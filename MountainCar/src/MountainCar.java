@@ -19,7 +19,7 @@ public class MountainCar extends EnvironmentBase{
 
 
 
-	private  boolean randomStarts;
+	private  boolean randomStarts=false;
 
 	static final int numActions = 3;
 	
