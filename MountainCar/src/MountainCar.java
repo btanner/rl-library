@@ -103,8 +103,9 @@ public class MountainCar extends EnvironmentBase{
 		velocity = (Math.random()*mcar_max_velocity*2) - Math.abs(mcar_max_velocity);
 	}else{
 		position = -0.5;
-		position = 0.0;
+		velocity = 0.0;
 	}
+	
 		return makeObservation();
 	}
 
