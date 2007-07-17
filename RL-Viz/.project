@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>RL-VizLib</name>
+			<type>2</type>
+			<location>/Users/btanner/eclipseWorkspace/RL-VizLib/src</location>
+		</link>
+	</linkedResources>
 </projectDescription>

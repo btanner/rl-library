@@ -1,6 +1,8 @@
 import rlglue.*;
 import java.io.IOException;
 
+import messaging.EnvMessageType;
+
 public class Driver
 {
     protected static final int kNumEpisodes = 100;
@@ -9,7 +11,8 @@ public class Driver
 
     protected static void run(int numEpisodes) throws IOException
     {
-	/*run for num_episode number of episodes and store the number of steps and return from each episode*/        	for(int x = 0; x < numEpisodes; ++x) {
+	/*run for num_episode number of episodes and store the number of steps and return from each episode*/        	
+    	for(int x = 0; x < numEpisodes; ++x) {
 	    RLGlue.RL_episode(0);
 	    System.out.println(RLGlue.RL_num_steps());
 	    
@@ -28,6 +31,12 @@ public class Driver
 	/*basic main loop*/
 	
 	RLGlue.RL_init();
+	
+	System.out.println(EnvMessageType.kEnvResponse.id());
+	String theMessage="TO=3 FROM=0 CMD=1 VALTYPE=0 VALS=NULL";
+	
+	System.out.println("About to send message: "+theMessage);
+	RLGlue.RL_env_message(theMessage);
 	run(kNumEpisodes);
 	RLGlue.RL_cleanup();
 	
