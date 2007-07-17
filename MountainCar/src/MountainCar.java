@@ -1,4 +1,6 @@
 
+import messaging.EnvironmentMessageParser;
+import messaging.EnvironmentMessages;
 import rlglue.Action;
 import rlglue.Observation;
 import rlglue.Random_seed_key;
@@ -80,7 +82,9 @@ public class MountainCar extends EnvironmentBase{
 		return "1:e:2_[f,f]_[,]_[,]:1_[i]_[0,3]";
 	}
 
-	public String env_message(String arg0) {
+	public String env_message(String theMessage) {
+		EnvironmentMessages theMessageObject=EnvironmentMessageParser.parseMessage(theMessage);
+			
 		System.out.println("We need some code written in Env Message for MountainCar!");
 		// TODO Auto-generated method stub
 		return null;
