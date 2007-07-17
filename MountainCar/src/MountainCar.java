@@ -1,14 +1,5 @@
-//#include "bt-glue/Environment.h"
-//#include "bt-glue/DynamicClassLoadingEnvironment.h"
-//#include "bt-glue/RLGlueEnvironment.h"
-
-//class DataHolder;
-//
-////STL Stuff
-//#include <vector>
 
 import rlglue.Action;
-import rlglue.Environment;
 import rlglue.Observation;
 import rlglue.Random_seed_key;
 import rlglue.Reward_observation;
@@ -20,12 +11,12 @@ import rlglue.State_key;
 Dynamics
 
 ============================*/
-public class MountainCar implements Environment{
+public class MountainCar extends EnvironmentBase{
 	
 	
 	private double position;
 	private double velocity;
-	private int theAction=0;
+
 
 
 	private  boolean randomStarts;
@@ -90,34 +81,22 @@ public class MountainCar implements Environment{
 	}
 
 	public String env_message(String arg0) {
+		System.out.println("We need some code written in Env Message for MountainCar!");
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	
-//	//At the end of movement, decide whether to randomly reYposition the agent
-//	bool MountainCarEnv::step(const DataHolder* theAction){
-//		
-//		int a=theAction->getIntValue(0);
-//
-//		mcar_velocity += (a-1)*0.001 + cos(3*mcar_position)*(-0.0025);
-//	    if (mcar_velocity > mcar_max_velocity) mcar_velocity = mcar_max_velocity;
-//	    if (mcar_velocity < -mcar_max_velocity) mcar_velocity = -mcar_max_velocity;
-//	    mcar_position += mcar_velocity;
-//	    if (mcar_position > mcar_max_position) mcar_position = mcar_max_position;
-//	    if (mcar_position < mcar_min_position) mcar_position = mcar_min_position;
-//	    if (mcar_position==mcar_min_position && mcar_velocity<0) mcar_velocity = 0;		
-//
-//		bool goalRegion=false;
-//		goalRegion=inGoalRegion();
-//
-//		return goalRegion;
-//		}
-//
-//	void MountainCarEnv::start(){
-//	}
-//
-	
+
+	@Override
+	protected Observation makeObservation(){
+		Observation currentObs= new Observation(0,2);
+		currentObs.doubleArray[0]=position;
+		currentObs.doubleArray[1]=velocity;
+		return currentObs;
+	}
+
+
 	public Observation env_start() {
 	if(randomStarts){
 		position = (Math.random()*(mcar_max_position + Math.abs((mcar_min_position))) - Math.abs(mcar_min_position));
@@ -126,14 +105,22 @@ public class MountainCar implements Environment{
 		position = -0.5;
 		position = 0.0;
 	}
-	
-		return null;
+		return makeObservation();
 	}
 
-	public Reward_observation env_step(Action arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public Reward_observation env_step(Action theAction) {
+		int a=theAction.intArray[0];
+				velocity += ((a-1))*0.001 + Math.cos(3.0f*position)*(-0.0025);
+			    if (velocity > mcar_max_velocity) velocity = mcar_max_velocity;
+			    if (velocity < -mcar_max_velocity) velocity = -mcar_max_velocity;
+			    position += velocity;
+			    if (position > mcar_max_position) position = mcar_max_position;
+			    if (position < mcar_min_position) position = mcar_min_position;
+			    if (position==mcar_min_position && velocity<0) velocity = 0;		
+	
+
+		return makeRewardObservation(getReward(),inGoalRegion());
+		}
 	
 	
 	public MountainCar() {
@@ -144,7 +131,6 @@ public class MountainCar implements Environment{
 		this.randomStarts = randomStarts;
 	}
 
-	
 	
 	public void env_cleanup() {
 		// TODO Auto-generated method stub
@@ -197,33 +183,13 @@ public class MountainCar implements Environment{
 //	}
 
 
-//	const DataHolder *MountainCarEnv::getObservations(){
-//		
-//		DataHolder *theObs=new DataHolder();
-//		theObs->addFloatValue(getPosition());
-//		theObs->addFloatValue(getVelocity());
-//		
-//		return theObs;
-//	}
 //
-//	double MountainCarEnv::getReward(){
-//		
-//		if(inGoalRegion())
-//			return 0.0f;
-//		else
-//			return -1.0f;
-//	}
-//
-//
-//
-//
-//	double MountainCarEnv::getPosition(){
-//		return mcar_position;
-//	}
-//	double MountainCarEnv::getVelocity(){
-//		return mcar_velocity;
-//	}
-//
+	private double getReward(){
+		if(inGoalRegion())
+			return 0.0f;
+		else
+			return -1.0f;
+	}
 
 }
 
