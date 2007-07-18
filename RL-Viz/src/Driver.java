@@ -2,6 +2,8 @@ import rlglue.*;
 import java.io.IOException;
 
 import messaging.EnvMessageType;
+import messaging.EnvRangeRequest;
+import messaging.EnvRangeResponse;
 
 public class Driver
 {
@@ -32,11 +34,10 @@ public class Driver
 	
 	RLGlue.RL_init();
 	
-	System.out.println(EnvMessageType.kEnvResponse.id());
-	String theMessage="TO=3 FROM=0 CMD=1 VALTYPE=0 VALS=NULL";
+	EnvRangeResponse theERResponse=EnvRangeRequest.Execute();
 	
-	System.out.println("About to send message: "+theMessage);
-	RLGlue.RL_env_message(theMessage);
+	System.out.println("Continuing with the experiment");
+
 	run(kNumEpisodes);
 	RLGlue.RL_cleanup();
 	
