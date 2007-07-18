@@ -1,10 +1,12 @@
 
 import java.util.Vector;
 
-import messaging.EnvMessageType;
-import messaging.EnvRangeResponse;
-import messaging.EnvironmentMessageParser;
-import messaging.EnvironmentMessages;
+import messaging.environment.EnvMessageType;
+import messaging.environment.EnvObsForStateRequest;
+import messaging.environment.EnvObsForStateResponse;
+import messaging.environment.EnvRangeResponse;
+import messaging.environment.EnvironmentMessageParser;
+import messaging.environment.EnvironmentMessages;
 import rlglue.Action;
 import rlglue.Observation;
 import rlglue.Random_seed_key;
@@ -88,6 +90,7 @@ public class MountainCar extends EnvironmentBase{
 
 	public String env_message(String theMessage) {
 		EnvironmentMessages theMessageObject=EnvironmentMessageParser.parseMessage(theMessage);
+		String theResponseString=null;
 		
 		System.out.println("mountain car got it");
 		
@@ -104,15 +107,34 @@ public class MountainCar extends EnvironmentBase{
 				
 			EnvRangeResponse theResponse=new EnvRangeResponse(mins, maxs);
 			
-			String theResponseString=theResponse.makeStringResponse();
+			theResponseString=theResponse.makeStringResponse();
 			
 			System.out.println("MountainCar: Sending response over network: "+theResponseString);
-			
 			return theResponseString;
 
 		}
-
+		if(theMessageObject.getTheMessageType().id()==messaging.environment.EnvMessageType.kEnvQueryObservationsForState.id()){
+			System.out.println("and treating it like kEnvQueryObservationsForState request");
 			
+			EnvObsForStateRequest theCastedRequest=(EnvObsForStateRequest)theMessageObject;
+			
+			Vector<Observation> theQueryStates=theCastedRequest.getTheRequestStates();
+			Vector<Observation> theObservations= new Vector<Observation>();
+			
+			for(int i=0;i<theQueryStates.size();i++){
+				Observation thisObs=getObservationForState(theQueryStates.get(i));
+				theObservations.add(thisObs);
+			}
+			
+			EnvObsForStateResponse theResponse = new EnvObsForStateResponse(theObservations);
+			
+			theResponseString=theResponse.makeStringResponse();
+			
+			System.out.println("MountainCar: Sending response over network: "+theResponseString);
+			return theResponseString;
+		}
+
+
 	
 		
 
@@ -123,6 +145,10 @@ public class MountainCar extends EnvironmentBase{
 	}
 
 	
+//This is really easy in mountainCar because you observe exactly the state
+	private Observation getObservationForState(Observation observation) {
+		return observation;
+	}
 
 	@Override
 	protected Observation makeObservation(){
