@@ -1,13 +1,18 @@
 import rlglue.*;
 import java.io.IOException;
+import java.util.Vector;
 
-import messaging.EnvMessageType;
-import messaging.EnvRangeRequest;
-import messaging.EnvRangeResponse;
+import messaging.agent.AgentValueForObsRequest;
+import messaging.agent.AgentValueForObsResponse;
+import messaging.environment.EnvMessageType;
+import messaging.environment.EnvObsForStateRequest;
+import messaging.environment.EnvObsForStateResponse;
+import messaging.environment.EnvRangeRequest;
+import messaging.environment.EnvRangeResponse;
 
 public class Driver
 {
-    protected static final int kNumEpisodes = 100;
+    protected static final int kNumEpisodes = 5;
     protected static int rlNumSteps[];
     protected static double rlReturn[];
 
@@ -35,10 +40,33 @@ public class Driver
 	RLGlue.RL_init();
 	
 	EnvRangeResponse theERResponse=EnvRangeRequest.Execute();
+	System.out.println("Reponse to Range request was: "+theERResponse);
 	
+	Vector<Observation> theQueryStates=new Vector<Observation>();
+	Observation tmpObs=new Observation(0,2);
+	tmpObs.doubleArray[0]=0;
+	tmpObs.doubleArray[1]=0;
+	theQueryStates.add(tmpObs);
+	tmpObs=new Observation(0,2);
+	tmpObs.doubleArray[0]=0;
+	tmpObs.doubleArray[1]=.5;
+	theQueryStates.add(tmpObs);
+	EnvObsForStateResponse theObsForStateResponse=EnvObsForStateRequest.Execute(theQueryStates);
+
+	System.out.println("Reponse to EnvObsForState Request  was: "+theObsForStateResponse);
 	System.out.println("Continuing with the experiment");
 
 	run(kNumEpisodes);
+	
+	System.out.println("Now I want to know the value of those two states...");
+
+	Vector<Observation> theQueryObservations=theObsForStateResponse.getTheObservations();
+	
+	AgentValueForObsResponse theValueResponse = AgentValueForObsRequest.Execute(theQueryObservations);
+	
+	System.out.println("The learned values are: "+theValueResponse);
+
+	
 	RLGlue.RL_cleanup();
 	
 	/*add up all the steps and all the returns*/
