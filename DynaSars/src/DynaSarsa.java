@@ -1,3 +1,16 @@
+import java.util.Vector;
+
+import messaging.agent.AgentMessageParser;
+import messaging.agent.AgentMessageType;
+import messaging.agent.AgentMessages;
+import messaging.agent.AgentValueForObsRequest;
+import messaging.agent.AgentValueForObsResponse;
+import messaging.environment.EnvMessageType;
+import messaging.environment.EnvObsForStateRequest;
+import messaging.environment.EnvObsForStateResponse;
+import messaging.environment.EnvRangeResponse;
+import messaging.environment.EnvironmentMessageParser;
+import messaging.environment.EnvironmentMessages;
 import functionapproximation.FunctionApproximator;
 import functionapproximation.TileCodingFunctionApproximator;
 import rlglue.Action;
@@ -20,7 +33,7 @@ public class DynaSarsa implements Agent {
 
 
 	public DynaSarsa(){
-		this(100,8,.05,.1);
+		this(5,8,.05,.1);
 	}
 	
 	public DynaSarsa(int planningSteps, int numTilings, double alpha, double defaultWidth){
@@ -70,8 +83,42 @@ public class DynaSarsa implements Agent {
 	}
 
 	public String agent_message(String theMessage) {
-		System.out.println("Agent Message is a stub in DynaSarsa");
-		return "NO MESSAGE RESPONSE FROM DYNASARS";
+		AgentMessages theMessageObject=AgentMessageParser.parseMessage(theMessage);
+		String theResponseString=null;
+		
+		System.out.println("DynaSars got it");
+		
+		if(theMessageObject.getTheMessageType().id()==AgentMessageType.kAgentQueryValuesForObs.id()){
+			System.out.println("and treating it like value  request");
+
+			
+			AgentValueForObsRequest theCastedRequest=(AgentValueForObsRequest)theMessageObject;
+
+			Vector<Observation> theQueryObservations=theCastedRequest.getTheRequestObservations();
+			Vector<Double> theValues = new Vector<Double>();
+			
+			for(int i=0;i<theQueryObservations.size();i++){
+				theValues.add(getMaxValue(theQueryObservations.get(i)));
+			}
+			
+			AgentValueForObsResponse theResponse = new AgentValueForObsResponse(theValues);
+			
+			theResponseString=theResponse.makeStringResponse();
+			
+			System.out.println("DynaSars: Sending response over network: "+theResponseString);
+			return theResponseString;
+		}
+		
+
+
+	
+		
+
+		System.out.println("We need some code written in Env Message for MountainCar!");
+		Thread.dumpStack();
+		// TODO Auto-generated method stub
+		return null;
+
 	}
 
 	public Action agent_start(Observation theObservation) {
@@ -105,6 +152,19 @@ int chooseEpsilonGreedy(Observation theObservation) {
 	return action;
 }
 
+double getMaxValue(Observation theObservation){
+	int action=0;
+	double bestValue=theFA.query(theObservation,action);
+
+	for(int a=1;a<actionCount;a++){
+		double thisActionValue=theFA.query(theObservation,a);		
+
+		if(thisActionValue>=bestValue){
+				bestValue=thisActionValue;
+		}
+	}
+	return bestValue;
+}
 	
 int chooseGreedy(Observation theObservation){
 	int num_ties=1;
