@@ -1,4 +1,4 @@
-package messaging;
+package messaging.environment;
 
 public enum EnvMessageType{
 	kEnvResponse(0),

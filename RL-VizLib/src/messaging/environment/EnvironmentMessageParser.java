@@ -1,21 +1,20 @@
-package messaging;
+package messaging.environment;
 
 import java.util.StringTokenizer;
 
+import messaging.GenericMessage;
+import messaging.GenericMessageParser;
+import messaging.MessageUser;
+
 public class EnvironmentMessageParser extends GenericMessageParser{
 		public static EnvironmentMessages parseMessage(String theMessage){
-			StringTokenizer theTokenizer=new StringTokenizer(theMessage, " ");
-			String toString=theTokenizer.nextToken();
-			String fromString=theTokenizer.nextToken();
-			String typeString=theTokenizer.nextToken();
-			String valueString=theTokenizer.nextToken();
-			String payLoadString=theTokenizer.nextToken();
+			
+			GenericMessage theGenericMessage=new GenericMessage(theMessage);
 
+			MessageUser toU=theGenericMessage.getTo();
+			MessageUser fromU=theGenericMessage.getFrom();
 			
-			MessageUser toU=GenericMessageParser.parseUser(toString);
-			MessageUser fromU=GenericMessageParser.parseUser(fromString);
-			
-			int cmdId=GenericMessageParser.parseInt(typeString);
+			int cmdId=theGenericMessage.getTheMessageType();
 			
 			
 			if(cmdId==EnvMessageType.kEnvQueryVarRanges.id()){
@@ -23,6 +22,11 @@ public class EnvironmentMessageParser extends GenericMessageParser{
 				return new EnvRangeRequest(toU, fromU,EnvMessageType.kEnvQueryVarRanges);
 			}
 			
+			if(cmdId==EnvMessageType.kEnvQueryObservationsForState.id()){
+				System.out.println("In EnvironmentMessageParser -- realized the request was for kEnvQueryObservationsForState... passing it off to mountaincar");
+				return new EnvObsForStateRequest(toU, fromU,EnvMessageType.kEnvQueryObservationsForState,theGenericMessage.getPayLoad());
+			}
+
 			System.out.println("EnvironmentMessageParser - unknown query type: "+theMessage);
 			Thread.dumpStack();
 			System.exit(1);
