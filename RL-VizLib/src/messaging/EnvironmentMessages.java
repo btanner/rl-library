@@ -14,35 +14,31 @@ import java.util.Vector;
 		private MessageUser from;
 		private MessageUser to;
 		
-		public void EnvironmentMessages(MessageUser from, MessageUser to, EnvMessageType theMessageType){
+		public EnvironmentMessages(MessageUser from, MessageUser to, EnvMessageType theMessageType){
 			this.from=from;
 			this.to=to;
 			this.theMessageType=theMessageType;
 		}
 		
 		EnvMessageType getMessageType(){return theMessageType;}
-	};
 
-
-
-
-	class EnvRangeResponse extends EnvironmentMessages{
-		private Vector<Float> mins;
-		private Vector<Float> maxs;
-		
-		public void EnvRangeResponse(Vector<Float> mins, Vector<Float> maxs){
-			this.mins=mins;
-			this.maxs=maxs;
+		public EnvMessageType getTheMessageType() {
+			return theMessageType;
 		}
 
-		public Vector<Float> getMins() {
-			return mins;
+		public MessageUser getFrom() {
+			return from;
 		}
 
-		public Vector<Float> getMaxs() {
-			return maxs;
+		public MessageUser getTo() {
+			return to;
 		}
 	};
+
+
+
+
+	
 //
 //
 //	class Message_Env_Query_VarRanges : public EnvironmentMessage{
