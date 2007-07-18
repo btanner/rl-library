@@ -1,4 +1,8 @@
 
+import java.util.Vector;
+
+import messaging.EnvMessageType;
+import messaging.EnvRangeResponse;
 import messaging.EnvironmentMessageParser;
 import messaging.EnvironmentMessages;
 import rlglue.Action;
@@ -84,8 +88,36 @@ public class MountainCar extends EnvironmentBase{
 
 	public String env_message(String theMessage) {
 		EnvironmentMessages theMessageObject=EnvironmentMessageParser.parseMessage(theMessage);
+		
+		System.out.println("mountain car got it");
+		
+		if(theMessageObject.getTheMessageType().id()==EnvMessageType.kEnvQueryVarRanges.id()){
+			System.out.println("and treating it like var range request");
+//			//Handle a request for the ranges
+			Vector<Double> mins = new Vector<Double>();
+			Vector<Double> maxs = new Vector<Double>();
 			
+				mins.add(getMcar_min_position());
+				mins.add(getMcar_min_velocity());
+				maxs.add(getMcar_max_position());
+				maxs.add(getMcar_max_velocity());
+				
+			EnvRangeResponse theResponse=new EnvRangeResponse(mins, maxs);
+			
+			String theResponseString=theResponse.makeStringResponse();
+			
+			System.out.println("MountainCar: Sending response over network: "+theResponseString);
+			
+			return theResponseString;
+
+		}
+
+			
+	
+		
+
 		System.out.println("We need some code written in Env Message for MountainCar!");
+		Thread.dumpStack();
 		// TODO Auto-generated method stub
 		return null;
 	}
