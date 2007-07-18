@@ -2,7 +2,51 @@ import rlglue.Action;
 import rlglue.Agent;
 import rlglue.Observation;
 
+import functionapproximation.TileCoder;
+
 public class GenericSarsaLambda implements Agent {
+	
+	
+	
+	private int actionCount;
+	int MEMORY_SIZE;
+	int NUM_TILINGS;
+	int MAX_NONZERO_TRACES;
+	double defaultDivider;
+
+	int nonzero_traces[];
+	int num_nonzero_traces;
+	int nonzero_traces_inverse[];
+	double minimum_trace;
+
+	// Global RL variables:
+	double tempQ[];	// action values
+	double queryQ[]; //Q values used when querying value function
+
+	double observationDividers[];
+
+	double theta[];							// modifyable parameter vector, aka memory, weights
+	double e[];								// eligibility traces
+	int tempF[];								// sets of features, one set per action
+	int queryF[];							//Features used in querying the value function
+
+
+
+	// Standard RL parameters:
+	double epsilon;						// probability of random action
+	double alpha;						// step size parameter
+	double lambda;						// trace-decay parameters
+	double gamma;
+
+	int oldAction;						//action selected on previous time step
+	int newAction;						//action selected on current time step
+
+	double getAlpha(){return alpha;}
+	double getEpsilon(){return epsilon;}
+	int getNumTilings(){return NUM_TILINGS;}
+	int getMemorySize(){return MEMORY_SIZE;}
+	double getLambda(){return lambda;}
+	
 
 	TileCoder theTileCoder=new TileCoder();
 	public void agent_cleanup() {
@@ -133,44 +177,7 @@ public class GenericSarsaLambda implements Agent {
 		return action;
 	}
 
-	private int actionCount;
-	int MEMORY_SIZE;
-	int NUM_TILINGS;
-	int MAX_NONZERO_TRACES;
-	double defaultDivider;
 
-	int nonzero_traces[];
-	int num_nonzero_traces;
-	int nonzero_traces_inverse[];
-	double minimum_trace;
-
-	// Global RL variables:
-	double tempQ[];	// action values
-	double queryQ[]; //Q values used when querying value function
-
-	double observationDividers[];
-
-	double theta[];							// modifyable parameter vector, aka memory, weights
-	double e[];								// eligibility traces
-	int tempF[];								// sets of features, one set per action
-	int queryF[];							//Features used in querying the value function
-
-
-
-	// Standard RL parameters:
-	double epsilon;						// probability of random action
-	double alpha;						// step size parameter
-	double lambda;						// trace-decay parameters
-	double gamma;
-
-	int oldAction;						//action selected on previous time step
-	int newAction;						//action selected on current time step
-
-	double getAlpha(){return alpha;}
-	double getEpsilon(){return epsilon;}
-	int getNumTilings(){return NUM_TILINGS;}
-	int getMemorySize(){return MEMORY_SIZE;}
-	double getLambda(){return lambda;}
 
 
 	public GenericSarsaLambda(){
@@ -266,30 +273,10 @@ public class GenericSarsaLambda implements Agent {
 			Q[a] += theta[F[a*NUM_TILINGS+j]];
 	}
 
-	static{
-		//Some test code
-		TileCoder tmpTileCoder=new TileCoder();
-		
-		double tD[]=new double[2];
-		tD[0]=.5f;
-		tD[1]=1.0f;
-		
-		int tI[]=new int[1];
-		tI[0]=0;
-		
-		int tmpF[] = new int[1024];
-		tmpTileCoder.tiles(tmpF,0,8,1024,tD,2,tI,1);
-		
-		System.out.println("Tile got called ok!");
-		
-		
-	}
 	
 	
-	int callTime=0;
 	private void loadF(int F[],Observation theObservation)
 	{
-		callTime++;
 		int doubleCount=theObservation.doubleArray.length;
 		int intCount=theObservation.intArray.length;
 		double	double_vars[]=new double[doubleCount];
@@ -308,7 +295,6 @@ public class GenericSarsaLambda implements Agent {
 		for (int a=0; a<actionCount; a++){
 			int_vars[0]=a;
 			theTileCoder.tiles(F,a*NUM_TILINGS,NUM_TILINGS,MEMORY_SIZE,double_vars,doubleCount,int_vars, intCount+1);
-//			tiles(&F[a*NUM_TILINGS],NUM_TILINGS,MEMORY_SIZE,double_vars,doubleCount,int_vars, intCount+1);
 		}
 	}
 
