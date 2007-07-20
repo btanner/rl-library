@@ -4,5 +4,6 @@
 	<classpathentry kind="src" path="RL-VizLib"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="RL-Glue"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/RL-VizLib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
