@@ -3,6 +3,7 @@
 	<name>DynaSars</name>
 	<comment></comment>
 	<projects>
+		<project>RL-VizLib</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
