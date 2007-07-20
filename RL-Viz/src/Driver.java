@@ -12,7 +12,7 @@ import messaging.environment.EnvRangeResponse;
 
 public class Driver
 {
-    protected static final int kNumEpisodes = 5;
+    protected static final int kNumEpisodes = 500000;
     protected static int rlNumSteps[];
     protected static double rlReturn[];
 
@@ -37,10 +37,6 @@ public class Driver
 
 	/*basic main loop*/
 	
-	RLGlue.RL_init();
-	
-	EnvRangeResponse theERResponse=EnvRangeRequest.Execute();
-	System.out.println("Reponse to Range request was: "+theERResponse);
 	
 	Vector<Observation> theQueryStates=new Vector<Observation>();
 	Observation tmpObs=new Observation(0,2);
@@ -54,7 +50,27 @@ public class Driver
 	EnvObsForStateResponse theObsForStateResponse=EnvObsForStateRequest.Execute(theQueryStates);
 
 	System.out.println("Reponse to EnvObsForState Request  was: "+theObsForStateResponse);
+	
+	EnvRangeResponse theERResponse=EnvRangeRequest.Execute();
+	System.out.println("Reponse to Range request was: "+theERResponse);
+
 	System.out.println("Continuing with the experiment");
+	
+	System.out.println("Going to sleep");
+	
+	
+	try {
+		Thread.sleep(20000000);
+	} catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	System.exit(1);
+	
+	RLGlue.RL_init();
+	
+	
+
 
 	run(kNumEpisodes);
 	
