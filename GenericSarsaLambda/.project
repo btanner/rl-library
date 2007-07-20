@@ -18,7 +18,12 @@
 		<link>
 			<name>RL-VizLib</name>
 			<type>2</type>
-			<location>/Users/btanner/eclipseWorkspace/RL-VizLib/src</location>
+			<location>/Users/hackman/workspace/RL-VizLib/src</location>
+		</link>
+		<link>
+			<name>Java</name>
+			<type>2</type>
+			<location>/Users/hackman/Code/rl-glue/RL-Glue/Java</location>
 		</link>
 	</linkedResources>
 </projectDescription>
