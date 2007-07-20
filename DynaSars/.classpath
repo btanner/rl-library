@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/Users/btanner/ProgrammingProjects/rl-glue/RL-Glue/Java/RL-Glue.jar"/>
 	<classpathentry kind="src" path="/RL-VizLib"/>
+	<classpathentry kind="var" path="RL-GLue"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
