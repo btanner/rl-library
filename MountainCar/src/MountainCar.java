@@ -109,7 +109,7 @@ public class MountainCar extends EnvironmentBase{
 			
 			theResponseString=theResponse.makeStringResponse();
 			
-			System.out.println("MountainCar: Sending response over network: "+theResponseString);
+			//System.out.println("MountainCar: Sending response over network: "+theResponseString);
 			return theResponseString;
 
 		}
@@ -130,7 +130,7 @@ public class MountainCar extends EnvironmentBase{
 			
 			theResponseString=theResponse.makeStringResponse();
 			
-			System.out.println("MountainCar: Sending response over network: "+theResponseString);
+			//System.out.println("MountainCar: Sending response over network: "+theResponseString);
 			return theResponseString;
 		}
 
