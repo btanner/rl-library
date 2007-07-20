@@ -42,7 +42,9 @@ Vector<Observation> theRequestObservations=new Vector<Observation>();
 			theRequest+=":"+UtilityShop.serializeObservation(theRequestObservations.get(i));
 
 
+		long time1=System.currentTimeMillis();
 		String responseMessage=RLGlue.RL_agent_message(theRequest);
+		long time2=System.currentTimeMillis();
 		GenericMessage theGenericResponse=new GenericMessage(responseMessage);
 
 		String thePayLoadString=theGenericResponse.getPayLoad();
@@ -57,6 +59,11 @@ Vector<Observation> theRequestObservations=new Vector<Observation>();
 		}
 
 		AgentValueForObsResponse theResponse=new AgentValueForObsResponse(theValues);
+		
+		long time3=System.currentTimeMillis();
+		
+		System.out.println("Time to actually send and receive: "+(time2-time1)+" and time to parse response was: "+(time3-time2));
+
 		return theResponse;
 
 	}
