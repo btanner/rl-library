@@ -105,7 +105,7 @@ public class DynaSarsa implements Agent {
 			
 			theResponseString=theResponse.makeStringResponse();
 			
-			System.out.println("DynaSars: Sending response over network: "+theResponseString);
+			//System.out.println("DynaSars: Sending response over network: "+theResponseString);
 			return theResponseString;
 		}
 		
