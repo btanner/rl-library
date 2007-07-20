@@ -26,8 +26,7 @@ public class ThreadRenderObject extends Thread {
 			if(theComponent.update()){
 				theComponent.render(tmpImage);
 				Graphics2D G=(Graphics2D)prodImage.getGraphics();
-				G.drawImage(arg0, arg1, arg2, arg3)
-				prodImage.getGraphics().draw
+				//G.drawImage(arg0, arg1, arg2, arg3);
 			}
 			
 		}
