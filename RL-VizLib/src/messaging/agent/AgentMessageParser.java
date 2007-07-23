@@ -18,7 +18,6 @@ public class AgentMessageParser extends GenericMessageParser{
 			
 			
 			if(cmdId==AgentMessageType.kAgentQueryValuesForObs.id()){
-				System.out.println("In AgentMessageParser -- realized the request was for Values... passing it off to mountaincar");
 				return new AgentValueForObsRequest(toU, fromU,AgentMessageType.kAgentQueryValuesForObs,theGenericMessage.getPayLoad());
 			}
 			

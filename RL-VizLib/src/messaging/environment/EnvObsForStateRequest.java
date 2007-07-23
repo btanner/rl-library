@@ -8,6 +8,7 @@ import messaging.GenericMessage;
 import messaging.MessageUser;
 import messaging.MessageValueType;
 import messaging.UtilityShop;
+import messaging.agent.AgentMessageType;
 
 import rlglue.RLGlue;
 import rlglue.Observation;
@@ -31,17 +32,28 @@ Vector<Observation> theRequestStates=new Vector<Observation>();
 	}
 
 	public static EnvObsForStateResponse Execute(Vector<Observation> theQueryStates){
+		StringBuffer theRequestBuffer= new StringBuffer();
+		theRequestBuffer.append("TO=");
+		theRequestBuffer.append(MessageUser.kEnv.id());
+		theRequestBuffer.append(" FROM=");
+		theRequestBuffer.append(MessageUser.kBenchmark.id());
+		theRequestBuffer.append(" CMD=");
+		theRequestBuffer.append(EnvMessageType.kEnvQueryObservationsForState.id());
+		theRequestBuffer.append(" VALTYPE=");
+		theRequestBuffer.append(MessageValueType.kStringList.id());
+		theRequestBuffer.append(" VALS=");
+		
+		//Tell them how many
+		theRequestBuffer.append(theQueryStates.size());
 
-		String theRequest="TO="+MessageUser.kEnv.id()+" FROM="+MessageUser.kBenchmark.id();
-		theRequest+=" CMD="+EnvMessageType.kEnvQueryObservationsForState.id()+" VALTYPE="+MessageValueType.kStringList.id()+" VALS=";
+		for(int i=0;i<theQueryStates.size();i++){
+			theRequestBuffer.append(":");
+			UtilityShop.serializeObservation(theRequestBuffer,theQueryStates.get(i));
+		}
+		
 
-		//First send how many
-		theRequest+=theQueryStates.size();
-
-		for(int i=0;i<theQueryStates.size();i++)
-			theRequest+=":"+UtilityShop.serializeObservation(theQueryStates.get(i));
-
-
+		String theRequest=theRequestBuffer.toString();
+		
 		String responseMessage=RLGlue.RL_env_message(theRequest);
 		GenericMessage theGenericResponse=new GenericMessage(responseMessage);
 

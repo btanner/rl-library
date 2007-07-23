@@ -25,12 +25,16 @@ public class EnvObsForStateResponse extends AbstractResponse{
 	 */
 	@Override
 	public String toString() {
-		String theResponse="EnvObsForStateResponse: " + theObservations.size()+" observations, they are: (serialized for fun)";
+		StringBuffer bufferedResponse=new StringBuffer();
+		
+		bufferedResponse.append("EnvObsForStateResponse: " + theObservations.size()+" observations, they are: (serialized for fun)");
+		
 		for(int i=0;i<theObservations.size();i++){
-			theResponse+=UtilityShop.serializeObservation(theObservations.get(i))+" ";
+			UtilityShop.serializeObservation(bufferedResponse,theObservations.get(i));
+			bufferedResponse.append(" ");
 		}
-		// TODO Auto-generated method stub
-		return theResponse;
+
+		return bufferedResponse.toString();
 	}
 
 
@@ -47,15 +51,24 @@ public class EnvObsForStateResponse extends AbstractResponse{
 	
 	//So, when you create on of these in an environment, this gives you the response to send
 	public String makeStringResponse() {
-		String theResponseString="TO="+MessageUser.kBenchmark.id()+" FROM="+MessageUser.kEnv.id();
-		theResponseString+=" CMD="+EnvMessageType.kEnvResponse.id()+" VALTYPE="+MessageValueType.kStringList.id()+" VALS=";
+		StringBuffer theResponseBuffer= new StringBuffer();
+		theResponseBuffer.append("TO=");
+		theResponseBuffer.append(MessageUser.kBenchmark.id());
+		theResponseBuffer.append(" FROM=");
+		theResponseBuffer.append(MessageUser.kEnv.id());
+		theResponseBuffer.append(" CMD=");
+		theResponseBuffer.append(EnvMessageType.kEnvResponse.id());
+		theResponseBuffer.append(" VALTYPE=");
+		theResponseBuffer.append(MessageValueType.kStringList.id());
+		theResponseBuffer.append(" VALS=");
 		
-		theResponseString+=theObservations.size()+":";
-		
+		//Tell them how many
+		theResponseBuffer.append(theObservations.size());
+
 		for(int i=0;i<theObservations.size();i++){
-			theResponseString+=UtilityShop.serializeObservation(theObservations.get(i))+":";
+			theResponseBuffer.append(":");
+			UtilityShop.serializeObservation(theResponseBuffer,theObservations.get(i));
 		}
-		
-		return theResponseString;
+		return theResponseBuffer.toString();
 	}
 };

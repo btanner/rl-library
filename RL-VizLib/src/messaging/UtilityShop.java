@@ -6,16 +6,29 @@ import rlglue.Observation;
 
 
 public class UtilityShop {
-	static public String serializeObservation(Observation theObs){
-		String theString="";
-		
-		theString+=theObs.intArray.length+"_";
-		for(int i=0;i<theObs.intArray.length;i++)theString+=theObs.intArray[i]+"_";
-		theString+=theObs.doubleArray.length+"_";
-		for(int i=0;i<theObs.doubleArray.length;i++)theString+=theObs.doubleArray[i]+"_";
-		
-		return theString;
+//	static public String serializeObservation(Observation theObs){
+//		StringBuffer newBuffer=new StringBuffer();
+//		
+//		StringBuffer resultBuffer=serializeObservation(newBuffer,theObs);
+//		return resultBuffer.toString();
+//	}
+	
+	static public StringBuffer serializeObservation(StringBuffer theRequestBuffer,Observation theObs) {
+		theRequestBuffer.append(theObs.intArray.length);
+		theRequestBuffer.append("_");
+		for(int i=0;i<theObs.intArray.length;i++){
+			theRequestBuffer.append(theObs.intArray[i]);
+			theRequestBuffer.append("_");
+		}
+		theRequestBuffer.append(theObs.doubleArray.length);
+		theRequestBuffer.append("_");
+		for(int i=0;i<theObs.doubleArray.length;i++){
+			theRequestBuffer.append(theObs.doubleArray[i]);
+			theRequestBuffer.append("_");
+		}
+		return theRequestBuffer;
 	}
+
 
 	public static Observation buildObservationFromString(String thisObsString) {
 		StringTokenizer obsTokenizer = new StringTokenizer(thisObsString, "_");
@@ -42,4 +55,5 @@ public class UtilityShop {
 
 		return theObs;
 	}
+
 }

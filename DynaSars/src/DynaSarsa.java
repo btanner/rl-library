@@ -33,7 +33,7 @@ public class DynaSarsa implements Agent {
 
 
 	public DynaSarsa(){
-		this(5,8,.05,.1);
+		this(5,16,.05,.05);
 	}
 	
 	public DynaSarsa(int planningSteps, int numTilings, double alpha, double defaultWidth){
@@ -86,12 +86,8 @@ public class DynaSarsa implements Agent {
 		AgentMessages theMessageObject=AgentMessageParser.parseMessage(theMessage);
 		String theResponseString=null;
 		
-		System.out.println("DynaSars got it");
-		
-		if(theMessageObject.getTheMessageType().id()==AgentMessageType.kAgentQueryValuesForObs.id()){
-			System.out.println("and treating it like value  request");
 
-			
+		if(theMessageObject.getTheMessageType().id()==AgentMessageType.kAgentQueryValuesForObs.id()){
 			AgentValueForObsRequest theCastedRequest=(AgentValueForObsRequest)theMessageObject;
 
 			Vector<Observation> theQueryObservations=theCastedRequest.getTheRequestObservations();
@@ -104,8 +100,7 @@ public class DynaSarsa implements Agent {
 			AgentValueForObsResponse theResponse = new AgentValueForObsResponse(theValues);
 			
 			theResponseString=theResponse.makeStringResponse();
-			
-			//System.out.println("DynaSars: Sending response over network: "+theResponseString);
+
 			return theResponseString;
 		}
 		
@@ -114,7 +109,7 @@ public class DynaSarsa implements Agent {
 	
 		
 
-		System.out.println("We need some code written in Env Message for MountainCar!");
+		System.out.println("We need some code written in Agent Message for DynaSars!");
 		Thread.dumpStack();
 		// TODO Auto-generated method stub
 		return null;
@@ -128,7 +123,12 @@ public class DynaSarsa implements Agent {
 		return makeAction(theAction);
 	}
 
+	private int numSteps=0;
 	public Action agent_step(double reward, Observation theObservation) {
+		numSteps++;
+		if(numSteps%25000==0)
+			System.out.println("Steps so far: "+numSteps);
+		
 	int theAction=chooseEpsilonGreedy(theObservation);
 
 	theFA.step(theObservation, reward,theAction);

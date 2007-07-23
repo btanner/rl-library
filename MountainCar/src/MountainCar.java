@@ -1,6 +1,9 @@
 
 import java.util.Vector;
 
+import messages.MCStateRequest;
+import messages.MCStateResponse;
+import messaging.environment.EnvCustomRequest;
 import messaging.environment.EnvMessageType;
 import messaging.environment.EnvObsForStateRequest;
 import messaging.environment.EnvObsForStateResponse;
@@ -12,7 +15,6 @@ import rlglue.Observation;
 import rlglue.Random_seed_key;
 import rlglue.Reward_observation;
 import rlglue.State_key;
-
 
 /*===========================
 
@@ -135,6 +137,27 @@ public class MountainCar extends EnvironmentBase{
 		}
 
 
+		if(theMessageObject.getTheMessageType().id()==messaging.environment.EnvMessageType.kEnvCustom.id()){
+			System.out.println("and treating it like kEnvCustom request");
+			
+
+			EnvCustomRequest theCastedRequest=(EnvCustomRequest)theMessageObject;
+			
+			String theCustomType=theCastedRequest.getThePayload();
+			
+			if(theCustomType.equals("GETMCSTATE")){
+				//It is a request for the state
+				double position=this.getPosition();
+				double velocity=this.getVelocity();
+				double height= this.getHeight();
+				double deltaheight=this.getHeightAtPosition(position+.05);
+				MCStateResponse theResponseObject=new MCStateResponse(position,velocity,height,deltaheight);
+				return theResponseObject.makeStringResponse();
+			}
+			System.out.println("We need some code written in Env Message for MountainCar.. unknown custom message type received");
+
+		}
+
 	
 		
 
@@ -237,13 +260,6 @@ public class MountainCar extends EnvironmentBase{
 //			}
 //		}
 //
-
-
-//
-//	const DataHolder *MountainCarEnv::getObsForState(const DataHolder *someState){
-//		//In general this might be more complicated, but here, its really just the same thing b/c the observations are the state.
-//		return someState->clone();
-//	}
 
 
 //

@@ -5,7 +5,6 @@ import java.util.StringTokenizer;
 public class GenericMessageParser {
 
 		public static MessageUser parseUser(String userChunk){
-			System.out.println("GenericMessageParser got asked to parse "+userChunk);
 			StringTokenizer tok=new StringTokenizer(userChunk,"=");
 			tok.nextToken();
 			String theUserString=tok.nextToken();
