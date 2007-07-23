@@ -1,22 +1,51 @@
+import java.awt.Component;
+import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.util.Vector;
 
+import messages.MCStateRequest;
+import messages.MCStateResponse;
 import messaging.agent.AgentValueForObsRequest;
 import messaging.agent.AgentValueForObsResponse;
 import messaging.environment.EnvObsForStateRequest;
 import messaging.environment.EnvObsForStateResponse;
+import messaging.environment.EnvRangeRequest;
+import messaging.environment.EnvRangeResponse;
 import rlglue.Observation;
 
 
-public class MountainCarVisualizer  implements ValueFunctionDataProvider {
+public class MountainCarVisualizer  extends EnvVisualizer implements ValueFunctionDataProvider, AgentOnValueFunctionDataProvider {
 
 	Vector<Double> mins = new Vector<Double>();
 	Vector<Double> maxs = new Vector<Double>();
-	
-	public void setRanges(Vector<Double> mins,Vector<Double> maxs){
-		this.mins=mins;
-		this.maxs=maxs;
-	}
 
+MCStateResponse theCurrentState=null;
+
+	ValueFunctionVizComponent theValueFunction=null;
+
+	public MountainCarVisualizer(){
+		super();
+		theValueFunction=new ValueFunctionVizComponent(new Point2D.Double(1.0,1.0),this);
+		//Get the Ranges (internalize this)
+		EnvRangeResponse theERResponse=EnvRangeRequest.Execute();
+		mins = theERResponse.getMins();
+		maxs = theERResponse.getMaxs();
+		
+		VizComponent theRedBox=new RedBoxVizComponent();
+		AgentOnValueFunctionVizComponent agentOnVF=new AgentOnValueFunctionVizComponent(this);
+		super.addVizComponent(theValueFunction);
+//		super.addVizComponent(theRedBox);
+		super.addVizComponent(agentOnVF);
+		super.startVisualizing();
+	
+
+		
+	}
+	
+	
+	
+	
 	public double getMaxValueForDim(int whichDimension) {
 		return maxs.get(whichDimension);
 	}
@@ -33,11 +62,38 @@ public class MountainCarVisualizer  implements ValueFunctionDataProvider {
 	}
 
 	public Vector<Double> queryAgentValues(Vector<Observation> theQueryObs) {
-		System.out.println("queryAgentValues  was called in RLVizFrame!");
-		assert(theQueryObs!=null);
 		AgentValueForObsResponse theValueResponse = AgentValueForObsRequest.Execute(theQueryObs);
-		assert(theValueResponse.getTheValues()!=null);
 		return theValueResponse.getTheValues();
 	}
+
+
+
+
+	public double getCurrentStateInDimension(int whichDimension) {
+		if(theCurrentState==null)
+			return 0;
+		
+		
+		if(whichDimension==0)
+			return theCurrentState.getPosition();
+		else
+			return theCurrentState.getVelocity();
+		
+	}
+
+
+
+
+	public Point2D getWindowLocationForQueryPoint(Point2D stateValues) {
+		return theValueFunction.getWindowLocationForQueryPoint(stateValues);
+	}
+
+
+
+
+	public void updateAgentState() {
+		theCurrentState=MCStateRequest.Execute();
+	}
+
 
 }

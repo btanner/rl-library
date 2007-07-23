@@ -1,7 +1,7 @@
-import java.awt.Image;
+import java.awt.Graphics2D;
 
 
 public interface VizComponent {
 	public boolean update();
-	public void render(Image theImage);
+	public void render(Graphics2D g);
 }
