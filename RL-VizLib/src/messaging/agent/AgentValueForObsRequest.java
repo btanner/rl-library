@@ -7,10 +7,10 @@ import java.util.Vector;
 import messaging.GenericMessage;
 import messaging.MessageUser;
 import messaging.MessageValueType;
-import messaging.UtilityShop;
 
 import rlglue.RLGlue;
 import rlglue.Observation;
+import utilities.UtilityShop;
 
 public class AgentValueForObsRequest extends AgentMessages{
 	Vector<Observation> theRequestObservations=new Vector<Observation>();

@@ -5,9 +5,9 @@ import java.util.Vector;
 import messaging.AbstractResponse;
 import messaging.MessageUser;
 import messaging.MessageValueType;
-import messaging.UtilityShop;
 
 import rlglue.Observation;
+import utilities.UtilityShop;
 
 public class EnvObsForStateResponse extends AbstractResponse{
 	private Vector<Observation> theObservations;

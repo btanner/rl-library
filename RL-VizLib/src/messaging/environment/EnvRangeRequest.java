@@ -6,8 +6,6 @@ import java.util.Vector;
 import messaging.GenericMessage;
 import messaging.MessageUser;
 import messaging.MessageValueType;
-
-import rlglue.Observation;
 import rlglue.RLGlue;
 
 public class EnvRangeRequest extends EnvironmentMessages{

@@ -7,11 +7,9 @@ import java.util.Vector;
 import messaging.GenericMessage;
 import messaging.MessageUser;
 import messaging.MessageValueType;
-import messaging.UtilityShop;
-import messaging.agent.AgentMessageType;
-
-import rlglue.RLGlue;
 import rlglue.Observation;
+import rlglue.RLGlue;
+import utilities.UtilityShop;
 
 public class EnvObsForStateRequest extends EnvironmentMessages{
 Vector<Observation> theRequestStates=new Vector<Observation>();
@@ -53,6 +51,8 @@ Vector<Observation> theRequestStates=new Vector<Observation>();
 		
 
 		String theRequest=theRequestBuffer.toString();
+		
+		System.out.println("The string has size: "+theRequest.length());
 		
 		String responseMessage=RLGlue.RL_env_message(theRequest);
 		GenericMessage theGenericResponse=new GenericMessage(responseMessage);

@@ -1,4 +1,4 @@
-package messaging;
+package utilities;
 
 import java.util.StringTokenizer;
 
@@ -6,13 +6,11 @@ import rlglue.Observation;
 
 
 public class UtilityShop {
-//	static public String serializeObservation(Observation theObs){
-//		StringBuffer newBuffer=new StringBuffer();
-//		
-//		StringBuffer resultBuffer=serializeObservation(newBuffer,theObs);
-//		return resultBuffer.toString();
-//	}
 	
+	static public double normalizeValue(double theValue, double minPossible, double maxPossible){
+			return (theValue-minPossible)/(maxPossible-minPossible);
+	}
+
 	static public StringBuffer serializeObservation(StringBuffer theRequestBuffer,Observation theObs) {
 		theRequestBuffer.append(theObs.intArray.length);
 		theRequestBuffer.append("_");

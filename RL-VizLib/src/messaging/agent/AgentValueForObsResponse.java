@@ -5,9 +5,9 @@ import java.util.Vector;
 import messaging.AbstractResponse;
 import messaging.MessageUser;
 import messaging.MessageValueType;
-import messaging.UtilityShop;
 
 import rlglue.Observation;
+import utilities.UtilityShop;
 
 public class AgentValueForObsResponse extends AbstractResponse{
 	private Vector<Double> theValues;

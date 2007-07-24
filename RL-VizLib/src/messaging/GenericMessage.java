@@ -21,7 +21,7 @@ public class GenericMessage {
 		from=GenericMessageParser.parseUser(toString);
 		to=GenericMessageParser.parseUser(fromString);
 		theMessageType=GenericMessageParser.parseInt(typeString);
-		payLoadType=GenericMessageParser.parseValueType(typeString);
+		payLoadType=GenericMessageParser.parseValueType(valueString);
 		payLoad=GenericMessageParser.parsePayLoad(payLoadString);
 
 	}
