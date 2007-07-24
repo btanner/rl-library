@@ -6,9 +6,6 @@ import messaging.AbstractResponse;
 import messaging.MessageUser;
 import messaging.MessageValueType;
 
-import rlglue.Observation;
-import utilities.UtilityShop;
-
 public class AgentValueForObsResponse extends AbstractResponse{
 	private Vector<Double> theValues;
 	
@@ -29,7 +26,6 @@ public class AgentValueForObsResponse extends AbstractResponse{
 		for(int i=0;i<theValues.size();i++){
 			theResponse+=theValues.get(i)+" ";
 		}
-		// TODO Auto-generated method stub
 		return theResponse;
 	}
 

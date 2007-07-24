@@ -1,7 +1,5 @@
 package messaging.agent;
 
-import java.util.StringTokenizer;
-
 import messaging.GenericMessage;
 import messaging.GenericMessageParser;
 import messaging.MessageUser;
@@ -25,9 +23,6 @@ public class AgentMessageParser extends GenericMessageParser{
 			System.out.println("AgentMessageParser - unknown query type: "+theMessage);
 			Thread.dumpStack();
 			System.exit(1);
-//			EnvMessageType theMessageType=new EnvMessageType(theCMDInt);
-//			System.out.println("The Type token was: "+typeString+" and I think the message type is: "+theCMDInt);
-
 			return null;
 	}
 }
