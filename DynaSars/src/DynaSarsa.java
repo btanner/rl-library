@@ -5,17 +5,11 @@ import messaging.agent.AgentMessageType;
 import messaging.agent.AgentMessages;
 import messaging.agent.AgentValueForObsRequest;
 import messaging.agent.AgentValueForObsResponse;
-import messaging.environment.EnvMessageType;
-import messaging.environment.EnvObsForStateRequest;
-import messaging.environment.EnvObsForStateResponse;
-import messaging.environment.EnvRangeResponse;
-import messaging.environment.EnvironmentMessageParser;
-import messaging.environment.EnvironmentMessages;
-import functionapproximation.FunctionApproximator;
-import functionapproximation.TileCodingFunctionApproximator;
 import rlglue.Action;
 import rlglue.Agent;
 import rlglue.Observation;
+import functionapproximation.FunctionApproximator;
+import functionapproximation.TileCodingFunctionApproximator;
 
 
 public class DynaSarsa implements Agent {
@@ -111,7 +105,6 @@ public class DynaSarsa implements Agent {
 
 		System.out.println("We need some code written in Agent Message for DynaSars!");
 		Thread.dumpStack();
-		// TODO Auto-generated method stub
 		return null;
 
 	}
