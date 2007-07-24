@@ -11,6 +11,7 @@ import messaging.MessageValueType;
 import rlglue.RLGlue;
 import rlglue.Observation;
 import utilities.UtilityShop;
+import visualization.QueryableAgent;
 
 public class AgentValueForObsRequest extends AgentMessages{
 	Vector<Observation> theRequestObservations=new Vector<Observation>();
@@ -100,4 +101,23 @@ public class AgentValueForObsRequest extends AgentMessages{
 	public Vector<Observation> getTheRequestObservations() {
 		return theRequestObservations;
 	}
+
+	@Override
+	public boolean canHandleAutomatically() {
+		return true;
+	}
+
+	@Override
+	public String handleAutomatically(QueryableAgent theAgent) {
+		Vector<Double> theValues = new Vector<Double>();
+
+		for(int i=0;i<theRequestObservations.size();i++){
+			theValues.add(theAgent.getValueForState(theRequestObservations.get(i)));
+		}
+
+		AgentValueForObsResponse theResponse = new AgentValueForObsResponse(theValues);
+		return theResponse.makeStringResponse();
+	}
+
+
 }

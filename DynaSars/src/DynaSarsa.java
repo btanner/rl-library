@@ -1,18 +1,14 @@
-import java.util.Vector;
-
 import messaging.agent.AgentMessageParser;
-import messaging.agent.AgentMessageType;
 import messaging.agent.AgentMessages;
-import messaging.agent.AgentValueForObsRequest;
-import messaging.agent.AgentValueForObsResponse;
 import rlglue.Action;
 import rlglue.Agent;
 import rlglue.Observation;
+import visualization.QueryableAgent;
 import functionapproximation.FunctionApproximator;
 import functionapproximation.TileCodingFunctionApproximator;
 
 
-public class DynaSarsa implements Agent {
+public class DynaSarsa implements Agent, QueryableAgent {
 
 
 	private int actionCount;
@@ -20,7 +16,7 @@ public class DynaSarsa implements Agent {
 	private double alpha;
 	private double defaultWidth;
 	private int planningSteps;
-		
+
 	private int numTilings;
 	FunctionApproximator theFA;
 
@@ -29,11 +25,11 @@ public class DynaSarsa implements Agent {
 	public DynaSarsa(){
 		this(5,16,.05,.05);
 	}
-	
+
 	public DynaSarsa(int planningSteps, int numTilings, double alpha, double defaultWidth){
 		this.epsilon=.05;
 		this.alpha=alpha;
-		
+
 		this.planningSteps=planningSteps;
 		this.numTilings=numTilings;
 		this.defaultWidth=defaultWidth;
@@ -41,7 +37,7 @@ public class DynaSarsa implements Agent {
 
 	double  queryValueFunction(Observation theObservation){
 		double bestActionValue=Double.MIN_VALUE;
-		
+
 		for(int a=0;a<actionCount;a++){
 			double thisActionValue=theFA.query(theObservation,a);		
 			if(thisActionValue>=bestActionValue)bestActionValue=thisActionValue;
@@ -51,7 +47,7 @@ public class DynaSarsa implements Agent {
 
 
 	public void agent_end(double reward) {
-	    theFA.end(reward);
+		theFA.end(reward);
 	}
 
 
@@ -61,7 +57,7 @@ public class DynaSarsa implements Agent {
 //		assert(TSO.action_dim==1);
 //		assert(TSO.action_types[0]=='i');
 //		assert((int) TSO.action_mins[0]==0);
-//		
+
 //		actionCount=(int) TSO.action_maxs[0];
 //		int obsCount=TSO.obs_dim;
 
@@ -78,35 +74,13 @@ public class DynaSarsa implements Agent {
 
 	public String agent_message(String theMessage) {
 		AgentMessages theMessageObject=AgentMessageParser.parseMessage(theMessage);
-		String theResponseString=null;
-		
 
-		if(theMessageObject.getTheMessageType().id()==AgentMessageType.kAgentQueryValuesForObs.id()){
-			AgentValueForObsRequest theCastedRequest=(AgentValueForObsRequest)theMessageObject;
-
-			Vector<Observation> theQueryObservations=theCastedRequest.getTheRequestObservations();
-			Vector<Double> theValues = new Vector<Double>();
-			
-			for(int i=0;i<theQueryObservations.size();i++){
-				theValues.add(getMaxValue(theQueryObservations.get(i)));
-			}
-			
-			AgentValueForObsResponse theResponse = new AgentValueForObsResponse(theValues);
-			
-			theResponseString=theResponse.makeStringResponse();
-
-			return theResponseString;
-		}
-		
-
-
-	
-		
+		if(theMessageObject.canHandleAutomatically())
+			return theMessageObject.handleAutomatically(this);
 
 		System.out.println("We need some code written in Agent Message for DynaSars!");
 		Thread.dumpStack();
 		return null;
-
 	}
 
 	public Action agent_start(Observation theObservation) {
@@ -121,84 +95,86 @@ public class DynaSarsa implements Agent {
 		numSteps++;
 		if(numSteps%25000==0)
 			System.out.println("Steps so far: "+numSteps);
-		
-	int theAction=chooseEpsilonGreedy(theObservation);
 
-	theFA.step(theObservation, reward,theAction);
+		int theAction=chooseEpsilonGreedy(theObservation);
 
-	 for(int i=0;i<planningSteps;i++)
-		theFA.plan();
+		theFA.step(theObservation, reward,theAction);
 
-	return makeAction(theAction);
-}
+		for(int i=0;i<planningSteps;i++)
+			theFA.plan();
 
-
-//make this more standard, return an int, forget the value
-int chooseEpsilonGreedy(Observation theObservation) {
-	int action=0;
-	
-	if(Math.random()<=epsilon){
-		action=(int)(Math.random()*(float)actionCount);
-	}else{
-		action=chooseGreedy(theObservation);
+		return makeAction(theAction);
 	}
-	return action;
-}
 
-double getMaxValue(Observation theObservation){
-	int action=0;
-	double bestValue=theFA.query(theObservation,action);
 
-	for(int a=1;a<actionCount;a++){
-		double thisActionValue=theFA.query(theObservation,a);		
+//	make this more standard, return an int, forget the value
+	int chooseEpsilonGreedy(Observation theObservation) {
+		int action=0;
 
-		if(thisActionValue>=bestValue){
-				bestValue=thisActionValue;
+		if(Math.random()<=epsilon){
+			action=(int)(Math.random()*(float)actionCount);
+		}else{
+			action=chooseGreedy(theObservation);
 		}
+		return action;
 	}
-	return bestValue;
-}
-	
-int chooseGreedy(Observation theObservation){
-	int num_ties=1;
-	int action=0;
-	double bestValue=theFA.query(theObservation,action);
 
-	for(int a=1;a<actionCount;a++){
-		double thisActionValue=theFA.query(theObservation,a);		
 
-		if(thisActionValue>=bestValue){
-			if(thisActionValue>bestValue){
-				action=a;
-				bestValue=thisActionValue;
-			}else {
-				num_ties++;
-				//FIXME: Did weird things, should look into this and fix it
-				if (0 == (int)(Math.random()*num_ties))
-				{
-					bestValue = thisActionValue;
-					action = a;
+	int chooseGreedy(Observation theObservation){
+		int num_ties=1;
+		int action=0;
+		double bestValue=theFA.query(theObservation,action);
+
+		for(int a=1;a<actionCount;a++){
+			double thisActionValue=theFA.query(theObservation,a);		
+
+			if(thisActionValue>=bestValue){
+				if(thisActionValue>bestValue){
+					action=a;
+					bestValue=thisActionValue;
+				}else {
+					num_ties++;
+					//FIXME: Did weird things, should look into this and fix it
+					if (0 == (int)(Math.random()*num_ties))
+					{
+						bestValue = thisActionValue;
+						action = a;
+					}
 				}
 			}
 		}
+		return action;
 	}
-	return action;
-}
 
-Action makeAction(int baseAction){
-	Action actionObject = new Action(1, 0);
-	actionObject.intArray[0] = baseAction;
-	return actionObject;
-}
-	
+	Action makeAction(int baseAction){
+		Action actionObject = new Action(1, 0);
+		actionObject.intArray[0] = baseAction;
+		return actionObject;
+	}
+
 
 	public void agent_cleanup() {
 		// TODO Auto-generated method stub
-		
+
 	}
 	public void agent_freeze() {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+
+	public double getValueForState(Observation theObservation) {
+		int action=0;
+		double bestValue=theFA.query(theObservation,action);
+
+		for(int a=1;a<actionCount;a++){
+			double thisActionValue=theFA.query(theObservation,a);		
+
+			if(thisActionValue>=bestValue){
+				bestValue=thisActionValue;
+			}
+		}
+		return bestValue;
 	}
 
 }

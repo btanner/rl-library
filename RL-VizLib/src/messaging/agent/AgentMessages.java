@@ -1,4 +1,5 @@
 package messaging.agent;
+import visualization.QueryableAgent;
 import messaging.MessageUser;
 
 
@@ -26,5 +27,16 @@ import messaging.MessageUser;
 
 		public MessageUser getTo() {
 			return to;
+		}
+
+		/*
+		 * Override this if you can handle automatically given a queryable agent
+		 */
+		public boolean canHandleAutomatically() {
+			return false;
+		}
+		
+		public String handleAutomatically(QueryableAgent theAgent){
+			return "no response";
 		}
 	};

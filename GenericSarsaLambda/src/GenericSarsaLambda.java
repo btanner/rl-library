@@ -8,13 +8,14 @@ import messaging.agent.AgentValueForObsResponse;
 import rlglue.Action;
 import rlglue.Agent;
 import rlglue.Observation;
+import visualization.QueryableAgent;
 
 import functionapproximation.TileCoder;
 
-public class GenericSarsaLambda implements Agent {
-	
-	
-	
+public class GenericSarsaLambda implements Agent, QueryableAgent {
+
+
+
 	private int actionCount;
 	int MEMORY_SIZE;
 	int NUM_TILINGS;
@@ -28,14 +29,12 @@ public class GenericSarsaLambda implements Agent {
 
 	// Global RL variables:
 	double tempQ[];	// action values
-	double queryQ[]; //Q values used when querying value function
 
 	double observationDividers[];
 
 	double theta[];							// modifyable parameter vector, aka memory, weights
 	double e[];								// eligibility traces
 	int tempF[];								// sets of features, one set per action
-	int queryF[];							//Features used in querying the value function
 
 
 
@@ -53,7 +52,7 @@ public class GenericSarsaLambda implements Agent {
 	int getNumTilings(){return NUM_TILINGS;}
 	int getMemorySize(){return MEMORY_SIZE;}
 	double getLambda(){return lambda;}
-	
+
 
 	TileCoder theTileCoder=new TileCoder();
 	public void agent_cleanup() {
@@ -107,37 +106,22 @@ public class GenericSarsaLambda implements Agent {
 		for(int i=0;i<doubleCount;i++) observationDividers[i]=defaultDivider;
 
 		tempF = new int[actionCount*NUM_TILINGS];
-		queryF = new int[actionCount*NUM_TILINGS];
 		tempQ = new double[actionCount];
-		queryQ = new double[actionCount];
 	}
 
 	public String agent_message(String theMessage) {
 		AgentMessages theMessageObject=AgentMessageParser.parseMessage(theMessage);
-		String theResponseString=null;
-		
 
-		if(theMessageObject.getTheMessageType().id()==AgentMessageType.kAgentQueryValuesForObs.id()){
-			AgentValueForObsRequest theCastedRequest=(AgentValueForObsRequest)theMessageObject;
+		if(theMessageObject.canHandleAutomatically())
+			return theMessageObject.handleAutomatically(this);
 
-			Vector<Observation> theQueryObservations=theCastedRequest.getTheRequestObservations();
-			Vector<Double> theValues = new Vector<Double>();
-			
-			for(int i=0;i<theQueryObservations.size();i++){
-				theValues.add(queryValueFunction(theQueryObservations.get(i)));
-			}
-			
-			AgentValueForObsResponse theResponse = new AgentValueForObsResponse(theValues);
-			
-			theResponseString=theResponse.makeStringResponse();
-
-		}
-		return theResponseString;
-
+		System.out.println("We need some code written in Agent Message for Generic Sarsa Lambda!");
+		Thread.dumpStack();
+		return null;
 	}
-		
 
-			
+
+
 
 	public Action agent_start(Observation Observations) {
 		DecayTraces(0.0);                                            // clear all traces
@@ -152,7 +136,7 @@ public class GenericSarsaLambda implements Agent {
 		else
 			oldAction = argmax(tempQ);                                      // pick argmax action
 
-		
+
 		Action action = new Action(1, 0);
 		action.intArray[0] = oldAction;
 
@@ -219,9 +203,7 @@ public class GenericSarsaLambda implements Agent {
 		this.MAX_NONZERO_TRACES=100000;
 		observationDividers=null;
 		this.tempF=null;
-		this.queryF=null;
 		this.tempQ=null;
-		this.queryQ=null;
 
 		sharedConstructorStuff();
 	}
@@ -238,9 +220,7 @@ public class GenericSarsaLambda implements Agent {
 		this.defaultDivider=defaultDivider;
 		this.observationDividers=null;
 		this.tempF=null;
-		this.queryF=null;
 		this.tempQ=null;
-		this.queryQ=null;
 
 		sharedConstructorStuff();
 	}
@@ -268,12 +248,6 @@ public class GenericSarsaLambda implements Agent {
 
 
 
-	public double queryValueFunction(Observation queryObservation){
-		loadF(queryF,queryObservation);                         // compute features
-		loadQ(queryQ,queryF); 
-		int maxIndex=argmax(queryQ);
-		return queryQ[maxIndex];	
-	}
 
 	// Compute all the action values from current F and theta
 	private void loadQ(double Q[], int F[]) 
@@ -283,7 +257,7 @@ public class GenericSarsaLambda implements Agent {
 			Q[a] = 0;
 			for (int j=0; j<NUM_TILINGS; j++){
 				try{
-				Q[a] += theta[F[a*NUM_TILINGS+j]];
+					Q[a] += theta[F[a*NUM_TILINGS+j]];
 				}catch(Exception e){
 					System.out.println("Index into F is: "+a+"*"+NUM_TILINGS+"+"+j);
 					System.out.println("Index into theta is: "+F[a*NUM_TILINGS+j]);
@@ -302,8 +276,8 @@ public class GenericSarsaLambda implements Agent {
 			Q[a] += theta[F[a*NUM_TILINGS+j]];
 	}
 
-	
-	
+
+
 	private void loadF(int F[],Observation theObservation)
 	{
 		int doubleCount=theObservation.doubleArray.length;
@@ -418,6 +392,15 @@ public class GenericSarsaLambda implements Agent {
 			if (e[f] < minimum_trace) 
 				ClearExistentTrace(f,loc);
 		}
+	}
+	public double getValueForState(Observation theObservation) {
+		int queryF[] = new int[actionCount*NUM_TILINGS];
+		double queryQ[] = new double[actionCount];
+
+		loadF(queryF,theObservation);                         // compute features
+		loadQ(queryQ,queryF); 
+		int maxIndex=argmax(queryQ);
+		return queryQ[maxIndex];	
 	}
 
 
