@@ -1,10 +1,11 @@
+package Environments;
 import rlglue.Environment;
 import rlglue.Observation;
 import rlglue.Reward_observation;
 
 
 public abstract class EnvironmentBase implements Environment {
-	abstract Observation makeObservation();
+	abstract protected Observation makeObservation();
 	
 	protected Reward_observation makeRewardObservation(double reward, boolean isTerminal){
 		Reward_observation RO=new Reward_observation();

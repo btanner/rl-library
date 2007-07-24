@@ -1,5 +1,8 @@
+package MountainCar;
 
 import java.util.Vector;
+
+import Environments.EnvironmentBase;
 
 import messages.MCStateResponse;
 import messaging.environment.EnvCustomRequest;
@@ -15,6 +18,7 @@ import rlglue.Random_seed_key;
 import rlglue.Reward_observation;
 import rlglue.State_key;
 import visualization.QueryableEnvironment;
+import Environments.EnvironmentBase;
 
 /*===========================
 
