@@ -1,17 +1,6 @@
 import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.io.IOException;
-import java.util.Vector;
-
-import javax.swing.JPanel;
-
-import messaging.environment.EnvRangeRequest;
-import messaging.environment.EnvRangeResponse;
-
 import rlglue.RLGlue;
-
-import java.util.concurrent.locks.*;
 
 
 

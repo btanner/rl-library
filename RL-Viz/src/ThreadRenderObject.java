@@ -1,11 +1,12 @@
+import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Image;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 
 public class ThreadRenderObject extends Thread {
-	BufferedImage tmpImage=null;
+	BufferedImage workImage=null;
 	BufferedImage prodImage=null;
 
 	VizComponent theComponent=null;
@@ -13,6 +14,7 @@ public class ThreadRenderObject extends Thread {
 	
 	volatile boolean shouldDie=false;
 	
+	AffineTransform theScaleTransform=null;
 	int defaultSleepTime=50;
 	ImageAggregator theBoss;
 	
@@ -20,19 +22,47 @@ public class ThreadRenderObject extends Thread {
 		this.theComponent=theComponent;
 		this.theSize=theSize;
 		
-		tmpImage=new BufferedImage((int)theSize.getX(),(int)theSize.getY(),BufferedImage.TYPE_INT_RGB);
-		prodImage=new BufferedImage((int)theSize.getX(),(int)theSize.getY(),BufferedImage.TYPE_INT_RGB);
+		workImage=new BufferedImage((int)theSize.getX(),(int)theSize.getY(),BufferedImage.TYPE_INT_ARGB);
+
+		//Set the transform on the image so we can draw everything in [0,1]
+
+
+		theScaleTransform=new AffineTransform();
+		theScaleTransform.scale(theSize.getX(), theSize.getY());
+
+		
+		prodImage=new BufferedImage((int)theSize.getX(),(int)theSize.getY(),BufferedImage.TYPE_INT_ARGB);
+		
+		
 		this.theBoss=theBoss;
 	}
+	
 
+	@Override
 	public void run() {
 		
 		while(!shouldDie){
 
 			if(theComponent.update()){
-				theComponent.render(tmpImage.createGraphics());
-				Graphics2D G=(Graphics2D)prodImage.getGraphics();
-				G.drawImage(tmpImage, null, 0, 0);
+				Graphics2D g=workImage.createGraphics();
+				
+				//Set the scaling transform
+				AffineTransform currentTransform=g.getTransform();
+				currentTransform.concatenate(theScaleTransform);
+				g.setTransform(currentTransform);
+
+				//Clear the screen to transparent
+				Color myClearColor=new Color(0.0f,0.0f,0.0f,0.0f);
+				g.setColor(myClearColor);
+				g.setBackground(myClearColor);
+				g.clearRect(0,0,1,1);
+
+				theComponent.render(g);
+				
+				BufferedImage tmpImage=prodImage;
+				prodImage=workImage;
+				workImage=tmpImage;
+				
 				theBoss.receiveNotification();
 
 				try {

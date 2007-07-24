@@ -1,4 +1,4 @@
-import java.awt.Point;
+package interfaces;
 import java.util.Vector;
 
 import rlglue.Observation;

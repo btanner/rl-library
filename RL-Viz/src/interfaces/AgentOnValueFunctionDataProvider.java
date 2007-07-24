@@ -1,8 +1,9 @@
-import java.awt.geom.Point2D;
+package interfaces;
 
 
 public interface AgentOnValueFunctionDataProvider {
 	public double getCurrentStateInDimension(int whichDimension);
-	public Point2D getWindowLocationForQueryPoint(Point2D stateValues);
+	public double getMinValueForDim(int whichDimension);
+	public double getMaxValueForDim(int whichDimension);
 	public void updateAgentState();
 }

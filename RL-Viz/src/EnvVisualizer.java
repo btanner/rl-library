@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
@@ -15,7 +16,8 @@ public abstract class EnvVisualizer implements ImageAggregator {
 
 	
 	public EnvVisualizer(){
-		productionEnvImage=new BufferedImage(200,200,BufferedImage.TYPE_INT_RGB);
+		productionEnvImage=new BufferedImage(200,200,BufferedImage.TYPE_INT_ARGB);
+		bufferEnvImage=new BufferedImage(200,200,BufferedImage.TYPE_INT_ARGB);
 
 	}
 	
@@ -29,14 +31,19 @@ public abstract class EnvVisualizer implements ImageAggregator {
 	}
 
 	private void redrawCurrentImage(){
-		bufferEnvImage=new BufferedImage(200,200,BufferedImage.TYPE_INT_RGB);
 		Graphics2D G= bufferEnvImage.createGraphics();
+		Color myClearColor=new Color(0.0f,0.0f,0.0f,0.0f);
+		G.setColor(myClearColor);
+		G.setBackground(myClearColor);
+		G.clearRect(0,0,bufferEnvImage.getWidth(),bufferEnvImage.getHeight());
+
 		for (ThreadRenderObject thisRunner : threadRunners) {
 			//this needs to actually just return something that draws when it gets an update signal or something
 			G.drawImage(thisRunner.getProductionImage(),0,0,null);
 		}
+		BufferedImage tmpImage=productionEnvImage;
 		productionEnvImage=bufferEnvImage;
-		bufferEnvImage=null;
+		bufferEnvImage=tmpImage;
 
 	}
 

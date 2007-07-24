@@ -2,15 +2,12 @@ package messages;
 
 
 import java.util.StringTokenizer;
-import java.util.Vector;
-
 import messaging.GenericMessage;
 import messaging.MessageUser;
 import messaging.MessageValueType;
 import messaging.environment.EnvMessageType;
 import messaging.environment.EnvironmentMessages;
 
-import rlglue.Observation;
 import rlglue.RLGlue;
 
 public class MCStateRequest extends EnvironmentMessages{
@@ -25,6 +22,9 @@ public class MCStateRequest extends EnvironmentMessages{
 
 		String responseMessage=RLGlue.RL_env_message(theRequest);
 
+//should implement this soon.
+//		MCStateResponse theResponse=new MCStateResponse(responseMessage);
+			
 		GenericMessage theGenericResponse=new GenericMessage(responseMessage);
 
 		String thePayLoadString=theGenericResponse.getPayLoad();

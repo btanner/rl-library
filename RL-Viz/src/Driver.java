@@ -4,7 +4,6 @@ import java.util.Vector;
 
 import messaging.agent.AgentValueForObsRequest;
 import messaging.agent.AgentValueForObsResponse;
-import messaging.environment.EnvMessageType;
 import messaging.environment.EnvObsForStateRequest;
 import messaging.environment.EnvObsForStateResponse;
 import messaging.environment.EnvRangeRequest;
@@ -92,8 +91,8 @@ public class Driver
 	}
 	
 	/*average steps and returns*/
-	avgSteps /= (double)Driver.kNumEpisodes;
-	avgReturn /= (double)Driver.kNumEpisodes;
+	avgSteps /= Driver.kNumEpisodes;
+	avgReturn /= Driver.kNumEpisodes;
 	
 	/*print out results*/
 	System.out.println("\n-----------------------------------------------\n");

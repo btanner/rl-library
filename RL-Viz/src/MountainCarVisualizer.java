@@ -1,7 +1,6 @@
-import java.awt.Component;
-import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
+import interfaces.AgentOnValueFunctionDataProvider;
+import interfaces.ValueFunctionDataProvider;
+
 import java.util.Vector;
 
 import messages.MCStateRequest;
@@ -26,16 +25,14 @@ MCStateResponse theCurrentState=null;
 
 	public MountainCarVisualizer(){
 		super();
-		theValueFunction=new ValueFunctionVizComponent(new Point2D.Double(1.0,1.0),this);
+		theValueFunction=new ValueFunctionVizComponent(this);
 		//Get the Ranges (internalize this)
 		EnvRangeResponse theERResponse=EnvRangeRequest.Execute();
 		mins = theERResponse.getMins();
 		maxs = theERResponse.getMaxs();
 		
-		VizComponent theRedBox=new RedBoxVizComponent();
 		AgentOnValueFunctionVizComponent agentOnVF=new AgentOnValueFunctionVizComponent(this);
 		super.addVizComponent(theValueFunction);
-//		super.addVizComponent(theRedBox);
 		super.addVizComponent(agentOnVF);
 		super.startVisualizing();
 	
@@ -80,15 +77,6 @@ MCStateResponse theCurrentState=null;
 			return theCurrentState.getVelocity();
 		
 	}
-
-
-
-
-	public Point2D getWindowLocationForQueryPoint(Point2D stateValues) {
-		return theValueFunction.getWindowLocationForQueryPoint(stateValues);
-	}
-
-
 
 
 	public void updateAgentState() {

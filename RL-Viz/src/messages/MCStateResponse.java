@@ -1,8 +1,6 @@
 package messages;
 
 
-import java.util.Vector;
-
 import messaging.AbstractResponse;
 import messaging.MessageUser;
 import messaging.MessageValueType;
@@ -22,6 +20,7 @@ public class MCStateResponse extends AbstractResponse{
 		this.deltaheight=deltaheight;
 	}
 
+	@Override
 	public String toString() {
 		String theResponse="MCStateResponse: not implemented ";
 		return theResponse;
