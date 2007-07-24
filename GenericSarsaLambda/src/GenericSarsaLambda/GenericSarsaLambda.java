@@ -1,15 +1,10 @@
-import java.util.Vector;
-
+package GenericSarsaLambda;
 import messaging.agent.AgentMessageParser;
-import messaging.agent.AgentMessageType;
 import messaging.agent.AgentMessages;
-import messaging.agent.AgentValueForObsRequest;
-import messaging.agent.AgentValueForObsResponse;
 import rlglue.Action;
 import rlglue.Agent;
 import rlglue.Observation;
 import visualization.QueryableAgent;
-
 import functionapproximation.TileCoder;
 
 public class GenericSarsaLambda implements Agent, QueryableAgent {

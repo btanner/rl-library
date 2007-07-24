@@ -1,15 +1,7 @@
 package MountainCar;
 
-import java.util.Vector;
-
-import Environments.EnvironmentBase;
-
 import messages.MCStateResponse;
 import messaging.environment.EnvCustomRequest;
-import messaging.environment.EnvMessageType;
-import messaging.environment.EnvObsForStateRequest;
-import messaging.environment.EnvObsForStateResponse;
-import messaging.environment.EnvRangeResponse;
 import messaging.environment.EnvironmentMessageParser;
 import messaging.environment.EnvironmentMessages;
 import rlglue.Action;
@@ -100,7 +92,6 @@ public class MountainCar extends EnvironmentBase implements QueryableEnvironment
 		if(theMessageObject.canHandleAutomatically())
 			return theMessageObject.handleAutomatically(this);
 
-		String theResponseString=null;
 
 		if(theMessageObject.getTheMessageType().id()==messaging.environment.EnvMessageType.kEnvCustom.id()){
 			EnvCustomRequest theCastedRequest=(EnvCustomRequest)theMessageObject;
