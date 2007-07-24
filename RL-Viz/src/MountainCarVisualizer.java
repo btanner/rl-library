@@ -12,6 +12,8 @@ import messaging.environment.EnvObsForStateResponse;
 import messaging.environment.EnvRangeRequest;
 import messaging.environment.EnvRangeResponse;
 import rlglue.Observation;
+import visualization.AgentOnValueFunctionVizComponent;
+import visualization.EnvVisualizer;
 
 
 public class MountainCarVisualizer  extends EnvVisualizer implements ValueFunctionDataProvider, AgentOnValueFunctionDataProvider {

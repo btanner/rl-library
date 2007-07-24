@@ -1,3 +1,4 @@
+package visualization;
 import interfaces.AgentOnValueFunctionDataProvider;
 import utilities.UtilityShop;
 

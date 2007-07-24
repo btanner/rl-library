@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
+import visualization.EnvVisualizer;
+
 public class EnvironmentPanel extends JPanel {
 
 	BufferedImage latestImage=null;

@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import visualization.VizComponent;
+
 
 public class RedBoxVizComponent implements VizComponent {
 
