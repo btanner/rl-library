@@ -1,3 +1,5 @@
+package rlViz;
+
 import interfaces.AgentOnValueFunctionDataProvider;
 import interfaces.ValueFunctionDataProvider;
 

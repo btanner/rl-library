@@ -1,3 +1,5 @@
+package rlViz;
+
 import java.awt.Dimension;
 import java.io.IOException;
 import rlglue.RLGlue;

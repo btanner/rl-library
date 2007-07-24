@@ -11,6 +11,15 @@ public class UtilityShop {
 			return (theValue-minPossible)/(maxPossible-minPossible);
 	}
 
+static public  Observation cloneObservation(Observation theObs){
+		
+		Observation newObs=new Observation(theObs.intArray.length, theObs.doubleArray.length);
+		for(int i=0;i<theObs.intArray.length;i++) newObs.intArray[i]=theObs.intArray[i];
+		for(int i=0;i<theObs.doubleArray.length;i++) newObs.doubleArray[i]=theObs.doubleArray[i];
+
+		return newObs;
+	}
+
 	static public StringBuffer serializeObservation(StringBuffer theRequestBuffer,Observation theObs) {
 		theRequestBuffer.append(theObs.intArray.length);
 		theRequestBuffer.append("_");

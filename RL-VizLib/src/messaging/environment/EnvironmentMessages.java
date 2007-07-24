@@ -1,5 +1,4 @@
 package messaging.environment;
-import visualization.QueryableAgent;
 import visualization.QueryableEnvironment;
 import messaging.MessageUser;
 

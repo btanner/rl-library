@@ -1,3 +1,5 @@
+package rlViz;
+
 import java.awt.Graphics2D;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -8,6 +10,10 @@ import visualization.EnvVisualizer;
 
 public class EnvironmentPanel extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	BufferedImage latestImage=null;
     EnvVisualizer theVisualizer=null;
 
