@@ -16,28 +16,28 @@ import messaging.environment.EnvRangeResponse;
 import rlglue.Observation;
 import visualization.AgentOnValueFunctionVizComponent;
 import visualization.EnvVisualizer;
+import visualization.VizComponent;
 
 
 public class MountainCarVisualizer  extends EnvVisualizer implements ValueFunctionDataProvider, AgentOnValueFunctionDataProvider {
 
-	Vector<Double> mins = new Vector<Double>();
-	Vector<Double> maxs = new Vector<Double>();
+	Vector<Double> mins = null;
+	Vector<Double> maxs = null;
 
-MCStateResponse theCurrentState=null;
+	MCStateResponse theCurrentState=null;
 
-	ValueFunctionVizComponent theValueFunction=null;
 
 	public MountainCarVisualizer(){
 		super();
-		theValueFunction=new ValueFunctionVizComponent(this);
-		//Get the Ranges (internalize this)
-		EnvRangeResponse theERResponse=EnvRangeRequest.Execute();
-		mins = theERResponse.getMins();
-		maxs = theERResponse.getMaxs();
+		VizComponent theValueFunction=new ValueFunctionVizComponent(this);
+		VizComponent agentOnVF=new AgentOnValueFunctionVizComponent(this);
+		VizComponent carOnMountain=new CarOnMountainVizComponent();
 		
-		AgentOnValueFunctionVizComponent agentOnVF=new AgentOnValueFunctionVizComponent(this);
-		super.addVizComponent(theValueFunction);
-		super.addVizComponent(agentOnVF);
+		super.addVizComponentAtPositionWithSize(theValueFunction,0,.5,1.0,.5);
+		super.addVizComponentAtPositionWithSize(agentOnVF,0,.5,1.0,.5);
+		super.addVizComponentAtPositionWithSize(carOnMountain, 0, 0, 1.0, 0.5);
+//		RedBoxVizComponent testComponent=new RedBoxVizComponent();
+//		super.addVizComponent(testComponent);
 		super.startVisualizing();
 	
 
@@ -46,18 +46,24 @@ MCStateResponse theCurrentState=null;
 	
 	
 	
+	public void updateEnvironmentVariableRanges(){
+		//Get the Ranges (internalize this)
+		EnvRangeResponse theERResponse=EnvRangeRequest.Execute();
+		mins = theERResponse.getMins();
+		maxs = theERResponse.getMaxs();
+	}
 	
 	public double getMaxValueForDim(int whichDimension) {
+		if(maxs==null)updateEnvironmentVariableRanges();
 		return maxs.get(whichDimension);
 	}
 
 	public double getMinValueForDim(int whichDimension) {
+		if(mins==null)updateEnvironmentVariableRanges();
 		return mins.get(whichDimension);
 	}
 
 	public Vector<Observation> getQueryObservations(Vector<Observation> theQueryStates) {
-		System.out.println("getQueryObservations  was called in RLVizFrame!");
-
 		EnvObsForStateResponse theObsForStateResponse=EnvObsForStateRequest.Execute(theQueryStates);
 		return theObsForStateResponse.getTheObservations();
 	}

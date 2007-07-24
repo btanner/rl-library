@@ -1,14 +1,18 @@
 package rlViz;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 import visualization.EnvVisualizer;
 
-public class EnvironmentPanel extends JPanel {
+public class EnvironmentPanel extends JPanel implements ComponentListener{
 
 	/**
 	 * 
@@ -21,7 +25,10 @@ public class EnvironmentPanel extends JPanel {
 		super();
 		this.setSize((int)theSize.getWidth(), (int)theSize.getHeight());
 		this.theVisualizer=theVisualizer;
-		theVisualizer.setParentComponent(this);
+		theVisualizer.setParentComponent(this); 
+
+		addComponentListener(this);
+		
 	}
 
 	int paintCount=0;
@@ -38,8 +45,8 @@ public class EnvironmentPanel extends JPanel {
 		
 		Graphics2D g2=(Graphics2D)g;
 		
-//		g2.setColor(Color.RED);
-//		g2.fillRect(0,0,100,100);
+		g2.setColor(Color.BLUE);
+		g2.fillRect(0,0,1000,1000);
 
 		g2.drawImage(theVisualizer.getLatestImage(), 0, 0, this);
 //		
@@ -62,6 +69,25 @@ public class EnvironmentPanel extends JPanel {
 //		g2.drawImage(b,0,0,null);
 //		
 //		this.repaint();
+	}
+
+	public void componentHidden(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void componentMoved(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void componentResized(ComponentEvent arg0) {
+        		theVisualizer.receiveSizeChange(arg0.getComponent().getSize());
+	}
+
+	public void componentShown(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

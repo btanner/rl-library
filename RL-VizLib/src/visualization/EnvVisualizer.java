@@ -1,6 +1,7 @@
 package visualization;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -15,33 +16,51 @@ public abstract class EnvVisualizer implements ImageAggregator {
 	private Vector<ThreadRenderObject> threadRunners=new Vector<ThreadRenderObject>();
 	private Vector<Thread> theThreads=new Vector<Thread>();
 
-	
-	public EnvVisualizer(){
-		productionEnvImage=new BufferedImage(200,200,BufferedImage.TYPE_INT_ARGB);
-		bufferEnvImage=new BufferedImage(200,200,BufferedImage.TYPE_INT_ARGB);
+	private Vector<Point2D> positions=new Vector<Point2D>();
+	private Vector<Point2D> sizes=new Vector<Point2D>();
+
+	Dimension currentVisualizerPanelSize=new Dimension(100,100);
+
+
+	public void receiveSizeChange(Dimension newPanelSize){
+		currentVisualizerPanelSize=newPanelSize;
+		resizeImages();
+	}
+
+	private synchronized void resizeImages() {
+		productionEnvImage=new BufferedImage((int)currentVisualizerPanelSize.getWidth(),(int)currentVisualizerPanelSize.getHeight(),BufferedImage.TYPE_INT_ARGB);
+		bufferEnvImage=new BufferedImage((int)currentVisualizerPanelSize.getWidth(),(int)currentVisualizerPanelSize.getHeight(),BufferedImage.TYPE_INT_ARGB);
+
+		for(int i=0;i<threadRunners.size();i++){
+			threadRunners.get(i).receiveSizeChange(makeSizeForVizComponent(i));
+		}
 
 	}
-	
+
+	public EnvVisualizer(){
+		resizeImages();
+	}
+
 	public BufferedImage getLatestImage() {
 		return productionEnvImage;
 	}
 
-	//Maybe addVizComponent at location with size
-	public void addVizComponent(VizComponent newComponent){
-		threadRunners.add(new ThreadRenderObject(new Point2D.Double(200.0,200.0),newComponent,this));
-	}
 
-	private void redrawCurrentImage(){
+	private synchronized void redrawCurrentImage(){
 		Graphics2D G= bufferEnvImage.createGraphics();
 		Color myClearColor=new Color(0.0f,0.0f,0.0f,0.0f);
 		G.setColor(myClearColor);
 		G.setBackground(myClearColor);
 		G.clearRect(0,0,bufferEnvImage.getWidth(),bufferEnvImage.getHeight());
 
-		for (ThreadRenderObject thisRunner : threadRunners) {
-			//this needs to actually just return something that draws when it gets an update signal or something
-			G.drawImage(thisRunner.getProductionImage(),0,0,null);
+		for(int i=0;i<threadRunners.size();i++){
+			ThreadRenderObject thisRunner=threadRunners.get(i);
+
+			Dimension position=makeLocationForVizComponent(i);
+
+			G.drawImage(thisRunner.getProductionImage(),position.width,position.height,null);
 		}
+
 		BufferedImage tmpImage=productionEnvImage;
 		productionEnvImage=bufferEnvImage;
 		bufferEnvImage=tmpImage;
@@ -66,12 +85,12 @@ public abstract class EnvVisualizer implements ImageAggregator {
 		}
 	}
 	protected void stopVisualizing() {
-//tell them all to die
+//		tell them all to die
 		for (ThreadRenderObject thisRunner : threadRunners) {
 			thisRunner.kill();
 		}
 
-//wait for them all to be done
+//		wait for them all to be done
 		for (Thread thisThread : theThreads) {
 			try {
 				thisThread.join();
@@ -80,6 +99,39 @@ public abstract class EnvVisualizer implements ImageAggregator {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private Dimension makeSizeForVizComponent(int i){
+		double width=currentVisualizerPanelSize.getWidth();
+		double height=currentVisualizerPanelSize.getHeight();
+
+		double scaledWidth=width*sizes.get(i).getX();
+		double scaledHeight=height*sizes.get(i).getY();
+
+		Dimension d=new Dimension();
+		d.setSize(scaledWidth,scaledHeight);
+
+		return d;
+	}
+	private Dimension makeLocationForVizComponent(int i){
+		double width=currentVisualizerPanelSize.getWidth();
+		double height=currentVisualizerPanelSize.getHeight();
+
+		double startX=width*positions.get(i).getX();
+		double startY=height*positions.get(i).getY();
+
+		Dimension d=new Dimension();
+		d.setSize(startX,startY);
+
+		return d;
+	}
+
+	//All of these should be between 0 and 1
+	public void addVizComponentAtPositionWithSize(VizComponent newComponent, double xPos, double yPos, double width, double height){
+		threadRunners.add(new ThreadRenderObject(new Dimension(200,200),newComponent,this));
+		positions.add(new Point2D.Double(xPos,yPos));
+		sizes.add(new Point2D.Double(width,height));
+
 	}
 
 }

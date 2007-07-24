@@ -2,21 +2,21 @@ package rlViz;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 
 import visualization.VizComponent;
 
 
 public class RedBoxVizComponent implements VizComponent {
 
-	int count=0;
-	
+
 	public void render(Graphics2D g) {
-		count++;
-		System.out.println("Render on red box called: "+count+" times");
 		
-		g.setColor(Color.RED);
-		
-		g.fillRect(0, 0, 100, 100);
+	g.setColor(Color.RED);
+		Rectangle2D fillRect=new Rectangle2D.Double(0d,0d,1d,1d);
+		g.fill(fillRect);
+
 	}
 
 	public boolean update() {

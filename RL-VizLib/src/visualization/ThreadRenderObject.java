@@ -1,5 +1,6 @@
 package visualization;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -12,31 +13,37 @@ public class ThreadRenderObject extends Thread {
 	BufferedImage prodImage=null;
 
 	VizComponent theComponent=null;
-	Point2D theSize=null;
-	
+
 	volatile boolean shouldDie=false;
 	
 	AffineTransform theScaleTransform=null;
 	int defaultSleepTime=50;
 	ImageAggregator theBoss;
 	
-	public ThreadRenderObject(Point2D theSize, VizComponent theComponent, ImageAggregator theBoss){
-		this.theComponent=theComponent;
-		this.theSize=theSize;
-		
-		workImage=new BufferedImage((int)theSize.getX(),(int)theSize.getY(),BufferedImage.TYPE_INT_ARGB);
+	Dimension mySize;
+	
+	public void receiveSizeChange(Dimension newPanelSize){
+		mySize=newPanelSize;
+		resizeImages();
+	}
 
+	private void resizeImages() {
+		workImage=new BufferedImage((int)mySize.getWidth(),(int)mySize.getHeight(),BufferedImage.TYPE_INT_ARGB);
 		//Set the transform on the image so we can draw everything in [0,1]
-
-
 		theScaleTransform=new AffineTransform();
-		theScaleTransform.scale(theSize.getX(), theSize.getY());
+		theScaleTransform.scale(mySize.getWidth(),mySize.getHeight());
 
-		
-		prodImage=new BufferedImage((int)theSize.getX(),(int)theSize.getY(),BufferedImage.TYPE_INT_ARGB);
-		
-		
+		prodImage=new BufferedImage((int)mySize.getWidth(),(int)mySize.getHeight(),BufferedImage.TYPE_INT_ARGB);
+}
+
+	
+	
+	public ThreadRenderObject(Dimension currentVisualizerPanelSize, VizComponent theComponent, ImageAggregator theBoss){
+		this.theComponent=theComponent;
+		this.mySize=currentVisualizerPanelSize;
 		this.theBoss=theBoss;
+
+		resizeImages();
 	}
 	
 
@@ -68,8 +75,8 @@ public class ThreadRenderObject extends Thread {
 				theBoss.receiveNotification();
 
 				try {
-					Thread.yield();
-//					Thread.sleep(defaultSleepTime);
+//					Thread.yield();
+					Thread.sleep(defaultSleepTime);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -87,5 +94,7 @@ public class ThreadRenderObject extends Thread {
 	public void kill() {
 		shouldDie=true;
 	}
+
+
 
 }
