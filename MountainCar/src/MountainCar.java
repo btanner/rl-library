@@ -14,13 +14,14 @@ import rlglue.Observation;
 import rlglue.Random_seed_key;
 import rlglue.Reward_observation;
 import rlglue.State_key;
+import visualization.QueryableEnvironment;
 
 /*===========================
 
 Dynamics
 
 ============================*/
-public class MountainCar extends EnvironmentBase{
+public class MountainCar extends EnvironmentBase implements QueryableEnvironment{
 	
 	
 	private double position;
@@ -91,43 +92,11 @@ public class MountainCar extends EnvironmentBase{
 
 	public String env_message(String theMessage) {
 		EnvironmentMessages theMessageObject=EnvironmentMessageParser.parseMessage(theMessage);
+		
+		if(theMessageObject.canHandleAutomatically())
+			return theMessageObject.handleAutomatically(this);
+
 		String theResponseString=null;
-
-		if(theMessageObject.getTheMessageType().id()==EnvMessageType.kEnvQueryVarRanges.id()){
-//			//Handle a request for the ranges
-			Vector<Double> mins = new Vector<Double>();
-			Vector<Double> maxs = new Vector<Double>();
-			
-				mins.add(getMcar_min_position());
-				mins.add(getMcar_min_velocity());
-				maxs.add(getMcar_max_position());
-				maxs.add(getMcar_max_velocity());
-				
-			EnvRangeResponse theResponse=new EnvRangeResponse(mins, maxs);
-			
-			theResponseString=theResponse.makeStringResponse();
-			return theResponseString;
-
-		}
-		if(theMessageObject.getTheMessageType().id()==messaging.environment.EnvMessageType.kEnvQueryObservationsForState.id()){
-			
-			EnvObsForStateRequest theCastedRequest=(EnvObsForStateRequest)theMessageObject;
-			
-			Vector<Observation> theQueryStates=theCastedRequest.getTheRequestStates();
-			Vector<Observation> theObservations= new Vector<Observation>();
-			
-			for(int i=0;i<theQueryStates.size();i++){
-				Observation thisObs=getObservationForState(theQueryStates.get(i));
-				theObservations.add(thisObs);
-			}
-			
-			EnvObsForStateResponse theResponse = new EnvObsForStateResponse(theObservations);
-			
-			theResponseString=theResponse.makeStringResponse();
-
-			return theResponseString;
-		}
-
 
 		if(theMessageObject.getTheMessageType().id()==messaging.environment.EnvMessageType.kEnvCustom.id()){
 			EnvCustomRequest theCastedRequest=(EnvCustomRequest)theMessageObject;
@@ -156,10 +125,6 @@ public class MountainCar extends EnvironmentBase{
 	}
 
 	
-//This is really easy in mountainCar because you observe exactly the state
-	private Observation getObservationForState(Observation observation) {
-		return observation;
-	}
 
 	@Override
 	protected Observation makeObservation(){
@@ -256,6 +221,30 @@ public class MountainCar extends EnvironmentBase{
 			return 0.0f;
 		else
 			return -1.0f;
+	}
+
+	public double getMaxValueForQuerableVariable(int dimension) {
+		if(dimension==0)
+			return this.getMcar_max_position();
+		else
+			return this.getMcar_max_velocity();
+	}
+
+	public double getMinValueForQuerableVariable(int dimension) {
+		if(dimension==0)
+			return this.getMcar_min_position();
+		else
+			return this.getMcar_min_velocity();
+	}
+
+
+	//This is really easy in mountainCar because you observe exactly the state
+	public Observation getObservationForState(Observation theState) {
+		return theState;
+	}
+	
+	public int getNumVars(){
+		return 2;
 	}
 
 }

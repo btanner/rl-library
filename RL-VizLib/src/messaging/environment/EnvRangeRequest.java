@@ -7,6 +7,7 @@ import messaging.GenericMessage;
 import messaging.MessageUser;
 import messaging.MessageValueType;
 import rlglue.RLGlue;
+import visualization.QueryableEnvironment;
 
 public class EnvRangeRequest extends EnvironmentMessages{
 
@@ -43,4 +44,29 @@ public class EnvRangeRequest extends EnvironmentMessages{
 		return theResponse;
 
 	}
+
+	@Override
+	public boolean canHandleAutomatically() {
+		return true;
+	}
+
+	@Override
+	public String handleAutomatically(QueryableEnvironment theEnvironment) {
+		//			//Handle a request for the ranges
+			Vector<Double> mins = new Vector<Double>();
+			Vector<Double> maxs = new Vector<Double>();
+			
+			int numVars=theEnvironment.getNumVars();
+			
+			for(int i=0;i<numVars;i++){
+				mins.add(theEnvironment.getMinValueForQuerableVariable(i));
+				maxs.add(theEnvironment.getMaxValueForQuerableVariable(i));
+			}
+			
+			EnvRangeResponse theResponse=new EnvRangeResponse(mins, maxs);
+			
+			return theResponse.makeStringResponse();
+
+		}
+	
 }

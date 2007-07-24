@@ -10,6 +10,7 @@ import messaging.MessageValueType;
 import rlglue.Observation;
 import rlglue.RLGlue;
 import utilities.UtilityShop;
+import visualization.QueryableEnvironment;
 
 public class EnvObsForStateRequest extends EnvironmentMessages{
 Vector<Observation> theRequestStates=new Vector<Observation>();
@@ -80,4 +81,24 @@ Vector<Observation> theRequestStates=new Vector<Observation>();
 	public Vector<Observation> getTheRequestStates() {
 		return theRequestStates;
 	}
+	
+	@Override
+	public boolean canHandleAutomatically() {
+		return true;
+	}
+
+	@Override
+	public String handleAutomatically(QueryableEnvironment theEnvironment) {
+			Vector<Observation> theObservations= new Vector<Observation>();
+			
+			for(int i=0;i<theRequestStates.size();i++){
+				Observation thisObs=theEnvironment.getObservationForState(theRequestStates.get(i));
+				theObservations.add(thisObs);
+			}
+			
+			EnvObsForStateResponse theResponse = new EnvObsForStateResponse(theObservations);
+			return theResponse.makeStringResponse();
+
+		}
+	
 }
