@@ -1,7 +1,6 @@
 
 import java.util.Vector;
 
-import messages.MCStateRequest;
 import messages.MCStateResponse;
 import messaging.environment.EnvCustomRequest;
 import messaging.environment.EnvMessageType;
@@ -93,11 +92,8 @@ public class MountainCar extends EnvironmentBase{
 	public String env_message(String theMessage) {
 		EnvironmentMessages theMessageObject=EnvironmentMessageParser.parseMessage(theMessage);
 		String theResponseString=null;
-		
-		System.out.println("mountain car got it");
-		
+
 		if(theMessageObject.getTheMessageType().id()==EnvMessageType.kEnvQueryVarRanges.id()){
-			System.out.println("and treating it like var range request");
 //			//Handle a request for the ranges
 			Vector<Double> mins = new Vector<Double>();
 			Vector<Double> maxs = new Vector<Double>();
@@ -110,13 +106,10 @@ public class MountainCar extends EnvironmentBase{
 			EnvRangeResponse theResponse=new EnvRangeResponse(mins, maxs);
 			
 			theResponseString=theResponse.makeStringResponse();
-			
-			//System.out.println("MountainCar: Sending response over network: "+theResponseString);
 			return theResponseString;
 
 		}
 		if(theMessageObject.getTheMessageType().id()==messaging.environment.EnvMessageType.kEnvQueryObservationsForState.id()){
-			System.out.println("and treating it like kEnvQueryObservationsForState request");
 			
 			EnvObsForStateRequest theCastedRequest=(EnvObsForStateRequest)theMessageObject;
 			
@@ -131,19 +124,15 @@ public class MountainCar extends EnvironmentBase{
 			EnvObsForStateResponse theResponse = new EnvObsForStateResponse(theObservations);
 			
 			theResponseString=theResponse.makeStringResponse();
-			
-			//System.out.println("MountainCar: Sending response over network: "+theResponseString);
+
 			return theResponseString;
 		}
 
 
 		if(theMessageObject.getTheMessageType().id()==messaging.environment.EnvMessageType.kEnvCustom.id()){
-			System.out.println("and treating it like kEnvCustom request");
-			
-
 			EnvCustomRequest theCastedRequest=(EnvCustomRequest)theMessageObject;
 			
-			String theCustomType=theCastedRequest.getThePayload();
+			String theCustomType=theCastedRequest.getPayload();
 			
 			if(theCustomType.equals("GETMCSTATE")){
 				//It is a request for the state
@@ -163,7 +152,6 @@ public class MountainCar extends EnvironmentBase{
 
 		System.out.println("We need some code written in Env Message for MountainCar!");
 		Thread.dumpStack();
-		// TODO Auto-generated method stub
 		return null;
 	}
 
