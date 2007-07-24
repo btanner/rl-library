@@ -1,3 +1,10 @@
+import java.util.Vector;
+
+import messaging.agent.AgentMessageParser;
+import messaging.agent.AgentMessageType;
+import messaging.agent.AgentMessages;
+import messaging.agent.AgentValueForObsRequest;
+import messaging.agent.AgentValueForObsResponse;
 import rlglue.Action;
 import rlglue.Agent;
 import rlglue.Observation;
@@ -105,10 +112,32 @@ public class GenericSarsaLambda implements Agent {
 		queryQ = new double[actionCount];
 	}
 
-	public String agent_message(String arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public String agent_message(String theMessage) {
+		AgentMessages theMessageObject=AgentMessageParser.parseMessage(theMessage);
+		String theResponseString=null;
+		
+
+		if(theMessageObject.getTheMessageType().id()==AgentMessageType.kAgentQueryValuesForObs.id()){
+			AgentValueForObsRequest theCastedRequest=(AgentValueForObsRequest)theMessageObject;
+
+			Vector<Observation> theQueryObservations=theCastedRequest.getTheRequestObservations();
+			Vector<Double> theValues = new Vector<Double>();
+			
+			for(int i=0;i<theQueryObservations.size();i++){
+				theValues.add(queryValueFunction(theQueryObservations.get(i)));
+			}
+			
+			AgentValueForObsResponse theResponse = new AgentValueForObsResponse(theValues);
+			
+			theResponseString=theResponse.makeStringResponse();
+
+		}
+		return theResponseString;
+
 	}
+		
+
+			
 
 	public Action agent_start(Observation Observations) {
 		DecayTraces(0.0);                                            // clear all traces
