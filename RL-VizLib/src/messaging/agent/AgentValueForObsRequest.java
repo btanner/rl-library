@@ -16,8 +16,10 @@ import visualization.QueryableAgent;
 public class AgentValueForObsRequest extends AgentMessages{
 	Vector<Observation> theRequestObservations=new Vector<Observation>();
 
-	public AgentValueForObsRequest(MessageUser from, MessageUser to, AgentMessageType theMessageType, String thePayLoad) {
-		super(from, to, theMessageType);
+	public AgentValueForObsRequest(GenericMessage theMessageObject) {
+		super(theMessageObject);
+		
+		String thePayLoad=super.getPayLoad();
 
 		StringTokenizer obsTokenizer = new StringTokenizer(thePayLoad, ":");
 

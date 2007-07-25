@@ -15,8 +15,10 @@ import visualization.QueryableEnvironment;
 public class EnvObsForStateRequest extends EnvironmentMessages{
 Vector<Observation> theRequestStates=new Vector<Observation>();
 
-	public EnvObsForStateRequest(MessageUser from, MessageUser to, EnvMessageType theMessageType, String thePayLoad) {
-		super(from, to, theMessageType);
+	public EnvObsForStateRequest(GenericMessage theMessageObject) {
+		super(theMessageObject);
+		
+		String thePayLoad=super.getPayLoad();
 		
 		StringTokenizer obsTokenizer = new StringTokenizer(thePayLoad, ":");
 

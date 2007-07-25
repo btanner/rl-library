@@ -4,10 +4,10 @@ import java.util.StringTokenizer;
 
 public class GenericMessage {
 	private int theMessageType;
-	private MessageUser from;
-	private MessageUser to;
-	private MessageValueType payLoadType;
-	private String payLoad;
+	protected MessageUser from;
+	protected MessageUser to;
+	protected MessageValueType payLoadType;
+	protected String payLoad;
 	
 	public GenericMessage(String theMessage){
 		StringTokenizer theTokenizer=new StringTokenizer(theMessage, " ");
@@ -18,8 +18,8 @@ public class GenericMessage {
 		String payLoadString=theTokenizer.nextToken();
 
 		
-		from=GenericMessageParser.parseUser(toString);
-		to=GenericMessageParser.parseUser(fromString);
+		from=GenericMessageParser.parseUser(fromString);
+		to=GenericMessageParser.parseUser(toString);
 		theMessageType=GenericMessageParser.parseInt(typeString);
 		payLoadType=GenericMessageParser.parseValueType(valueString);
 		payLoad=GenericMessageParser.parsePayLoad(payLoadString);

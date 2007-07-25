@@ -1,12 +1,12 @@
-package messaging.environment;
+package messaging.environmentShell;
 import messaging.AbstractMessage;
 import messaging.GenericMessage;
 import visualization.QueryableEnvironment;
 
 
-	public class EnvironmentMessages extends AbstractMessage{
+	public class EnvironmentShellMessages extends AbstractMessage{
 	
-		public EnvironmentMessages(GenericMessage theMessageObject){
+		public EnvironmentShellMessages(GenericMessage theMessageObject){
 			super(theMessageObject);
 		}
 

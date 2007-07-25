@@ -7,6 +7,10 @@ import java.io.IOException;
 import javax.swing.JLabel;
 import javax.swing.JSplitPane;
 
+import messaging.environmentShell.EnvShellListRequest;
+import messaging.environmentShell.EnvShellListResponse;
+import messaging.environmentShell.EnvShellLoadRequest;
+
 import rlglue.RLGlue;
 
 
@@ -20,6 +24,16 @@ public class GraphicalDriver {
 	public static void main(String [] args) throws IOException {
 
 
+		//Get the Environment Names
+		EnvShellListResponse theEnvList=EnvShellListRequest.Execute();
+		
+		System.out.println("Environents available are:");
+		for (String thisEnvName : theEnvList.getTheEnvList()) {
+			System.out.println(thisEnvName);
+			System.out.println("Going to send back a request to load it!");
+			EnvShellLoadRequest.Execute(thisEnvName);
+		}
+		
 		RLVizFrame theFrame=new RLVizFrame();
 
 		

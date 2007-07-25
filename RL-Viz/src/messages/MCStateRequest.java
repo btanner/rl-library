@@ -12,8 +12,8 @@ import rlglue.RLGlue;
 
 public class MCStateRequest extends EnvironmentMessages{
 
-	public MCStateRequest(MessageUser from, MessageUser to, EnvMessageType theMessageType) {
-		super(from, to, theMessageType);
+	public MCStateRequest(GenericMessage theMessageObject){
+		super(theMessageObject);
 	}
 
 	public static MCStateResponse Execute(){

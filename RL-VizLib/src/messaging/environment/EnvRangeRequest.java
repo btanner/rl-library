@@ -11,8 +11,8 @@ import visualization.QueryableEnvironment;
 
 public class EnvRangeRequest extends EnvironmentMessages{
 
-	public EnvRangeRequest(MessageUser from, MessageUser to, EnvMessageType theMessageType) {
-		super(from, to, theMessageType);
+	public EnvRangeRequest(GenericMessage theMessageObject) {
+		super(theMessageObject);
 	}
 
 	public static EnvRangeResponse Execute(){

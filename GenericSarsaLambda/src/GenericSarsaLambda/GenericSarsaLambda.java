@@ -10,7 +10,7 @@ import functionapproximation.TileCoder;
 public class GenericSarsaLambda implements Agent, QueryableAgent {
 
 
-
+	boolean inited=false;
 	private int actionCount;
 	int MEMORY_SIZE;
 	int NUM_TILINGS;
@@ -52,6 +52,7 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 	TileCoder theTileCoder=new TileCoder();
 	public void agent_cleanup() {
 		// TODO Auto-generated method stub
+		inited=false;
 
 	}
 
@@ -102,6 +103,7 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 
 		tempF = new int[actionCount*NUM_TILINGS];
 		tempQ = new double[actionCount];
+		inited=true;
 	}
 
 	public String agent_message(String theMessage) {
@@ -389,6 +391,8 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 		}
 	}
 	public double getValueForState(Observation theObservation) {
+		if(!inited)return 0.0d;
+		
 		int queryF[] = new int[actionCount*NUM_TILINGS];
 		double queryQ[] = new double[actionCount];
 

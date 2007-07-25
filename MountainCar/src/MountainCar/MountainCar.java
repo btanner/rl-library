@@ -89,14 +89,13 @@ public class MountainCar extends EnvironmentBase implements QueryableEnvironment
 	public String env_message(String theMessage) {
 		EnvironmentMessages theMessageObject=EnvironmentMessageParser.parseMessage(theMessage);
 		
-		if(theMessageObject.canHandleAutomatically())
+		if(theMessageObject.canHandleAutomatically()){
 			return theMessageObject.handleAutomatically(this);
+		}
 
+		if(theMessageObject.getTheMessageType()==messaging.environment.EnvMessageType.kEnvCustom.id()){
 
-		if(theMessageObject.getTheMessageType().id()==messaging.environment.EnvMessageType.kEnvCustom.id()){
-			EnvCustomRequest theCastedRequest=(EnvCustomRequest)theMessageObject;
-			
-			String theCustomType=theCastedRequest.getPayload();
+			String theCustomType=theMessageObject.getPayLoad();
 			
 			if(theCustomType.equals("GETMCSTATE")){
 				//It is a request for the state
