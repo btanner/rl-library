@@ -35,16 +35,6 @@ public class Tetrlais extends EnvironmentBase implements QueryableEnvironment{
 		tet_global_score =0;
 		
 		Observation o = gameState.get_observation();
-		/*System.out.println("Current Game");
-		String line = null;
-		for(int i = 20 -1; i>=0; --i){
-			line = null;
-			line = ""  +o.intArray[i*10];
-				for(int j = 1; j<10; ++j )
-					line += o.intArray[i*10 + j];
-			System.out.println(line);
-		}
-		System.out.println();*/
 		return o;
 		
 	}
@@ -69,16 +59,6 @@ public class Tetrlais extends EnvironmentBase implements QueryableEnvironment{
 		
 		ro.o = gameState.get_observation();
 		
-		/*System.out.println("Current Game");
-		String line = null;
-		for(int i = 20 -1; i>=0; --i){
-			line = null;
-			line = ""  + ro.o.intArray[i*10];
-				for(int j = 1; j<10; ++j )
-					line += ro.o.intArray[i*10 + j];
-			System.out.println(line);
-		}
-		System.out.println();*/
 		return ro;
 	}
 	
@@ -122,8 +102,7 @@ public class Tetrlais extends EnvironmentBase implements QueryableEnvironment{
 	/*RL-Viz Methods*/
 	@Override
 	protected Observation makeObservation() {
-		// TODO Auto-generated method stu
-		
+		// TODO Auto-generated method stub
 		return gameState.get_observation();
 	}
 
