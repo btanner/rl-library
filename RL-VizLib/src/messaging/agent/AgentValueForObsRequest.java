@@ -79,11 +79,11 @@ public class AgentValueForObsRequest extends AgentMessages{
 
 		long time4=System.currentTimeMillis();
 
-		boolean printTiming=false;
+		boolean printTiming=true;
 		if(printTiming){
 			System.out.println("===================================");
 
-			System.out.println("timing summary for Getting values:");
+			System.out.println("timing summary for Getting "+numValues+" values:");
 			System.out.println("===================================");
 
 			System.out.println("Preamble before serialization:  "+(time1-time0));
@@ -91,7 +91,6 @@ public class AgentValueForObsRequest extends AgentMessages{
 			System.out.println("Nework query + response:  "+(time3-time2));
 			System.out.println("Parsing returned values:  "+(time4-time3));
 
-			System.out.println("Time to actually send and receive: "+(time2-time1)+" and time to parse response was: "+(time3-time2));
 		}
 		return theResponse;
 
@@ -111,6 +110,7 @@ public class AgentValueForObsRequest extends AgentMessages{
 
 	@Override
 	public String handleAutomatically(QueryableAgent theAgent) {
+		long t0=System.currentTimeMillis();
 		Vector<Double> theValues = new Vector<Double>();
 
 		for(int i=0;i<theRequestObservations.size();i++){
@@ -118,7 +118,22 @@ public class AgentValueForObsRequest extends AgentMessages{
 		}
 
 		AgentValueForObsResponse theResponse = new AgentValueForObsResponse(theValues);
-		return theResponse.makeStringResponse();
+		long t1=System.currentTimeMillis();
+
+		String stringResponse=theResponse.makeStringResponse();
+		long t2=System.currentTimeMillis();
+		
+		boolean printTiming=false;
+		if(printTiming){
+			System.out.println("===================================");
+
+			System.out.println("timing summary for handleAutomatically in AgentValueForOBs "+theRequestObservations.size()+" values:");
+			System.out.println("===================================");
+
+			System.out.println("Time to actually query the agent:  "+(t1-t0));
+			System.out.println("Time to make the string response:  "+(t2-t1));
+		}
+		return stringResponse;
 	}
 
 

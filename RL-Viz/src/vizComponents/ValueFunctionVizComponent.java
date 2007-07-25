@@ -1,4 +1,4 @@
-package rlViz;
+package vizComponents;
 
 import interfaces.ValueFunctionDataProvider;
 
@@ -132,11 +132,13 @@ public class ValueFunctionVizComponent implements VizComponent {
 
 
 
-
+//quick hack
+	long lastUpdateTime=0;
+	
 	public boolean update() {
 
 //		Update the resolution
-		double newValueFunctionResolution=30.0d;
+		double newValueFunctionResolution=dataProvider.getValueFunctionResolution();
 
 		if(newValueFunctionResolution!=currentValueFunctionResolution || theQueryObservations==null){
 
@@ -162,8 +164,13 @@ public class ValueFunctionVizComponent implements VizComponent {
 
 		theValues=dataProvider.queryAgentValues(theQueryObservations);
 
+		long CurrentTime=System.currentTimeMillis();
+		if(CurrentTime-lastUpdateTime>100){
+			lastUpdateTime=CurrentTime;
+			return true;	
+		}
+		return false;
 		//maybe we shouldn't return true all the time
-		return true;	
 	}
 
 

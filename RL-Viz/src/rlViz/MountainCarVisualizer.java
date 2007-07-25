@@ -17,6 +17,8 @@ import rlglue.Observation;
 import visualization.AgentOnValueFunctionVizComponent;
 import visualization.EnvVisualizer;
 import visualization.VizComponent;
+import vizComponents.CarOnMountainVizComponent;
+import vizComponents.ValueFunctionVizComponent;
 
 
 public class MountainCarVisualizer  extends EnvVisualizer implements ValueFunctionDataProvider, AgentOnValueFunctionDataProvider {
@@ -24,6 +26,8 @@ public class MountainCarVisualizer  extends EnvVisualizer implements ValueFuncti
 	Vector<Double> mins = null;
 	Vector<Double> maxs = null;
 
+	int currentValueFunctionResolution=5;
+	
 	MCStateResponse theCurrentState=null;
 
 
@@ -38,12 +42,12 @@ public class MountainCarVisualizer  extends EnvVisualizer implements ValueFuncti
 		super.addVizComponentAtPositionWithSize(carOnMountain, 0, 0, 1.0, 0.5);
 //		RedBoxVizComponent testComponent=new RedBoxVizComponent();
 //		super.addVizComponent(testComponent);
-		super.startVisualizing();
-	
-
-		
 	}
 	
+	public void setValueFunctionResolution(int theValue) {
+		currentValueFunctionResolution=theValue;
+	}
+
 	
 	
 	public void updateEnvironmentVariableRanges(){
@@ -91,6 +95,10 @@ public class MountainCarVisualizer  extends EnvVisualizer implements ValueFuncti
 
 	public void updateAgentState() {
 		theCurrentState=MCStateRequest.Execute();
+	}
+
+	public double getValueFunctionResolution() {
+		return (double)currentValueFunctionResolution;
 	}
 
 

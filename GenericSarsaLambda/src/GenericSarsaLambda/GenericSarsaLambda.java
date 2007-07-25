@@ -48,8 +48,66 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 	int getMemorySize(){return MEMORY_SIZE;}
 	double getLambda(){return lambda;}
 
-
 	TileCoder theTileCoder=new TileCoder();
+
+	
+
+	public GenericSarsaLambda(){
+		this.lambda=0.9f;
+		this.epsilon=0.05f;
+		this.alpha=.1f;
+		this.MEMORY_SIZE=1<<16;
+		this.NUM_TILINGS=16;
+		this.defaultDivider=.01f;
+		this.MAX_NONZERO_TRACES=100000;
+		observationDividers=null;
+		this.tempF=null;
+		this.tempQ=null;
+
+		sharedConstructorStuff();
+	}
+
+
+	public GenericSarsaLambda(double lambda,double epsilon, double alpha, int memsize, int num_tilings, double defaultDivider){
+
+		this.lambda=lambda;
+		this.epsilon=epsilon;
+		this.alpha=alpha;
+		this.MEMORY_SIZE=memsize;
+		this.NUM_TILINGS=num_tilings;
+		this.MAX_NONZERO_TRACES=100000;
+		this.defaultDivider=defaultDivider;
+		this.observationDividers=null;
+		this.tempF=null;
+		this.tempQ=null;
+
+		sharedConstructorStuff();
+	}
+
+
+	private void sharedConstructorStuff(){
+		nonzero_traces=new int[MAX_NONZERO_TRACES];
+		num_nonzero_traces=0;
+		nonzero_traces_inverse = new int[MEMORY_SIZE];
+		minimum_trace = 0.01;
+		theta = new double[MEMORY_SIZE];
+		e = new double[MEMORY_SIZE];
+		gamma=1.0f;
+
+		System.out.print("***********\nnew tile coding agent:");
+		System.out.print("lambda: "+lambda);
+		System.out.print(" epsilon: "+epsilon);
+		System.out.print(" alpha: "+alpha);
+		System.out.print(" num_tilings: "+NUM_TILINGS);
+		System.out.print(" defaultDivider: "+defaultDivider);
+		System.out.println("\n**********");
+	}
+
+
+	
+	
+	
+	
 	public void agent_cleanup() {
 		// TODO Auto-generated method stub
 		inited=false;
@@ -107,10 +165,24 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 	}
 
 	public String agent_message(String theMessage) {
+		boolean printTiming=false;
+		long t0=System.currentTimeMillis();
 		AgentMessages theMessageObject=AgentMessageParser.parseMessage(theMessage);
+		long t1=System.currentTimeMillis();
 
-		if(theMessageObject.canHandleAutomatically())
+		if(theMessageObject.canHandleAutomatically()){
+			
+			if(printTiming){
+				System.out.println("===================================");
+
+				System.out.println("timing summary on agent Side of getValues");
+				System.out.println("===================================");
+
+				System.out.println("Time to use AgentMessageParser to gimme theMessageObject: "+(t1-t0));
+			}
+
 			return theMessageObject.handleAutomatically(this);
+		}
 
 		System.out.println("We need some code written in Agent Message for Generic Sarsa Lambda!");
 		Thread.dumpStack();
@@ -188,58 +260,6 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 	}
 
 
-
-
-	public GenericSarsaLambda(){
-		this.lambda=0.0f;
-		this.epsilon=0.05f;
-		this.alpha=.1f;
-		this.MEMORY_SIZE=1<<16;
-		this.NUM_TILINGS=8;
-		this.defaultDivider=.1f;
-		this.MAX_NONZERO_TRACES=100000;
-		observationDividers=null;
-		this.tempF=null;
-		this.tempQ=null;
-
-		sharedConstructorStuff();
-	}
-
-
-	public GenericSarsaLambda(double lambda,double epsilon, double alpha, int memsize, int num_tilings, double defaultDivider){
-
-		this.lambda=lambda;
-		this.epsilon=epsilon;
-		this.alpha=alpha;
-		this.MEMORY_SIZE=memsize;
-		this.NUM_TILINGS=num_tilings;
-		this.MAX_NONZERO_TRACES=100000;
-		this.defaultDivider=defaultDivider;
-		this.observationDividers=null;
-		this.tempF=null;
-		this.tempQ=null;
-
-		sharedConstructorStuff();
-	}
-
-
-	private void sharedConstructorStuff(){
-		nonzero_traces=new int[MAX_NONZERO_TRACES];
-		num_nonzero_traces=0;
-		nonzero_traces_inverse = new int[MEMORY_SIZE];
-		minimum_trace = 0.01;
-		theta = new double[MEMORY_SIZE];
-		e = new double[MEMORY_SIZE];
-		gamma=1.0f;
-
-		System.out.print("***********\nnew tile coding agent:");
-		System.out.print("lambda: "+lambda);
-		System.out.print(" epsilon: "+epsilon);
-		System.out.print(" alpha: "+alpha);
-		System.out.print(" num_tilings: "+NUM_TILINGS);
-		System.out.print(" defaultDivider: "+defaultDivider);
-		System.out.println("\n**********");
-	}
 
 
 

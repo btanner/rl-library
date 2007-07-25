@@ -21,14 +21,18 @@ public class EnvironmentPanel extends JPanel implements ComponentListener{
 	BufferedImage latestImage=null;
     EnvVisualizer theVisualizer=null;
 
-	public EnvironmentPanel(Dimension theSize, EnvVisualizer theVisualizer){
-		super();
-		this.setSize((int)theSize.getWidth(), (int)theSize.getHeight());
-		this.theVisualizer=theVisualizer;
+
+    public void setVisualizer(EnvVisualizer theVisualizer){
+    	if(this.theVisualizer!=null)this.theVisualizer.stopVisualizing();
+    	
+    	this.theVisualizer=theVisualizer;
 		theVisualizer.setParentComponent(this); 
+    }
+	public EnvironmentPanel(Dimension initialSize){
+		super();
+		this.setSize((int)initialSize.getWidth(), (int)initialSize.getHeight());
 
 		addComponentListener(this);
-		
 	}
 
 	int paintCount=0;
@@ -48,27 +52,9 @@ public class EnvironmentPanel extends JPanel implements ComponentListener{
 		g2.setColor(Color.BLUE);
 		g2.fillRect(0,0,1000,1000);
 
-		g2.drawImage(theVisualizer.getLatestImage(), 0, 0, this);
-//		
-//		BufferedImage b=new BufferedImage(150,150,BufferedImage.TYPE_INT_ARGB);
-//		Graphics2D gSECOND=b.createGraphics();
-////		Color myClearColor=new Color(0.0f,0.0f,0.0f,0.0f);
-//////		
-//////		gSECOND.setColor(myClearColor);
-//////		gSECOND.fillRect(0,0,150,150);
-////		
-//		gSECOND.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.0f));
-//		Rectangle2D.Double rect = new Rectangle2D.Double(0,0,150,150); 
-//		gSECOND.fill(rect);
-//		gSECOND.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-////		gSECOND.clearRect(0,0,150,150);
-////		
-//		gSECOND.setColor(Color.BLUE);
-//		gSECOND.fillRect(0, 0, 10+(paintCount/25), 10+(paintCount/25));
-////		
-//		g2.drawImage(b,0,0,null);
-//		
-//		this.repaint();
+		if(theVisualizer!=null)
+			g2.drawImage(theVisualizer.getLatestImage(), 0, 0, this);
+
 	}
 
 	public void componentHidden(ComponentEvent arg0) {
@@ -82,14 +68,14 @@ public class EnvironmentPanel extends JPanel implements ComponentListener{
 	}
 
 	public void componentResized(ComponentEvent arg0) {
-        		theVisualizer.receiveSizeChange(arg0.getComponent().getSize());
+		if(theVisualizer!=null)
+       		theVisualizer.receiveSizeChange(arg0.getComponent().getSize());
 	}
 
 	public void componentShown(ComponentEvent arg0) {
 		// TODO Auto-generated method stub
 		
 	}
-
 
 
 

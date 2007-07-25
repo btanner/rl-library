@@ -19,8 +19,10 @@ public abstract class EnvVisualizer implements ImageAggregator {
 	private Vector<Point2D> positions=new Vector<Point2D>();
 	private Vector<Point2D> sizes=new Vector<Point2D>();
 
+
 	Dimension currentVisualizerPanelSize=new Dimension(100,100);
 
+	boolean currentlyRunning=false;
 
 	public void receiveSizeChange(Dimension newPanelSize){
 		currentVisualizerPanelSize=newPanelSize;
@@ -77,14 +79,16 @@ public abstract class EnvVisualizer implements ImageAggregator {
 		this.parentComponent=theComponent;
 	}
 
-	protected void startVisualizing() {
+	public void startVisualizing() {
+		currentlyRunning=true;
 		for (ThreadRenderObject thisRunner : threadRunners) {
 			Thread theThread=new Thread(thisRunner);
 			theThreads.add(theThread);
 			theThread.start();
 		}
+		
 	}
-	protected void stopVisualizing() {
+	public void stopVisualizing() {
 //		tell them all to die
 		for (ThreadRenderObject thisRunner : threadRunners) {
 			thisRunner.kill();
@@ -99,6 +103,8 @@ public abstract class EnvVisualizer implements ImageAggregator {
 				e.printStackTrace();
 			}
 		}
+		currentlyRunning=false;
+
 	}
 
 	private Dimension makeSizeForVizComponent(int i){
@@ -133,5 +139,15 @@ public abstract class EnvVisualizer implements ImageAggregator {
 		sizes.add(new Point2D.Double(width,height));
 
 	}
+
+	public boolean isCurrentlyRunning() {
+		return currentlyRunning;
+	}
+
+	public void setValueFunctionResolution(int theValue) {
+		//Maybe nobody uses this and it just does nothing
+		//If you override it, you can use it!
+	}
+
 
 }

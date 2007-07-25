@@ -43,15 +43,26 @@ public class AgentValueForObsResponse extends AbstractResponse{
 	
 	//So, when you create on of these in an environment, this gives you the response to send
 	public String makeStringResponse() {
-		String theResponseString="TO="+MessageUser.kBenchmark.id()+" FROM="+MessageUser.kAgent.id();
-		theResponseString+=" CMD="+AgentMessageType.kAgentResponse.id()+" VALTYPE="+MessageValueType.kStringList.id()+" VALS=";
 		
-		theResponseString+=theValues.size()+":";
+		StringBuffer theResponseBuffer= new StringBuffer();
+		theResponseBuffer.append("TO=");
+		theResponseBuffer.append(MessageUser.kBenchmark.id());
+		theResponseBuffer.append(" FROM=");
+		theResponseBuffer.append(MessageUser.kAgent.id());
+		theResponseBuffer.append(" CMD=");
+		theResponseBuffer.append(AgentMessageType.kAgentResponse.id());
+		theResponseBuffer.append(" VALTYPE=");
+		theResponseBuffer.append(MessageValueType.kStringList.id());
+		theResponseBuffer.append(" VALS=");
+
+		theResponseBuffer.append(theValues.size());
+		theResponseBuffer.append(":");
+
 		
 		for(int i=0;i<theValues.size();i++){
-			theResponseString+=theValues.get(i)+":";
+			theResponseBuffer.append(theValues.get(i));
+			theResponseBuffer.append(':');
 		}
-		
-		return theResponseString;
+		return theResponseBuffer.toString();
 	}
 };

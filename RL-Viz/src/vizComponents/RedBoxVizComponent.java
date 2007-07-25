@@ -1,4 +1,4 @@
-package rlViz;
+package vizComponents;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
