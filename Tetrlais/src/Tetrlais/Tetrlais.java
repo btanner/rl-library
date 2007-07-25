@@ -9,6 +9,7 @@ public class Tetrlais extends EnvironmentBase implements QueryableEnvironment{
 	
 	private int tet_global_score =0;
 	private GameState gameState = new GameState(10,20);
+	static final int terminal_score = -100;
 	
 	/*Base RL-Glue Functions*/
 	public String env_init() {
@@ -33,7 +34,18 @@ public class Tetrlais extends EnvironmentBase implements QueryableEnvironment{
 		gameState.reset();
 		tet_global_score =0;
 		
-		return gameState.get_observation();
+		Observation o = gameState.get_observation();
+		/*System.out.println("Current Game");
+		String line = null;
+		for(int i = 20 -1; i>=0; --i){
+			line = null;
+			line = ""  +o.intArray[i*10];
+				for(int j = 1; j<10; ++j )
+					line += o.intArray[i*10 + j];
+			System.out.println(line);
+		}
+		System.out.println();*/
+		return o;
 		
 	}
 	
@@ -51,12 +63,23 @@ public class Tetrlais extends EnvironmentBase implements QueryableEnvironment{
 			tet_global_score = gameState.get_score();
 		}
 		else{
-			ro.r = gameState.get_score();
+			ro.r = Tetrlais.terminal_score;
 			tet_global_score = 0;	
 		}
 		
 		ro.o = gameState.get_observation();
-		return null;
+		
+		/*System.out.println("Current Game");
+		String line = null;
+		for(int i = 20 -1; i>=0; --i){
+			line = null;
+			line = ""  + ro.o.intArray[i*10];
+				for(int j = 1; j<10; ++j )
+					line += ro.o.intArray[i*10 + j];
+			System.out.println(line);
+		}
+		System.out.println();*/
+		return ro;
 	}
 	
 	public void env_cleanup() {

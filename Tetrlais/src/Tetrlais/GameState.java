@@ -26,7 +26,7 @@ public class GameState{
 	SingleBlockPiece sbpL2 = new SingleBlockPiece(1,1,1,0); //L brick  bottom right square missing
 	SingleBlockPiece sbpL3 = new SingleBlockPiece(1,1,0,1); // the L Brick,bottom left square missing
 	SingleBlockPiece sbpL4 = new SingleBlockPiece(0,1,1,1); // the L brick, top left square missing
-	SingleBlockPiece[] sbpL = {sbpL1, sbpL2,sbpL2,sbpL4};
+	SingleBlockPiece[] sbpL = {sbpL1, sbpL2,sbpL3,sbpL4};
 	int[] sbpLcw = {1,2,3,0}; // clock wise rotation matrix for L brick
 	int[] sbpLccw = {3,0,1,2}; //counter clock wise rotation matrix for L brick
 	
@@ -56,8 +56,13 @@ public class GameState{
 	public void reset(){
 		// TODO Fill in Method
 		this.current_x = this.world_width/2 -1;
-		this.current_y = 0;
+		this.current_y = 0; 
 		this.current_score =0;
+		for(int i=0; i < world_state.length; i++){
+			this.world_state[i] = 0;
+			this.world_observation[i]=0;
+		}
+
 		this.is_game_over = false;
 	}
 
@@ -69,7 +74,19 @@ public class GameState{
 		write_block(this.current_x, this.current_y, (this.blockTable[this.current_block]).getCurrentPiece(), this.world_observation);
 		Observation o = new Observation(this.world_observation.length,0);
 		for(int i=0; i< this.world_observation.length; i++)
-			o.intArray[i] = this.world_observation[i];			
+			o.intArray[i] = this.world_observation[i];		
+		
+		/*System.out.println("Current Game");
+		String line = null;
+		for(int i = this.world_height -1; i>=0; --i){
+			line = null;
+			line = ""  +this.world_state[i*this.world_width];
+				for(int j = 1; j<this.world_width; ++j )
+					line += this.world_state[i*this.world_width + j];
+			System.out.println(line);
+		}
+		System.out.println();*/
+			
 		return o;
 	}
 
@@ -85,6 +102,16 @@ public class GameState{
 				}	
 		    }
 		  }
+	
+	/*System.out.println("writing brick");
+	String brick = "";
+	for(int i =0 ; i< 2; i++)
+	{brick = "";
+		for(int j= 0; j<2; j++)
+			brick += block.getBrick(i*2+j);
+		System.out.println(brick);
+	}
+	System.out.println();*/
 	}
 
 	public int game_over(){
@@ -100,22 +127,18 @@ public class GameState{
 
 		  if ( action.intArray[0] == GameState.CW )
 		  {
-		    if ( 
-			this.in_bounds( this.current_x, this.current_y, this.blockTable[this.current_block].get_rotated_block(Block.CLOCKWISE)) &&
-			!this.is_colliding( this.current_x, this.current_y, this.blockTable[ this.current_block].get_rotated_block(Block.CLOCKWISE)) 
-		       )
+		    if (this.in_bounds( this.current_x, this.current_y, this.blockTable[this.current_block].get_rotated_block(Block.CLOCKWISE)) &&
+		    	!this.is_colliding( this.current_x, this.current_y, this.blockTable[ this.current_block].get_rotated_block(Block.CLOCKWISE)))
 		    {
 		    	this.blockTable[ this.current_block].rotate(Block.CLOCKWISE);
 		    }
 		  }
 		  else if ( action.intArray[0] == GameState.CCW )
 		  {
-		    if ( 
-			this.in_bounds( this.current_x, this.current_y, this.blockTable[this.current_block].get_rotated_block(Block.COUNTERCLOCKWISE)) &&
-			!this.is_colliding( this.current_x, this.current_y, this.blockTable[this.current_block].get_rotated_block(Block.CLOCKWISE) ) 
-		       )
+		    if (this.in_bounds( this.current_x, this.current_y, this.blockTable[this.current_block].get_rotated_block(Block.COUNTERCLOCKWISE)) &&
+		    	!this.is_colliding( this.current_x, this.current_y, this.blockTable[this.current_block].get_rotated_block(Block.COUNTERCLOCKWISE)))
 		    {
-		      this.blockTable[this.current_block].rotate(Block.CLOCKWISE);
+		      this.blockTable[this.current_block].rotate(Block.COUNTERCLOCKWISE);
 		    }
 		  }
 		  else if ( action.intArray[0] == GameState.LEFT)
@@ -199,8 +222,8 @@ public class GameState{
 
 	private boolean spawn_block() {
 		// TODO Auto-generated method stub
-		int move = random.nextInt(this.blockTable.length);
-		this.blockTable[move].setCurrentBlockPiece(0);
+		this.current_block = random.nextInt(this.blockTable.length);
+		this.blockTable[this.current_block ].setCurrentBlockPiece(0);
 		this.current_x = (int)(this.world_width /2) -1; 
 		this.current_y =0;
 		this.is_game_over = this.is_colliding( this.current_x, this.current_y, (this.blockTable[ this.current_block ]).getCurrentPiece() );
@@ -209,17 +232,13 @@ public class GameState{
 
 	private void score() {
 		// TODO Auto-generated method stub
-		boolean rows_exist = false;
-		while(rows_exist){
-			rows_exist = false;
-			for(int y = this.world_height-1; y>=0; --y){
-				if(this.is_row(y))
-				{
-					rows_exist = true;
-					this.remove_row(y);
-					this.current_score +=1;
-				}	
-			}		
+		for(int y = this.world_height-1; y>=0; --y){
+			if(this.is_row(y))
+			{
+				this.remove_row(y);
+				this.current_score +=1;	
+				y +=1;
+			}			
 		}
 	}
 
@@ -254,9 +273,6 @@ public class GameState{
 
 	public int get_score() {
 		// TODO Auto-generated method stub remember return -100 if terminal
-		if(this.is_game_over)
-			return -100;
-		else
 			return this.current_score;
 	}
 
