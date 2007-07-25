@@ -165,11 +165,12 @@ public class ValueFunctionVizComponent implements VizComponent {
 		theValues=dataProvider.queryAgentValues(theQueryObservations);
 
 		long CurrentTime=System.currentTimeMillis();
-		if(CurrentTime-lastUpdateTime>100){
-			lastUpdateTime=CurrentTime;
-			return true;	
-		}
-		return false;
+//		if(CurrentTime-lastUpdateTime>100){
+//			lastUpdateTime=CurrentTime;
+//			return true;	
+//		}
+//		return false;
+		return true;
 		//maybe we shouldn't return true all the time
 	}
 
