@@ -50,9 +50,9 @@ public class Block {
 	}
 	
 	public SingleBlockPiece get_rotated_block(int i){
-		if(i == this.CLOCKWISE)
+		if(i == Block.CLOCKWISE)
 			return this.matrix[this.rotate_cw[this.currentBlockPiece]];
-		else if(i == this.COUNTERCLOCKWISE)
+		else if(i == Block.COUNTERCLOCKWISE)
 			return this.matrix[this.rotate_ccw[this.currentBlockPiece]];
 		else{
 			System.out.println("in Block.java get_rotated_block(int i) you have chosen an invalid value. Try using Block.CLOCKWISE or Block.COUNTERCLOCKWISE.");

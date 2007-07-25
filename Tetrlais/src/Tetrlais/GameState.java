@@ -2,7 +2,6 @@ package Tetrlais;
 
 import java.util.Random;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import rlglue.*;
 
@@ -99,7 +98,7 @@ public class GameState{
 		// TODO Auto-generated method stub
 		if ( this.game_over() ==1 ) return;
 
-		  if ( action.intArray[0] == this.CW )
+		  if ( action.intArray[0] == GameState.CW )
 		  {
 		    if ( 
 			this.in_bounds( this.current_x, this.current_y, this.blockTable[this.current_block].get_rotated_block(Block.CLOCKWISE)) &&
@@ -109,7 +108,7 @@ public class GameState{
 		    	this.blockTable[ this.current_block].rotate(Block.CLOCKWISE);
 		    }
 		  }
-		  else if ( action.intArray[0] == this.CCW )
+		  else if ( action.intArray[0] == GameState.CCW )
 		  {
 		    if ( 
 			this.in_bounds( this.current_x, this.current_y, this.blockTable[this.current_block].get_rotated_block(Block.COUNTERCLOCKWISE)) &&
@@ -119,7 +118,7 @@ public class GameState{
 		      this.blockTable[this.current_block].rotate(Block.CLOCKWISE);
 		    }
 		  }
-		  else if ( action.intArray[0] == this.LEFT)
+		  else if ( action.intArray[0] == GameState.LEFT)
 		  {
 		    if (
 			this.in_bounds( this.current_x-1, this.current_y, this.blockTable[this.current_block].getCurrentPiece()) &&
@@ -129,7 +128,7 @@ public class GameState{
 		      this.current_x -= 1;
 		    }
 		  }
-		  else if ( action.intArray[0] == this.RIGHT )
+		  else if ( action.intArray[0] == GameState.RIGHT )
 		  {
 		    if ( 
 			this.in_bounds(this.current_x+1, this.current_y, this.blockTable[this.current_block].getCurrentPiece()) &&
@@ -139,7 +138,7 @@ public class GameState{
 		      this.current_x += 1;
 		    }
 		  } 
-		  else if ( action.intArray[0] == this.NONE )
+		  else if ( action.intArray[0] == GameState.NONE )
 		  {
 		  }
 		  else 
