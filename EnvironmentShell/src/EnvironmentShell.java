@@ -66,13 +66,13 @@ public class EnvironmentShell implements Environment{
 
 			//Handle a request to actually load the environment
 			if(theMessageObject.getTheMessageType()==EnvShellMessageType.kEnvShellLoad.id()){
-
 				String envName=((EnvShellLoadRequest)theMessageObject).getEnvName();
 
 				//Actually "load" the environment
 				theEnvironment=loadHelper.loadEnvironment(envName);
 
 				EnvShellLoadResponse theResponse=new EnvShellLoadResponse(theEnvironment!=null);
+
 				return theResponse.makeStringResponse();
 			}
 

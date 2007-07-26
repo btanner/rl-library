@@ -1,7 +1,7 @@
 package messaging.environmentShell;
 import messaging.AbstractMessage;
 import messaging.GenericMessage;
-import visualization.QueryableEnvironment;
+import visualization.interfaces.getEnvMaxMinsInterface;
 
 
 	public class EnvironmentShellMessages extends AbstractMessage{
@@ -11,7 +11,7 @@ import visualization.QueryableEnvironment;
 		}
 
 		
-		public String handleAutomatically(QueryableEnvironment theEnvironment){
+		public String handleAutomatically(getEnvMaxMinsInterface theEnvironment){
 			return "no response";
 		}
 

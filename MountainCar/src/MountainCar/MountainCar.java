@@ -1,5 +1,6 @@
 package MountainCar;
 
+import general.RLVizVersion;
 import messages.MCStateResponse;
 import messaging.NotAnRLVizMessageException;
 import messaging.environment.EnvCustomRequest;
@@ -10,7 +11,9 @@ import rlglue.Observation;
 import rlglue.Random_seed_key;
 import rlglue.Reward_observation;
 import rlglue.State_key;
-import visualization.QueryableEnvironment;
+import visualization.interfaces.RLVizEnvInterface;
+import visualization.interfaces.getEnvMaxMinsInterface;
+import visualization.interfaces.getEnvObsForStateInterface;
 import Environments.EnvironmentBase;
 
 /*===========================
@@ -18,7 +21,7 @@ import Environments.EnvironmentBase;
 Dynamics
 
 ============================*/
-public class MountainCar extends EnvironmentBase implements QueryableEnvironment{
+public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterface, getEnvObsForStateInterface, RLVizEnvInterface{
 	
 	
 	private double position;
@@ -96,7 +99,9 @@ public class MountainCar extends EnvironmentBase implements QueryableEnvironment
 			return "I only respond to RL-Viz messages!";
 		}
 		
-		if(theMessageObject.canHandleAutomatically()){
+		
+		
+		if(theMessageObject.canHandleAutomatically(this)){
 			return theMessageObject.handleAutomatically(this);
 		}
 
@@ -246,6 +251,10 @@ public class MountainCar extends EnvironmentBase implements QueryableEnvironment
 	
 	public int getNumVars(){
 		return 2;
+	}
+
+	public RLVizVersion getTheVersionISupport() {
+	return new RLVizVersion(1,1);
 	}
 
 }

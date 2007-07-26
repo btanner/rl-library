@@ -22,6 +22,8 @@ public class EnvShellLoadResponse extends AbstractResponse{
 		GenericMessage theGenericResponse=new GenericMessage(theMessage);
 
 		String thePayLoadString=theGenericResponse.getPayLoad();
+		
+		System.out.println("Env Shell Load response is: "+theMessage);
 
 		StringTokenizer obsTokenizer = new StringTokenizer(thePayLoadString, ":");
 		String loadResult=obsTokenizer.nextToken();

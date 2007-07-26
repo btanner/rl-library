@@ -1,7 +1,8 @@
 package messaging.environment;
+import rlglue.Environment;
 import messaging.AbstractMessage;
 import messaging.GenericMessage;
-import visualization.QueryableEnvironment;
+import visualization.interfaces.getEnvMaxMinsInterface;
 
 
 	public class EnvironmentMessages extends AbstractMessage{
@@ -11,7 +12,7 @@ import visualization.QueryableEnvironment;
 		}
 
 		
-		public String handleAutomatically(QueryableEnvironment theEnvironment){
+		public String handleAutomatically(Environment theEnvironment){
 			return "no response";
 		}
 

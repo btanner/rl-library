@@ -1,5 +1,8 @@
 package messaging;
 
+import java.util.StringTokenizer;
+
+import messaging.environment.EnvMessageType;
 
 public class AbstractMessage {
 	GenericMessage theRealMessageObject=null;
@@ -46,9 +49,10 @@ public class AbstractMessage {
 	/*
 	 * Override this if you can handle automatically given a queryable environment or agent
 	 */
-	public boolean canHandleAutomatically() {
+	public boolean canHandleAutomatically(Object theReceiver) {
 		return false;
 	}
+	
 
 	public static String makeMessage(int TO, int FROM, int CMD, int VALTYPE,String PAYLOAD) {
 		StringBuffer theRequestBuffer=new StringBuffer();

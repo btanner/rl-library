@@ -12,6 +12,7 @@ public class EnvironmentMessageParser extends GenericMessageParser{
 
 		if(cmdId==EnvMessageType.kEnvQueryVarRanges.id()) 				return new EnvRangeRequest(theGenericMessage);
 		if(cmdId==EnvMessageType.kEnvQueryObservationsForState.id()) 	return new EnvObsForStateRequest(theGenericMessage);
+		if(cmdId==EnvMessageType.kEnvQuerySupportedVersion.id()) 	return new EnvVersionSupportedRequest(theGenericMessage);
 		if(cmdId==EnvMessageType.kEnvCustom.id())						return new EnvCustomRequest(theGenericMessage);
 
 

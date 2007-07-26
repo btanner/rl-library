@@ -7,8 +7,10 @@ import messaging.GenericMessage;
 import messaging.MessageUser;
 import messaging.MessageValueType;
 import messaging.NotAnRLVizMessageException;
+import rlglue.Environment;
 import rlglue.RLGlue;
-import visualization.QueryableEnvironment;
+import visualization.interfaces.getEnvMaxMinsInterface;
+import visualization.interfaces.getEnvObsForStateInterface;
 
 public class EnvRangeRequest extends EnvironmentMessages{
 
@@ -39,21 +41,23 @@ public class EnvRangeRequest extends EnvironmentMessages{
 	}
 
 	@Override
-	public boolean canHandleAutomatically() {
-		return true;
+	public boolean canHandleAutomatically(Object theReceiver) {
+		return (theReceiver instanceof getEnvMaxMinsInterface);
 	}
 
 	@Override
-	public String handleAutomatically(QueryableEnvironment theEnvironment) {
+	public String handleAutomatically(Environment theEnvironment) {
+		
+		getEnvMaxMinsInterface castedEnv = (getEnvMaxMinsInterface)theEnvironment;
 		//			//Handle a request for the ranges
 		Vector<Double> mins = new Vector<Double>();
 		Vector<Double> maxs = new Vector<Double>();
 
-		int numVars=theEnvironment.getNumVars();
+		int numVars=castedEnv.getNumVars();
 
 		for(int i=0;i<numVars;i++){
-			mins.add(theEnvironment.getMinValueForQuerableVariable(i));
-			maxs.add(theEnvironment.getMaxValueForQuerableVariable(i));
+			mins.add(castedEnv.getMinValueForQuerableVariable(i));
+			maxs.add(castedEnv.getMaxValueForQuerableVariable(i));
 		}
 
 		EnvRangeResponse theResponse=new EnvRangeResponse(mins, maxs);

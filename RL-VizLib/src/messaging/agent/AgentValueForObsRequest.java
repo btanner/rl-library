@@ -74,7 +74,7 @@ public class AgentValueForObsRequest extends AgentMessages{
 	}
 
 	@Override
-	public boolean canHandleAutomatically() {
+	public boolean canHandleAutomatically(Object theReceiver) {
 		return true;
 	}
 

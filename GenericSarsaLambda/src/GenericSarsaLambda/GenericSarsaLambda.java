@@ -175,7 +175,7 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 			return "I only respond to RL-Viz messages!";
 		}
 
-		if(theMessageObject.canHandleAutomatically()){
+		if(theMessageObject.canHandleAutomatically(null)){
 			return theMessageObject.handleAutomatically(this);
 		}
 

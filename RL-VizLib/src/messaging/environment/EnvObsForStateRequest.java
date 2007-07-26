@@ -9,10 +9,12 @@ import messaging.GenericMessage;
 import messaging.MessageUser;
 import messaging.MessageValueType;
 import messaging.NotAnRLVizMessageException;
+import rlglue.Environment;
 import rlglue.Observation;
 import rlglue.RLGlue;
 import utilities.UtilityShop;
-import visualization.QueryableEnvironment;
+import visualization.interfaces.getEnvMaxMinsInterface;
+import visualization.interfaces.getEnvObsForStateInterface;
 
 public class EnvObsForStateRequest extends EnvironmentMessages{
 	Vector<Observation> theRequestStates=new Vector<Observation>();
@@ -77,16 +79,17 @@ public class EnvObsForStateRequest extends EnvironmentMessages{
 	}
 
 	@Override
-	public boolean canHandleAutomatically() {
-		return true;
+	public boolean canHandleAutomatically(Object theReceiver) {
+		return (theReceiver instanceof getEnvObsForStateInterface);
 	}
 
 	@Override
-	public String handleAutomatically(QueryableEnvironment theEnvironment) {
+	public String handleAutomatically(Environment theEnvironment) {
 		Vector<Observation> theObservations= new Vector<Observation>();
-
+		getEnvObsForStateInterface castedEnv=(getEnvObsForStateInterface)theEnvironment;
+		
 		for(int i=0;i<theRequestStates.size();i++){
-			Observation thisObs=theEnvironment.getObservationForState(theRequestStates.get(i));
+			Observation thisObs=castedEnv.getObservationForState(theRequestStates.get(i));
 			theObservations.add(thisObs);
 		}
 

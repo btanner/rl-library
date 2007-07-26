@@ -86,7 +86,7 @@ public class DynaSarsa implements Agent, QueryableAgent {
 
 		
 
-		if(theMessageObject.canHandleAutomatically())
+		if(theMessageObject.canHandleAutomatically(null))
 			return theMessageObject.handleAutomatically(this);
 
 		System.out.println("We need some code written in Agent Message for DynaSars!");

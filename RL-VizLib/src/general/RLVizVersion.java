@@ -15,7 +15,7 @@ public class RLVizVersion implements Comparable{
 	}
 	
 	public RLVizVersion(String serialized){
-		StringTokenizer theTokenizer=new StringTokenizer("_");
+		StringTokenizer theTokenizer=new StringTokenizer(serialized,"_");
 		majorRevision=Integer.parseInt(theTokenizer.nextToken());
 		minorRevision=Integer.parseInt(theTokenizer.nextToken());
 	}

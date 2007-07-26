@@ -1,13 +1,18 @@
 package messaging.environment;
 
 
+import java.util.Vector;
+
 import general.RLVizVersion;
 import messaging.AbstractMessage;
 import messaging.GenericMessage;
 import messaging.MessageUser;
 import messaging.MessageValueType;
 import messaging.NotAnRLVizMessageException;
+import rlglue.Environment;
 import rlglue.RLGlue;
+import visualization.interfaces.RLVizEnvInterface;
+import visualization.interfaces.getEnvMaxMinsInterface;
 
 public class EnvVersionSupportedRequest extends EnvironmentMessages{
 
@@ -33,6 +38,19 @@ public class EnvVersionSupportedRequest extends EnvironmentMessages{
 			theResponse= new EnvVersionSupportedResponse(RLVizVersion.NOVERSION);
 		}
 		return theResponse;
-
 	}
+
+	@Override
+	public String handleAutomatically(Environment theEnvironment) {
+		RLVizEnvInterface castedEnv = (RLVizEnvInterface)theEnvironment;
+		EnvVersionSupportedResponse theResponse=new EnvVersionSupportedResponse(castedEnv.getTheVersionISupport());
+		return theResponse.makeStringResponse();
+	}
+
+	@Override
+	public boolean canHandleAutomatically(Object theEnvironment) {
+		return (theEnvironment instanceof RLVizEnvInterface);
+	}
+	
+	
 }
