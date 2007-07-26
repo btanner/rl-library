@@ -1,6 +1,5 @@
 package messaging.environment;
 
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 import messaging.AbstractMessage;

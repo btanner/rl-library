@@ -9,10 +9,8 @@ import messaging.GenericMessage;
 import messaging.MessageUser;
 import messaging.MessageValueType;
 import messaging.NotAnRLVizMessageException;
-import messaging.environment.EnvMessageType;
-
-import rlglue.RLGlue;
 import rlglue.Observation;
+import rlglue.RLGlue;
 import utilities.UtilityShop;
 import visualization.QueryableAgent;
 

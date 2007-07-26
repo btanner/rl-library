@@ -9,7 +9,6 @@ import messaging.GenericMessage;
 import messaging.MessageUser;
 import messaging.MessageValueType;
 import messaging.NotAnRLVizMessageException;
-import messaging.agent.AgentMessageType;
 
 public class EnvShellListResponse extends AbstractResponse{
 	private Vector<String> theEnvList = new Vector<String>();

@@ -1,8 +1,5 @@
 package messaging;
 
-import java.util.StringTokenizer;
-
-import messaging.environment.EnvMessageType;
 
 public class AbstractMessage {
 	GenericMessage theRealMessageObject=null;

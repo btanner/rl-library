@@ -1,16 +1,11 @@
 package messaging.environment;
 
 
-import java.util.StringTokenizer;
-
 import messaging.AbstractMessage;
 import messaging.GenericMessage;
 import messaging.MessageUser;
 import messaging.MessageValueType;
 import messaging.NotAnRLVizMessageException;
-import messaging.environment.EnvMessageType;
-import messaging.environment.EnvironmentMessages;
-
 import rlglue.RLGlue;
 
 public class EnvVersionSupportedRequest extends EnvironmentMessages{
