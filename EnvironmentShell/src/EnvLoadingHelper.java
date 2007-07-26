@@ -10,13 +10,14 @@ public class EnvLoadingHelper {
 	Vector<File> theFiles=new Vector<File>();
 
 	public void loadEnvFiles(){
-		// TODO Auto-generated method stub
 		String curDir = System.getProperty("user.dir");
 		File d= new File(curDir);
 		String workSpaceDir=d.getParent();
 
 
 		String envJarDirString=workSpaceDir+"/envJars/";
+		
+
 		File envJarDir=new File(envJarDirString);
 		File [] theFileList=envJarDir.listFiles();
 		for (File thisFile : theFileList) {
@@ -57,6 +58,11 @@ public class EnvLoadingHelper {
 
 		try {
 			URL theURL=new URL("file",null, theFileName);
+
+			boolean loadRemote=false;
+			if(loadRemote)theURL=new URL("http://rl-library.googlecode.com/svn/trunk/envJars/MountainCar.jar");
+
+
 			urlLoader = new URLClassLoader(new URL[]{theURL});
 
 			//If an environment is in jar called myEnv.jar, we'll expect there to be a class at myEnv/myEnv.class
