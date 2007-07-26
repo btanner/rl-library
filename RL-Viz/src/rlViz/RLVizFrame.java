@@ -31,7 +31,7 @@ public class RLVizFrame extends JFrame{
 	public RLVizFrame(){
 		super();
 		
-		theGlueConnection=new RLGlueLogic();
+		theGlueConnection=RLGlueLogic.getGlobalGlueLogic();
 		
 		
 		

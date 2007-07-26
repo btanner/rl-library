@@ -1,6 +1,8 @@
 package messaging.environment;
 
 
+import general.RLVizVersion;
+
 import java.util.StringTokenizer;
 
 import messaging.AbstractMessage;
@@ -12,13 +14,11 @@ import messaging.NotAnRLVizMessageException;
 import messaging.environment.EnvMessageType;
 
 public class EnvVersionSupportedResponse extends AbstractResponse{
-	int majorRevision;
-	int minorRevision;
+	RLVizVersion theVersion=null;
 	
 
-	public EnvVersionSupportedResponse(int majorRevision, int minorRevision){
-		this.majorRevision=majorRevision;
-		this.minorRevision=minorRevision;
+	public EnvVersionSupportedResponse(RLVizVersion theVersion){
+		this.theVersion=theVersion;
 	}
 
 	public EnvVersionSupportedResponse(String responseMessage) throws NotAnRLVizMessageException {
@@ -29,8 +29,7 @@ public class EnvVersionSupportedResponse extends AbstractResponse{
 
 		StringTokenizer versionTokenizer = new StringTokenizer(thePayLoadString, ":");
 
-		majorRevision=Integer.parseInt(versionTokenizer.nextToken());
-		minorRevision=Integer.parseInt(versionTokenizer.nextToken());
+		theVersion=new RLVizVersion(versionTokenizer.nextToken());
 	}
 
 
@@ -39,9 +38,7 @@ public class EnvVersionSupportedResponse extends AbstractResponse{
 		StringBuffer thePayLoadBuffer= new StringBuffer();
 
 
-		thePayLoadBuffer.append(majorRevision);
-		thePayLoadBuffer.append(":");
-		thePayLoadBuffer.append(minorRevision);
+		thePayLoadBuffer.append(theVersion.serialize());
 		
 		String theResponse=AbstractMessage.makeMessage(
 				MessageUser.kBenchmark.id(),
@@ -54,12 +51,8 @@ public class EnvVersionSupportedResponse extends AbstractResponse{
 	
 }
 
-	public int getMajorRevision() {
-		return majorRevision;
-	}
-
-	public int getMinorRevision() {
-		return minorRevision;
+	public RLVizVersion getTheVersion() {
+		return theVersion;
 	}
 
 };

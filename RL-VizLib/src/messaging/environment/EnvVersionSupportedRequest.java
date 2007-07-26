@@ -1,6 +1,7 @@
 package messaging.environment;
 
 
+import general.RLVizVersion;
 import messaging.AbstractMessage;
 import messaging.GenericMessage;
 import messaging.MessageUser;
@@ -29,7 +30,7 @@ public class EnvVersionSupportedRequest extends EnvironmentMessages{
 			theResponse = new EnvVersionSupportedResponse(responseMessage);
 		} catch (NotAnRLVizMessageException e) {
 			//if we didn't get back anything good from the environment, we'll assume its supporting version 0.0 of rlViz :P
-			theResponse= new EnvVersionSupportedResponse(0,0);
+			theResponse= new EnvVersionSupportedResponse(RLVizVersion.NOVERSION);
 		}
 		return theResponse;
 

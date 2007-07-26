@@ -1,9 +1,13 @@
 package rlViz;
 
+import general.RLVizVersion;
+
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import messaging.environment.EnvVersionSupportedRequest;
+import messaging.environment.EnvVersionSupportedResponse;
 import messaging.environmentShell.EnvShellListRequest;
 import messaging.environmentShell.EnvShellListResponse;
 import messaging.environmentShell.EnvShellLoadRequest;
@@ -13,6 +17,15 @@ import visualization.EnvVisualizer;
 
 public class RLGlueLogic {
 
+//Singleton pattern, should make sure its thread safe
+	static RLGlueLogic theGlobalGlueLogic=null;
+
+	static RLGlueLogic getGlobalGlueLogic(){
+		if(theGlobalGlueLogic==null)theGlobalGlueLogic=new RLGlueLogic();
+		
+		return theGlobalGlueLogic;
+	}
+	
 	boolean debugLocal=false;
 
 	TinyGlue myGlueState=null;
@@ -20,15 +33,23 @@ public class RLGlueLogic {
 	EnvVisualizer theEnvVisualizer=null;
 	
 	Timer currentTimer=null;
-	public RLGlueLogic(){
+
+	private RLVizVersion theEnvVersion=null;
+	
+	private RLGlueLogic(){
 		myGlueState=new TinyGlue();
+	}
+	
+	public RLVizVersion getEnvVersion(){
+		return theEnvVersion;
 	}
 
 	public void step(){
-		//This is not ideal
+		//This is not ideal.. getting bad fast
 		if(theEnvVisualizer!=null)
-			if(!theEnvVisualizer.isCurrentlyRunning())
+			if(!theEnvVisualizer.isCurrentlyRunning()){
 				theEnvVisualizer.startVisualizing();
+			}
 		myGlueState.step();
 	}
 
@@ -60,6 +81,13 @@ public class RLGlueLogic {
 
 	public void loadEnvironment(String envName) {
 		EnvShellLoadRequest.Execute(envName);
+		EnvVersionSupportedResponse versionResponse=EnvVersionSupportedRequest.Execute();
+		
+		//this shouldn't happen anyway
+		if(versionResponse!=null)
+			theEnvVersion=versionResponse.getTheVersion();
+		else
+			theEnvVersion=RLVizVersion.NOVERSION;
 	}
 
 	public void setVisualizer(EnvVisualizer theEVisualizer) {
