@@ -53,6 +53,13 @@ public class MountainCarVisualizer  extends EnvVisualizer implements ValueFuncti
 	public void updateEnvironmentVariableRanges(){
 		//Get the Ranges (internalize this)
 		EnvRangeResponse theERResponse=EnvRangeRequest.Execute();
+		
+		if(theERResponse==null){
+			System.err.println("Asked an Environment for Variable Ranges and didn't get back a parseable message.");
+			Thread.dumpStack();
+			System.exit(1);
+		}
+
 		mins = theERResponse.getMins();
 		maxs = theERResponse.getMaxs();
 	}
@@ -69,11 +76,24 @@ public class MountainCarVisualizer  extends EnvVisualizer implements ValueFuncti
 
 	public Vector<Observation> getQueryObservations(Vector<Observation> theQueryStates) {
 		EnvObsForStateResponse theObsForStateResponse=EnvObsForStateRequest.Execute(theQueryStates);
+		
+		if(theObsForStateResponse==null){
+			System.err.println("Asked an Environment for Query Observations and didn't get back a parseable message.");
+			Thread.dumpStack();
+			System.exit(1);
+		}
 		return theObsForStateResponse.getTheObservations();
 	}
 
 	public Vector<Double> queryAgentValues(Vector<Observation> theQueryObs) {
 		AgentValueForObsResponse theValueResponse = AgentValueForObsRequest.Execute(theQueryObs);
+		
+		if(theValueResponse==null){
+			System.err.println("Asked an Agent for Values and didn't get back a parseable message.");
+			Thread.dumpStack();
+			System.exit(1);
+		}
+
 		return theValueResponse.getTheValues();
 	}
 

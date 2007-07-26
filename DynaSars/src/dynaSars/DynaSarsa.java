@@ -1,4 +1,6 @@
 package dynaSars;
+import messaging.GenericMessage;
+import messaging.NotAnRLVizMessageException;
 import messaging.agent.AgentMessageParser;
 import messaging.agent.AgentMessages;
 import rlglue.Action;
@@ -74,7 +76,15 @@ public class DynaSarsa implements Agent, QueryableAgent {
 	}
 
 	public String agent_message(String theMessage) {
-		AgentMessages theMessageObject=AgentMessageParser.parseMessage(theMessage);
+		AgentMessages theMessageObject;
+		try {
+			theMessageObject = AgentMessageParser.parseMessage(theMessage);
+		} catch (NotAnRLVizMessageException e) {
+			System.err.println("Someone sent EnvironmentShell a message that wasn't RL-Viz compatible");
+			return "I only respond to RL-Viz messages!";
+		}
+
+		
 
 		if(theMessageObject.canHandleAutomatically())
 			return theMessageObject.handleAutomatically(this);

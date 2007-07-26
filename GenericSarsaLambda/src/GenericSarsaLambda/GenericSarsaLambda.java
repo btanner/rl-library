@@ -1,4 +1,5 @@
 package GenericSarsaLambda;
+import messaging.NotAnRLVizMessageException;
 import messaging.agent.AgentMessageParser;
 import messaging.agent.AgentMessages;
 import rlglue.Action;
@@ -165,28 +166,22 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 	}
 
 	public String agent_message(String theMessage) {
-		boolean printTiming=false;
-		long t0=System.currentTimeMillis();
-		AgentMessages theMessageObject=AgentMessageParser.parseMessage(theMessage);
-		long t1=System.currentTimeMillis();
+
+		AgentMessages theMessageObject;
+		try {
+			theMessageObject = AgentMessageParser.parseMessage(theMessage);
+		} catch (NotAnRLVizMessageException e) {
+			System.err.println("Someone sent GenericSarsaLambda a message that wasn't RL-Viz compatible");
+			return "I only respond to RL-Viz messages!";
+		}
 
 		if(theMessageObject.canHandleAutomatically()){
-			
-			if(printTiming){
-				System.out.println("===================================");
-
-				System.out.println("timing summary on agent Side of getValues");
-				System.out.println("===================================");
-
-				System.out.println("Time to use AgentMessageParser to gimme theMessageObject: "+(t1-t0));
-			}
-
 			return theMessageObject.handleAutomatically(this);
 		}
 
 		System.out.println("We need some code written in Agent Message for Generic Sarsa Lambda!");
 		Thread.dumpStack();
-		return null;
+		return "BLAH!";
 	}
 
 

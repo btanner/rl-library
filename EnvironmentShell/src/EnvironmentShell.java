@@ -2,6 +2,7 @@ import java.util.Vector;
 
 import messaging.GenericMessage;
 import messaging.MessageUser;
+import messaging.NotAnRLVizMessageException;
 import messaging.environmentShell.EnvShellListResponse;
 import messaging.environmentShell.EnvShellLoadRequest;
 import messaging.environmentShell.EnvShellLoadResponse;
@@ -41,7 +42,13 @@ public class EnvironmentShell implements Environment{
 
 	public String env_message(String theMessage) {
 
-		GenericMessage theGenericMessage=new GenericMessage(theMessage);
+		GenericMessage theGenericMessage;
+		try {
+			theGenericMessage = new GenericMessage(theMessage);
+		} catch (NotAnRLVizMessageException e) {
+			System.err.println("Someone sent EnvironmentShell a message that wasn't RL-Viz compatible");
+			return "I only respond to RL-Viz messages!";
+		}
 		if(theGenericMessage.getTo().id()==MessageUser.kEnvShell.id()){
 
 			//Its for me

@@ -1,9 +1,13 @@
 package messages;
 
 
+import java.util.StringTokenizer;
+
 import messaging.AbstractResponse;
+import messaging.GenericMessage;
 import messaging.MessageUser;
 import messaging.MessageValueType;
+import messaging.NotAnRLVizMessageException;
 import messaging.environment.EnvMessageType;
 
 public class MCStateResponse extends AbstractResponse{
@@ -11,13 +15,27 @@ public class MCStateResponse extends AbstractResponse{
 	double velocity;
 	double height;
 	double deltaheight;
-	
+
 
 	public MCStateResponse(double position, double velocity, double height,double deltaheight) {
 		this.position=position;
 		this.velocity=velocity;
 		this.height=height;
 		this.deltaheight=deltaheight;
+	}
+
+	public MCStateResponse(String responseMessage) throws NotAnRLVizMessageException {
+
+		GenericMessage theGenericResponse = new GenericMessage(responseMessage);
+
+		String thePayLoadString=theGenericResponse.getPayLoad();
+
+		StringTokenizer stateTokenizer = new StringTokenizer(thePayLoadString, ":");
+
+		position=Double.parseDouble(stateTokenizer.nextToken());
+		velocity=Double.parseDouble(stateTokenizer.nextToken());
+		height=Double.parseDouble(stateTokenizer.nextToken());
+		deltaheight=Double.parseDouble(stateTokenizer.nextToken());
 	}
 
 	@Override
@@ -39,7 +57,7 @@ public class MCStateResponse extends AbstractResponse{
 		theResponseBuffer.append(" VALTYPE=");
 		theResponseBuffer.append(MessageValueType.kStringList.id());
 		theResponseBuffer.append(" VALS=");
-		
+
 		theResponseBuffer.append(position);
 		theResponseBuffer.append(":");
 		theResponseBuffer.append(velocity);
@@ -48,8 +66,8 @@ public class MCStateResponse extends AbstractResponse{
 		theResponseBuffer.append(":");
 		theResponseBuffer.append(deltaheight);
 		theResponseBuffer.append(":");
-		
-		
+
+
 		return theResponseBuffer.toString();
 	}
 

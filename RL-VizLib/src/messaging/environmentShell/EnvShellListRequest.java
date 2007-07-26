@@ -1,8 +1,10 @@
 package messaging.environmentShell;
 
+import messaging.AbstractMessage;
 import messaging.GenericMessage;
 import messaging.MessageUser;
 import messaging.MessageValueType;
+import messaging.NotAnRLVizMessageException;
 import rlglue.RLGlue;
 
 public class EnvShellListRequest extends EnvironmentShellMessages{
@@ -14,14 +16,23 @@ public class EnvShellListRequest extends EnvironmentShellMessages{
 	
 
 	public static EnvShellListResponse Execute(){
+		String theRequest=AbstractMessage.makeMessage(
+				MessageUser.kEnvShell.id(),
+				MessageUser.kBenchmark.id(),
+				EnvShellMessageType.kEnvShellListQuery.id(),
+				MessageValueType.kNone.id(),
+				"NULL");
 
-		String theRequest="TO="+MessageUser.kEnvShell.id()+" FROM="+MessageUser.kBenchmark.id();
-		theRequest+=" CMD="+EnvShellMessageType.kEnvShellListQuery.id()+" VALTYPE="+MessageValueType.kNone.id()+" VALS=NULL";
 
 		String responseMessage=RLGlue.RL_env_message(theRequest);
 		
-		System.out.println("the response messge from the Shell was: "+responseMessage);
-		EnvShellListResponse theResponse=new EnvShellListResponse(responseMessage);
+		EnvShellListResponse theResponse;
+		try {
+			theResponse = new EnvShellListResponse(responseMessage);
+		} catch (NotAnRLVizMessageException e) {
+			System.err.println("In EnvShellListRequest: response was not an RLViz Message");
+			return null;
+		}
 		return theResponse;
 
 

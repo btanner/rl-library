@@ -1,10 +1,13 @@
 package messaging.environmentShell;
 
 import java.util.StringTokenizer;
+
+import messaging.AbstractMessage;
 import messaging.AbstractResponse;
 import messaging.GenericMessage;
 import messaging.MessageUser;
 import messaging.MessageValueType;
+import messaging.NotAnRLVizMessageException;
 
 public class EnvShellLoadResponse extends AbstractResponse{
 //	Constructor when the Shell is responding to the load request
@@ -15,7 +18,7 @@ public class EnvShellLoadResponse extends AbstractResponse{
 	}
 
 //	Constructor when the benchmark is interpreting the returned response
-	public EnvShellLoadResponse(String theMessage) {
+	public EnvShellLoadResponse(String theMessage) throws NotAnRLVizMessageException {
 		GenericMessage theGenericResponse=new GenericMessage(theMessage);
 
 		String thePayLoadString=theGenericResponse.getPayLoad();
@@ -34,18 +37,23 @@ public class EnvShellLoadResponse extends AbstractResponse{
 
 	@Override
 	public String makeStringResponse() {
-		String theResponseString="TO="+MessageUser.kBenchmark.id()+" FROM="+MessageUser.kEnvShell.id();
-		theResponseString+=" CMD="+EnvShellMessageType.kEnvShellResponse.id()+" VALTYPE="+MessageValueType.kStringList.id()+" VALS=";
-		
+		String thePayLoadString="";
+
 		if(theResult)
-			theResponseString+="SUCCESS:No Message";
+			thePayLoadString+="SUCCESS:No Message";
 		else
-			theResponseString+="FAILURE:No Message";
+			thePayLoadString+="FAILURE:No Message";
 
-		//Right now we just always say it was a success
+		String theResponse=AbstractMessage.makeMessage(
+				MessageUser.kBenchmark.id(),
+				MessageUser.kEnvShell.id(),
+				EnvShellMessageType.kEnvShellResponse.id(),
+				MessageValueType.kStringList.id(),
+				thePayLoadString);
 
-		return theResponseString;
-	}
+
+		return theResponse;
+		}
 
 
 };

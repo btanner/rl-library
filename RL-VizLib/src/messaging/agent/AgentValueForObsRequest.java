@@ -4,9 +4,12 @@ package messaging.agent;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import messaging.AbstractMessage;
 import messaging.GenericMessage;
 import messaging.MessageUser;
 import messaging.MessageValueType;
+import messaging.NotAnRLVizMessageException;
+import messaging.environment.EnvMessageType;
 
 import rlglue.RLGlue;
 import rlglue.Observation;
@@ -34,65 +37,34 @@ public class AgentValueForObsRequest extends AgentMessages{
 	}
 
 	public static AgentValueForObsResponse Execute(Vector<Observation> theRequestObservations){
-		long time0=System.currentTimeMillis();
-
-		StringBuffer theRequestBuffer= new StringBuffer();
-		theRequestBuffer.append("TO=");
-		theRequestBuffer.append(MessageUser.kAgent.id());
-		theRequestBuffer.append(" FROM=");
-		theRequestBuffer.append(MessageUser.kBenchmark.id());
-		theRequestBuffer.append(" CMD=");
-		theRequestBuffer.append(AgentMessageType.kAgentQueryValuesForObs.id());
-		theRequestBuffer.append(" VALTYPE=");
-		theRequestBuffer.append(MessageValueType.kStringList.id());
-		theRequestBuffer.append(" VALS=");
+		StringBuffer thePayLoadBuffer= new StringBuffer();
 
 		//Tell them how many
-		theRequestBuffer.append(theRequestObservations.size());
-
-		long time1=System.currentTimeMillis();
+		thePayLoadBuffer.append(theRequestObservations.size());
 
 		for(int i=0;i<theRequestObservations.size();i++){
-			theRequestBuffer.append(":");
-			UtilityShop.serializeObservation(theRequestBuffer,theRequestObservations.get(i));
+			thePayLoadBuffer.append(":");
+			UtilityShop.serializeObservation(thePayLoadBuffer,theRequestObservations.get(i));
 		}
 
-		String theRequest=theRequestBuffer.toString();
+		String theRequest=AbstractMessage.makeMessage(
+				MessageUser.kAgent.id(),
+				MessageUser.kBenchmark.id(),
+				AgentMessageType.kAgentQueryValuesForObs.id(),
+				MessageValueType.kStringList.id(),
+				thePayLoadBuffer.toString());
 
-		long time2=System.currentTimeMillis();
 		String responseMessage=RLGlue.RL_agent_message(theRequest);
-		long time3=System.currentTimeMillis();
-		GenericMessage theGenericResponse=new GenericMessage(responseMessage);
 
-		String thePayLoadString=theGenericResponse.getPayLoad();
-
-		StringTokenizer valueTokenizer = new StringTokenizer(thePayLoadString, ":");
-		Vector<Double> theValues = new Vector<Double>();
-		String numValuesToken=valueTokenizer.nextToken();
-		int numValues=Integer.parseInt(numValuesToken);
-		assert(numValues>=0);
-		for(int i=0;i<numValues;i++){
-			theValues.add(Double.parseDouble(valueTokenizer.nextToken()));
-		}
-
-		AgentValueForObsResponse theResponse=new AgentValueForObsResponse(theValues);
-
-		long time4=System.currentTimeMillis();
-
-		boolean printTiming=true;
-		if(printTiming){
-			System.out.println("===================================");
-
-			System.out.println("timing summary for Getting "+numValues+" values:");
-			System.out.println("===================================");
-
-			System.out.println("Preamble before serialization:  "+(time1-time0));
-			System.out.println("Serialization:  "+(time2-time1));
-			System.out.println("Nework query + response:  "+(time3-time2));
-			System.out.println("Parsing returned values:  "+(time4-time3));
-
-		}
-		return theResponse;
+			AgentValueForObsResponse theResponse;
+			try {
+				theResponse = new AgentValueForObsResponse(responseMessage);
+			} catch (NotAnRLVizMessageException e) {
+				System.err.println("AgentValueForObsResponse received a non RLViz response");
+				theResponse=null;
+			}
+			
+			return theResponse;
 
 	}
 
@@ -110,7 +82,6 @@ public class AgentValueForObsRequest extends AgentMessages{
 
 	@Override
 	public String handleAutomatically(QueryableAgent theAgent) {
-		long t0=System.currentTimeMillis();
 		Vector<Double> theValues = new Vector<Double>();
 
 		for(int i=0;i<theRequestObservations.size();i++){
@@ -118,21 +89,8 @@ public class AgentValueForObsRequest extends AgentMessages{
 		}
 
 		AgentValueForObsResponse theResponse = new AgentValueForObsResponse(theValues);
-		long t1=System.currentTimeMillis();
-
 		String stringResponse=theResponse.makeStringResponse();
-		long t2=System.currentTimeMillis();
-		
-		boolean printTiming=false;
-		if(printTiming){
-			System.out.println("===================================");
 
-			System.out.println("timing summary for handleAutomatically in AgentValueForOBs "+theRequestObservations.size()+" values:");
-			System.out.println("===================================");
-
-			System.out.println("Time to actually query the agent:  "+(t1-t0));
-			System.out.println("Time to make the string response:  "+(t2-t1));
-		}
 		return stringResponse;
 	}
 

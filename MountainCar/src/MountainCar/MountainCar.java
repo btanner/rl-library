@@ -1,6 +1,7 @@
 package MountainCar;
 
 import messages.MCStateResponse;
+import messaging.NotAnRLVizMessageException;
 import messaging.environment.EnvCustomRequest;
 import messaging.environment.EnvironmentMessageParser;
 import messaging.environment.EnvironmentMessages;
@@ -87,7 +88,13 @@ public class MountainCar extends EnvironmentBase implements QueryableEnvironment
 	}
 
 	public String env_message(String theMessage) {
-		EnvironmentMessages theMessageObject=EnvironmentMessageParser.parseMessage(theMessage);
+		EnvironmentMessages theMessageObject;
+		try {
+			theMessageObject = EnvironmentMessageParser.parseMessage(theMessage);
+		} catch (NotAnRLVizMessageException e) {
+			System.err.println("Someone sent mountain Car a message that wasn't RL-Viz compatible");
+			return "I only respond to RL-Viz messages!";
+		}
 		
 		if(theMessageObject.canHandleAutomatically()){
 			return theMessageObject.handleAutomatically(this);

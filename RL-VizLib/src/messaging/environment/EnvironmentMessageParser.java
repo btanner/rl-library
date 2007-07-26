@@ -2,10 +2,10 @@ package messaging.environment;
 
 import messaging.GenericMessage;
 import messaging.GenericMessageParser;
-import messaging.MessageUser;
+import messaging.NotAnRLVizMessageException;
 
 public class EnvironmentMessageParser extends GenericMessageParser{
-	public static EnvironmentMessages parseMessage(String theMessage){
+	public static EnvironmentMessages parseMessage(String theMessage) throws NotAnRLVizMessageException{
 		GenericMessage theGenericMessage=new GenericMessage(theMessage);
 
 		int cmdId=theGenericMessage.getTheMessageType();

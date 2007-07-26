@@ -1,18 +1,44 @@
 package messaging.environment;
 
+import java.util.StringTokenizer;
 import java.util.Vector;
 
+import messaging.AbstractMessage;
 import messaging.AbstractResponse;
+import messaging.GenericMessage;
 import messaging.MessageUser;
 import messaging.MessageValueType;
+import messaging.NotAnRLVizMessageException;
 
 public class EnvRangeResponse extends AbstractResponse{
-	private Vector<Double> mins;
-	private Vector<Double> maxs;
+	private Vector<Double> mins=null;
+	private Vector<Double> maxs=null;
 	
 	public EnvRangeResponse(Vector<Double> mins, Vector<Double> maxs){
 		this.mins=mins;
 		this.maxs=maxs;
+	}
+
+	public EnvRangeResponse(String responseMessage) throws NotAnRLVizMessageException {
+
+		GenericMessage theGenericResponse = new GenericMessage(responseMessage);
+
+		String thePayLoadString=theGenericResponse.getPayLoad();
+
+		StringTokenizer obsTokenizer = new StringTokenizer(thePayLoadString, ":");
+
+		String numValuesToken=obsTokenizer.nextToken();
+		int numValues=Integer.parseInt(numValuesToken);
+
+
+		mins=new Vector<Double>();
+		maxs=new Vector<Double>();
+
+		for(int i=0;i<numValues;i++){
+			mins.add(Double.parseDouble(obsTokenizer.nextToken()));
+			maxs.add(Double.parseDouble(obsTokenizer.nextToken()));
+		}
+
 	}
 
 	public String toString() {
@@ -34,15 +60,22 @@ public class EnvRangeResponse extends AbstractResponse{
 
 	@Override
 	public String makeStringResponse() {
-		String theResponseString="TO="+MessageUser.kBenchmark.id()+" FROM="+MessageUser.kEnv.id();
-		theResponseString+=" CMD="+EnvMessageType.kEnvResponse.id()+" VALTYPE="+MessageValueType.kStringList.id()+" VALS=";
-		
-		theResponseString+=mins.size()+":";
+
+		String thePayLoadString=mins.size()+":";
 		
 		for(int i=0;i<mins.size();i++){
-			theResponseString+=mins.get(i)+":"+maxs.get(i)+":";
+			thePayLoadString+=mins.get(i)+":"+maxs.get(i)+":";
 		}
 		
-		return theResponseString;
+		String theResponse=AbstractMessage.makeMessage(
+				MessageUser.kBenchmark.id(),
+				MessageUser.kEnv.id(),
+				EnvMessageType.kEnvResponse.id(),
+				MessageValueType.kStringList.id(),
+				thePayLoadString);
+		
+		return theResponse;
+	
+		
 	}
 };

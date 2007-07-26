@@ -60,6 +60,7 @@ public class GenericMessageParser {
 			StringTokenizer payLoadTokenizer=new StringTokenizer(payLoadString,"=");
 			payLoadTokenizer.nextToken();
 			String thePayLoadString=payLoadTokenizer.nextToken();
+
 			return thePayLoadString;
 		}
 }

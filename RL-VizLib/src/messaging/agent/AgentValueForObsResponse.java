@@ -1,17 +1,39 @@
 package messaging.agent;
 
+import java.util.StringTokenizer;
 import java.util.Vector;
 
+import messaging.AbstractMessage;
 import messaging.AbstractResponse;
+import messaging.GenericMessage;
 import messaging.MessageUser;
 import messaging.MessageValueType;
+import messaging.NotAnRLVizMessageException;
 
 public class AgentValueForObsResponse extends AbstractResponse{
-	private Vector<Double> theValues;
+	private Vector<Double> theValues=null;
 	
 
 	public AgentValueForObsResponse(Vector<Double> theValues) {
 		this.theValues=theValues;
+	}
+
+
+
+
+	public AgentValueForObsResponse(String responseMessage) throws NotAnRLVizMessageException {
+		GenericMessage theGenericResponse = new GenericMessage(responseMessage);
+
+		String thePayLoadString=theGenericResponse.getPayLoad();
+
+		StringTokenizer valueTokenizer = new StringTokenizer(thePayLoadString, ":");
+		theValues = new Vector<Double>();
+		String numValuesToken=valueTokenizer.nextToken();
+		int numValues=Integer.parseInt(numValuesToken);
+
+		for(int i=0;i<numValues;i++){
+			theValues.add(Double.parseDouble(valueTokenizer.nextToken()));
+		}
 	}
 
 
@@ -43,26 +65,24 @@ public class AgentValueForObsResponse extends AbstractResponse{
 	
 	//So, when you create on of these in an environment, this gives you the response to send
 	public String makeStringResponse() {
-		
-		StringBuffer theResponseBuffer= new StringBuffer();
-		theResponseBuffer.append("TO=");
-		theResponseBuffer.append(MessageUser.kBenchmark.id());
-		theResponseBuffer.append(" FROM=");
-		theResponseBuffer.append(MessageUser.kAgent.id());
-		theResponseBuffer.append(" CMD=");
-		theResponseBuffer.append(AgentMessageType.kAgentResponse.id());
-		theResponseBuffer.append(" VALTYPE=");
-		theResponseBuffer.append(MessageValueType.kStringList.id());
-		theResponseBuffer.append(" VALS=");
+		StringBuffer thePayLoadBuffer= new StringBuffer();
 
-		theResponseBuffer.append(theValues.size());
-		theResponseBuffer.append(":");
+		thePayLoadBuffer.append(theValues.size());
+		thePayLoadBuffer.append(":");
 
 		
 		for(int i=0;i<theValues.size();i++){
-			theResponseBuffer.append(theValues.get(i));
-			theResponseBuffer.append(':');
+			thePayLoadBuffer.append(theValues.get(i));
+			thePayLoadBuffer.append(':');
 		}
-		return theResponseBuffer.toString();
+		
+		String theResponse=AbstractMessage.makeMessage(
+				MessageUser.kAgent.id(),
+				MessageUser.kBenchmark.id(),
+				AgentMessageType.kAgentResponse.id(),
+				MessageValueType.kStringList.id(),
+				thePayLoadBuffer.toString());
+
+		return theResponse;
 	}
 };

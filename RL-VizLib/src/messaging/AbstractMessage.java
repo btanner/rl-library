@@ -2,6 +2,8 @@ package messaging;
 
 import java.util.StringTokenizer;
 
+import messaging.environment.EnvMessageType;
+
 public class AbstractMessage {
 	GenericMessage theRealMessageObject=null;
 	
@@ -49,6 +51,22 @@ public class AbstractMessage {
 	 */
 	public boolean canHandleAutomatically() {
 		return false;
+	}
+
+	public static String makeMessage(int TO, int FROM, int CMD, int VALTYPE,String PAYLOAD) {
+		StringBuffer theRequestBuffer=new StringBuffer();
+		theRequestBuffer.append("TO=");
+		theRequestBuffer.append(TO);
+		theRequestBuffer.append(" FROM=");
+		theRequestBuffer.append(FROM);
+		theRequestBuffer.append(" CMD=");
+		theRequestBuffer.append(CMD);
+		theRequestBuffer.append(" VALTYPE=");
+		theRequestBuffer.append(VALTYPE);
+		theRequestBuffer.append(" VALS=");
+		theRequestBuffer.append(PAYLOAD);
+		
+		return theRequestBuffer.toString();
 	}
 
 

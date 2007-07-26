@@ -1,4 +1,4 @@
-package messages;
+package messaging.environment;
 
 
 import java.util.StringTokenizer;
@@ -13,30 +13,29 @@ import messaging.environment.EnvironmentMessages;
 
 import rlglue.RLGlue;
 
-public class MCStateRequest extends EnvironmentMessages{
+public class EnvVersionSupportedRequest extends EnvironmentMessages{
 
-	public MCStateRequest(GenericMessage theMessageObject){
+	public EnvVersionSupportedRequest(GenericMessage theMessageObject){
 		super(theMessageObject);
 	}
 
-	public static MCStateResponse Execute(){
+	public static EnvVersionSupportedResponse Execute(){
 		String theRequest=AbstractMessage.makeMessage(
 				MessageUser.kEnv.id(),
 				MessageUser.kBenchmark.id(),
-				EnvMessageType.kEnvCustom.id(),
-				MessageValueType.kString.id(),
-				"GETMCSTATE");
+				EnvMessageType.kEnvQuerySupportedVersion.id(),
+				MessageValueType.kNone.id(),
+				"NULL");
 
 		String responseMessage=RLGlue.RL_env_message(theRequest);
 
-		MCStateResponse theResponse;
+		EnvVersionSupportedResponse theResponse;
 		try {
-			theResponse = new MCStateResponse(responseMessage);
+			theResponse = new EnvVersionSupportedResponse(responseMessage);
 		} catch (NotAnRLVizMessageException e) {
-			System.err.println("In MCStateRequest, the response was not RL-Viz compatible");
-			theResponse=null;
+			//if we didn't get back anything good from the environment, we'll assume its supporting version 0.0 of rlViz :P
+			theResponse= new EnvVersionSupportedResponse(0,0);
 		}
-
 		return theResponse;
 
 	}

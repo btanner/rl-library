@@ -8,21 +8,28 @@ public class GenericMessage {
 	protected MessageUser to;
 	protected MessageValueType payLoadType;
 	protected String payLoad;
-	
-	public GenericMessage(String theMessage){
-		StringTokenizer theTokenizer=new StringTokenizer(theMessage, " ");
-		String toString=theTokenizer.nextToken();
-		String fromString=theTokenizer.nextToken();
-		String typeString=theTokenizer.nextToken();
-		String valueString=theTokenizer.nextToken();
-		String payLoadString=theTokenizer.nextToken();
 
-		
-		from=GenericMessageParser.parseUser(fromString);
-		to=GenericMessageParser.parseUser(toString);
-		theMessageType=GenericMessageParser.parseInt(typeString);
-		payLoadType=GenericMessageParser.parseValueType(valueString);
-		payLoad=GenericMessageParser.parsePayLoad(payLoadString);
+	public GenericMessage(String theMessage) throws NotAnRLVizMessageException{
+		try {
+			StringTokenizer theTokenizer=new StringTokenizer(theMessage, " ");
+
+
+			String toString=theTokenizer.nextToken();
+			String fromString=theTokenizer.nextToken();
+			String typeString=theTokenizer.nextToken();
+			String valueString=theTokenizer.nextToken();
+			String payLoadString=theTokenizer.nextToken();
+
+			from=GenericMessageParser.parseUser(fromString);
+			to=GenericMessageParser.parseUser(toString);
+
+			theMessageType=GenericMessageParser.parseInt(typeString);
+			payLoadType=GenericMessageParser.parseValueType(valueString);
+			payLoad=GenericMessageParser.parsePayLoad(payLoadString);
+		} catch (Exception e) {
+			//The message was NOT what we expected!
+			throw new NotAnRLVizMessageException();
+		}		
 
 	}
 
