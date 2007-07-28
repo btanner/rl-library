@@ -10,8 +10,8 @@ import rlVizLib.messaging.GenericMessage;
 import rlVizLib.messaging.MessageUser;
 import rlVizLib.messaging.MessageValueType;
 import rlVizLib.messaging.NotAnRLVizMessageException;
-import rlVizLib.visualization.interfaces.RLVizEnvInterface;
-import rlVizLib.visualization.interfaces.getEnvMaxMinsInterface;
+import rlVizLib.messaging.interfaces.RLVizEnvInterface;
+import rlVizLib.messaging.interfaces.getEnvMaxMinsInterface;
 import rlglue.Environment;
 import rlglue.RLGlue;
 

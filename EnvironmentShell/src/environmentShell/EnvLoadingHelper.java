@@ -1,3 +1,4 @@
+package environmentShell;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -7,9 +8,10 @@ import rlglue.Environment;
 
 
 public class EnvLoadingHelper {
-	Vector<File> theFiles=new Vector<File>();
+	Vector<File> theFiles=null;
 
 	public void loadEnvFiles(){
+		theFiles=new Vector<File>();
 		String curDir = System.getProperty("user.dir");
 		File d= new File(curDir);
 		String workSpaceDir=d.getParent();
@@ -38,6 +40,9 @@ public class EnvLoadingHelper {
 	}
 	
 	public Environment loadEnvironment(String envName) {
+		if(theFiles==null)
+			loadEnvFiles();
+		
 		//Get the file from the list
 		for (File theFile : theFiles) {
 			if(theFile.getName().equals(envName+".jar")){

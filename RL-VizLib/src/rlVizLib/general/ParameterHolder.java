@@ -33,23 +33,19 @@ public class ParameterHolder {
 	}
 	public ParameterHolder(final String theString){
 		this();
+
 		StringTokenizer iss=new StringTokenizer(theString,"_");
 
 		int numParams;
 		String thisParamName;
 
-		double fParamValue;
-		int iParamValue;
-		String sParamValue;
-
 		int thisParamType;
 
-		//MAke sure the first bit of this isn't NULL!
-		String pointerType;
-
+		//Make sure the first bit of this isn't NULL!
 		if(iss.nextToken().equals("NULL"))
 			return;
 
+		
 		numParams=Integer.parseInt(iss.nextToken());
 
 		for(int i=0;i<numParams;i++){
@@ -85,7 +81,13 @@ public class ParameterHolder {
 
 
 
-	private void setAlias(String thisAlias, String thisTarget) {
+	public void setAlias(String thisAlias, String thisTarget) {
+		if(thisAlias.contains(" ")||thisAlias.contains(":")||thisAlias.contains("_")){
+			System.out.println("The name or alias of a parameter cannot contain a space or : or _");
+			Thread.dumpStack();
+			System.exit(1);
+		}
+		
 		if(allParams.get(thisTarget)==null){
 			System.out.println("Careful, you are setting an alias of: "+thisAlias+" to original: "+thisTarget+" but the original isn't in the parameter set!");
 			Thread.dumpStack();
@@ -96,14 +98,14 @@ public class ParameterHolder {
 	}
 
 
-	private void addStringParam(String thisParamName, String thisParamValue) {
+	public void addStringParam(String thisParamName, String thisParamValue) {
 		addStringParam(thisParamName);
 		setStringParam(thisParamName,thisParamValue);
 	}
 
 
 
-	private void setStringParam(String thisParamAlias, String thisParamValue) {
+	public void setStringParam(String thisParamAlias, String thisParamValue) {
 		String name=getAlias(thisParamAlias);
 		if(!allParams.containsKey(name)){
 			System.err.println("Careful, you are setting the value of parameter: "+name+" but the parameter hasn't been added...");
@@ -116,32 +118,32 @@ public class ParameterHolder {
 		allParamNames.add(thisParamName);
 		setAlias(thisParamName,thisParamName);
 	}
-	private void addStringParam(String thisParamName) {
+	public void addStringParam(String thisParamName) {
 		allParams.put(thisParamName,stringParam);
 		allParamTypes.add(stringParam);
 		genericNewParam(thisParamName);
 	}
 
-	private void addIntParam(String thisParamName) {
+	public void addIntParam(String thisParamName) {
 		allParams.put(thisParamName,intParam);
 		allParamTypes.add(intParam);
 		genericNewParam(thisParamName);
 	}
 
-	private void addDoubleParam(String thisParamName) {
+	public void addDoubleParam(String thisParamName) {
 		allParams.put(thisParamName,doubleParam);
 		allParamTypes.add(doubleParam);
 		genericNewParam(thisParamName);
 	}
 
 
-	private void addDoubleParam(String thisParamName, double thisParamValue) {
+	public void addDoubleParam(String thisParamName, double thisParamValue) {
 		addDoubleParam(thisParamName);
 		setDoubleParam(thisParamName,thisParamValue);
 	}
 
 
-	private void setDoubleParam(String thisParamAlias, double thisParamValue) {
+	public void setDoubleParam(String thisParamAlias, double thisParamValue) {
 		String name=getAlias(thisParamAlias);
 		if(!allParams.containsKey(name)){
 			System.err.println("Careful, you are setting the value of parameter: "+name+" but the parameter hasn't been added...");
@@ -151,14 +153,14 @@ public class ParameterHolder {
 
 
 
-	private void addIntParam(String thisParamName, int thisParamValue) {
+	public void addIntParam(String thisParamName, int thisParamValue) {
 		addIntParam(thisParamName);
 		setIntParam(thisParamName,thisParamValue);
 	}
 
 
 
-	private void setIntParam(String thisParamAlias,int thisParamValue) {
+	public void setIntParam(String thisParamAlias,int thisParamValue) {
 		String name=getAlias(thisParamAlias);
 		if(!allParams.containsKey(name)){
 			System.err.println("Careful, you are setting the value of parameter: "+name+" but the parameter hasn't been added...");
@@ -272,7 +274,7 @@ public class ParameterHolder {
 //	return (aliases.count(alias)!=0);
 //	}
 
-	public static void main(String []args){
+	public static ParameterHolder makeTestParameterHolder(){
 		ParameterHolder p= new ParameterHolder();
 		
 		p.addDoubleParam("Alpha",.1);
@@ -281,9 +283,14 @@ public class ParameterHolder {
 		p.addIntParam("StepCount",5);
 		p.addIntParam("Tiles",16);
 
-		p.addStringParam("Agent Name","Dave");
+		p.addStringParam("AgentName","Dave");
 		p.addStringParam("AgentOccupation","Winner");
 		
+		return p;
+	}
+	public static void main(String []args){
+
+		ParameterHolder p=makeTestParameterHolder();
 		String serializedVersion = p.stringSerialize();
 		System.out.println("serialized: "+serializedVersion);
 		
@@ -293,7 +300,7 @@ public class ParameterHolder {
 		System.out.println(p.getdoubleParam("epsilon"));
 		System.out.println(p.getIntParam("StepCount"));
 		System.out.println(p.getIntParam("Tiles"));
-		System.out.println(p.getStringParam("Agent Name"));
+		System.out.println(p.getStringParam("AgentName"));
 		System.out.println(p.getStringParam("AgentOccupation"));
 		
 		System.out.println("---");
@@ -302,7 +309,7 @@ public class ParameterHolder {
 		System.out.println(unpackedP.getdoubleParam("epsilon"));
 		System.out.println(unpackedP.getIntParam("StepCount"));
 		System.out.println(unpackedP.getIntParam("Tiles"));
-		System.out.println(unpackedP.getStringParam("Agent Name"));
+		System.out.println(unpackedP.getStringParam("AgentName"));
 		System.out.println(unpackedP.getStringParam("AgentOccupation"));
 }
 

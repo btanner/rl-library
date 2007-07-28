@@ -1,12 +1,12 @@
 package GenericSarsaLambda;
-import messaging.NotAnRLVizMessageException;
-import messaging.agent.AgentMessageParser;
-import messaging.agent.AgentMessages;
+import rlVizLib.functionapproximation.TileCoder;
+import rlVizLib.messaging.NotAnRLVizMessageException;
+import rlVizLib.messaging.agent.AgentMessageParser;
+import rlVizLib.messaging.agent.AgentMessages;
+import rlVizLib.visualization.QueryableAgent;
 import rlglue.Action;
 import rlglue.Agent;
 import rlglue.Observation;
-import visualization.QueryableAgent;
-import functionapproximation.TileCoder;
 
 public class GenericSarsaLambda implements Agent, QueryableAgent {
 
@@ -58,8 +58,8 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 		this.epsilon=0.05f;
 		this.alpha=.1f;
 		this.MEMORY_SIZE=1<<16;
-		this.NUM_TILINGS=16;
-		this.defaultDivider=.01f;
+		this.NUM_TILINGS=5;
+		this.defaultDivider=.1f;
 		this.MAX_NONZERO_TRACES=100000;
 		observationDividers=null;
 		this.tempF=null;

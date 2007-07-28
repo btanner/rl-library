@@ -10,8 +10,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-import messaging.environmentShell.EnvShellListRequest;
-import messaging.environmentShell.EnvShellListResponse;
+import rlVizLib.messaging.environmentShell.EnvShellListRequest;
+import rlVizLib.messaging.environmentShell.EnvShellListResponse;
+
 
 
 public class RLVizFrame extends JFrame{

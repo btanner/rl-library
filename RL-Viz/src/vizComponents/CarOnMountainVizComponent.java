@@ -6,7 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 
-import visualization.VizComponent;
+import rlVizLib.visualization.VizComponent;
+
 
 
 public class CarOnMountainVizComponent implements VizComponent {

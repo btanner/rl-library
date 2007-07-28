@@ -1,15 +1,15 @@
 package rlViz;
 
+import rlVizLib.messaging.agent.AgentValueForObsRequest;
+import rlVizLib.messaging.agent.AgentValueForObsResponse;
+import rlVizLib.messaging.environment.EnvObsForStateRequest;
+import rlVizLib.messaging.environment.EnvObsForStateResponse;
+import rlVizLib.messaging.environment.EnvRangeRequest;
+import rlVizLib.messaging.environment.EnvRangeResponse;
 import rlglue.*;
 import java.io.IOException;
 import java.util.Vector;
 
-import messaging.agent.AgentValueForObsRequest;
-import messaging.agent.AgentValueForObsResponse;
-import messaging.environment.EnvObsForStateRequest;
-import messaging.environment.EnvObsForStateResponse;
-import messaging.environment.EnvRangeRequest;
-import messaging.environment.EnvRangeResponse;
 
 public class Driver
 {

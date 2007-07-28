@@ -3,12 +3,13 @@ package messages;
 
 import java.util.StringTokenizer;
 
-import messaging.AbstractResponse;
-import messaging.GenericMessage;
-import messaging.MessageUser;
-import messaging.MessageValueType;
-import messaging.NotAnRLVizMessageException;
-import messaging.environment.EnvMessageType;
+import rlVizLib.messaging.AbstractResponse;
+import rlVizLib.messaging.GenericMessage;
+import rlVizLib.messaging.MessageUser;
+import rlVizLib.messaging.MessageValueType;
+import rlVizLib.messaging.NotAnRLVizMessageException;
+import rlVizLib.messaging.environment.EnvMessageType;
+
 
 public class MCStateResponse extends AbstractResponse{
 	double position;

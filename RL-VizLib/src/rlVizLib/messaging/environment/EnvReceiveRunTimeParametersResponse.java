@@ -12,24 +12,20 @@ import rlVizLib.messaging.MessageUser;
 import rlVizLib.messaging.MessageValueType;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 
-public class EnvVersionSupportedResponse extends AbstractResponse{
-	RLVizVersion theVersion=null;
+public class EnvReceiveRunTimeParametersResponse extends AbstractResponse{
+	boolean accepted=false;
 	
 
-	public EnvVersionSupportedResponse(RLVizVersion theVersion){
-		this.theVersion=theVersion;
+	public EnvReceiveRunTimeParametersResponse(boolean accepted){
+		this.accepted=accepted;
 	}
-	
 
-	public EnvVersionSupportedResponse(String responseMessage) throws NotAnRLVizMessageException {
+	public EnvReceiveRunTimeParametersResponse(String responseMessage) throws NotAnRLVizMessageException {
 		GenericMessage theGenericResponse = new GenericMessage(responseMessage);
 
-		
 		String thePayLoadString=theGenericResponse.getPayLoad();
-
-		StringTokenizer versionTokenizer = new StringTokenizer(thePayLoadString, ":");
-
-		theVersion=new RLVizVersion(versionTokenizer.nextToken());
+		
+		this.accepted=Boolean.parseBoolean(thePayLoadString);
 	}
 
 
@@ -38,7 +34,7 @@ public class EnvVersionSupportedResponse extends AbstractResponse{
 		StringBuffer thePayLoadBuffer= new StringBuffer();
 
 
-		thePayLoadBuffer.append(theVersion.serialize());
+		thePayLoadBuffer.append(this.accepted);
 		
 		String theResponse=AbstractMessage.makeMessage(
 				MessageUser.kBenchmark.id(),
@@ -51,8 +47,7 @@ public class EnvVersionSupportedResponse extends AbstractResponse{
 	
 }
 
-	public RLVizVersion getTheVersion() {
-		return theVersion;
-	}
-
+		public boolean getAccepted(){
+			return accepted;
+		}
 };

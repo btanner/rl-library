@@ -1,7 +1,7 @@
 package rlVizLib.messaging.environmentShell;
 import rlVizLib.messaging.AbstractMessage;
 import rlVizLib.messaging.GenericMessage;
-import rlVizLib.visualization.interfaces.getEnvMaxMinsInterface;
+import rlVizLib.messaging.interfaces.getEnvMaxMinsInterface;
 
 
 	public class EnvironmentShellMessages extends AbstractMessage{

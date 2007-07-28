@@ -18,16 +18,21 @@ String envName;
 	
 	
 
-	public static EnvShellLoadResponse Execute(String envName){
-		String theRequest=AbstractMessage.makeMessage(
+	//This is intended for debugging but works well to be just called to save code duplication
+	public static String getRequestMessage(String envName){
+		return AbstractMessage.makeMessage(
 				MessageUser.kEnvShell.id(),
 				MessageUser.kBenchmark.id(),
 				EnvShellMessageType.kEnvShellLoad.id(),
 				MessageValueType.kString.id(),
 				envName);
+		
+	}
+	public static EnvShellLoadResponse Execute(String envName){
+		String theRequest=getRequestMessage(envName);
 
 		String responseMessage=RLGlue.RL_env_message(theRequest);
-		
+
 		EnvShellLoadResponse theResponse;
 		try {
 			theResponse = new EnvShellLoadResponse(responseMessage);

@@ -1,15 +1,15 @@
 package vizComponents;
 
-import interfaces.ValueFunctionDataProvider;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Vector;
 
+import rlVizLib.interfaces.ValueFunctionDataProvider;
+import rlVizLib.utilities.UtilityShop;
+import rlVizLib.visualization.VizComponent;
 import rlglue.Observation;
-import utilities.UtilityShop;
-import visualization.VizComponent;
 
 public class ValueFunctionVizComponent implements VizComponent {
 //	Point2D relativeVFDrawSize;

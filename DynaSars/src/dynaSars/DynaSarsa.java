@@ -1,14 +1,14 @@
 package dynaSars;
-import messaging.GenericMessage;
-import messaging.NotAnRLVizMessageException;
-import messaging.agent.AgentMessageParser;
-import messaging.agent.AgentMessages;
+import rlVizLib.messaging.agent.AgentMessageParser;
+import rlVizLib.messaging.agent.AgentMessages;
+import rlVizLib.functionapproximation.FunctionApproximator;
+import rlVizLib.functionapproximation.TileCodingFunctionApproximator;
+import rlVizLib.messaging.GenericMessage;
+import rlVizLib.messaging.NotAnRLVizMessageException;
+import rlVizLib.visualization.QueryableAgent;
 import rlglue.Action;
 import rlglue.Agent;
 import rlglue.Observation;
-import visualization.QueryableAgent;
-import functionapproximation.FunctionApproximator;
-import functionapproximation.TileCodingFunctionApproximator;
 
 
 public class DynaSarsa implements Agent, QueryableAgent {

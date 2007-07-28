@@ -1,4 +1,4 @@
-package rlVizLib.visualization.interfaces;
+package rlVizLib.messaging.interfaces;
 
 import rlglue.Observation;
 

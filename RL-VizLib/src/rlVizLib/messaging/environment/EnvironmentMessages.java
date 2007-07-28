@@ -1,7 +1,7 @@
 package rlVizLib.messaging.environment;
 import rlVizLib.messaging.AbstractMessage;
 import rlVizLib.messaging.GenericMessage;
-import rlVizLib.visualization.interfaces.getEnvMaxMinsInterface;
+import rlVizLib.messaging.interfaces.getEnvMaxMinsInterface;
 import rlglue.Environment;
 
 

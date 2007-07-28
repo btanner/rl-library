@@ -5,7 +5,8 @@ public enum EnvMessageType{
 	kEnvQueryVarRanges(1),
 	kEnvQueryObservationsForState(2),
 	kEnvCustom(3),
-	kEnvQuerySupportedVersion(4);
+	kEnvQuerySupportedVersion(4),
+	kEnvReceiveRunTimeParameters(5);
 	
 	private final int id;
 	

@@ -1,22 +1,22 @@
 package rlViz;
 
-import interfaces.AgentOnValueFunctionDataProvider;
-import interfaces.ValueFunctionDataProvider;
 
 import java.util.Vector;
 
 import messages.MCStateRequest;
 import messages.MCStateResponse;
-import messaging.agent.AgentValueForObsRequest;
-import messaging.agent.AgentValueForObsResponse;
-import messaging.environment.EnvObsForStateRequest;
-import messaging.environment.EnvObsForStateResponse;
-import messaging.environment.EnvRangeRequest;
-import messaging.environment.EnvRangeResponse;
+import rlVizLib.interfaces.AgentOnValueFunctionDataProvider;
+import rlVizLib.interfaces.ValueFunctionDataProvider;
+import rlVizLib.messaging.agent.AgentValueForObsRequest;
+import rlVizLib.messaging.agent.AgentValueForObsResponse;
+import rlVizLib.messaging.environment.EnvObsForStateRequest;
+import rlVizLib.messaging.environment.EnvObsForStateResponse;
+import rlVizLib.messaging.environment.EnvRangeRequest;
+import rlVizLib.messaging.environment.EnvRangeResponse;
+import rlVizLib.visualization.AgentOnValueFunctionVizComponent;
+import rlVizLib.visualization.EnvVisualizer;
+import rlVizLib.visualization.VizComponent;
 import rlglue.Observation;
-import visualization.AgentOnValueFunctionVizComponent;
-import visualization.EnvVisualizer;
-import visualization.VizComponent;
 import vizComponents.CarOnMountainVizComponent;
 import vizComponents.ValueFunctionVizComponent;
 

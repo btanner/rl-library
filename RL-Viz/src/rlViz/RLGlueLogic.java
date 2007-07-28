@@ -1,19 +1,19 @@
 package rlViz;
 
-import general.RLVizVersion;
 
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import messaging.environment.EnvVersionSupportedRequest;
-import messaging.environment.EnvVersionSupportedResponse;
-import messaging.environmentShell.EnvShellListRequest;
-import messaging.environmentShell.EnvShellListResponse;
-import messaging.environmentShell.EnvShellLoadRequest;
+import rlVizLib.general.RLVizVersion;
+import rlVizLib.messaging.environment.EnvVersionSupportedRequest;
+import rlVizLib.messaging.environment.EnvVersionSupportedResponse;
+import rlVizLib.messaging.environmentShell.EnvShellListRequest;
+import rlVizLib.messaging.environmentShell.EnvShellListResponse;
+import rlVizLib.messaging.environmentShell.EnvShellLoadRequest;
+import rlVizLib.visualization.EnvVisualizer;
 import rlglue.RLGlue;
 import rlglue.Reward_observation_action_terminal;
-import visualization.EnvVisualizer;
 
 public class RLGlueLogic {
 

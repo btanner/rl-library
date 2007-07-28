@@ -1,16 +1,13 @@
 package messages;
 
 
-import java.util.StringTokenizer;
-
-import messaging.AbstractMessage;
-import messaging.GenericMessage;
-import messaging.MessageUser;
-import messaging.MessageValueType;
-import messaging.NotAnRLVizMessageException;
-import messaging.environment.EnvMessageType;
-import messaging.environment.EnvironmentMessages;
-
+import rlVizLib.messaging.AbstractMessage;
+import rlVizLib.messaging.GenericMessage;
+import rlVizLib.messaging.MessageUser;
+import rlVizLib.messaging.MessageValueType;
+import rlVizLib.messaging.NotAnRLVizMessageException;
+import rlVizLib.messaging.environment.EnvMessageType;
+import rlVizLib.messaging.environment.EnvironmentMessages;
 import rlglue.RLGlue;
 
 public class MCStateRequest extends EnvironmentMessages{

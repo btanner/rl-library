@@ -1,27 +1,33 @@
 package MountainCar;
 
-import general.RLVizVersion;
 import messages.MCStateResponse;
-import messaging.NotAnRLVizMessageException;
-import messaging.environment.EnvCustomRequest;
-import messaging.environment.EnvironmentMessageParser;
-import messaging.environment.EnvironmentMessages;
+
+import rlVizLib.Environments.EnvironmentBase;
+import rlVizLib.general.ParameterHolder;
+import rlVizLib.general.RLVizVersion;
+import rlVizLib.messaging.NotAnRLVizMessageException;
+import rlVizLib.messaging.environment.EnvCustomRequest;
+import rlVizLib.messaging.environment.EnvironmentMessageParser;
+import rlVizLib.messaging.environment.EnvironmentMessages;
+import rlVizLib.messaging.interfaces.RLVizEnvInterface;
+import rlVizLib.messaging.interfaces.ReceivesRunTimeParameterHolderInterface;
+import rlVizLib.messaging.interfaces.getEnvMaxMinsInterface;
+import rlVizLib.messaging.interfaces.getEnvObsForStateInterface;
+import rlVizLib.utilities.TaskSpecObject;
+import rlVizLib.utilities.TaskSpecParser;
 import rlglue.Action;
+import rlglue.Environment;
 import rlglue.Observation;
 import rlglue.Random_seed_key;
 import rlglue.Reward_observation;
 import rlglue.State_key;
-import visualization.interfaces.RLVizEnvInterface;
-import visualization.interfaces.getEnvMaxMinsInterface;
-import visualization.interfaces.getEnvObsForStateInterface;
-import Environments.EnvironmentBase;
 
 /*===========================
 
 Dynamics
 
 ============================*/
-public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterface, getEnvObsForStateInterface, RLVizEnvInterface{
+public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterface, getEnvObsForStateInterface, RLVizEnvInterface, ReceivesRunTimeParameterHolderInterface{
 	
 	
 	private double position;
@@ -105,7 +111,7 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 			return theMessageObject.handleAutomatically(this);
 		}
 
-		if(theMessageObject.getTheMessageType()==messaging.environment.EnvMessageType.kEnvCustom.id()){
+		if(theMessageObject.getTheMessageType()==rlVizLib.messaging.environment.EnvMessageType.kEnvCustom.id()){
 
 			String theCustomType=theMessageObject.getPayLoad();
 			
@@ -255,6 +261,22 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 
 	public RLVizVersion getTheVersionISupport() {
 	return new RLVizVersion(1,1);
+	}
+	
+	
+	public static void main(String args[]){
+		Environment mcEnv=new MountainCar();
+		String taskSpec=mcEnv.env_init();
+		TaskSpecObject parsedTaskSpec = TaskSpecParser.parse(taskSpec);
+		System.out.println(parsedTaskSpec);
+		
+	}
+
+	public boolean receiveRunTimeParameters(ParameterHolder theParams) {
+		System.out.println("MountainCar received some parameters!");
+		System.out.println("They look like:"+theParams.stringSerialize());
+		//return that I acknowledge this
+		return true;
 	}
 
 }

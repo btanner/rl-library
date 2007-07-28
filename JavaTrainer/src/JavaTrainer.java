@@ -1,6 +1,7 @@
+import rlVizLib.general.ParameterHolder;
+import rlVizLib.messaging.environment.EnvReceiveRunTimeParametersRequest;
 import rlVizLib.messaging.environmentShell.EnvShellLoadRequest;
 import rlglue.RLGlue;
-
 
 public class JavaTrainer {
 
@@ -9,7 +10,14 @@ public class JavaTrainer {
 	 */
 	public static void main(String[] args) {
 		String theEnv="MountainCar";
-		EnvShellLoadRequest.Execute("MountainCar");
+
+		EnvShellLoadRequest.Execute(theEnv);
+		
+		ParameterHolder p=new ParameterHolder();
+		p.addDoubleParam("gravity", -9.8);
+		
+		EnvReceiveRunTimeParametersRequest.Execute(p);
+		
 		//This is like sending the following, which goes to the environmentShell Loader and loads the theEnv.
 		//RL_env_message("TO=1 FROM=0 CMD=2 VALTYPE=1 VALS="+theEnv);
 		

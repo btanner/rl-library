@@ -10,7 +10,8 @@ import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
-import visualization.EnvVisualizer;
+import rlVizLib.visualization.EnvVisualizer;
+
 
 public class EnvironmentPanel extends JPanel implements ComponentListener{
 

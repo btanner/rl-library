@@ -1,14 +1,15 @@
+package environmentShell;
 import java.util.Vector;
 
-import messaging.GenericMessage;
-import messaging.MessageUser;
-import messaging.NotAnRLVizMessageException;
-import messaging.environmentShell.EnvShellListResponse;
-import messaging.environmentShell.EnvShellLoadRequest;
-import messaging.environmentShell.EnvShellLoadResponse;
-import messaging.environmentShell.EnvShellMessageType;
-import messaging.environmentShell.EnvironmentShellMessageParser;
-import messaging.environmentShell.EnvironmentShellMessages;
+import rlVizLib.messaging.GenericMessage;
+import rlVizLib.messaging.MessageUser;
+import rlVizLib.messaging.NotAnRLVizMessageException;
+import rlVizLib.messaging.environmentShell.EnvShellListResponse;
+import rlVizLib.messaging.environmentShell.EnvShellLoadRequest;
+import rlVizLib.messaging.environmentShell.EnvShellLoadResponse;
+import rlVizLib.messaging.environmentShell.EnvShellMessageType;
+import rlVizLib.messaging.environmentShell.EnvironmentShellMessageParser;
+import rlVizLib.messaging.environmentShell.EnvironmentShellMessages;
 import rlglue.Action;
 import rlglue.Environment;
 import rlglue.Observation;
