@@ -3,6 +3,7 @@ package rlVizLib.messaging.environmentShell;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import rlVizLib.general.ParameterHolder;
 import rlVizLib.messaging.AbstractMessage;
 import rlVizLib.messaging.AbstractResponse;
 import rlVizLib.messaging.GenericMessage;
@@ -13,6 +14,7 @@ import rlVizLib.messaging.NotAnRLVizMessageException;
 
 public class EnvShellListResponse extends AbstractResponse{
 	private Vector<String> theEnvList = new Vector<String>();
+	private Vector<ParameterHolder> theParamList = new Vector<ParameterHolder>();
 
 	public EnvShellListResponse(String responseMessage) throws NotAnRLVizMessageException {
 		GenericMessage theGenericResponse=new GenericMessage(responseMessage);
@@ -27,13 +29,15 @@ public class EnvShellListResponse extends AbstractResponse{
 
 		for(int i=0;i<numEnvironments;i++){
 			theEnvList.add(envListTokenizer.nextToken());
+			theParamList.add(new ParameterHolder(envListTokenizer.nextToken()));
 		}
 
 	}
 
 
-	public EnvShellListResponse(Vector<String> envNameVector) {
+	public EnvShellListResponse(Vector<String> envNameVector, Vector<ParameterHolder> envParamVector) {
 		this.theEnvList=envNameVector;
+		this.theParamList=envParamVector;
 	}
 
 
@@ -44,6 +48,11 @@ public class EnvShellListResponse extends AbstractResponse{
 
 		for(int i=0;i<theEnvList.size();i++){
 			thePayLoadString+=theEnvList.get(i)+":";
+			if(theParamList.get(i)!=null)
+				thePayLoadString+=theParamList.get(i).stringSerialize()+":";
+			else
+				thePayLoadString+="NULL:";//When we pass this into a parameter holder constructor it will just create an empty param holder
+				
 		}
 
 		String theResponse=AbstractMessage.makeMessage(
@@ -65,6 +74,9 @@ public class EnvShellListResponse extends AbstractResponse{
 
 	public Vector<String> getTheEnvList() {
 		return theEnvList;
+	}
+	public Vector<ParameterHolder> getTheParamList() {
+		return theParamList;
 	}
 
 };

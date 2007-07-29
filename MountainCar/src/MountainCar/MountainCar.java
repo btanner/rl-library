@@ -174,12 +174,22 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 		}
 	
 	
-	public MountainCar() {
-		this(false);
+	public static ParameterHolder getDefaultParameters(){
+		ParameterHolder p = new ParameterHolder();
+		p.addDoubleParam("gravity",-9.8);
+		p.addBooleanParam("randomStartStates",false);
+		
+		return p;
 	}
-	public MountainCar(boolean randomStarts) {
+	
+	public MountainCar(ParameterHolder p){
 		super();
-		this.randomStarts = randomStarts;
+		if(p!=null){
+			System.out.println("Constructing mountain Car with a parameter holder: "+p.toString());
+		}
+	}
+	public MountainCar() {
+		this(null);
 	}
 
 	

@@ -9,8 +9,8 @@ public class ParameterHolder {
 
 	private final int intParam=0;
 	private final int doubleParam=1;
-	private final int stringParam=2;
-
+	private final int boolParam=2;
+	private final int stringParam=3;
 
 
 	//This a straight port of my bt-glue C++ Code, might simplify in Java
@@ -18,6 +18,7 @@ public class ParameterHolder {
 	Map<String, Integer> intParams=new TreeMap<String, Integer>();
 	Map<String, Double> doubleParams=new TreeMap<String, Double>();
 	Map<String, String> stringParams=new TreeMap<String, String>();
+	Map<String, Boolean> boolParams=new TreeMap<String, Boolean>();
 
 	Map<String, Integer> allParams=new TreeMap<String, Integer>();
 	Map<String, String> aliases=new TreeMap<String, String>();
@@ -59,6 +60,10 @@ public class ParameterHolder {
 			if(thisParamType==doubleParam){
 				double thisParamValue=Double.parseDouble(iss.nextToken());
 				addDoubleParam(thisParamName,thisParamValue);
+			}
+			if(thisParamType==boolParam){
+				boolean thisParamValue=Boolean.parseBoolean(iss.nextToken());
+				addBooleanParam(thisParamName,thisParamValue);
 			}
 			if(thisParamType==stringParam){
 				addStringParam(thisParamName,iss.nextToken());
@@ -152,7 +157,27 @@ public class ParameterHolder {
 	}
 
 
+	public void addBooleanParam(String thisParamName) {
+		allParams.put(thisParamName,boolParam);
+		allParamTypes.add(boolParam);
+		genericNewParam(thisParamName);
+	}
 
+
+	public void addBooleanParam(String thisParamName, boolean thisParamValue) {
+		addBooleanParam(thisParamName);
+		setBooleanParam(thisParamName,thisParamValue);
+	}
+
+
+	public void setBooleanParam(String thisParamAlias, boolean thisParamValue) {
+		String name=getAlias(thisParamAlias);
+		if(!allParams.containsKey(name)){
+			System.err.println("Careful, you are setting the value of parameter: "+name+" but the parameter hasn't been added...");
+		}
+		boolParams.put(name, thisParamValue);
+	}
+	
 	public void addIntParam(String thisParamName, int thisParamValue) {
 		addIntParam(thisParamName);
 		setIntParam(thisParamName,thisParamValue);
@@ -203,7 +228,8 @@ public class ParameterHolder {
 			outs.append("_");
 
 			if(paramType==intParam)outs.append(getIntParam(allParamNames.get(i)));
-			if(paramType==doubleParam)outs.append(getdoubleParam(allParamNames.get(i)));
+			if(paramType==doubleParam)outs.append(getDoubleParam(allParamNames.get(i)));
+			if(paramType==boolParam)outs.append(getBooleanParam(allParamNames.get(i)));
 			if(paramType==stringParam)outs.append(getStringParam(allParamNames.get(i)));
 			outs.append("_");
 		}
@@ -236,7 +262,7 @@ public class ParameterHolder {
 
 
 
-	private Object getdoubleParam(String theAlias) {
+	private Object getDoubleParam(String theAlias) {
 		//Convert from an alias to the real name
 		String name=getAlias(theAlias);
 
@@ -246,6 +272,15 @@ public class ParameterHolder {
 		return doubleParams.get(name);
 	}
 
+	private Object getBooleanParam(String theAlias) {
+		//Convert from an alias to the real name
+		String name=getAlias(theAlias);
+
+		if(!allParams.containsKey(name)){System.out.println("Careful, you are getting the value of parameter: "+name+" but the parameter hasn't been added...");System.exit(1);}
+		if(!boolParams.containsKey(name)){System.out.println("Careful, you are getting the value of parameter: "+name+" but the parameter isn't a bool parameter...");System.exit(1);}
+
+		return boolParams.get(name);
+	}
 
 
 	private Object getIntParam(String theAlias) {
@@ -285,7 +320,10 @@ public class ParameterHolder {
 
 		p.addStringParam("AgentName","Dave");
 		p.addStringParam("AgentOccupation","Winner");
-		
+
+		p.addBooleanParam("ISCool",false);
+		p.addBooleanParam("ISFast",true);
+
 		return p;
 	}
 	public static void main(String []args){
@@ -296,21 +334,26 @@ public class ParameterHolder {
 		
 		ParameterHolder unpackedP=new ParameterHolder(serializedVersion);
 
-		System.out.println(p.getdoubleParam("Alpha"));
-		System.out.println(p.getdoubleParam("epsilon"));
+		System.out.println(p.getDoubleParam("Alpha"));
+		System.out.println(p.getDoubleParam("epsilon"));
 		System.out.println(p.getIntParam("StepCount"));
 		System.out.println(p.getIntParam("Tiles"));
 		System.out.println(p.getStringParam("AgentName"));
 		System.out.println(p.getStringParam("AgentOccupation"));
+		System.out.println(p.getBooleanParam("ISCool"));
+		System.out.println(p.getBooleanParam("ISFast"));
 		
 		System.out.println("---");
 		
-		System.out.println(unpackedP.getdoubleParam("Alpha"));
-		System.out.println(unpackedP.getdoubleParam("epsilon"));
+		System.out.println(unpackedP.getDoubleParam("Alpha"));
+		System.out.println(unpackedP.getDoubleParam("epsilon"));
 		System.out.println(unpackedP.getIntParam("StepCount"));
 		System.out.println(unpackedP.getIntParam("Tiles"));
 		System.out.println(unpackedP.getStringParam("AgentName"));
 		System.out.println(unpackedP.getStringParam("AgentOccupation"));
+		System.out.println(unpackedP.getBooleanParam("ISCool"));
+		System.out.println(unpackedP.getBooleanParam("ISFast"));
+
 }
 
 

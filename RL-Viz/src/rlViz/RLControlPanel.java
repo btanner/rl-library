@@ -12,6 +12,8 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import rlVizLib.general.ParameterHolder;
+
 public class RLControlPanel extends JPanel implements ActionListener, ChangeListener {
 
 	/**
@@ -35,11 +37,19 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 	
 	private void  updateEnvList(){
 		envListComboBox.removeAllItems();
-		Vector<String> envListVector = theGlueConnection.getEnvList();
+		Vector<String> envListVector = theGlueConnection.getEnvNameList();
 		
 		for (String thisEnv : envListVector) {
 			envListComboBox.addItem(thisEnv);
 		}
+		
+		Vector<ParameterHolder> envParamVector = theGlueConnection.getEnvParamList();
+		
+		for (ParameterHolder thisEnvParams : envParamVector) {
+			System.out.println("Received a parameter holder for an env jar and it is: "+thisEnvParams.stringSerialize());
+		}
+
+		
 		if(envListVector.size()==0)envListComboBox.addItem("No Envs Available");
 //		String[] agentListArray = theGlueConnection.getAgentList().toArray(new String[0]);
 

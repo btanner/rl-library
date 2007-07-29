@@ -1,6 +1,7 @@
 package environmentShell;
 import java.util.Vector;
 
+import rlVizLib.general.ParameterHolder;
 import rlVizLib.messaging.GenericMessage;
 import rlVizLib.messaging.MessageUser;
 import rlVizLib.messaging.NotAnRLVizMessageException;
@@ -59,8 +60,9 @@ public class EnvironmentShell implements Environment{
 			if(theMessageObject.getTheMessageType()==EnvShellMessageType.kEnvShellListQuery.id()){
 				loadHelper.loadEnvFiles();
 				Vector<String> envNameVector=loadHelper.getEnvNames();
+				Vector<ParameterHolder> envParamVector=loadHelper.getParamHolders();
 				
-				EnvShellListResponse theResponse=new EnvShellListResponse(envNameVector);
+				EnvShellListResponse theResponse=new EnvShellListResponse(envNameVector,envParamVector);
 
 				return theResponse.makeStringResponse();
 			}

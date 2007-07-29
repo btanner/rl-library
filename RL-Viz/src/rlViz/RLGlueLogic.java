@@ -5,6 +5,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import rlVizLib.general.ParameterHolder;
 import rlVizLib.general.RLVizVersion;
 import rlVizLib.messaging.environment.EnvVersionSupportedRequest;
 import rlVizLib.messaging.environment.EnvVersionSupportedResponse;
@@ -53,7 +54,9 @@ public class RLGlueLogic {
 		myGlueState.step();
 	}
 
-	public Vector<String> getEnvList(){
+	
+	private EnvShellListResponse theEnvListResponseObject=null;
+	public Vector<String> getEnvNameList(){
 		if(debugLocal){
 			Vector<String> theList=new Vector<String>();
 			theList.add("Env 1");
@@ -61,9 +64,29 @@ public class RLGlueLogic {
 			return theList;
 		}
 		//Get the Environment Names
-		EnvShellListResponse theEnvListResponseObject=EnvShellListRequest.Execute();
+		if(theEnvListResponseObject==null)theEnvListResponseObject=EnvShellListRequest.Execute();
 		return theEnvListResponseObject.getTheEnvList();
 	}
+
+	public Vector<ParameterHolder> getEnvParamList(){
+		if(debugLocal){
+			Vector<ParameterHolder> theList=new Vector<ParameterHolder>();
+			
+			ParameterHolder p = new ParameterHolder();
+			p.addDoubleParam("sampleParam1",.5);
+			theList.add(p);
+
+			p = new ParameterHolder();
+			p.addIntParam("sampleParam2",7);
+			theList.add(p);
+			return theList;
+		}
+		//Get the Environment Names
+		if(theEnvListResponseObject==null)theEnvListResponseObject=EnvShellListRequest.Execute();
+		return theEnvListResponseObject.getTheParamList();
+	}
+
+	
 	public Vector<String> getAgentList(){
 		//don't have an agent list loading mechanism yet
 		if(debugLocal||true){
