@@ -12,6 +12,7 @@ import javax.swing.JSplitPane;
 
 import rlVizLib.messaging.environmentShell.EnvShellListRequest;
 import rlVizLib.messaging.environmentShell.EnvShellListResponse;
+import rlVizLib.visualization.EnvVisualizer;
 
 
 
@@ -59,7 +60,7 @@ public class RLVizFrame extends JFrame{
 	
 	}
 
-	public void setEnvVisualizer(MountainCarVisualizer theEVisualizer) {
+	public void setEnvVisualizer(EnvVisualizer theEVisualizer) {
 		ePanel.setVisualizer(theEVisualizer);
 		theGlueConnection.setVisualizer(theEVisualizer);
 	}
