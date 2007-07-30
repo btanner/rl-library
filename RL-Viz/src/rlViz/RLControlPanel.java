@@ -1,5 +1,6 @@
 package rlViz;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -9,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.SpringLayout;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -24,8 +26,13 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 	
 	private static final long serialVersionUID = 1L;
 	JComboBox envListComboBox = null;
+	
 	JComboBox agentListComboBox = null;
-
+	
+	Vector<ParameterHolder> envParamVector=null;
+	
+	ParameterHolderLogic envParamLogic=null;
+	
 	JButton bLoad = null;
 	JButton bUnLoad = null;
 	JButton bStart =null; 
@@ -43,7 +50,7 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 			envListComboBox.addItem(thisEnv);
 		}
 		
-		Vector<ParameterHolder> envParamVector = theGlueConnection.getEnvParamList();
+		envParamVector=theGlueConnection.getEnvParamList();
 		
 		for (ParameterHolder thisEnvParams : envParamVector) {
 			System.out.println("Received a parameter holder for an env jar and it is: "+thisEnvParams.stringSerialize());
@@ -59,7 +66,15 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 		super();
 		this.theGlueConnection=theGlueConnection;
 		
+		
 		envListComboBox = new JComboBox(new String[]{"No Envs Available"});
+
+		ParameterHolderPanel envParamPanel=new ParameterHolderPanel(new SpringLayout());
+		envParamLogic=new ParameterHolderLogic(envParamPanel,theGlueConnection.getEnvNameList(),theGlueConnection.getEnvParamList());
+		add(envParamPanel);
+		envListComboBox.addActionListener(envParamLogic);
+		
+		
 		agentListComboBox = new JComboBox(new String[]{"No Agents Available"});
 
 		bLoad = new JButton("Load Experiment");
@@ -146,8 +161,9 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 		bStop.setEnabled(false);
 		bStep.setEnabled(true);
 		
-		String envName=(String)envListComboBox.getSelectedItem();
-		theGlueConnection.loadEnvironment(envName);
+		String envName=envParamLogic.getCurrentEnvironmentName();
+		ParameterHolder currentParams=envParamLogic.getCurrentParameterValues();
+		theGlueConnection.loadEnvironment(envName,currentParams);
 	}
 	private void handleStartClick(){
 		System.out.println("Should start running continuously");

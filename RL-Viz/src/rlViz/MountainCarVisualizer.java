@@ -40,9 +40,7 @@ public class MountainCarVisualizer  extends EnvVisualizer implements ValueFuncti
 		super.addVizComponentAtPositionWithSize(theValueFunction,0,.5,1.0,.5);
 		super.addVizComponentAtPositionWithSize(agentOnVF,0,.5,1.0,.5);
 		super.addVizComponentAtPositionWithSize(carOnMountain, 0, 0, 1.0, 0.5);
-//		RedBoxVizComponent testComponent=new RedBoxVizComponent();
-//		super.addVizComponent(testComponent);
-	}
+}
 	
 	public void setValueFunctionResolution(int theValue) {
 		currentValueFunctionResolution=theValue;

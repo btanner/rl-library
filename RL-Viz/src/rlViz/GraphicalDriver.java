@@ -33,7 +33,6 @@ public class GraphicalDriver {
 
 		
 		MountainCarVisualizer theEVisualizer=new MountainCarVisualizer();
-		
 		theFrame.setEnvVisualizer(theEVisualizer);
 //		MountainCarVisualizer theAVisualizer=new MountainCarVisualizer();
 

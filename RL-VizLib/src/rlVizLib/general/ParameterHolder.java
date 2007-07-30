@@ -7,10 +7,10 @@ import java.util.Vector;
 
 public class ParameterHolder {
 
-	private final int intParam=0;
-	private final int doubleParam=1;
-	private final int boolParam=2;
-	private final int stringParam=3;
+	public static final int intParam=0;
+	public static final int doubleParam=1;
+	public static final int boolParam=2;
+	public static final int stringParam=3;
 
 	//This a straight port of my bt-glue C++ Code, might simplify in Java
 
@@ -33,7 +33,7 @@ public class ParameterHolder {
 	}
 
 	public boolean isNull(){
-		return (intParams.size()==0 && doubleParams.size()==0 && stringParams.size()==0 && boolParams.size()==0);
+		return (allParams.size()==0);
 	}
 
 	public ParameterHolder(final String theString){
@@ -360,6 +360,18 @@ public class ParameterHolder {
 		System.out.println(unpackedP.getBooleanParam("ISFast"));
 
 }
+
+	public int getParamCount() {
+		return allParams.size();
+	}
+
+	public int getParamType(int i) {
+		return allParamTypes.get(i);
+	}
+
+	public String getParamName(int i) {
+		return allParamNames.get(i);
+	}
 
 
 }

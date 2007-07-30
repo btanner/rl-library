@@ -72,8 +72,7 @@ public class RLGlueLogic {
 		if(debugLocal){
 			Vector<ParameterHolder> theList=new Vector<ParameterHolder>();
 			
-			ParameterHolder p = new ParameterHolder();
-			p.addDoubleParam("sampleParam1",.5);
+			ParameterHolder p = ParameterHolder.makeTestParameterHolder();
 			theList.add(p);
 
 			p = new ParameterHolder();
@@ -102,8 +101,8 @@ public class RLGlueLogic {
 		return null;
 	}
 
-	public void loadEnvironment(String envName) {
-		EnvShellLoadRequest.Execute(envName,null);
+	public void loadEnvironment(String envName, ParameterHolder currentParams) {
+		EnvShellLoadRequest.Execute(envName,currentParams);
 		EnvVersionSupportedResponse versionResponse=EnvVersionSupportedRequest.Execute();
 		
 		//this shouldn't happen anyway
