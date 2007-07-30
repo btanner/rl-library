@@ -3,6 +3,8 @@ import rlVizLib.functionapproximation.TileCoder;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.agent.AgentMessageParser;
 import rlVizLib.messaging.agent.AgentMessages;
+import rlVizLib.utilities.TaskSpecObject;
+import rlVizLib.utilities.TaskSpecParser;
 import rlVizLib.visualization.QueryableAgent;
 import rlglue.Action;
 import rlglue.Agent;
@@ -10,8 +12,13 @@ import rlglue.Observation;
 
 public class GenericSarsaLambda implements Agent, QueryableAgent {
 
-
-	boolean inited=false;
+    static {
+        boolean assertsEnabled = false;
+        assert assertsEnabled = true; // Intentional side effect!!!
+        if (!assertsEnabled)
+           System.err.println("We recommend you run with assertions enabled because that is how lots of the data checking is handled.  Try java -ea");
+    }
+    boolean inited=false;
 	private int actionCount;
 	int MEMORY_SIZE;
 	int NUM_TILINGS;
@@ -145,9 +152,20 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 
 	public void agent_init(String taskSpec) {
 		//Parse the task spec somehow
-		actionCount=3;//sampleAction->getIntValue(0);
-		int doubleCount=2;
-//		assert(actionCount>0);
+		
+		TaskSpecObject theTaskObject = TaskSpecParser.parse(taskSpec);
+
+		
+		actionCount=(int)theTaskObject.action_maxs[0];
+		assert(actionCount>0);
+
+		assert(theTaskObject.action_mins[0]==0);
+		assert(theTaskObject.num_discrete_action_dims==1);
+		assert(theTaskObject.num_continuous_action_dims==0);
+		assert(theTaskObject.action_types[0]=='i');
+		assert(theTaskObject.action_maxs[0]>=0);
+
+		int doubleCount=theTaskObject.num_continuous_obs_dims;
 		for (int i=0; i<MEMORY_SIZE; i++) {
 			theta[i]= 0.0;                     // clear memory at start of each run
 			e[i] = 0.0;                            // clear all traces
@@ -302,7 +320,6 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 		}
 
 		//int_vars[0] will be the action
-
 		for(int i=0;i<intCount;i++){
 			int_vars[i+1] = theObservation.intArray[i];
 		}
