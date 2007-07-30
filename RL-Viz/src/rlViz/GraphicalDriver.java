@@ -18,12 +18,7 @@ import rlVizLib.messaging.environmentShell.EnvShellLoadRequest;
 import rlVizLib.visualization.EnvVisualizer;
 import rlglue.RLGlue;
 
-
-
 public class GraphicalDriver {
-
-
-
 
 	public static void main(String [] args) throws IOException {
 		
@@ -33,7 +28,7 @@ public class GraphicalDriver {
 		RLVizFrame theFrame=new RLVizFrame();
 
 		
-		MountainCarVisualizer theEVisualizer=new MountainCarVisualizer();
+		TetrlaisVisualizer theEVisualizer=new TetrlaisVisualizer();
 		theFrame.setEnvVisualizer((EnvVisualizer)theEVisualizer);
 //		MountainCarVisualizer theAVisualizer=new MountainCarVisualizer();
 
