@@ -1,24 +1,19 @@
 package GenericSarsaLambda;
-import rlVizLib.functionapproximation.TileCoder;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.agent.AgentMessageParser;
 import rlVizLib.messaging.agent.AgentMessages;
-import rlVizLib.utilities.TaskSpecObject;
-import rlVizLib.utilities.TaskSpecParser;
-import rlVizLib.visualization.QueryableAgent;
 import rlglue.Action;
 import rlglue.Agent;
 import rlglue.Observation;
+import rlVizLib.utilities.TaskSpecObject;
+import rlVizLib.utilities.TaskSpecParser;
+import rlVizLib.visualization.QueryableAgent;
+import rlVizLib.functionapproximation.TileCoder;
 
 public class GenericSarsaLambda implements Agent, QueryableAgent {
 
-    static {
-        boolean assertsEnabled = false;
-        assert assertsEnabled = true; // Intentional side effect!!!
-        if (!assertsEnabled)
-           System.err.println("We recommend you run with assertions enabled because that is how lots of the data checking is handled.  Try java -ea");
-    }
-    boolean inited=false;
+
+	boolean inited=false;
 	private int actionCount;
 	int MEMORY_SIZE;
 	int NUM_TILINGS;
@@ -65,8 +60,8 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 		this.epsilon=0.05f;
 		this.alpha=.1f;
 		this.MEMORY_SIZE=1<<16;
-		this.NUM_TILINGS=5;
-		this.defaultDivider=.1f;
+		this.NUM_TILINGS=16;
+		this.defaultDivider=.01f;
 		this.MAX_NONZERO_TRACES=100000;
 		observationDividers=null;
 		this.tempF=null;
@@ -152,7 +147,6 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 
 	public void agent_init(String taskSpec) {
 		//Parse the task spec somehow
-		
 		TaskSpecObject theTaskObject = TaskSpecParser.parse(taskSpec);
 
 		
@@ -320,6 +314,7 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 		}
 
 		//int_vars[0] will be the action
+
 		for(int i=0;i<intCount;i++){
 			int_vars[i+1] = theObservation.intArray[i];
 		}

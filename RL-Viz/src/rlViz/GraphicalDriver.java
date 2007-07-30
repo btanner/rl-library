@@ -15,6 +15,7 @@ import javax.swing.JSplitPane;
 import rlVizLib.messaging.environmentShell.EnvShellListRequest;
 import rlVizLib.messaging.environmentShell.EnvShellListResponse;
 import rlVizLib.messaging.environmentShell.EnvShellLoadRequest;
+import rlVizLib.visualization.EnvVisualizer;
 import rlglue.RLGlue;
 
 
@@ -32,8 +33,8 @@ public class GraphicalDriver {
 		RLVizFrame theFrame=new RLVizFrame();
 
 		
-		MountainCarVisualizer theEVisualizer=new MountainCarVisualizer();
-		theFrame.setEnvVisualizer(theEVisualizer);
+		TetrlaisVisualizer theEVisualizer=new TetrlaisVisualizer();
+		theFrame.setEnvVisualizer((EnvVisualizer)theEVisualizer);
 //		MountainCarVisualizer theAVisualizer=new MountainCarVisualizer();
 
 //		RLGlue.RL_init();

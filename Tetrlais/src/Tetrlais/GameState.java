@@ -74,19 +74,7 @@ public class GameState{
 		write_block(this.current_x, this.current_y, (this.blockTable[this.current_block]).getCurrentPiece(), this.world_observation);
 		Observation o = new Observation(this.world_observation.length,0);
 		for(int i=0; i< this.world_observation.length; i++)
-			o.intArray[i] = this.world_observation[i];		
-		
-		/*System.out.println("Current Game");
-		String line = null;
-		for(int i = this.world_height -1; i>=0; --i){
-			line = null;
-			line = ""  +this.world_state[i*this.world_width];
-				for(int j = 1; j<this.world_width; ++j )
-					line += this.world_state[i*this.world_width + j];
-			System.out.println(line);
-		}
-		System.out.println();*/
-			
+			o.intArray[i] = this.world_observation[i];					
 		return o;
 	}
 
@@ -102,16 +90,6 @@ public class GameState{
 				}	
 		    }
 		  }
-	
-	/*System.out.println("writing brick");
-	String brick = "";
-	for(int i =0 ; i< 2; i++)
-	{brick = "";
-		for(int j= 0; j<2; j++)
-			brick += block.getBrick(i*2+j);
-		System.out.println(brick);
-	}
-	System.out.println();*/
 	}
 
 	public int game_over(){
@@ -274,6 +252,17 @@ public class GameState{
 	public int get_score() {
 		// TODO Auto-generated method stub remember return -100 if terminal
 			return this.current_score;
+	}
+	
+	public int getWidth(){
+		return this.world_width;
+	}
+	public int getHeight(){
+		return this.world_height;
+	}
+	
+	public int [] getWorldState(){
+		return this.world_observation;
 	}
 
 

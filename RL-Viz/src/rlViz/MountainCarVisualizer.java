@@ -35,7 +35,7 @@ public class MountainCarVisualizer  extends EnvVisualizer implements ValueFuncti
 		super();
 		VizComponent theValueFunction=new ValueFunctionVizComponent(this);
 		VizComponent agentOnVF=new AgentOnValueFunctionVizComponent(this);
-		VizComponent carOnMountain=new CarOnMountainVizComponent();
+		VizComponent carOnMountain=new CarOnMountainVizComponent(this);
 		
 		super.addVizComponentAtPositionWithSize(theValueFunction,0,.5,1.0,.5);
 		super.addVizComponentAtPositionWithSize(agentOnVF,0,.5,1.0,.5);
@@ -99,6 +99,11 @@ public class MountainCarVisualizer  extends EnvVisualizer implements ValueFuncti
 
 
 	public double getCurrentStateInDimension(int whichDimension) {
+		/*
+		 * This is only allowed access to the state Variables which are defined
+		 * in the Task Spec as being State Variables. The implicitly defined values,
+		 * like the height, should not be accessed through here
+		 */
 		if(theCurrentState==null)
 			return 0;
 		
@@ -108,6 +113,13 @@ public class MountainCarVisualizer  extends EnvVisualizer implements ValueFuncti
 		else
 			return theCurrentState.getVelocity();
 		
+	}
+	
+	public double getHeight(){
+		return theCurrentState.getHeight();		
+	}
+	public double getDeltaHeight(){
+		return theCurrentState.getDeltaheight();
 	}
 
 

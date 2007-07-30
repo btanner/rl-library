@@ -1,10 +1,15 @@
 package Tetrlais;
 
+import messages.MCStateResponse;
+import messages.TetrlaisStateResponse;
+import rlVizLib.messaging.environment.EnvironmentMessageParser;
+import rlVizLib.messaging.environment.EnvironmentMessages;
+import rlVizLib.messaging.interfaces.RLVizEnvInterface;
+import rlVizLib.general.RLVizVersion;
 import rlglue.*;
-import visualization.QueryableEnvironment;
-import Environments.EnvironmentBase;
+import rlVizLib.Environments.EnvironmentBase;
 
-public class Tetrlais extends EnvironmentBase implements QueryableEnvironment{
+public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 
 	
 	private int tet_global_score =0;
@@ -80,8 +85,39 @@ public class Tetrlais extends EnvironmentBase implements QueryableEnvironment{
 	}
 
 
-	public String env_message(String arg0) {
-		// TODO Auto-generated method stub
+	public String env_message(String theMessage) {
+		EnvironmentMessages theMessageObject;
+		try {
+			theMessageObject = EnvironmentMessageParser.parseMessage(theMessage);
+		} catch (Exception e) {
+			System.err.println("Someone sent Tetrlais a message that wasn't RL-Viz compatible");
+			return "I only respond to RL-Viz messages!";
+		}
+		
+		
+		
+		if(theMessageObject.canHandleAutomatically(this)){
+			return theMessageObject.handleAutomatically(this);
+		}
+
+		if(theMessageObject.getTheMessageType()==rlVizLib.messaging.environment.EnvMessageType.kEnvCustom.id()){
+
+			String theCustomType=theMessageObject.getPayLoad();
+			
+			if(theCustomType.equals("GETTETRLAISSTATE")){
+				//It is a request for the state
+				TetrlaisStateResponse theResponseObject=new TetrlaisStateResponse(this.tet_global_score, this.gameState.getWidth(), this.gameState.getHeight(), this.gameState.getWorldState());
+				return theResponseObject.makeStringResponse();
+			}
+			System.out.println("We need some code written in Env Message for Tetrlais.. unknown custom message type received");
+			Thread.dumpStack();
+			
+			return null;
+		}
+		
+		System.out.println("We need some code written in Env Message for  Tetrlais!");
+		Thread.dumpStack();
+		
 		return null;
 	}
 
@@ -105,27 +141,12 @@ public class Tetrlais extends EnvironmentBase implements QueryableEnvironment{
 		// TODO Auto-generated method stub
 		return gameState.get_observation();
 	}
-
-	public double getMaxValueForQuerableVariable(int dimension) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public double getMinValueForQuerableVariable(int dimension) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public int getNumVars() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public Observation getObservationForState(Observation theState) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	/*End of RL-Viz Methods*/
+
+	public RLVizVersion getTheVersionISupport() {
+		// TODO Auto-generated method stub
+		return new RLVizVersion(1,0);
+	}
 
 	/*Tetris Helper Functions*/
 
