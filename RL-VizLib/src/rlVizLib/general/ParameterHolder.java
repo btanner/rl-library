@@ -12,7 +12,6 @@ public class ParameterHolder {
 	private final int boolParam=2;
 	private final int stringParam=3;
 
-
 	//This a straight port of my bt-glue C++ Code, might simplify in Java
 
 	Map<String, Integer> intParams=new TreeMap<String, Integer>();
@@ -32,6 +31,11 @@ public class ParameterHolder {
 	public ParameterHolder(){
 
 	}
+
+	public boolean isNull(){
+		return (intParams.size()==0 && doubleParams.size()==0 && stringParams.size()==0 && boolParams.size()==0);
+	}
+
 	public ParameterHolder(final String theString){
 		this();
 
@@ -198,6 +202,7 @@ public class ParameterHolder {
 	private String getAlias(String thisParamAlias) {
 		if(!aliases.containsKey(thisParamAlias)){
 			System.err.println("You wanted to look up original for alias: "+thisParamAlias+", but that alias hasn't been set");
+			Thread.dumpStack();
 			System.exit(-1);
 		}
 		return  aliases.get(thisParamAlias);
@@ -250,7 +255,7 @@ public class ParameterHolder {
 
 
 
-	private Object getStringParam(String theAlias) {
+	public String getStringParam(String theAlias) {
 		//Convert from an alias to the real name
 		String name=getAlias(theAlias);
 
@@ -262,7 +267,7 @@ public class ParameterHolder {
 
 
 
-	private Object getDoubleParam(String theAlias) {
+	public double getDoubleParam(String theAlias) {
 		//Convert from an alias to the real name
 		String name=getAlias(theAlias);
 
@@ -272,7 +277,7 @@ public class ParameterHolder {
 		return doubleParams.get(name);
 	}
 
-	private Object getBooleanParam(String theAlias) {
+	public boolean getBooleanParam(String theAlias) {
 		//Convert from an alias to the real name
 		String name=getAlias(theAlias);
 
@@ -283,7 +288,7 @@ public class ParameterHolder {
 	}
 
 
-	private Object getIntParam(String theAlias) {
+	public int getIntParam(String theAlias) {
 		//Convert from an alias to the real name
 		String name=getAlias(theAlias);
 

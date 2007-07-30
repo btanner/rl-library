@@ -1,5 +1,6 @@
 package environmentShell;
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -51,15 +52,14 @@ public class EnvLoadingHelper {
 	}
 
 	
-	public Environment loadEnvironment(String envName) {
-		if(theFiles==null)
-			loadEnvFiles();
+	public Environment loadEnvironment(String envName, ParameterHolder theParams) {
+		if(theFiles==null)loadEnvFiles();
 		
 		//Get the file from the list
 		for (File theFile : theFiles) {
 			if(theFile.getName().equals(envName+".jar")){
 				//this is the right one load it
-				return loadEnvironmentFromFile(theFile,envName);
+				return loadEnvironmentFromFile(theFile,envName,theParams);
 			}
 		}
 		return null;
@@ -104,7 +104,7 @@ public class EnvLoadingHelper {
 
 
 
-	private Environment loadEnvironmentFromFile(File theFile,String envName){
+	private Environment loadEnvironmentFromFile(File theFile,String envName, ParameterHolder theParams){
 		Environment theEnvironment=null;
 		String theFileName=theFile.getAbsolutePath();
 
@@ -126,6 +126,11 @@ public class EnvLoadingHelper {
 
 			Class theEnvClass=urlLoader.loadClass(className);
 			theEnvironment=(Environment)theEnvClass.newInstance();
+			
+			Constructor paramBasedConstructor = theEnvClass.getConstructor(ParameterHolder.class);
+
+			theEnvironment=(Environment)paramBasedConstructor.newInstance(theParams);
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

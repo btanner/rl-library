@@ -103,7 +103,7 @@ public class RLGlueLogic {
 	}
 
 	public void loadEnvironment(String envName) {
-		EnvShellLoadRequest.Execute(envName);
+		EnvShellLoadRequest.Execute(envName,null);
 		EnvVersionSupportedResponse versionResponse=EnvVersionSupportedRequest.Execute();
 		
 		//this shouldn't happen anyway

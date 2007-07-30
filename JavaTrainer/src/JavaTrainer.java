@@ -1,5 +1,7 @@
 import rlVizLib.general.ParameterHolder;
 import rlVizLib.messaging.environment.EnvReceiveRunTimeParametersRequest;
+import rlVizLib.messaging.environmentShell.EnvShellListRequest;
+import rlVizLib.messaging.environmentShell.EnvShellListResponse;
 import rlVizLib.messaging.environmentShell.EnvShellLoadRequest;
 import rlglue.RLGlue;
 
@@ -11,10 +13,19 @@ public class JavaTrainer {
 	public static void main(String[] args) {
 		String theEnv="MountainCar";
 
-		EnvShellLoadRequest.Execute(theEnv);
 		
-		ParameterHolder p=new ParameterHolder();
-		p.addDoubleParam("gravity", -9.8);
+		EnvShellListResponse ListResponse = EnvShellListRequest.Execute();
+		
+		int thisEnvIndex=ListResponse.getTheEnvList().indexOf(theEnv);
+		
+		System.out.println("Looks like: "+theEnv+" is environment number: "+thisEnvIndex);
+		
+		ParameterHolder p = ListResponse.getTheParamList().get(thisEnvIndex);
+		
+		p.setBooleanParam("randomStartStates",true);
+		
+		EnvShellLoadRequest.Execute(theEnv,p);
+		
 		
 		EnvReceiveRunTimeParametersRequest.Execute(p);
 		
