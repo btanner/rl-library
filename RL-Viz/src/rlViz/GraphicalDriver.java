@@ -33,7 +33,7 @@ public class GraphicalDriver {
 		RLVizFrame theFrame=new RLVizFrame();
 
 		
-		TetrlaisVisualizer theEVisualizer=new TetrlaisVisualizer();
+		MountainCarVisualizer theEVisualizer=new MountainCarVisualizer();
 		theFrame.setEnvVisualizer((EnvVisualizer)theEVisualizer);
 //		MountainCarVisualizer theAVisualizer=new MountainCarVisualizer();
 

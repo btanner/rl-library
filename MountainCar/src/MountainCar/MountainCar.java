@@ -116,6 +116,8 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 			}
 		}
 	}
+	
+	
 
 	private double getReward(){
 		if(inGoalRegion())

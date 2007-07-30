@@ -5,6 +5,7 @@ import messages.TetrlaisStateResponse;
 import rlVizLib.messaging.environment.EnvironmentMessageParser;
 import rlVizLib.messaging.environment.EnvironmentMessages;
 import rlVizLib.messaging.interfaces.RLVizEnvInterface;
+import rlVizLib.general.ParameterHolder;
 import rlVizLib.general.RLVizVersion;
 import rlglue.*;
 import rlVizLib.Environments.EnvironmentBase;
@@ -15,6 +16,14 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 	private int tet_global_score =0;
 	private GameState gameState = new GameState(10,20);
 	static final int terminal_score = -100;
+	
+	public Tetrlais(){
+		super();
+	}
+	public Tetrlais(ParameterHolder p){
+	       super();
+	   }
+	
 	
 	/*Base RL-Glue Functions*/
 	public String env_init() {
