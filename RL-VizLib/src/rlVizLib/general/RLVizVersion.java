@@ -2,7 +2,7 @@ package rlVizLib.general;
 
 import java.util.StringTokenizer;
 
-public class RLVizVersion implements Comparable{
+public class RLVizVersion implements Comparable<RLVizVersion>{
 	int majorRevision;
 	int minorRevision;
 	
@@ -33,8 +33,7 @@ public class RLVizVersion implements Comparable{
 		return theString;
 	}
 
-	public int compareTo(Object in) {
-		RLVizVersion otherVersion=(RLVizVersion)in;
+	public int compareTo(RLVizVersion otherVersion) {
 		
 		if(otherVersion.getMajorRevision()<getMajorRevision())
 			return 1;
