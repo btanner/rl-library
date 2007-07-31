@@ -102,10 +102,12 @@ public class EnvironmentShell implements Environment{
 	}
 
 	public Observation env_start() {
+		System.out.println("env_start called in envShell");
 		return theEnvironment.env_start();
 	}
 
 	public Reward_observation env_step(Action arg0) {
+		System.out.println("env_start called in envShell");
 		return theEnvironment.env_step(arg0);
 	}
 

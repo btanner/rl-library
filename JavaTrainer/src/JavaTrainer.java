@@ -14,7 +14,7 @@ public class JavaTrainer {
 //		String theEnv="Tetrlais";
 		String theEnv="MountainCar";
 
-		
+		System.out.println("Java Trainer about to send request for List");
 		EnvShellListResponse ListResponse = EnvShellListRequest.Execute();
 		
 		int thisEnvIndex=ListResponse.getTheEnvList().indexOf(theEnv);
@@ -27,18 +27,22 @@ public class JavaTrainer {
 		
 		EnvShellLoadRequest.Execute(theEnv,p);
 		
+		System.out.println("Environment is loaded");
 		
-		EnvReceiveRunTimeParametersRequest.Execute(p);
+//		EnvReceiveRunTimeParametersRequest.Execute(p);
 		
 		//This is like sending the following, which goes to the environmentShell Loader and loads the theEnv.
 		//RL_env_message("TO=1 FROM=0 CMD=2 VALTYPE=1 VALS="+theEnv);
 		
 		RLGlue.RL_init();
 		
+//		RLGlue.RL_start();
+//		RLGlue.RL_step();
+		
 		int numEpisodes=10;
 	
 		for(int i=0;i<numEpisodes;i++){
-			RLGlue.RL_episode(0);
+			RLGlue.RL_episode(10000);
 			System.out.println("Steps: "+RLGlue.RL_num_steps());
 		}
 		RLGlue.RL_cleanup();
