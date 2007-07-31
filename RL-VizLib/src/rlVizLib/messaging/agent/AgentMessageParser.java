@@ -3,9 +3,6 @@ package rlVizLib.messaging.agent;
 import rlVizLib.messaging.GenericMessage;
 import rlVizLib.messaging.GenericMessageParser;
 import rlVizLib.messaging.NotAnRLVizMessageException;
-import rlVizLib.messaging.agent.AgentMessageType;
-import rlVizLib.messaging.agent.AgentMessages;
-import rlVizLib.messaging.agent.AgentValueForObsRequest;
 
 public class AgentMessageParser extends GenericMessageParser{
 	public static AgentMessages parseMessage(String theMessage) throws NotAnRLVizMessageException{

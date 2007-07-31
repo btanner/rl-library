@@ -1,7 +1,8 @@
 package rlVizLib.Environments;
-import rlglue.Environment;
-import rlglue.Observation;
-import rlglue.Reward_observation;
+
+import rlglue.environment.Environment;
+import rlglue.types.Observation;
+import rlglue.types.Reward_observation;
 
 
 public abstract class EnvironmentBase implements Environment {

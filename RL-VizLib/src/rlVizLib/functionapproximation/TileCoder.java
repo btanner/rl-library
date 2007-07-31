@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class TileCoder {
 
-	final static int MAX_NUM_VARS=20;       // Maximum number of variables in a grid-tiling      
+	final static int MAX_NUM_VARS=300;       // Maximum number of variables in a grid-tiling      
 	final static int MAX_NUM_COORDS = 100;     // Maximum number of hashing coordinates      
 	final static int MaxLONGINT =  2147483647;  
 

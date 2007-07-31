@@ -2,7 +2,8 @@ package rlVizLib.utilities;
 
 import java.util.StringTokenizer;
 
-import rlglue.Observation;
+import rlglue.types.Observation;
+
 
 
 public class UtilityShop {

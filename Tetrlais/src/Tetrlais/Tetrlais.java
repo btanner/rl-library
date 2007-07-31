@@ -8,14 +8,19 @@ import rlVizLib.messaging.interfaces.RLVizEnvInterface;
 import rlVizLib.general.ParameterHolder;
 import rlVizLib.general.RLVizVersion;
 import rlglue.*;
+import rlglue.types.Action;
+import rlglue.types.Observation;
+import rlglue.types.Random_seed_key;
+import rlglue.types.Reward_observation;
+import rlglue.types.State_key;
 import rlVizLib.Environments.EnvironmentBase;
 
 public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 
 	
 	private int tet_global_score =0;
-	private GameState gameState = new GameState(10,20);
-	static final int terminal_score = -100;
+	private GameState gameState = new GameState(4,8);
+	static final int terminal_score = 0;
 	
 	public Tetrlais(){
 		super();
@@ -23,6 +28,16 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 	public Tetrlais(ParameterHolder p){
 	       super();
 	   }
+
+	
+	//This method creates the object that can be used to easily set different problem parameters
+	public static ParameterHolder getDefaultParameters(){
+		ParameterHolder p = new ParameterHolder();
+		p.addIntParam("NumRows",16);
+
+		return p;
+	}
+
 	
 	
 	/*Base RL-Glue Functions*/
@@ -31,11 +46,13 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 		 * has 200 binary observation variables and 1 action variable which ranges between 0 and 4. These are all 
 		 * integer values. */
 		/*NOTE: THE GAME STATE WIDTH AND HEIGHT MUST MULTIPLY TO EQUAL THE NUMBER OF OBSERVATION VARIABLES*/
-		String task_spec = "2.0:e:200_[";
-		for(int i = 0; i< 199; i++)
+		int numStates=gameState.getHeight()*gameState.getWidth();
+		
+		String task_spec = "2.0:e:"+numStates+"_[";
+		for(int i = 0; i< numStates-1; i++)
 				task_spec = task_spec + "i, ";
 		task_spec = task_spec + "i]";
-		for(int i=0; i<200;i++)
+		for(int i=0; i<numStates;i++)
 			task_spec = task_spec + "_[0,1]";
 		task_spec = task_spec + ":1_[i]_[0,4]";
 		
@@ -63,7 +80,8 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 		{
 			gameState.take_action(action);
 			gameState.update();
-			ro.r = gameState.get_score() - tet_global_score;
+			ro.r = 3.0d*(gameState.get_score() - tet_global_score) + .1d;
+//			ro.r=1.0d;
 			tet_global_score = gameState.get_score();
 		}
 		else{

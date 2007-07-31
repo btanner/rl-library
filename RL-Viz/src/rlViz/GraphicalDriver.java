@@ -1,22 +1,8 @@
 package rlViz;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.io.IOException;
-import java.util.Vector;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-
-
-import rlVizLib.messaging.environmentShell.EnvShellListRequest;
-import rlVizLib.messaging.environmentShell.EnvShellListResponse;
-import rlVizLib.messaging.environmentShell.EnvShellLoadRequest;
 import rlVizLib.visualization.EnvVisualizer;
-import rlglue.RLGlue;
 
 public class GraphicalDriver {
 

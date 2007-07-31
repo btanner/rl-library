@@ -9,7 +9,7 @@ import java.util.Vector;
 import rlVizLib.interfaces.ValueFunctionDataProvider;
 import rlVizLib.utilities.UtilityShop;
 import rlVizLib.visualization.VizComponent;
-import rlglue.Observation;
+import rlglue.types.Observation;
 
 public class ValueFunctionVizComponent implements VizComponent {
 //	Point2D relativeVFDrawSize;

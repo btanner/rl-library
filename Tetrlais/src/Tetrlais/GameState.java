@@ -4,6 +4,8 @@ import java.util.Random;
 
 
 import rlglue.*;
+import rlglue.types.Action;
+import rlglue.types.Observation;
 
 public class GameState{
 	
@@ -31,7 +33,9 @@ public class GameState{
 	int[] sbpLccw = {3,0,1,2}; //counter clock wise rotation matrix for L brick
 	
 	/*Hold all the possible bricks that can fall*/
-	private Block[] blockTable = {new Block(sbpO, sbp0rotate, sbp0rotate, 0), new Block(sbpI, sbpIrotate, sbpIrotate, 0), new Block(sbpL, sbpLcw, sbpLccw, 0)};
+//The right thing
+	//private Block[] blockTable = {new Block(sbpO, sbp0rotate, sbp0rotate, 0), new Block(sbpI, sbpIrotate, sbpIrotate, 0), new Block(sbpL, sbpLcw, sbpLccw, 0)};
+	private Block[] blockTable = {/*new Block(sbpO, sbp0rotate, sbp0rotate, 0),*/new Block(sbpI, sbpIrotate, sbpIrotate, 0)};
 
 	private int current_block;/*which block we're using in the block table*/
 	

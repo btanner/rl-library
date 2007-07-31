@@ -10,7 +10,7 @@ import rlVizLib.messaging.MessageUser;
 import rlVizLib.messaging.MessageValueType;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.utilities.UtilityShop;
-import rlglue.Observation;
+import rlglue.types.Observation;
 
 public class EnvObsForStateResponse extends AbstractResponse{
 	private Vector<Observation> theObservations=null;

@@ -1,17 +1,12 @@
 package rlViz;
 
 import java.awt.Dimension;
-import java.util.Vector;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-import rlVizLib.messaging.environmentShell.EnvShellListRequest;
-import rlVizLib.messaging.environmentShell.EnvShellListResponse;
 import rlVizLib.visualization.EnvVisualizer;
 
 

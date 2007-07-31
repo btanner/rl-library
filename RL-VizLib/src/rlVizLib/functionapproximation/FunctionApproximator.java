@@ -1,5 +1,6 @@
 package rlVizLib.functionapproximation;
-import rlglue.Observation;
+
+import rlglue.types.Observation;
 
 
 public abstract class FunctionApproximator {

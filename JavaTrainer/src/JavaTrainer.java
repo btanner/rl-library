@@ -11,6 +11,7 @@ public class JavaTrainer {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+//		String theEnv="Tetrlais";
 		String theEnv="MountainCar";
 
 		
@@ -22,7 +23,7 @@ public class JavaTrainer {
 		
 		ParameterHolder p = ListResponse.getTheParamList().get(thisEnvIndex);
 		
-		p.setBooleanParam("randomStartStates",true);
+//		p.setBooleanParam("randomStartStates",true);
 		
 		EnvShellLoadRequest.Execute(theEnv,p);
 		

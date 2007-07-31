@@ -13,12 +13,12 @@ import rlVizLib.messaging.interfaces.getEnvMaxMinsInterface;
 import rlVizLib.messaging.interfaces.getEnvObsForStateInterface;
 import rlVizLib.utilities.TaskSpecObject;
 import rlVizLib.utilities.TaskSpecParser;
-import rlglue.Action;
-import rlglue.Environment;
-import rlglue.Observation;
-import rlglue.Random_seed_key;
-import rlglue.Reward_observation;
-import rlglue.State_key;
+import rlglue.environment.Environment;
+import rlglue.types.Action;
+import rlglue.types.Observation;
+import rlglue.types.Random_seed_key;
+import rlglue.types.Reward_observation;
+import rlglue.types.State_key;
 
 /*
  * July 2007

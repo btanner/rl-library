@@ -1,15 +1,15 @@
 package environmentShell;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Vector;
-import java.util.jar.*;
-
-import java.io.*;
 import java.lang.reflect.Method;
-import java.net.*;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Vector;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 
-import rlglue.Environment;
+import rlglue.environment.Environment;
 
 public class EnvShellDriver {
 

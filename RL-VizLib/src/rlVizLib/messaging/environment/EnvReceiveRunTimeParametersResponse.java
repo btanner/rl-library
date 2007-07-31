@@ -2,9 +2,6 @@ package rlVizLib.messaging.environment;
 
 
 
-import java.util.StringTokenizer;
-
-import rlVizLib.general.RLVizVersion;
 import rlVizLib.messaging.AbstractMessage;
 import rlVizLib.messaging.AbstractResponse;
 import rlVizLib.messaging.GenericMessage;

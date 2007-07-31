@@ -1,19 +1,16 @@
 package vizComponents;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.RenderedImage;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 import rlViz.MountainCarVisualizer;
-
 import rlVizLib.utilities.UtilityShop;
 import rlVizLib.visualization.VizComponent;
 

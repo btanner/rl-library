@@ -7,7 +7,7 @@ import java.net.URLClassLoader;
 import java.util.Vector;
 
 import rlVizLib.general.ParameterHolder;
-import rlglue.Environment;
+import rlglue.environment.Environment;
 
 
 public class EnvLoadingHelper {

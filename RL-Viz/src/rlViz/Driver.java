@@ -1,14 +1,16 @@
 package rlViz;
 
+import java.io.IOException;
+import java.util.Vector;
+
 import rlVizLib.messaging.agent.AgentValueForObsRequest;
 import rlVizLib.messaging.agent.AgentValueForObsResponse;
 import rlVizLib.messaging.environment.EnvObsForStateRequest;
 import rlVizLib.messaging.environment.EnvObsForStateResponse;
 import rlVizLib.messaging.environment.EnvRangeRequest;
 import rlVizLib.messaging.environment.EnvRangeResponse;
-import rlglue.*;
-import java.io.IOException;
-import java.util.Vector;
+import rlglue.RLGlue;
+import rlglue.types.Observation;
 
 
 public class Driver

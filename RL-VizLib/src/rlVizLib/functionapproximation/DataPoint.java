@@ -1,6 +1,7 @@
 package rlVizLib.functionapproximation;
 
-import rlglue.Observation;
+import rlglue.types.Observation;
+
 
 public class DataPoint {
 	public Observation s=null;

@@ -9,12 +9,11 @@ import rlVizLib.messaging.GenericMessage;
 import rlVizLib.messaging.MessageUser;
 import rlVizLib.messaging.MessageValueType;
 import rlVizLib.messaging.NotAnRLVizMessageException;
-import rlVizLib.messaging.interfaces.getEnvMaxMinsInterface;
 import rlVizLib.messaging.interfaces.getEnvObsForStateInterface;
 import rlVizLib.utilities.UtilityShop;
-import rlglue.Environment;
-import rlglue.Observation;
 import rlglue.RLGlue;
+import rlglue.environment.Environment;
+import rlglue.types.Observation;
 
 public class EnvObsForStateRequest extends EnvironmentMessages{
 	Vector<Observation> theRequestStates=new Vector<Observation>();

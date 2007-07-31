@@ -1,9 +1,6 @@
 package rlVizLib.messaging.environment;
 
 
-import java.util.Vector;
-
-
 import rlVizLib.general.RLVizVersion;
 import rlVizLib.messaging.AbstractMessage;
 import rlVizLib.messaging.GenericMessage;
@@ -11,9 +8,8 @@ import rlVizLib.messaging.MessageUser;
 import rlVizLib.messaging.MessageValueType;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.interfaces.RLVizEnvInterface;
-import rlVizLib.messaging.interfaces.getEnvMaxMinsInterface;
-import rlglue.Environment;
 import rlglue.RLGlue;
+import rlglue.environment.Environment;
 
 public class EnvVersionSupportedRequest extends EnvironmentMessages{
 

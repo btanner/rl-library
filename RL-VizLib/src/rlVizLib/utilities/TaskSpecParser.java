@@ -1,7 +1,4 @@
 package rlVizLib.utilities;
-import java.io.*;
-import java.lang.*;
-import java.util.regex.*;
 
 public class TaskSpecParser
 {        
@@ -104,6 +101,8 @@ public class TaskSpecParser
 	    {
 		tmp3 = null;
 		tmp3 = tmp2[i].split(",");
+		
+		System.out.println("I think the action part of the task spec is: "+tmp2[i]);
 		tmp3[0] = tmp3[0].substring(1,tmp3[0].length());
 		tmp3[1] = tmp3[1].substring(0, tmp3[1].length()-1);
 		tsObject.action_mins[i-2] = Float.parseFloat(tmp3[0]);

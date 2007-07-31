@@ -1,8 +1,5 @@
 package rlVizLib.messaging;
 
-import java.util.StringTokenizer;
-
-import rlVizLib.messaging.environment.EnvMessageType;
 
 
 public class AbstractMessage {

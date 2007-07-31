@@ -11,8 +11,8 @@ import rlVizLib.messaging.MessageValueType;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.utilities.UtilityShop;
 import rlVizLib.visualization.QueryableAgent;
-import rlglue.Observation;
 import rlglue.RLGlue;
+import rlglue.types.Observation;
 
 public class AgentValueForObsRequest extends AgentMessages{
 	Vector<Observation> theRequestObservations=new Vector<Observation>();

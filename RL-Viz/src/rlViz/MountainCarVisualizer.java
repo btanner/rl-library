@@ -16,7 +16,7 @@ import rlVizLib.messaging.environment.EnvRangeResponse;
 import rlVizLib.visualization.AgentOnValueFunctionVizComponent;
 import rlVizLib.visualization.EnvVisualizer;
 import rlVizLib.visualization.VizComponent;
-import rlglue.Observation;
+import rlglue.types.Observation;
 import vizComponents.CarOnMountainVizComponent;
 import vizComponents.ValueFunctionVizComponent;
 

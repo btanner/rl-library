@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Random;
 
-import rlglue.Action;
-import rlglue.Agent;
-import rlglue.Observation;
 import rlVizLib.visualization.QueryableAgent;
+import rlglue.agent.Agent;
+import rlglue.types.Action;
+import rlglue.types.Observation;
 
 public class RandomAgent implements Agent, QueryableAgent {
 	private Action action;

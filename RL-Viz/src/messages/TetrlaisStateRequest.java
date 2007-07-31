@@ -1,6 +1,5 @@
 package messages;
 
-import rlglue.RLGlue;
 import rlVizLib.messaging.AbstractMessage;
 import rlVizLib.messaging.GenericMessage;
 import rlVizLib.messaging.MessageUser;
@@ -8,6 +7,7 @@ import rlVizLib.messaging.MessageValueType;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvMessageType;
 import rlVizLib.messaging.environment.EnvironmentMessages;
+import rlglue.RLGlue;
 
 public class TetrlaisStateRequest extends EnvironmentMessages{
 

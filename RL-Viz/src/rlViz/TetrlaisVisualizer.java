@@ -1,22 +1,10 @@
 package rlViz;
 
-import java.util.Vector;
-
-import messages.MCStateRequest;
 import messages.TetrlaisStateRequest;
 import messages.TetrlaisStateResponse;
-import rlVizLib.messaging.environment.EnvRangeRequest;
-import rlVizLib.messaging.environment.EnvRangeResponse;
-
-import rlglue.Observation;
-import rlVizLib.interfaces.AgentOnValueFunctionDataProvider;
-import rlVizLib.interfaces.ValueFunctionDataProvider;
-import rlVizLib.visualization.AgentOnValueFunctionVizComponent;
 import rlVizLib.visualization.EnvVisualizer;
 import rlVizLib.visualization.VizComponent;
-import vizComponents.CarOnMountainVizComponent;
 import vizComponents.TetrlaisBlocksComponent;
-import vizComponents.ValueFunctionVizComponent;
 
 public class TetrlaisVisualizer  extends EnvVisualizer {
 	

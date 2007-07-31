@@ -1,7 +1,7 @@
 package rlVizLib.interfaces;
 import java.util.Vector;
 
-import rlglue.Observation;
+import rlglue.types.Observation;
 
 
 public interface ValueFunctionDataProvider {
