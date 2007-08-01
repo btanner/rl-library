@@ -164,7 +164,6 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 		theGlueConnection.loadEnvironment(envName,currentParams);
 	}
 	private void handleStartClick(){
-		System.out.println("Should start running continuously");
 		bLoad.setEnabled(false);
 		bUnLoad.setEnabled(false);
 		bStart.setEnabled(false);
@@ -176,7 +175,6 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 	}
 
 	private void handleStepClick() {
-		System.out.println("Should take on step");
 		envListComboBox.setEnabled(false);
 		bLoad.setEnabled(false);
 		bUnLoad.setEnabled(true);
@@ -187,7 +185,6 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 	}
 
 	private void handleStopClick() {
-		System.out.println("Should stop");
 		envListComboBox.setEnabled(false);
 		bLoad.setEnabled(false);
 		bUnLoad.setEnabled(true);

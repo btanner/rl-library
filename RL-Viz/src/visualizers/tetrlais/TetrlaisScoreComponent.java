@@ -1,8 +1,9 @@
-package rlViz;
+package visualizers.tetrlais;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 
 import rlVizLib.visualization.VizComponent;
 
@@ -27,8 +28,10 @@ public class TetrlaisScoreComponent implements VizComponent{
 	    //SET COLOR
 	    g.setColor(Color.WHITE);
 	    //DRAW STRING
+	    AffineTransform saveAT = g.getTransform();
+   	    g.scale(.25, .25);
 	    g.drawString("" +this.tetVis.getScore(),0,1);
-		
+	    g.setTransform(saveAT);
 	}
 
 	public boolean update() {

@@ -60,14 +60,12 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 	}
 
 	public String env_init() {
-		System.out.println("env init in mountainCar");
 		position = defaultInitPosition;
 		velocity = defaultInitVelocity;
-		return "1:e:2_[f,f]_["+minPosition+","+maxPosition+"]_["+(-maxVelocity)+","+maxVelocity+"]:1_[i]_[0,3]";
+		return "1:e:2_[f,f]_["+minPosition+","+maxPosition+"]_["+(-maxVelocity)+","+maxVelocity+"]:1_[i]_[0,2]";
 	}
 
 	public Observation env_start() {
-		System.out.println("env_start in mountainCar");
 		if(randomStarts){
 			position = (Math.random()*(maxPosition + Math.abs((minPosition))) - Math.abs(minPosition));
 			velocity = (Math.random()*maxVelocity*2) - Math.abs(maxVelocity);
@@ -82,6 +80,12 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 //	The constants of this height function could easily be parameterized
 	public Reward_observation env_step(Action theAction) {
 		int a=theAction.intArray[0];
+
+		if(a>2||a<0){
+			Thread.dumpStack();
+			System.exit(1);
+		}
+		
 		velocity += ((a-1))*0.001 + Math.cos(3.0f*position)*(-0.0025);
 		if (velocity > maxVelocity) velocity = maxVelocity;
 		if (velocity < minVelocity) velocity = minVelocity;
@@ -89,8 +93,6 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 		if (position > maxPosition) position = maxPosition;
 		if (position < minPosition) position = minPosition;
 		if (position==minPosition && velocity<0) velocity = 0;		
-
-		System.out.println("In env_step, are we done?: "+inGoalRegion());
 
 		return makeRewardObservation(getReward(),inGoalRegion());
 	}

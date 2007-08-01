@@ -2,7 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="var" path="RL-Glue"/>
-	<classpathentry kind="var" path="RL-Viz"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/RL-Viz"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/RLGlueJava"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/RL-VizLib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

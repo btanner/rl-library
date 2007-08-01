@@ -1,4 +1,4 @@
-package rlViz;
+package visualizers.mountainCar;
 
 
 import java.util.Vector;
@@ -17,7 +17,6 @@ import rlVizLib.visualization.AgentOnValueFunctionVizComponent;
 import rlVizLib.visualization.EnvVisualizer;
 import rlVizLib.visualization.VizComponent;
 import rlglue.types.Observation;
-import vizComponents.CarOnMountainVizComponent;
 import vizComponents.ValueFunctionVizComponent;
 
 
@@ -33,13 +32,13 @@ public class MountainCarVisualizer  extends EnvVisualizer implements ValueFuncti
 
 	public MountainCarVisualizer(){
 		super();
-		VizComponent theValueFunction=new ValueFunctionVizComponent(this);
-		VizComponent agentOnVF=new AgentOnValueFunctionVizComponent(this);
+//		VizComponent theValueFunction=new ValueFunctionVizComponent(this);
+//		VizComponent agentOnVF=new AgentOnValueFunctionVizComponent(this);
 		VizComponent carOnMountain=new CarOnMountainVizComponent(this);
 		
-		super.addVizComponentAtPositionWithSize(theValueFunction,0,.5,1.0,.5);
-		super.addVizComponentAtPositionWithSize(agentOnVF,0,.5,1.0,.5);
-		super.addVizComponentAtPositionWithSize(carOnMountain, 0, 0, 1.0, 0.5);
+//		super.addVizComponentAtPositionWithSize(theValueFunction,0,.5,1.0,.5);
+//		super.addVizComponentAtPositionWithSize(agentOnVF,0,.5,1.0,.5);
+		super.addVizComponentAtPositionWithSize(carOnMountain, 0, 0, 1.0, 1.0);
 }
 	
 	public void setValueFunctionResolution(int theValue) {

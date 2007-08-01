@@ -1,5 +1,6 @@
 package rlVizLib.general;
 
+import java.awt.Component;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
@@ -298,8 +299,31 @@ public class ParameterHolder {
 		return intParams.get(name);
 	}
 
+public String toString(){
+	StringBuffer theBuffer=new StringBuffer();
+	for(int i=0;i<getParamCount();i++){
+		int thisParamType=getParamType(i);
+		String thisParamName=getParamName(i);
 
-
+		switch (thisParamType) {
+		case ParameterHolder.boolParam:
+			theBuffer.append("boolParam: "+thisParamName+" = "+getBooleanParam(thisParamName));
+			break;
+		case ParameterHolder.intParam:
+			theBuffer.append("intParam: "+thisParamName+" = "+getIntParam(thisParamName));
+			break;
+		case ParameterHolder.doubleParam:
+			theBuffer.append("doubleParam: "+thisParamName+" = "+getDoubleParam(thisParamName));
+			break;
+		case ParameterHolder.stringParam:
+			theBuffer.append("stringParam: "+thisParamName+" = "+getStringParam(thisParamName));
+			break;
+		}
+		theBuffer.append("\n");
+	}
+	return theBuffer.toString();
+}
+	
 //	int ParameterHolder::getParamCount(){
 //	return allParamNames.size();
 //	}

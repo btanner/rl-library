@@ -56,12 +56,12 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 	
 
 	public GenericSarsaLambda(){
-		this.lambda=0.0f;
+		this.lambda=0.5f;
 		this.epsilon=0.05f;
-		this.alpha=.1f;
-		this.MEMORY_SIZE=1<<16;
-		this.NUM_TILINGS=16;
-		this.defaultDivider=.1f;
+		this.alpha=.25f;
+		this.MEMORY_SIZE=1<<20;
+		this.NUM_TILINGS=8;
+		this.defaultDivider=.05f;
 		this.MAX_NONZERO_TRACES=100000;
 		observationDividers=null;
 		this.tempF=null;
@@ -95,7 +95,7 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 		minimum_trace = 0.01;
 		theta = new double[MEMORY_SIZE];
 		e = new double[MEMORY_SIZE];
-		gamma=.9f;
+		gamma=1.0f;
 
 		System.out.print("***********\nnew tile coding agent:");
 		System.out.print("lambda: "+lambda);
@@ -147,11 +147,13 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 
 	public void agent_init(String taskSpec) {
 		//Parse the task spec somehow
+		
+		System.out.println("Sarsa: Agent Init");
 		System.out.println("The task Spec is: "+taskSpec);
 		TaskSpecObject theTaskObject = TaskSpecParser.parse(taskSpec);
 
 		
-		actionCount=(int)theTaskObject.action_maxs[0];
+		actionCount=1+(int)theTaskObject.action_maxs[0];
 		
 		theTaskObject.num_discrete_action_dims=1;
 		System.out.println("The number of actions is: "+actionCount);

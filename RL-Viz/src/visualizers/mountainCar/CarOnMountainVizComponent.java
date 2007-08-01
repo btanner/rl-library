@@ -1,4 +1,4 @@
-package vizComponents;
+package visualizers.mountainCar;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -10,7 +10,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import rlViz.MountainCarVisualizer;
 import rlVizLib.utilities.UtilityShop;
 import rlVizLib.visualization.VizComponent;
 

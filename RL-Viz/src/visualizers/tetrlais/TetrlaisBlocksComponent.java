@@ -1,10 +1,9 @@
-package vizComponents;
+package visualizers.tetrlais;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
-import rlViz.TetrlaisVisualizer;
 import rlVizLib.visualization.VizComponent;
 
 public class TetrlaisBlocksComponent implements VizComponent {

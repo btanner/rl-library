@@ -80,10 +80,10 @@ public class ThreadRenderObject extends Thread {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}
-			
-		}
-
+			}			
+		}//end of the while loop
+		//Now that we've died, can reset the shouldDie flag so that we can easily be restarted
+		shouldDie=false;
 	}
 
 	public BufferedImage getProductionImage() {

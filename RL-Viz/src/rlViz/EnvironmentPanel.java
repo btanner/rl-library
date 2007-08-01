@@ -20,20 +20,29 @@ public class EnvironmentPanel extends JPanel implements ComponentListener{
 	 */
 	private static final long serialVersionUID = 1L;
 	BufferedImage latestImage=null;
-    EnvVisualizer theVisualizer=null;
+	EnvVisualizer theVisualizer=null;
 
 
-    public void setVisualizer(EnvVisualizer theVisualizer){
-    	if(this.theVisualizer!=null)this.theVisualizer.stopVisualizing();
-    	
-    	this.theVisualizer=theVisualizer;
-		theVisualizer.setParentComponent(this); 
-    }
-	public EnvironmentPanel(Dimension initialSize){
+	public void setVisualizer(EnvVisualizer theVisualizer){
+		if(this.theVisualizer!=null)this.theVisualizer.stopVisualizing();
+
+		this.theVisualizer=theVisualizer;
+
+		if(theVisualizer!=null){
+			theVisualizer.setParentComponent(this); 
+			theVisualizer.receiveSizeChange(new Dimension(getWidth(),getHeight()));
+		}
+	}
+
+	public EnvironmentPanel(Dimension initialSize, EnvVisualizer defaultEnvVisualizer){
 		super();
 		this.setSize((int)initialSize.getWidth(), (int)initialSize.getHeight());
-
 		addComponentListener(this);
+		setVisualizer(defaultEnvVisualizer);
+	}
+
+	public EnvironmentPanel(Dimension dimension) {
+		this(dimension,null);
 	}
 
 	int paintCount=0;
@@ -44,38 +53,46 @@ public class EnvironmentPanel extends JPanel implements ComponentListener{
 	@Override
 	public void paint(Graphics g) {
 		paintCount++;
-		
-		
+
+
 		super.paint(g);
-		
+
 		Graphics2D g2=(Graphics2D)g;
-		
+
 		g2.setColor(Color.BLUE);
 		g2.fillRect(0,0,1000,1000);
 
 		if(theVisualizer!=null)
 			g2.drawImage(theVisualizer.getLatestImage(), 0, 0, this);
-        
+
 	}
 
 	public void componentHidden(ComponentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void componentMoved(ComponentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void componentResized(ComponentEvent arg0) {
 		if(theVisualizer!=null)
-       		theVisualizer.receiveSizeChange(arg0.getComponent().getSize());
+			theVisualizer.receiveSizeChange(arg0.getComponent().getSize());
 	}
 
 	public void componentShown(ComponentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	public void startVisualizing() {
+		if(theVisualizer!=null)	theVisualizer.startVisualizing();
+	}
+
+	public void stopVisualizing() {
+		if(theVisualizer!=null)	theVisualizer.stopVisualizing();
 	}
 
 

@@ -1,10 +1,9 @@
-package rlViz;
+package visualizers.tetrlais;
 
 import messages.TetrlaisStateRequest;
 import messages.TetrlaisStateResponse;
 import rlVizLib.visualization.EnvVisualizer;
 import rlVizLib.visualization.VizComponent;
-import vizComponents.TetrlaisBlocksComponent;
 
 public class TetrlaisVisualizer  extends EnvVisualizer {
 	

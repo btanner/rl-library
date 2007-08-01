@@ -12,14 +12,8 @@ import rlVizLib.visualization.EnvVisualizer;
 
 
 public class RLVizFrame extends JFrame{
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-	
-	
 	//Components
 	EnvironmentPanel ePanel=null;
 	EnvironmentPanel aPanel=null;
@@ -30,10 +24,6 @@ public class RLVizFrame extends JFrame{
 		
 		theGlueConnection=RLGlueLogic.getGlobalGlueLogic();
 		
-		
-		
-
-		
 		ePanel= new EnvironmentPanel(new Dimension(200,200));
 //		EnvironmentPanel aPanel= new EnvironmentPanel(new Dimension(200,200),theAVisualizer);
 //		
@@ -43,8 +33,7 @@ public class RLVizFrame extends JFrame{
 		agentEnvSplitPane.setOneTouchExpandable(true);
 		agentEnvSplitPane.setDividerLocation(150);
 
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				agentEnvSplitPane, controlPanel);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, agentEnvSplitPane, controlPanel);
 		splitPane.setOneTouchExpandable(true);
 		splitPane.setDividerLocation(150);
 
@@ -53,6 +42,10 @@ public class RLVizFrame extends JFrame{
 		setSize(800,600);
 		setVisible(true);
 	
+	}
+
+	public RLVizFrame(String string) {
+		// TODO Auto-generated constructor stub
 	}
 
 	public void setEnvVisualizer(EnvVisualizer theEVisualizer) {

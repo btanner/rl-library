@@ -3,20 +3,22 @@ package rlViz;
 import java.io.IOException;
 
 import rlVizLib.visualization.EnvVisualizer;
+import visualizers.tetrlais.TetrlaisVisualizer;
 
 public class GraphicalDriver {
 
 	public static void main(String [] args) throws IOException {
 		
 
-	
+			
 
 		RLVizFrame theFrame=new RLVizFrame();
+//		RLVizFrame theFrame=new RLVizFrame("MountainCar");
 
 		EnvVisualizer theEVisualizer=null;
 		
-		theEVisualizer=new MountainCarVisualizer();
-//		TetrlaisVisualizer theEVisualizer=new TetrlaisVisualizer();
+//		theEVisualizer=new MountainCarVisualizer();
+		theEVisualizer=new TetrlaisVisualizer();
 		theFrame.setEnvVisualizer((EnvVisualizer)theEVisualizer);
 //		MountainCarVisualizer theAVisualizer=new MountainCarVisualizer();
 

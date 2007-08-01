@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import rlVizLib.general.ParameterHolder;
 import rlVizLib.general.RLVizVersion;
+import rlVizLib.general.TinyGlue;
 import rlVizLib.messaging.environment.EnvVersionSupportedRequest;
 import rlVizLib.messaging.environment.EnvVersionSupportedResponse;
 import rlVizLib.messaging.environmentShell.EnvShellListRequest;
@@ -30,7 +31,6 @@ public class RLGlueLogic {
 	boolean debugLocal=false;
 
 	TinyGlue myGlueState=null;
-
 	EnvVisualizer theEnvVisualizer=null;
 	
 	Timer currentTimer=null;
@@ -148,24 +148,4 @@ public class RLGlueLogic {
 }
 
 
-class TinyGlue{
-	boolean hasInited=false;
-	boolean episodeOver=true;
-	void step(){
 
-		if(!hasInited){
-			RLGlue.RL_init();
-			hasInited=true;
-		}
-
-		if(episodeOver){
-			RLGlue.RL_start();
-			episodeOver=false;
-		}else{
-			Reward_observation_action_terminal whatHappened=RLGlue.RL_step();
-			if(whatHappened.terminal==1){
-				episodeOver=true;
-			}
-		}
-	}
-}

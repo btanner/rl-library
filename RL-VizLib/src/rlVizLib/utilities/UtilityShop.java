@@ -64,4 +64,9 @@ static public  Observation cloneObservation(Observation theObs){
 		return theObs;
 	}
 
+	public static String serializeObservation(Observation o) {
+		StringBuffer b = new StringBuffer();
+		return serializeObservation(b,o).toString();
+	}
+
 }

@@ -1,50 +1,78 @@
 import rlVizLib.general.ParameterHolder;
-import rlVizLib.messaging.environment.EnvReceiveRunTimeParametersRequest;
+import rlVizLib.general.TinyGlue;
 import rlVizLib.messaging.environmentShell.EnvShellListRequest;
 import rlVizLib.messaging.environmentShell.EnvShellListResponse;
 import rlVizLib.messaging.environmentShell.EnvShellLoadRequest;
+import rlVizLib.visualization.EnvVisualizer;
 import rlglue.RLGlue;
+import visualizers.mountainCar.MountainCarVisualizer;
 
 public class JavaTrainer {
 
 	/**
 	 * @param args
+	 * @throws InterruptedException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 //		String theEnv="Tetrlais";
 		String theEnv="MountainCar";
 
-		System.out.println("Java Trainer about to send request for List");
 		EnvShellListResponse ListResponse = EnvShellListRequest.Execute();
 		
 		int thisEnvIndex=ListResponse.getTheEnvList().indexOf(theEnv);
-		
-		System.out.println("Looks like: "+theEnv+" is environment number: "+thisEnvIndex);
-		
+
 		ParameterHolder p = ListResponse.getTheParamList().get(thisEnvIndex);
 		
-//		p.setBooleanParam("randomStartStates",true);
-		
+		System.out.println("Running with Parameter Settings: "+p);
+
 		EnvShellLoadRequest.Execute(theEnv,p);
-		
-		System.out.println("Environment is loaded");
-		
-//		EnvReceiveRunTimeParametersRequest.Execute(p);
-		
-		//This is like sending the following, which goes to the environmentShell Loader and loads the theEnv.
-		//RL_env_message("TO=1 FROM=0 CMD=2 VALTYPE=1 VALS="+theEnv);
-		
+
 		RLGlue.RL_init();
 		
-//		RLGlue.RL_start();
-//		RLGlue.RL_step();
-		
-		int numEpisodes=10;
-	
-		for(int i=0;i<numEpisodes;i++){
+		int sum=0;
+		for(int i=0;i<100;i++){
 			RLGlue.RL_episode(10000);
-			System.out.println("Steps: "+RLGlue.RL_num_steps());
+			sum+=RLGlue.RL_num_steps();
+			if(i%25==0){
+			System.out.println("Running episode: "+i+" total steps in last bunch is: "+sum);
+			sum=0;
+			}
 		}
+		TinyGlue theTinyGlue= new TinyGlue();
+		//Set this otherwise the first step of theTinyGlue will call RL_init and undo all our learning
+		theTinyGlue.setInited(true);
+		
+		RLVizWatchFrame theViz=new RLVizWatchFrame(theEnv,"");
+		theViz.startVisualizing();
+		
+		
+		
+		//Run a least 500 steps
+		for(int i=0;i<500;i++){
+			theTinyGlue.step();
+			Thread.sleep(10);
+		}
+		//Run out the episode 
+		while(theTinyGlue.step());
+		
+		
+	System.out.println("out of the display loop");
+	theViz.stopVisualizing();
+	
+	
+
+	System.out.println("running 1000 steps quietly");
+	for(int i=0;i<1000;i++){
+		theTinyGlue.step();
+	}
+	System.out.println("running 1000 steps showing again");
+	theViz.startVisualizing();
+	for(int i=0;i<1000;i++){
+		theTinyGlue.step();
+		Thread.sleep(10);
+		
+		}
+
 		RLGlue.RL_cleanup();
 	}
 

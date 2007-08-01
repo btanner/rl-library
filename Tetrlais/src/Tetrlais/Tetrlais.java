@@ -5,9 +5,9 @@ import messages.TetrlaisStateResponse;
 import rlVizLib.messaging.environment.EnvironmentMessageParser;
 import rlVizLib.messaging.environment.EnvironmentMessages;
 import rlVizLib.messaging.interfaces.RLVizEnvInterface;
+import rlVizLib.utilities.UtilityShop;
 import rlVizLib.general.ParameterHolder;
 import rlVizLib.general.RLVizVersion;
-import rlglue.*;
 import rlglue.types.Action;
 import rlglue.types.Observation;
 import rlglue.types.Random_seed_key;
@@ -17,29 +17,42 @@ import rlVizLib.Environments.EnvironmentBase;
 
 public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 
-	
+
 	private int tet_global_score =0;
-	private GameState gameState = new GameState(4,8);
-	static final int terminal_score = 0;
-	
+	private GameState gameState = null;
+
+	static final int terminal_score = -10;
+
+	int numRows=4;
+	int numCols=8;
+
 	public Tetrlais(){
 		super();
+		gameState=new GameState(numRows,numCols);
 	}
 	public Tetrlais(ParameterHolder p){
-	       super();
-	   }
+		super();
+		if(p!=null){
+			if(!p.isNull()){
+				numRows=p.getIntParam("NumRows");
+				numCols=p.getIntParam("NumCols");
+			}
+		}
+		gameState=new GameState(numRows,numCols);
 
-	
+	}
+
+
 	//This method creates the object that can be used to easily set different problem parameters
 	public static ParameterHolder getDefaultParameters(){
 		ParameterHolder p = new ParameterHolder();
-		p.addIntParam("NumRows",16);
-
+		p.addIntParam("NumRows",10);
+		p.addIntParam("NumCols",10);
 		return p;
 	}
 
-	
-	
+
+
 	/*Base RL-Glue Functions*/
 	public String env_init() {
 		/* initialize the environment, construct a task_spec to pass on. The tetris environment
@@ -47,56 +60,54 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 		 * integer values. */
 		/*NOTE: THE GAME STATE WIDTH AND HEIGHT MUST MULTIPLY TO EQUAL THE NUMBER OF OBSERVATION VARIABLES*/
 		int numStates=gameState.getHeight()*gameState.getWidth();
-		
+
 		String task_spec = "2.0:e:"+numStates+"_[";
 		for(int i = 0; i< numStates-1; i++)
-				task_spec = task_spec + "i, ";
+			task_spec = task_spec + "i, ";
 		task_spec = task_spec + "i]";
 		for(int i=0; i<numStates;i++)
 			task_spec = task_spec + "_[0,1]";
-		task_spec = task_spec + ":1_[i]_[0,4]";
-		
+		task_spec = task_spec + ":1_[i]_[0,5]";
+		//fifth action is borkerd
+
 		return task_spec;
 	}
 
 	public Observation env_start() {
-		// TODO Auto-generated method stub
-		
 		gameState.reset();
 		tet_global_score =0;
-		
+
 		Observation o = gameState.get_observation();
+
 		return o;
-		
 	}
-	
+
 	public Reward_observation env_step(Action action) {
-		// TODO Auto-generated method stub
 		Reward_observation ro = new Reward_observation();
-		
-		ro.terminal = (int) gameState.game_over();
-		
-		if(gameState.game_over() == 0)
+
+		ro.terminal = 1;
+
+		if(!gameState.gameOver())
 		{
+			ro.terminal=0;
 			gameState.take_action(action);
 			gameState.update();
-			ro.r = 3.0d*(gameState.get_score() - tet_global_score) + .1d;
-//			ro.r=1.0d;
+//			ro.r = 3.0d*(gameState.get_score() - tet_global_score) - .01d;
+			ro.r=1.0d;
 			tet_global_score = gameState.get_score();
 		}
 		else{
 			ro.r = Tetrlais.terminal_score;
 			tet_global_score = 0;	
 		}
-		
+
 		ro.o = gameState.get_observation();
-		
 		return ro;
 	}
-	
+
 	public void env_cleanup() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public Random_seed_key env_get_random_seed() {
@@ -120,9 +131,9 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 			System.err.println("Someone sent Tetrlais a message that wasn't RL-Viz compatible");
 			return "I only respond to RL-Viz messages!";
 		}
-		
-		
-		
+
+
+
 		if(theMessageObject.canHandleAutomatically(this)){
 			return theMessageObject.handleAutomatically(this);
 		}
@@ -130,7 +141,7 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 		if(theMessageObject.getTheMessageType()==rlVizLib.messaging.environment.EnvMessageType.kEnvCustom.id()){
 
 			String theCustomType=theMessageObject.getPayLoad();
-			
+
 			if(theCustomType.equals("GETTETRLAISSTATE")){
 				//It is a request for the state
 				TetrlaisStateResponse theResponseObject=new TetrlaisStateResponse(this.tet_global_score, this.gameState.getWidth(), this.gameState.getHeight(), this.gameState.getWorldState());
@@ -138,21 +149,21 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 			}
 			System.out.println("We need some code written in Env Message for Tetrlais.. unknown custom message type received");
 			Thread.dumpStack();
-			
+
 			return null;
 		}
-		
+
 		System.out.println("We need some code written in Env Message for  Tetrlais!");
 		Thread.dumpStack();
-		
+
 		return null;
 	}
 
 	public void env_set_random_seed(Random_seed_key arg0) {
 		// TODO Auto-generated method stub
-		
+
 		System.out.println("The Tetris Environment does not implement env_set_random_seed. Sorry.");
-		
+
 	}
 
 	public void env_set_state(State_key arg0) {
@@ -160,8 +171,8 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 		System.out.println("The Tetris Environment does not implement env_set_state. Sorry.");
 	}
 	/*End of Base RL-Glue Functions */
-	
-	
+
+
 	/*RL-Viz Methods*/
 	@Override
 	protected Observation makeObservation() {

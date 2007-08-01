@@ -42,7 +42,6 @@ public class TetrlaisStateResponse extends AbstractResponse {
 			this.world[i] = Integer.parseInt(stateTokenizer.nextToken());
 			++i;
 		}
-		
 	}
 	
 	@Override

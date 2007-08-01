@@ -64,8 +64,7 @@ public class ParameterHolderPanel extends JPanel {
 	}
 	public void renderCurrentParameterHolder(){
 		//Should actually save the state of all these guys, people would probably like that
-		for (Component thisComponent : allComponents)remove(thisComponent);
-
+		for (Component thisComponent : allComponents)this.remove(thisComponent);
 		allComponents.removeAllElements();
 
 		for(int i=0;i<currentParamHolder.getParamCount();i++){

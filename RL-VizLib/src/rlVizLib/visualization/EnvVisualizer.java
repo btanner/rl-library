@@ -80,12 +80,15 @@ public abstract class EnvVisualizer implements ImageAggregator {
 	}
 
 	public void startVisualizing() {
+		System.out.println("in envVisualizer:startVisualizing");
 		currentlyRunning=true;
 		for (ThreadRenderObject thisRunner : threadRunners) {
+			System.out.println("adding a thread");
 			Thread theThread=new Thread(thisRunner);
 			theThreads.add(theThread);
 			theThread.start();
 		}
+		System.out.println("done adding threads");
 		
 	}
 	public void stopVisualizing() {
@@ -103,8 +106,8 @@ public abstract class EnvVisualizer implements ImageAggregator {
 				e.printStackTrace();
 			}
 		}
+		theThreads.removeAllElements();
 		currentlyRunning=false;
-
 	}
 
 	private Dimension makeSizeForVizComponent(int i){
