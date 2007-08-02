@@ -12,7 +12,7 @@ export RLGLUEPATH=bin/RL-Glue.jar
 export RLVIZPATH=bin/RL-Viz.jar
 export RLVIZLIBPATH=bin/RL-VizLib.jar
 export ENVSHELLPATH=bin/EnvShell.jar
-export AGENTPATH=~/eclipseWorkspace/GenericSarsaLambda/bin/
+export AGENTPATH=bin/agent/
 export RLCLASSPATH=$RLGLUEPATH:$RLVIZPATH:$RLVIZLIBPATH:$ENVSHELLPATH:$AGENTPATH
 export RLGLUEEXECPATH=bin/RL_Glue
 
