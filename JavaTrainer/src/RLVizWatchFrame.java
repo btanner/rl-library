@@ -11,8 +11,9 @@ import javax.swing.JSplitPane;
 import javax.swing.WindowConstants;
 
 import rlViz.EnvVisualizerFactory;
-import rlViz.EnvironmentPanel;
-import rlVizLib.visualization.EnvVisualizer;
+import rlViz.VisualizerPanel;
+import rlViz.visualizerLoadListener;
+import rlVizLib.visualization.AbstractVisualizer;
 
 
 
@@ -20,7 +21,7 @@ public class RLVizWatchFrame extends JFrame{
 	private static final long serialVersionUID = 1L;
 
 	//Components
-	EnvironmentPanel ePanel=null;
+	VisualizerPanel ePanel=null;
 
 	public RLVizWatchFrame(){
 		this("","");
@@ -29,11 +30,15 @@ public class RLVizWatchFrame extends JFrame{
 		super();
 		//This very well might return null
 		this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-		EnvVisualizer defaultEnvVisualizer = EnvVisualizerFactory.createVisualizerFromString(envName);
 //		theGlueConnection=RLGlueLogic.getGlobalGlueLogic();
+
+		ePanel= new VisualizerPanel(new Dimension(600,600));
 		
-		
-		ePanel= new EnvironmentPanel(new Dimension(600,600),defaultEnvVisualizer);
+		AbstractVisualizer defaultEnvVisualizer = EnvVisualizerFactory.createVisualizerFromString(envName);
+
+		if(ePanel instanceof visualizerLoadListener){
+			((visualizerLoadListener)ePanel).notifyVisualizerLoaded(defaultEnvVisualizer);
+		}
 //		EnvironmentPanel aPanel= new EnvironmentPanel(new Dimension(200,200),theAVisualizer);
 //		
 //		JPanel controlPanel=new RLControlPanel(theGlueConnection);

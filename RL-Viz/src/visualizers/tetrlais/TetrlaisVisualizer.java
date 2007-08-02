@@ -2,10 +2,11 @@ package visualizers.tetrlais;
 
 import messages.TetrlaisStateRequest;
 import messages.TetrlaisStateResponse;
-import rlVizLib.visualization.EnvVisualizer;
+import rlVizLib.visualization.AbstractVisualizer;
+import rlVizLib.visualization.VisualizerPanelInterface;
 import rlVizLib.visualization.VizComponent;
 
-public class TetrlaisVisualizer  extends EnvVisualizer {
+public class TetrlaisVisualizer  extends AbstractVisualizer {
 	
 	private TetrlaisStateResponse currentState = null;
 

@@ -8,28 +8,29 @@ import java.awt.image.BufferedImage;
 import java.util.Vector;
 
 
-public abstract class EnvVisualizer implements ImageAggregator {
+public abstract class AbstractVisualizer implements ImageAggregator {
 	private BufferedImage productionEnvImage=null;
 	private BufferedImage bufferEnvImage=null;
-	private Component parentComponent=null;
-
+	private VisualizerPanelInterface parentPanel=null;
+	
 	private Vector<ThreadRenderObject> threadRunners=new Vector<ThreadRenderObject>();
 	private Vector<Thread> theThreads=new Vector<Thread>();
 
 	private Vector<Point2D> positions=new Vector<Point2D>();
 	private Vector<Point2D> sizes=new Vector<Point2D>();
 
-
-	Dimension currentVisualizerPanelSize=new Dimension(100,100);
-
 	boolean currentlyRunning=false;
+	
+	public void setParentPanel(VisualizerPanelInterface parentPanel){
+		this.parentPanel=parentPanel;
+	}
 
-	public void receiveSizeChange(Dimension newPanelSize){
-		currentVisualizerPanelSize=newPanelSize;
+	public void notifyPanelSizeChange(){
 		resizeImages();
 	}
 
 	private synchronized void resizeImages() {
+		Dimension currentVisualizerPanelSize=parentPanel.getSize();
 		productionEnvImage=new BufferedImage((int)currentVisualizerPanelSize.getWidth(),(int)currentVisualizerPanelSize.getHeight(),BufferedImage.TYPE_INT_ARGB);
 		bufferEnvImage=new BufferedImage((int)currentVisualizerPanelSize.getWidth(),(int)currentVisualizerPanelSize.getHeight(),BufferedImage.TYPE_INT_ARGB);
 
@@ -39,9 +40,7 @@ public abstract class EnvVisualizer implements ImageAggregator {
 
 	}
 
-	public EnvVisualizer(){
-		resizeImages();
-	}
+	public AbstractVisualizer(){}
 
 	public BufferedImage getLatestImage() {
 		return productionEnvImage;
@@ -72,25 +71,18 @@ public abstract class EnvVisualizer implements ImageAggregator {
 	public void receiveNotification() {
 		//One of the guys I draw has updates
 		redrawCurrentImage();
-		parentComponent.repaint();
-	}
-
-	public void setParentComponent(Component theComponent) {
-		this.parentComponent=theComponent;
+		parentPanel.receiveNotificationVizChanged();
 	}
 
 	public void startVisualizing() {
-		System.out.println("in envVisualizer:startVisualizing");
 		currentlyRunning=true;
 		for (ThreadRenderObject thisRunner : threadRunners) {
-			System.out.println("adding a thread");
 			Thread theThread=new Thread(thisRunner);
 			theThreads.add(theThread);
 			theThread.start();
 		}
-		System.out.println("done adding threads");
-		
 	}
+
 	public void stopVisualizing() {
 //		tell them all to die
 		for (ThreadRenderObject thisRunner : threadRunners) {
@@ -111,6 +103,7 @@ public abstract class EnvVisualizer implements ImageAggregator {
 	}
 
 	private Dimension makeSizeForVizComponent(int i){
+		Dimension currentVisualizerPanelSize=parentPanel.getSize();
 		double width=currentVisualizerPanelSize.getWidth();
 		double height=currentVisualizerPanelSize.getHeight();
 
@@ -123,6 +116,8 @@ public abstract class EnvVisualizer implements ImageAggregator {
 		return d;
 	}
 	private Dimension makeLocationForVizComponent(int i){
+		Dimension currentVisualizerPanelSize=parentPanel.getSize();
+
 		double width=currentVisualizerPanelSize.getWidth();
 		double height=currentVisualizerPanelSize.getHeight();
 

@@ -13,7 +13,7 @@ import rlVizLib.messaging.environment.EnvVersionSupportedResponse;
 import rlVizLib.messaging.environmentShell.EnvShellListRequest;
 import rlVizLib.messaging.environmentShell.EnvShellListResponse;
 import rlVizLib.messaging.environmentShell.EnvShellLoadRequest;
-import rlVizLib.visualization.EnvVisualizer;
+import rlVizLib.visualization.AbstractVisualizer;
 
 public class RLGlueLogic {
 
@@ -29,10 +29,14 @@ public class RLGlueLogic {
 	boolean debugLocal=false;
 
 	TinyGlue myGlueState=null;
-	EnvVisualizer theEnvVisualizer=null;
+	AbstractVisualizer theEnvVisualizer=null;
 	
 	Timer currentTimer=null;
 
+
+	
+	Vector<visualizerLoadListener> envVisualizerLoadListeners=new Vector<visualizerLoadListener>();
+	
 	private RLVizVersion theEnvVersion=null;
 	
 	private RLGlueLogic(){
@@ -101,6 +105,7 @@ public class RLGlueLogic {
 
 	public void loadEnvironment(String envName, ParameterHolder currentParams) {
 		EnvShellLoadRequest.Execute(envName,currentParams);
+		
 		EnvVersionSupportedResponse versionResponse=EnvVersionSupportedRequest.Execute();
 		
 		//this shouldn't happen anyway
@@ -108,11 +113,12 @@ public class RLGlueLogic {
 			theEnvVersion=versionResponse.getTheVersion();
 		else
 			theEnvVersion=RLVizVersion.NOVERSION;
+		
+		theEnvVisualizer=EnvVisualizerFactory.createVisualizerFromString(envName);
+		notifyNewEnvVisualizerListeners();
 	}
 
-	public void setVisualizer(EnvVisualizer theEVisualizer) {
-		this.theEnvVisualizer=theEVisualizer;
-	}
+
 
 	public void start(int period) {
 	    currentTimer = new Timer();
@@ -141,6 +147,16 @@ public class RLGlueLogic {
 	public void setNewValueFunctionResolution(int theValue) {
 		if(theEnvVisualizer!=null)
 			theEnvVisualizer.setValueFunctionResolution(theValue);
+	}
+
+	private void notifyNewEnvVisualizerListeners() {
+		for (visualizerLoadListener thisListener : envVisualizerLoadListeners)
+			thisListener.notifyVisualizerLoaded(theEnvVisualizer);
+	}
+
+
+	public void addEnvVisualizerLoadListener(visualizerLoadListener panel) {
+		envVisualizerLoadListeners.add(panel);
 	}
 
 }

@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-import rlVizLib.visualization.EnvVisualizer;
+import rlVizLib.visualization.AbstractVisualizer;
 
 
 
@@ -15,8 +15,8 @@ public class RLVizFrame extends JFrame{
 	private static final long serialVersionUID = 1L;
 
 	//Components
-	EnvironmentPanel ePanel=null;
-	EnvironmentPanel aPanel=null;
+	VisualizerPanel ePanel=null;
+	VisualizerPanel aPanel=null;
 
 	RLGlueLogic theGlueConnection=null;
 	public RLVizFrame(){
@@ -24,7 +24,11 @@ public class RLVizFrame extends JFrame{
 		
 		theGlueConnection=RLGlueLogic.getGlobalGlueLogic();
 		
-		ePanel= new EnvironmentPanel(new Dimension(200,200));
+		ePanel= new VisualizerPanel(new Dimension(200,200));
+		
+		if (ePanel instanceof visualizerLoadListener) {
+			RLGlueLogic.getGlobalGlueLogic().addEnvVisualizerLoadListener((visualizerLoadListener) ePanel);
+		}
 //		EnvironmentPanel aPanel= new EnvironmentPanel(new Dimension(200,200),theAVisualizer);
 //		
 		JPanel controlPanel=new RLControlPanel(theGlueConnection);
@@ -48,9 +52,9 @@ public class RLVizFrame extends JFrame{
 		// TODO Auto-generated constructor stub
 	}
 
-	public void setEnvVisualizer(EnvVisualizer theEVisualizer) {
-		ePanel.setVisualizer(theEVisualizer);
-		theGlueConnection.setVisualizer(theEVisualizer);
-	}
+//	public void setEnvVisualizer(EnvVisualizer theEVisualizer) {
+//		ePanel.setVisualizer(theEVisualizer);
+//		theGlueConnection.setVisualizer(theEVisualizer);
+//	}
 
 }

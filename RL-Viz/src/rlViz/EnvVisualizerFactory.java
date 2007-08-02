@@ -1,14 +1,15 @@
 package rlViz;
 
-import rlVizLib.visualization.EnvVisualizer;
+import rlVizLib.visualization.AbstractVisualizer;
+import rlVizLib.visualization.VisualizerPanelInterface;
 import visualizers.mountainCar.MountainCarVisualizer;
 import visualizers.tetrlais.TetrlaisVisualizer;
 
 public class EnvVisualizerFactory {
 	
-	public static EnvVisualizer createVisualizerFromString(String theEnvName){
+	public static AbstractVisualizer createVisualizerFromString(String theEnvName){
 		//So this is where we have to hard code things
-		EnvVisualizer theEnvVisualizer=null;
+		AbstractVisualizer theEnvVisualizer=null;
 		
 		if(theEnvName.equalsIgnoreCase("mountaincar")){
 			theEnvVisualizer=new MountainCarVisualizer();

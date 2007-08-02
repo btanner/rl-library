@@ -2,7 +2,7 @@ package rlViz;
 
 import java.io.IOException;
 
-import rlVizLib.visualization.EnvVisualizer;
+import rlVizLib.visualization.AbstractVisualizer;
 import visualizers.tetrlais.TetrlaisVisualizer;
 
 public class GraphicalDriver {
@@ -15,11 +15,11 @@ public class GraphicalDriver {
 		RLVizFrame theFrame=new RLVizFrame();
 //		RLVizFrame theFrame=new RLVizFrame("MountainCar");
 
-		EnvVisualizer theEVisualizer=null;
+		AbstractVisualizer theEVisualizer=null;
 		
 //		theEVisualizer=new MountainCarVisualizer();
-		theEVisualizer=new TetrlaisVisualizer();
-		theFrame.setEnvVisualizer((EnvVisualizer)theEVisualizer);
+//		theEVisualizer=new TetrlaisVisualizer();
+//		theFrame.setEnvVisualizer((EnvVisualizer)theEVisualizer);
 //		MountainCarVisualizer theAVisualizer=new MountainCarVisualizer();
 
 //		RLGlue.RL_init();

@@ -3,7 +3,7 @@ import rlVizLib.general.TinyGlue;
 import rlVizLib.messaging.environmentShell.EnvShellListRequest;
 import rlVizLib.messaging.environmentShell.EnvShellListResponse;
 import rlVizLib.messaging.environmentShell.EnvShellLoadRequest;
-import rlVizLib.visualization.EnvVisualizer;
+import rlVizLib.visualization.AbstractVisualizer;
 import rlglue.RLGlue;
 import visualizers.mountainCar.MountainCarVisualizer;
 

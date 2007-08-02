@@ -10,60 +10,39 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-import rlVizLib.visualization.EnvVisualizer;
+import rlVizLib.general.ParameterHolder;
+import rlVizLib.visualization.AbstractVisualizer;
+import rlVizLib.visualization.VisualizerPanelInterface;
 
 
-public class EnvironmentPanel extends JPanel implements ComponentListener{
+public class VisualizerPanel extends JPanel implements ComponentListener, VisualizerPanelInterface,visualizerLoadListener{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	BufferedImage latestImage=null;
-	EnvVisualizer theVisualizer=null;
+	AbstractVisualizer theVisualizer=null;
 
 
-	public void setVisualizer(EnvVisualizer theVisualizer){
-		if(this.theVisualizer!=null)this.theVisualizer.stopVisualizing();
 
-		this.theVisualizer=theVisualizer;
-
-		if(theVisualizer!=null){
-			theVisualizer.setParentComponent(this); 
-			theVisualizer.receiveSizeChange(new Dimension(getWidth(),getHeight()));
-		}
-	}
-
-	public EnvironmentPanel(Dimension initialSize, EnvVisualizer defaultEnvVisualizer){
+	public VisualizerPanel(Dimension initialSize){
 		super();
 		this.setSize((int)initialSize.getWidth(), (int)initialSize.getHeight());
 		addComponentListener(this);
-		setVisualizer(defaultEnvVisualizer);
 	}
 
-	public EnvironmentPanel(Dimension dimension) {
-		this(dimension,null);
-	}
 
-	int paintCount=0;
-
-	/* (non-Javadoc)
-	 * @see javax.swing.JComponent#paint(java.awt.Graphics)
-	 */
 	@Override
 	public void paint(Graphics g) {
-		paintCount++;
-
-
 		super.paint(g);
 
 		Graphics2D g2=(Graphics2D)g;
 
-		g2.setColor(Color.BLUE);
-		g2.fillRect(0,0,1000,1000);
+//		g2.setColor(Color.BLUE);
+//		g2.fillRect(0,0,1000,1000);
 
-		if(theVisualizer!=null)
-			g2.drawImage(theVisualizer.getLatestImage(), 0, 0, this);
+		if(theVisualizer!=null)	g2.drawImage(theVisualizer.getLatestImage(), 0, 0, this);
 
 	}
 
@@ -78,8 +57,7 @@ public class EnvironmentPanel extends JPanel implements ComponentListener{
 	}
 
 	public void componentResized(ComponentEvent arg0) {
-		if(theVisualizer!=null)
-			theVisualizer.receiveSizeChange(arg0.getComponent().getSize());
+		if(theVisualizer!=null)theVisualizer.notifyPanelSizeChange();
 	}
 
 	public void componentShown(ComponentEvent arg0) {
@@ -94,6 +72,21 @@ public class EnvironmentPanel extends JPanel implements ComponentListener{
 	public void stopVisualizing() {
 		if(theVisualizer!=null)	theVisualizer.stopVisualizing();
 	}
+
+	public void receiveNotificationVizChanged() {
+		this.repaint();
+	}
+
+
+	public void notifyVisualizerLoaded(AbstractVisualizer theNewVisualizer) {
+		if(this.theVisualizer!=null)this.theVisualizer.stopVisualizing();
+		this.theVisualizer=theNewVisualizer;
+		
+		theVisualizer.setParentPanel(this);
+		theVisualizer.notifyPanelSizeChange();
+	}
+
+	
 
 
 

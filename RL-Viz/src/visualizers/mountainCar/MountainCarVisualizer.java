@@ -14,13 +14,14 @@ import rlVizLib.messaging.environment.EnvObsForStateResponse;
 import rlVizLib.messaging.environment.EnvRangeRequest;
 import rlVizLib.messaging.environment.EnvRangeResponse;
 import rlVizLib.visualization.AgentOnValueFunctionVizComponent;
-import rlVizLib.visualization.EnvVisualizer;
+import rlVizLib.visualization.AbstractVisualizer;
+import rlVizLib.visualization.VisualizerPanelInterface;
 import rlVizLib.visualization.VizComponent;
 import rlglue.types.Observation;
 import vizComponents.ValueFunctionVizComponent;
 
 
-public class MountainCarVisualizer  extends EnvVisualizer implements ValueFunctionDataProvider, AgentOnValueFunctionDataProvider {
+public class MountainCarVisualizer  extends AbstractVisualizer implements ValueFunctionDataProvider, AgentOnValueFunctionDataProvider {
 
 	Vector<Double> mins = null;
 	Vector<Double> maxs = null;
