@@ -14,8 +14,6 @@ import rlVizLib.messaging.environmentShell.EnvShellListRequest;
 import rlVizLib.messaging.environmentShell.EnvShellListResponse;
 import rlVizLib.messaging.environmentShell.EnvShellLoadRequest;
 import rlVizLib.visualization.EnvVisualizer;
-import rlglue.RLGlue;
-import rlglue.types.Reward_observation_action_terminal;
 
 public class RLGlueLogic {
 
