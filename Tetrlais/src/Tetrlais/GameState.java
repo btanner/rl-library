@@ -18,6 +18,8 @@ public class GameState{
 	static final int FALL = 5; /* fall down *
 
 	/*creating bricks*/
+	
+	
 	SingleBlockPiece sbpO1 = new SingleBlockPiece(1,1,1,1);// the "O brick" all four squares 
 	SingleBlockPiece[] sbpO = {sbpO1}; 
 	int[] sbp0rotate = {0};// rotation matrix for the O brick
