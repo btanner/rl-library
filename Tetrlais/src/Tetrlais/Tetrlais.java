@@ -1,5 +1,7 @@
 package Tetrlais;
 
+import java.util.Vector;
+
 import messages.MCStateResponse;
 import messages.TetrlaisStateResponse;
 import rlVizLib.messaging.environment.EnvironmentMessageParser;
@@ -18,27 +20,36 @@ import rlVizLib.Environments.EnvironmentBase;
 public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 
 
-	private int tet_global_score =0;
+	private int currentScore =0;
 	private GameState gameState = null;
 
-	static final int terminal_score = -10;
+	static final int terminalScore = -10;
 
-	int numRows=4;
-	int numCols=8;
+//	/*Hold all the possible bricks that can fall*/
+	Vector<TetrlaisPiece> possibleBlocks=new Vector<TetrlaisPiece>();
+
+//Defaults
+	int width=4;
+	int height=8;
 
 	public Tetrlais(){
 		super();
-		gameState=new GameState(numRows,numCols);
+		//Defaults
+		possibleBlocks.add(TetrlaisPiece.makeLine());
+		gameState=new GameState(width,height,possibleBlocks);
 	}
 	public Tetrlais(ParameterHolder p){
 		super();
 		if(p!=null){
 			if(!p.isNull()){
-				numRows=p.getIntParam("NumRows");
-				numCols=p.getIntParam("NumCols");
+				width=p.getIntParam("Width");
+				height=p.getIntParam("Height");
+				if(p.getBooleanParam("LongBlock"))	possibleBlocks.add(TetrlaisPiece.makeLine());
+				if(p.getBooleanParam("SquareBlock"))	possibleBlocks.add(TetrlaisPiece.makeSquare());
+				if(p.getBooleanParam("TriBlock"))	possibleBlocks.add(TetrlaisPiece.makeTri());
 			}
 		}
-		gameState=new GameState(numRows,numCols);
+		gameState=new GameState(width,height,possibleBlocks);
 
 	}
 
@@ -46,8 +57,11 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 	//This method creates the object that can be used to easily set different problem parameters
 	public static ParameterHolder getDefaultParameters(){
 		ParameterHolder p = new ParameterHolder();
-		p.addIntParam("NumRows",10);
-		p.addIntParam("NumCols",10);
+		p.addIntParam("Width",6);
+		p.addIntParam("Height",12);
+		p.addBooleanParam("LongBlock",true);
+		p.addBooleanParam("SquareBlock",true);
+		p.addBooleanParam("TriBlock",true);
 		return p;
 	}
 
@@ -68,14 +82,13 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 		for(int i=0; i<numStates;i++)
 			task_spec = task_spec + "_[0,1]";
 		task_spec = task_spec + ":1_[i]_[0,5]";
-		//fifth action is borkerd
 
 		return task_spec;
 	}
 
 	public Observation env_start() {
 		gameState.reset();
-		tet_global_score =0;
+		currentScore =0;
 
 		Observation o = gameState.get_observation();
 
@@ -90,15 +103,15 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 		if(!gameState.gameOver())
 		{
 			ro.terminal=0;
-			gameState.take_action(action);
 			gameState.update();
+			gameState.take_action(action);
 //			ro.r = 3.0d*(gameState.get_score() - tet_global_score) - .01d;
 			ro.r=1.0d;
-			tet_global_score = gameState.get_score();
+			currentScore = gameState.get_score();
 		}
 		else{
-			ro.r = Tetrlais.terminal_score;
-			tet_global_score = 0;	
+			ro.r = Tetrlais.terminalScore;
+			currentScore = 0;	
 		}
 
 		ro.o = gameState.get_observation();
@@ -144,7 +157,7 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 
 			if(theCustomType.equals("GETTETRLAISSTATE")){
 				//It is a request for the state
-				TetrlaisStateResponse theResponseObject=new TetrlaisStateResponse(this.tet_global_score, this.gameState.getWidth(), this.gameState.getHeight(), this.gameState.getWorldState());
+				TetrlaisStateResponse theResponseObject=new TetrlaisStateResponse(this.currentScore, this.gameState.getWidth(), this.gameState.getHeight(), this.gameState.getWorldState());
 				return theResponseObject.makeStringResponse();
 			}
 			System.out.println("We need some code written in Env Message for Tetrlais.. unknown custom message type received");
