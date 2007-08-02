@@ -13,6 +13,7 @@ import rlVizLib.messaging.environment.EnvVersionSupportedResponse;
 import rlVizLib.messaging.environmentShell.EnvShellListRequest;
 import rlVizLib.messaging.environmentShell.EnvShellListResponse;
 import rlVizLib.messaging.environmentShell.EnvShellLoadRequest;
+import rlVizLib.messaging.environmentShell.EnvShellUnLoadRequest;
 import rlVizLib.visualization.AbstractVisualizer;
 
 public class RLGlueLogic {
@@ -115,7 +116,7 @@ public class RLGlueLogic {
 			theEnvVersion=RLVizVersion.NOVERSION;
 		
 		theEnvVisualizer=EnvVisualizerFactory.createVisualizerFromString(envName);
-		notifyNewEnvVisualizerListeners();
+		notifyEnvVisualizerListenersNewEnv();
 	}
 
 
@@ -149,7 +150,7 @@ public class RLGlueLogic {
 			theEnvVisualizer.setValueFunctionResolution(theValue);
 	}
 
-	private void notifyNewEnvVisualizerListeners() {
+	private void notifyEnvVisualizerListenersNewEnv() {
 		for (visualizerLoadListener thisListener : envVisualizerLoadListeners)
 			thisListener.notifyVisualizerLoaded(theEnvVisualizer);
 	}
@@ -158,6 +159,23 @@ public class RLGlueLogic {
 	public void addEnvVisualizerLoadListener(visualizerLoadListener panel) {
 		envVisualizerLoadListeners.add(panel);
 	}
+
+	public void unloadEnvironment() {
+		notifyEnvVisualizerListenersUnloadEnv();
+		theEnvVisualizer.stopVisualizing();
+		theEnvVisualizer=null;
+		
+		rlglue.RLGlue.RL_cleanup();
+		
+		myGlueState.setInited(false);
+		EnvShellUnLoadRequest.Execute();
+	}
+
+	private void notifyEnvVisualizerListenersUnloadEnv() {
+		for (visualizerLoadListener thisListener : envVisualizerLoadListeners)
+			thisListener.notifyVisualizerUnLoaded();
+	}
+
 
 }
 

@@ -128,16 +128,6 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 
 	}
 
-	private void handleUnLoadClick() {
-		envListComboBox.setEnabled(true);
-		bLoad.setEnabled(true);
-		bUnLoad.setEnabled(false);
-		bStart.setEnabled(false);
-		bStop.setEnabled(false);
-		bStep.setEnabled(false);
-		
-	}
-
 
 	private void setDefaultEnabling() {
 		envListComboBox.setEnabled(true);
@@ -149,6 +139,20 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 		bStop.setEnabled(false);
 		bStep.setEnabled(false);
 	}
+
+	
+	private void handleUnLoadClick() {
+		envListComboBox.setEnabled(true);
+		bLoad.setEnabled(true);
+		bUnLoad.setEnabled(false);
+		bStart.setEnabled(false);
+		bStop.setEnabled(false);
+		bStep.setEnabled(false);
+		
+		theGlueConnection.unloadEnvironment();
+		
+	}
+
 
 	private void handleLoadClick(){
 		envListComboBox.setEnabled(false);

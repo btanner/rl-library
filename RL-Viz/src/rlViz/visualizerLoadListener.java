@@ -6,4 +6,6 @@ public interface visualizerLoadListener {
 	
 	public void notifyVisualizerLoaded(AbstractVisualizer theNewVisualizer);
 
+	public void notifyVisualizerUnLoaded();
+
 }

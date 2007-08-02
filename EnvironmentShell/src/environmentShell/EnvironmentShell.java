@@ -9,6 +9,7 @@ import rlVizLib.messaging.environmentShell.EnvShellListResponse;
 import rlVizLib.messaging.environmentShell.EnvShellLoadRequest;
 import rlVizLib.messaging.environmentShell.EnvShellLoadResponse;
 import rlVizLib.messaging.environmentShell.EnvShellMessageType;
+import rlVizLib.messaging.environmentShell.EnvShellUnLoadResponse;
 import rlVizLib.messaging.environmentShell.EnvironmentShellMessageParser;
 import rlVizLib.messaging.environmentShell.EnvironmentShellMessages;
 import rlglue.environment.Environment;
@@ -83,6 +84,15 @@ public class EnvironmentShell implements Environment{
 				return theResponse.makeStringResponse();
 			}
 
+			//Handle a request to actually load the environment
+			if(theMessageObject.getTheMessageType()==EnvShellMessageType.kEnvShellUnLoad.id()){
+				//Actually "load" the environment
+				theEnvironment=null;
+
+				EnvShellUnLoadResponse theResponse=new EnvShellUnLoadResponse();
+
+				return theResponse.makeStringResponse();
+			}
 
 			System.err.println("Env shell doesn't know how to handle message: "+theMessage);
 		}

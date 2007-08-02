@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 import rlVizLib.general.ParameterHolder;
+import rlVizLib.general.TinyGlue;
 import rlVizLib.visualization.AbstractVisualizer;
 import rlVizLib.visualization.VisualizerPanelInterface;
 
@@ -84,6 +85,11 @@ public class VisualizerPanel extends JPanel implements ComponentListener, Visual
 		
 		theVisualizer.setParentPanel(this);
 		theVisualizer.notifyPanelSizeChange();
+	}
+
+
+	public void notifyVisualizerUnLoaded() {
+			theVisualizer=null;
 	}
 
 	
