@@ -1,33 +1,109 @@
 package Tetrlais;
 
 public class TetrlaisPiece {
-	int thePiece[][][]=new int[4][7][7];
+	int thePiece[][][]=new int[4][5][5];
 	int currentOrientation=0;
 
-	public void setRow(int theRow, int[] theCols){
-		thePiece[0][theRow]=theCols;
+	public void setShape(int Direction, int row0[],int row1[],int row2[],int row3[],int row4[]){
+		thePiece[Direction][0]=row0;
+		thePiece[Direction][1]=row1;
+		thePiece[Direction][2]=row2;
+		thePiece[Direction][3]=row3;
+		thePiece[Direction][4]=row4;
+	}
+	
+	public int[][] getShape(int whichOrientation){
+		return thePiece[whichOrientation];
 	}
 
 	public static TetrlaisPiece makeSquare(){
 		TetrlaisPiece newPiece = new TetrlaisPiece();
 
-		int[] row0={0,0,0,0,0,0,0};
-		int[] row1={0,0,0,1,0,0,0};
-		int[] row2={0,0,0,1,0,0,0};
-		int[] row3={0,0,0,1,0,0,0};
-		int[] row4={0,0,0,1,0,0,0};
-		int[] row5={0,0,0,0,0,0,0};
-		int[] row6={0,0,0,0,0,0,0};
+		{
+			//Orientation 0,1,2,3
+		int[] row0={0,0,0,0,0};
+		int[] row1={0,0,1,1,0};
+		int[] row2={0,0,1,1,0};
+		int[] row3={0,0,0,0,0};
+		int[] row4={0,0,0,0,0};
+		newPiece.setShape(0, row0, row1, row2, row3, row4);
+		newPiece.setShape(1, row0, row1, row2, row3, row4);
+		newPiece.setShape(2, row0, row1, row2, row3, row4);
+		newPiece.setShape(3, row0, row1, row2, row3, row4);
+		}
+		
+		return newPiece;
+	}
+	
+	public static TetrlaisPiece makeTri(){
+		TetrlaisPiece newPiece = new TetrlaisPiece();
 
+		{
+			//Orientation 0
+		int[] row0={0,0,0,0,0};
+		int[] row1={0,0,1,0,0};
+		int[] row2={0,1,1,1,0};
+		int[] row3={0,0,0,0,0};
+		int[] row4={0,0,0,0,0};
+		newPiece.setShape(0, row0, row1, row2, row3, row4);
+		}
+		{
+			//Orientation 1
+		int[] row0={0,0,0,0,0};
+		int[] row1={0,0,1,0,0};
+		int[] row2={0,0,1,1,0};
+		int[] row3={0,0,1,0,0};
+		int[] row4={0,0,0,0,0};
+		newPiece.setShape(1, row0, row1, row2, row3, row4);
+		}
 
-		newPiece.setRow(0, row0);
-		newPiece.setRow(1, row1);
-		newPiece.setRow(2, row2);
-		newPiece.setRow(3, row3);
-		newPiece.setRow(4, row4);
-		newPiece.setRow(5, row5);
-		newPiece.setRow(6, row6);
+		{
+			//Orientation 2
+		int[] row0={0,0,0,0,0};
+		int[] row1={0,0,0,0,0};
+		int[] row2={0,1,1,1,0};
+		int[] row3={0,0,1,0,0};
+		int[] row4={0,0,0,0,0};
+		newPiece.setShape(2, row0, row1, row2, row3, row4);
+		}
+		{
+			//Orientation 3
+		int[] row0={0,0,0,0,0};
+		int[] row1={0,0,1,0,0};
+		int[] row2={0,1,1,0,0};
+		int[] row3={0,0,1,0,0};
+		int[] row4={0,0,0,0,0};
+		newPiece.setShape(3, row0, row1, row2, row3, row4);
+		}
 
+		
+		return newPiece;
+	}
+
+		public static TetrlaisPiece makeLine(){
+		TetrlaisPiece newPiece = new TetrlaisPiece();
+
+		{
+			//Orientation 0+2
+		int[] row0={0,0,1,0,0};
+		int[] row1={0,0,1,0,0};
+		int[] row2={0,0,1,0,0};
+		int[] row3={0,0,1,0,0};
+		int[] row4={0,0,0,0,0};
+		newPiece.setShape(0, row0, row1, row2, row3, row4);
+		newPiece.setShape(2, row0, row1, row2, row3, row4);
+		}
+
+		{
+			//Orientation 1+3
+		int[] row0={0,0,0,0,0};
+		int[] row1={0,0,0,0,0};
+		int[] row2={0,1,1,1,1};
+		int[] row3={0,0,0,0,0};
+		int[] row4={0,0,0,0,0};
+		newPiece.setShape(1, row0, row1, row2, row3, row4);
+		newPiece.setShape(3, row0, row1, row2, row3, row4);
+		}
 		return newPiece;
 
 	}
@@ -42,19 +118,9 @@ public class TetrlaisPiece {
 		return shapeBuffer.toString();
 
 	}
-	public void makeRotations(){
-		for(int nextDirection=1;nextDirection<4;nextDirection++){
-			for(int i=0;i<thePiece[currentOrientation].length;i++){
-				for(int j=0;j<thePiece[currentOrientation][i].length;j++){
-					thePiece[nextDirection][i][j]=thePiece[nextDirection-1][6-j][i];
-				}
-			}
-		}
-	}
 
 	public static void main(String []args){
-		TetrlaisPiece thePiece=makeSquare();
-		thePiece.makeRotations();
+		TetrlaisPiece thePiece=makeTri();
 		System.out.println(thePiece);
 		thePiece.currentOrientation=1;
 		System.out.println(thePiece);
