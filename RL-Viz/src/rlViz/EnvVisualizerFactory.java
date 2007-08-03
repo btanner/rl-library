@@ -1,7 +1,6 @@
 package rlViz;
 
 import rlVizLib.visualization.AbstractVisualizer;
-import rlVizLib.visualization.VisualizerPanelInterface;
 import visualizers.mountainCar.MountainCarVisualizer;
 import visualizers.tetrlais.TetrlaisVisualizer;
 

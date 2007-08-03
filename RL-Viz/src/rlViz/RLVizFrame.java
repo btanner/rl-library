@@ -3,11 +3,8 @@ package rlViz;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-
-import rlVizLib.visualization.AbstractVisualizer;
 
 
 
@@ -32,14 +29,14 @@ public class RLVizFrame extends JFrame{
 //		EnvironmentPanel aPanel= new EnvironmentPanel(new Dimension(200,200),theAVisualizer);
 //		
 		JPanel controlPanel=new RLControlPanel(theGlueConnection);
+		controlPanel.setSize(300, this.getHeight());
 		
-		JSplitPane agentEnvSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,ePanel,new JLabel("Agent viz goes here"));
-		agentEnvSplitPane.setOneTouchExpandable(true);
-		agentEnvSplitPane.setDividerLocation(150);
+//		JSplitPane agentEnvSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,ePanel,new JLabel("Agent viz goes here"));
+//		agentEnvSplitPane.setOneTouchExpandable(true);
+//		agentEnvSplitPane.setDividerLocation(150);
 
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, agentEnvSplitPane, controlPanel);
-		splitPane.setOneTouchExpandable(true);
-		splitPane.setDividerLocation(150);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, ePanel, controlPanel);
+		splitPane.setDividerLocation(500);
 
 
 		getContentPane().add(splitPane);
@@ -47,14 +44,5 @@ public class RLVizFrame extends JFrame{
 		setVisible(true);
 	
 	}
-
-	public RLVizFrame(String string) {
-		// TODO Auto-generated constructor stub
-	}
-
-//	public void setEnvVisualizer(EnvVisualizer theEVisualizer) {
-//		ePanel.setVisualizer(theEVisualizer);
-//		theGlueConnection.setVisualizer(theEVisualizer);
-//	}
 
 }

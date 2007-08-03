@@ -3,7 +3,6 @@ package visualizers.tetrlais;
 import messages.TetrlaisStateRequest;
 import messages.TetrlaisStateResponse;
 import rlVizLib.visualization.AbstractVisualizer;
-import rlVizLib.visualization.VisualizerPanelInterface;
 import rlVizLib.visualization.VizComponent;
 
 public class TetrlaisVisualizer  extends AbstractVisualizer {

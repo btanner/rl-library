@@ -15,6 +15,10 @@ import rlVizLib.general.ParameterHolder;
 
 public class ParameterHolderPanel extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	Vector<Component> allComponents=new Vector<Component>();
 	Map<String, Component> nameToValueMap= new TreeMap<String, Component>();
 
