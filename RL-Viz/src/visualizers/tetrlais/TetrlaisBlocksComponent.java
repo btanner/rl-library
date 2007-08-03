@@ -39,7 +39,7 @@ public class TetrlaisBlocksComponent implements VizComponent {
 	}
 
 	public boolean update() {
-		this.tetVis.updateAgentState();
+		tetVis.updateAgentState();
 		return true;
 	}
 

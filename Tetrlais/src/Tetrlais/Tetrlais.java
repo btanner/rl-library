@@ -19,7 +19,8 @@ import rlVizLib.Environments.EnvironmentBase;
 
 public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 
-
+	private int timeStep=0;
+	private int episodeNumber=0;
 	private int currentScore =0;
 	private GameState gameState = null;
 
@@ -37,6 +38,8 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 		//Defaults
 		possibleBlocks.add(TetrlaisPiece.makeLine());
 		gameState=new GameState(width,height,possibleBlocks);
+		timeStep=0;
+		episodeNumber=0;	
 	}
 	public Tetrlais(ParameterHolder p){
 		super();
@@ -50,7 +53,8 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 			}
 		}
 		gameState=new GameState(width,height,possibleBlocks);
-
+		timeStep=0;
+		episodeNumber=0;
 	}
 
 
@@ -74,7 +78,8 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 		 * integer values. */
 		/*NOTE: THE GAME STATE WIDTH AND HEIGHT MUST MULTIPLY TO EQUAL THE NUMBER OF OBSERVATION VARIABLES*/
 		int numStates=gameState.getHeight()*gameState.getWidth();
-
+		timeStep=0;
+		episodeNumber=0;
 		String task_spec = "2.0:e:"+numStates+"_[";
 		for(int i = 0; i< numStates-1; i++)
 			task_spec = task_spec + "i, ";
@@ -89,7 +94,8 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 	public Observation env_start() {
 		gameState.reset();
 		currentScore =0;
-
+		timeStep=0;
+		episodeNumber++;
 		Observation o = gameState.get_observation();
 
 		return o;
@@ -97,6 +103,7 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 
 	public Reward_observation env_step(Action action) {
 		Reward_observation ro = new Reward_observation();
+		timeStep++;
 
 		ro.terminal = 1;
 
@@ -157,7 +164,7 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 
 			if(theCustomType.equals("GETTETRLAISSTATE")){
 				//It is a request for the state
-				TetrlaisStateResponse theResponseObject=new TetrlaisStateResponse(this.currentScore, this.gameState.getWidth(), this.gameState.getHeight(), this.gameState.getWorldState());
+				TetrlaisStateResponse theResponseObject=new TetrlaisStateResponse(timeStep, episodeNumber,currentScore, gameState.getWidth(), gameState.getHeight(), gameState.getWorldState());
 				return theResponseObject.makeStringResponse();
 			}
 			System.out.println("We need some code written in Env Message for Tetrlais.. unknown custom message type received");

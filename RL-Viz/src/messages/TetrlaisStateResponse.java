@@ -14,12 +14,16 @@ public class TetrlaisStateResponse extends AbstractResponse {
 	private int world_width =0;
 	private int world_height =0;
 	private int [] world = null;
+	private int timeStep=0;
+	private int episodeNumber=0;
 	
-	public TetrlaisStateResponse(int score,int width, int height, int [] gs){
+	public TetrlaisStateResponse(int episodeNumber, int timeStep,int score,int width, int height, int [] gs){
 		this.tet_global_score =score;
 		this.world_width = width;
 		this.world_height = height;
 		this.world = gs;	
+		this.timeStep=timeStep;
+		this.episodeNumber=episodeNumber;
 	}
 	
 	public TetrlaisStateResponse(String responseMessage)throws NotAnRLVizMessageException{
@@ -31,6 +35,8 @@ public class TetrlaisStateResponse extends AbstractResponse {
 		String thePayLoadString=theGenericResponse.getPayLoad();
 
 		StringTokenizer stateTokenizer = new StringTokenizer(thePayLoadString, ":");
+		this.timeStep=Integer.parseInt(stateTokenizer.nextToken());
+		this.episodeNumber=Integer.parseInt(stateTokenizer.nextToken());
 
 		this.world_width=Integer.parseInt(stateTokenizer.nextToken());
 		this.world_height=Integer.parseInt(stateTokenizer.nextToken());
@@ -58,11 +64,16 @@ public class TetrlaisStateResponse extends AbstractResponse {
 		theResponseBuffer.append(MessageValueType.kStringList.id());
 		theResponseBuffer.append(" VALS=");
 
+		theResponseBuffer.append(this.timeStep);
+		theResponseBuffer.append(":");
+		theResponseBuffer.append(this.episodeNumber);
+		theResponseBuffer.append(":");
 		theResponseBuffer.append(this.world_width);
 		theResponseBuffer.append(":");
 		theResponseBuffer.append(this.world_height);
 		theResponseBuffer.append(":");
 		theResponseBuffer.append(this.tet_global_score);
+		theResponseBuffer.append(":");
 		for(int i = 0; i < this.world.length; i++){
 		theResponseBuffer.append(":");
 		theResponseBuffer.append(world[i]);
@@ -82,6 +93,22 @@ public class TetrlaisStateResponse extends AbstractResponse {
 	}
 	public int [] getWorld(){
 		return this.world;
+	}
+	
+	public int getTimeStep(){
+		return timeStep;
+	}
+	public int getEpisodeNumber(){
+		return episodeNumber;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj==null)
+			return false;
+		TetrlaisStateResponse compareObject=(TetrlaisStateResponse)obj;
+		return (compareObject.timeStep==timeStep&&compareObject.episodeNumber==episodeNumber);
+		
 	}
 
 }

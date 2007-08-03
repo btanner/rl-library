@@ -183,7 +183,7 @@ public class GameState{
 	private void spawn_block() {
 		currentBlockId = random.nextInt(possibleBlocks.size());
 		currentRotation=0;
-		currentX = (int)(worldWidth /2) -1; 
+		currentX = (int)(worldWidth /2)-2; 
 		currentY =0;
 		is_game_over = colliding(currentX,currentY,currentRotation);
 	}

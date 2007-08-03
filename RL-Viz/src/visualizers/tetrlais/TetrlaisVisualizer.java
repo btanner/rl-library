@@ -7,36 +7,49 @@ import rlVizLib.visualization.VisualizerPanelInterface;
 import rlVizLib.visualization.VizComponent;
 
 public class TetrlaisVisualizer  extends AbstractVisualizer {
-	
+
 	private TetrlaisStateResponse currentState = null;
 
 	public TetrlaisVisualizer(){
 		super();
-		VizComponent theTetrlaisVisualizer=(VizComponent) new TetrlaisBlocksComponent(this);
-		super.addVizComponentAtPositionWithSize(theTetrlaisVisualizer,0,.5,1.0,.5);
-		VizComponent theTetrlaisScoreViz = (VizComponent) new TetrlaisScoreComponent(this);
-		super.addVizComponentAtPositionWithSize(theTetrlaisScoreViz, 0,0,1.0,0.5);
+		VizComponent theBlockVisualizer= new TetrlaisBlocksComponent(this);
+		VizComponent theTetrlaisScoreViz = new TetrlaisScoreComponent(this);
+
+		addVizComponentAtPositionWithSize(theBlockVisualizer,0,0,1.0,1.0);
+		addVizComponentAtPositionWithSize(theTetrlaisScoreViz, 0,0,1.0,0.5);
 	}
-	
-	public void updateAgentState() {
-		currentState=TetrlaisStateRequest.Execute();
+
+	public boolean updateAgentState() {
+		TetrlaisStateResponse newState=TetrlaisStateRequest.Execute();
+		if(!newState.equals(currentState)){
+			currentState=newState;
+			return true;
+		}
+		return false;
 	}
 
 	public int getWidth(){
-		return this.currentState.getWidth();
+		return currentState.getWidth();
 	}
-	
+
 	public int getHeight(){
 
-		return this.currentState.getHeight();
+		return currentState.getHeight();
 	}
-	
+
 	public int getScore(){
-		return this.currentState.getScore();
+		return currentState.getScore();
+	}
+
+	public int [] getWorld(){
+		return currentState.getWorld();
 	}
 	
-	public int [] getWorld(){
-		return this.currentState.getWorld();
+	public int getEpisodeNumber(){
+		return currentState.getEpisodeNumber();
+	}
+	public int getTimeStep(){
+		return currentState.getTimeStep();
 	}
 
 }

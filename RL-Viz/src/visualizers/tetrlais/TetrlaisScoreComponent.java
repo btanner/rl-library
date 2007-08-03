@@ -10,33 +10,32 @@ import rlVizLib.visualization.VizComponent;
 public class TetrlaisScoreComponent implements VizComponent{
 	private TetrlaisVisualizer tetVis = null;
 	
+	int lastScore=0;
 
 	public TetrlaisScoreComponent(TetrlaisVisualizer ev){
-		// TODO Write Constructor
 		this.tetVis = ev;
+		lastScore=-1;
 	}
 
 	public void render(Graphics2D g) {
-		// TODO Auto-generated method stub
-//		g.setColor(new Color(0.0f, 0.0f, (float) (0.0f + this.tetVis.getScore()*0.1)));
-//		Rectangle2D.Double agentRect = new Rectangle2D.Double(0.0f,0.0f, 1.0f,1.0f);
-//		g.fill(agentRect);
-		
-		Font f = new Font("Courier",Font.ITALIC + Font.BOLD,1);     
+		//This is some hacky stuff, someone better than me should clean it up
+		Font f = new Font("Verdana",0,8);     
 		g.setFont(f);
-	    g.setBackground(Color.BLACK);
 	    //SET COLOR
-	    g.setColor(Color.WHITE);
+	    g.setColor(Color.BLACK);
 	    //DRAW STRING
 	    AffineTransform saveAT = g.getTransform();
-   	    g.scale(.25, .25);
-	    g.drawString("" +this.tetVis.getScore(),0,1);
+   	    g.scale(.01, .01);
+	    g.drawString("Lines: " +tetVis.getScore(),0.0f, 10.0f);
+	    g.drawString("E/S: " +tetVis.getEpisodeNumber()+"/"+tetVis.getTimeStep(),0.0f, 20.0f);
 	    g.setTransform(saveAT);
 	}
 
 	public boolean update() {
 		this.tetVis.updateAgentState();
 		return true;
+		
+		
 	}
 	
 	
