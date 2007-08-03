@@ -9,7 +9,3 @@ echo "---------------------------"
 echo "Making the Environment Jars"
 echo "---------------------------"
 ./makeEnvJars.bash
-echo "---------------------------"
-echo "Making the training package"
-echo "---------------------------"
-./makeTrainingPackage.bash
