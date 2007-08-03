@@ -106,6 +106,9 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 		p.addDoubleParam("minVelocity",-.07d);
 		p.addDoubleParam("maxVelocity",.07d);
 
+		p.addDoubleParam("minPosition",-1.2d);
+		p.addDoubleParam("maxPosition",.4d);
+		
 		return p;
 	}
 
@@ -116,6 +119,9 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 				this.randomStarts=p.getBooleanParam("randomStartStates");
 				this.minVelocity=p.getDoubleParam("minVelocity");
 				this.maxVelocity=p.getDoubleParam("maxVelocity");
+
+				this.minPosition=p.getDoubleParam("minPosition");
+				this.maxPosition=p.getDoubleParam("maxPosition");
 				
 				System.out.println("MountainCar Max and Min Velocity are: "+minVelocity+" and "+maxVelocity);
 			}
