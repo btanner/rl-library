@@ -27,7 +27,7 @@ public class TetrlaisScoreComponent implements VizComponent{
 	    AffineTransform saveAT = g.getTransform();
    	    g.scale(.01, .01);
 	    g.drawString("Lines: " +tetVis.getScore(),0.0f, 10.0f);
-	    g.drawString("E/S: " +tetVis.getEpisodeNumber()+"/"+tetVis.getTimeStep(),0.0f, 20.0f);
+	    g.drawString("S/E: " +tetVis.getEpisodeNumber()+"/"+tetVis.getTimeStep(),0.0f, 20.0f);
 	    g.setTransform(saveAT);
 	}
 

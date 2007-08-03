@@ -27,6 +27,10 @@ public class ParameterHolderPanel extends JPanel {
 	}
 
 
+	public void setEnabled(boolean shouldEnable){
+		for (Component thisComponent : allComponents)thisComponent.setEnabled(shouldEnable);
+	}
+	
 	ParameterHolder currentParamHolder=null;
 
 	public void switchParameters(ParameterHolder p) {

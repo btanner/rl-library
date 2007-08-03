@@ -33,16 +33,15 @@ public class RLGlueLogic {
 	AbstractVisualizer theEnvVisualizer=null;
 	
 	Timer currentTimer=null;
-
+	
+	int timeStepDelay=100;
+	boolean running=false;
 
 	
 	Vector<visualizerLoadListener> envVisualizerLoadListeners=new Vector<visualizerLoadListener>();
-	
 	private RLVizVersion theEnvVersion=null;
 	
-	private RLGlueLogic(){
-		myGlueState=new TinyGlue();
-	}
+	private RLGlueLogic(){}
 	
 	public RLVizVersion getEnvVersion(){
 		return theEnvVersion;
@@ -115,21 +114,24 @@ public class RLGlueLogic {
 		else
 			theEnvVersion=RLVizVersion.NOVERSION;
 		
+		myGlueState=new TinyGlue();
 		theEnvVisualizer=EnvVisualizerFactory.createVisualizerFromString(envName);
 		notifyEnvVisualizerListenersNewEnv();
 	}
 
 
 
-	public void start(int period) {
+	public void start() {
+		if(running)
+			stop();
+		running=true;
 	    currentTimer = new Timer();
-
-	    
+    
 	    currentTimer.scheduleAtFixedRate(new TimerTask() {
 	            public void run() {
 	            	step();
 	            }
-	        }, 0, period);		
+	        }, 0, timeStepDelay);		
 	}
 
 	public void stop() {
@@ -137,12 +139,13 @@ public class RLGlueLogic {
 			currentTimer.cancel();
 			currentTimer=null;
 		}
+		running=false;
 		
 	}
 
 	public void setNewStepDelay(int stepDelay) {
-		stop();
-		start(stepDelay);
+		this.timeStepDelay=stepDelay;
+		if(running)start();
 	}
 
 	public void setNewValueFunctionResolution(int theValue) {
@@ -164,10 +167,10 @@ public class RLGlueLogic {
 		notifyEnvVisualizerListenersUnloadEnv();
 		theEnvVisualizer.stopVisualizing();
 		theEnvVisualizer=null;
+		myGlueState=null;
+
 		
 		rlglue.RLGlue.RL_cleanup();
-		
-		myGlueState.setInited(false);
 		EnvShellUnLoadRequest.Execute();
 	}
 

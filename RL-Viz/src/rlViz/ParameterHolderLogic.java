@@ -33,6 +33,11 @@ public ParameterHolder getCurrentParameterValues(){
 	updateParamsFromPanel();
 	return theParams.get(currentLoadedIndex);
 }
+
+public void setEnabled(boolean b){
+	thePanel.setEnabled(b);
+}
+
 public String getCurrentEnvironmentName(){
 	return theNames.get(currentLoadedIndex);
 }

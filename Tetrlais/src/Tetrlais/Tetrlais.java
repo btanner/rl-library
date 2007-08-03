@@ -2,20 +2,18 @@ package Tetrlais;
 
 import java.util.Vector;
 
-import messages.MCStateResponse;
 import messages.TetrlaisStateResponse;
+import rlVizLib.Environments.EnvironmentBase;
+import rlVizLib.general.ParameterHolder;
+import rlVizLib.general.RLVizVersion;
 import rlVizLib.messaging.environment.EnvironmentMessageParser;
 import rlVizLib.messaging.environment.EnvironmentMessages;
 import rlVizLib.messaging.interfaces.RLVizEnvInterface;
-import rlVizLib.utilities.UtilityShop;
-import rlVizLib.general.ParameterHolder;
-import rlVizLib.general.RLVizVersion;
 import rlglue.types.Action;
 import rlglue.types.Observation;
 import rlglue.types.Random_seed_key;
 import rlglue.types.Reward_observation;
 import rlglue.types.State_key;
-import rlVizLib.Environments.EnvironmentBase;
 
 public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 
@@ -101,7 +99,15 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 		return o;
 	}
 
-	public Reward_observation env_step(Action action) {
+	public Reward_observation env_step(Action actionObject) {
+		int theAction=actionObject.intArray[0];
+		if(theAction>5||theAction<0){
+			System.err.println("Invalid action selected in Tetrlais: "+theAction);
+			Thread.dumpStack();
+			System.exit(1);
+		}
+
+		
 		Reward_observation ro = new Reward_observation();
 		timeStep++;
 
@@ -111,7 +117,7 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 		{
 			ro.terminal=0;
 			gameState.update();
-			gameState.take_action(action);
+			gameState.take_action(theAction);
 //			ro.r = 3.0d*(gameState.get_score() - tet_global_score) - .01d;
 			ro.r=1.0d;
 			currentScore = gameState.get_score();

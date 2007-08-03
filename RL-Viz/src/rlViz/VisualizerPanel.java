@@ -3,10 +3,14 @@ package rlViz;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 
 import rlVizLib.visualization.AbstractVisualizer;
@@ -23,11 +27,14 @@ public class VisualizerPanel extends JPanel implements ComponentListener, Visual
 	AbstractVisualizer theVisualizer=null;
 
 
-
+	//Going to use this timer so that all of the cascase resizing that happens is on a delay so that window resizing is more responsive
+	Timer resizeChildrenTimer = null;
+	
 	public VisualizerPanel(Dimension initialSize){
 		super();
 		this.setSize((int)initialSize.getWidth(), (int)initialSize.getHeight());
 		addComponentListener(this);
+
 	}
 
 
@@ -55,6 +62,16 @@ public class VisualizerPanel extends JPanel implements ComponentListener, Visual
 	}
 
 	public void componentResized(ComponentEvent arg0) {
+		resizeChildrenTimer = new Timer();
+		resizeChildrenTimer.schedule(new TimerTask() {
+		            public void run() {
+		            	tellChildrenToResize();
+		            }
+		        }, 1000);		
+
+	}
+	
+	public void tellChildrenToResize(){
 		if(theVisualizer!=null)theVisualizer.notifyPanelSizeChange();
 	}
 

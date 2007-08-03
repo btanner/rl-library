@@ -4,8 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.SpringLayout;
@@ -63,7 +65,7 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 	public RLControlPanel(RLGlueLogic theGlueConnection){
 		super();
 		this.theGlueConnection=theGlueConnection;
-		
+		setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 		
 		envListComboBox = new JComboBox(new String[]{"No Envs Available"});
 
@@ -91,8 +93,9 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 		bStep.addActionListener(this);
 		
 		setDefaultEnabling();
+		add(new JLabel("Choose an environment to load"));
 		add(envListComboBox);
-		add(agentListComboBox);
+//		add(agentListComboBox);
 		add(bLoad);
 		add(bUnLoad);
 		add(bStart);
@@ -103,17 +106,18 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 		                                      1, 500, 50);
 		sleepTimeBetweenSteps.addChangeListener(this);
 
-		numColsOrRowsForValueFunction = new JSlider(JSlider.HORIZONTAL,
-                1, 100, 10);
-		numColsOrRowsForValueFunction.addChangeListener(this);
 	
 		//Turn on labels at major tick marks.
 		sleepTimeBetweenSteps.setMajorTickSpacing(100);
 		sleepTimeBetweenSteps.setMinorTickSpacing(10);
 		sleepTimeBetweenSteps.setPaintTicks(true);
 		sleepTimeBetweenSteps.setPaintLabels(true);
+		add(new JLabel("Simulation Speed (left is faster)"));
 		add(sleepTimeBetweenSteps);
-		add(numColsOrRowsForValueFunction);
+
+//		numColsOrRowsForValueFunction = new JSlider(JSlider.HORIZONTAL,1, 100, 10);
+//		numColsOrRowsForValueFunction.addChangeListener(this);
+//		add(numColsOrRowsForValueFunction);
 
 		updateEnvList();
 	}
@@ -138,6 +142,7 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 		bStart.setEnabled(false);
 		bStop.setEnabled(false);
 		bStep.setEnabled(false);
+		envParamLogic.setEnabled(true);
 	}
 
 	
@@ -148,7 +153,7 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 		bStart.setEnabled(false);
 		bStop.setEnabled(false);
 		bStep.setEnabled(false);
-		
+		envParamLogic.setEnabled(true);
 		theGlueConnection.unloadEnvironment();
 		
 	}
@@ -162,6 +167,9 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 		bStart.setEnabled(true);
 		bStop.setEnabled(false);
 		bStep.setEnabled(true);
+		envParamLogic.setEnabled(false);
+
+		
 		
 		String envName=envParamLogic.getCurrentEnvironmentName();
 		ParameterHolder currentParams=envParamLogic.getCurrentParameterValues();
@@ -175,7 +183,8 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 		bStep.setEnabled(false);
 		
 		int stepDelay=(int)sleepTimeBetweenSteps.getValue();
-		theGlueConnection.start(stepDelay);
+		theGlueConnection.setNewStepDelay(stepDelay);
+		theGlueConnection.start();
 	}
 
 	private void handleStepClick() {
@@ -205,6 +214,10 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 		int theValue = (int)source.getValue();
 		
 		if(source==numColsOrRowsForValueFunction)theGlueConnection.setNewValueFunctionResolution(theValue);
-		if(source==sleepTimeBetweenSteps)theGlueConnection.setNewStepDelay(theValue);
+		if(source==sleepTimeBetweenSteps){
+			if (!source.getValueIsAdjusting())
+				theGlueConnection.setNewStepDelay(theValue);
+			
+		}
 	}
 }

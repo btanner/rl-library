@@ -62,7 +62,7 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 	public String env_init() {
 		position = defaultInitPosition;
 		velocity = defaultInitVelocity;
-		return "1:e:2_[f,f]_["+minPosition+","+maxPosition+"]_["+(-maxVelocity)+","+maxVelocity+"]:1_[i]_[0,2]";
+		return "1:e:2_[f,f]_["+minPosition+","+maxPosition+"]_["+minVelocity+","+maxVelocity+"]:1_[i]_[0,2]";
 	}
 
 	public Observation env_start() {
@@ -73,7 +73,6 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 			position = defaultInitPosition;
 			velocity = defaultInitVelocity;
 		}
-
 		return makeObservation();
 	}
 
@@ -82,6 +81,7 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 		int a=theAction.intArray[0];
 
 		if(a>2||a<0){
+			System.err.println("Invalid action selected in mountainCar: "+a);
 			Thread.dumpStack();
 			System.exit(1);
 		}

@@ -3,7 +3,6 @@ package Tetrlais;
 import java.util.Random;
 import java.util.Vector;
 
-import rlglue.types.Action;
 import rlglue.types.Observation;
 
 public class GameState{
@@ -82,10 +81,9 @@ public class GameState{
 		return is_game_over;
 	}
 
-	public void take_action(Action action){
+	public void take_action(int theAction){
 		if (gameOver()) return;
 
-		int theAction=action.intArray[0];
 
 		int nextRotation=currentRotation;
 		int nextX=currentX;
@@ -107,10 +105,10 @@ public class GameState{
 			break;
 		case GameState.FALL:
 			nextY=currentY;
-			
+
 			boolean isInBounds=true;
 			boolean isColliding=false;
-			
+
 			//Fall until you hit something then back up once
 			while(isInBounds&&!isColliding){
 				nextY++;
@@ -188,6 +186,7 @@ public class GameState{
 		is_game_over = colliding(currentX,currentY,currentRotation);
 	}
 
+	@SuppressWarnings("unused")
 	private void printMatrix(){
 		for(int y = worldHeight-1; y>=0; --y){
 			for( int x = 0; x < worldWidth; ++x){
