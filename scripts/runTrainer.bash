@@ -3,7 +3,13 @@
 cd ../
 killall RL_Glue
 
+echo "---------------------------"
+echo "runTrainer.bash -- making all the jars"
+echo "---------------------------"
 ./makeAllJars.bash
+echo "---------------------------"
+echo "runTrainer.bash -- making the training package"
+echo "---------------------------"
 ./makeTrainingPackage.bash
 
 cd trainingPack
