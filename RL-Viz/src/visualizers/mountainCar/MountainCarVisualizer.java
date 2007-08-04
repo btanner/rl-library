@@ -3,6 +3,8 @@ package visualizers.mountainCar;
 
 import java.util.Vector;
 
+import messages.MCHeightRequest;
+import messages.MCHeightResponse;
 import messages.MCStateRequest;
 import messages.MCStateResponse;
 import rlVizLib.interfaces.AgentOnValueFunctionDataProvider;
@@ -32,10 +34,12 @@ public class MountainCarVisualizer  extends AbstractVisualizer implements ValueF
 		super();
 //		VizComponent theValueFunction=new ValueFunctionVizComponent(this);
 //		VizComponent agentOnVF=new AgentOnValueFunctionVizComponent(this);
+		VizComponent mountain=new MountainVizComponent(this);
 		VizComponent carOnMountain=new CarOnMountainVizComponent(this);
 		
 //		super.addVizComponentAtPositionWithSize(theValueFunction,0,.5,1.0,.5);
 //		super.addVizComponentAtPositionWithSize(agentOnVF,0,.5,1.0,.5);
+		super.addVizComponentAtPositionWithSize(mountain, 0, 0, 1.0, 1.0);
 		super.addVizComponentAtPositionWithSize(carOnMountain, 0, 0, 1.0, 1.0);
 }
 	
@@ -126,6 +130,11 @@ public class MountainCarVisualizer  extends AbstractVisualizer implements ValueF
 
 	public double getValueFunctionResolution() {
 		return (double)currentValueFunctionResolution;
+	}
+
+	public Vector<Double> getHeightsForPositions(Vector<Double> theQueryPositions) {
+		MCHeightResponse heightResponse=MCHeightRequest.Execute(theQueryPositions);
+		return heightResponse.getHeights();
 	}
 
 

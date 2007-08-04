@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
@@ -32,8 +33,8 @@ public class CarOnMountainVizComponent implements VizComponent {
 
             this.img = ImageIO.read(new File(workSpaceDir+"/MountainCar/images/Mazda.gif"));
             this.scaleTransform =
-                AffineTransform.getScaleInstance((double)0.1*(this.img.getWidth(null)/this.img.getHeight(null))/this.img.getWidth(null),
-                    (double)0.1*(this.img.getWidth(null)/this.img.getHeight(null))/this.img.getHeight(null));
+                AffineTransform.getScaleInstance((double)0.025*(this.img.getWidth(null)/this.img.getHeight(null))/this.img.getWidth(null),
+                    (double)0.025*(this.img.getWidth(null)/this.img.getHeight(null))/this.img.getHeight(null));
 		} catch (IOException e) {
         	System.out.println("Cannot open car");
         }   
@@ -48,15 +49,14 @@ public class CarOnMountainVizComponent implements VizComponent {
 		
 		
 		g.setColor(Color.RED);
-		//Font f = new Font("TimesRoman",Font.BOLD,24);
-		//This doesn't work, not sure why
-		//g.setFont(f);
-		 //g.drawString("CAR", 0.2f, 0.2f);
+
+		//to bring things back into the window
+		double minPosition=mcv.getMinValueForDim(0);	
+		double maxPosition=mcv.getMaxValueForDim(0);	
 		
-		double transX = UtilityShop.normalizeValue( this.mcv.getCurrentStateInDimension(0),
-				this.mcv.getMinValueForDim(0),
-				this.mcv.getMaxValueForDim(0));
+		double transX = UtilityShop.normalizeValue( this.mcv.getCurrentStateInDimension(0),	minPosition,				maxPosition);
 		
+		//need to get he actual height ranges
 		double transY = UtilityShop.normalizeValue(
 				this.mcv.getHeight(),
 				-1.0f,
@@ -64,14 +64,20 @@ public class CarOnMountainVizComponent implements VizComponent {
 				);
 		transY= (1.0-transY);
 		
-		
-        this.translateTransform =AffineTransform.getTranslateInstance(transX,transY+0.01);
-        this.rotateTransform = AffineTransform.getRotateInstance((Math.atan((this.mcv.getHeight()-this.mcv.getDeltaHeight())/0.05)),transX, transY);
-        translateTransform.concatenate(scaleTransform);
-        translateTransform.concatenate(this.rotateTransform);
-		//Rectangle2D agentRect=new Rectangle2D.Double(transX,transY,0.2,0.2);
-		//g.fill(agentRect);
-		((Graphics2D)g).drawRenderedImage((RenderedImage) this.img,translateTransform);
+		double rectWidth=.05;
+		double rectHeight=.05;
+		Rectangle2D fillRect=new Rectangle2D.Double(transX-rectWidth/2.0d,transY-rectHeight/2.0d,rectWidth,rectHeight);
+		g.fill(fillRect);
+
+//		
+//		
+//        this.translateTransform =AffineTransform.getTranslateInstance(transX,transY+0.01);
+//        this.rotateTransform = AffineTransform.getRotateInstance((Math.atan((this.mcv.getHeight()-this.mcv.getDeltaHeight())/0.05)),transX, transY);
+//        translateTransform.concatenate(scaleTransform);
+//        translateTransform.concatenate(this.rotateTransform);
+//		//Rectangle2D agentRect=new Rectangle2D.Double(transX,transY,0.2,0.2);
+//		//g.fill(agentRect);
+//		((Graphics2D)g).drawRenderedImage((RenderedImage) this.img,translateTransform);
 
 	}
 

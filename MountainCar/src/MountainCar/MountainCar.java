@@ -1,5 +1,10 @@
 package MountainCar;
 
+import java.util.StringTokenizer;
+import java.util.Vector;
+
+import messages.MCHeightRequest;
+import messages.MCHeightResponse;
 import messages.MCStateResponse;
 import rlVizLib.Environments.EnvironmentBase;
 import rlVizLib.general.ParameterHolder;
@@ -163,6 +168,24 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 				MCStateResponse theResponseObject=new MCStateResponse(position,velocity,height,deltaheight);
 				return theResponseObject.makeStringResponse();
 			}
+			
+			if(theCustomType.startsWith("GETHEIGHTS")){
+				Vector<Double> theHeights=new Vector<Double>();
+
+				StringTokenizer theTokenizer = new StringTokenizer(theCustomType,":");
+				//throw away the first token
+				theTokenizer.nextToken();
+				
+				int numQueries=Integer.parseInt(theTokenizer.nextToken());
+				for(int i=0;i<numQueries;i++){
+					double thisPoint=Double.parseDouble(theTokenizer.nextToken());
+					theHeights.add(getHeightAtPosition(thisPoint));
+				}
+
+				MCHeightResponse theResponseObject=new MCHeightResponse(theHeights);
+				return theResponseObject.makeStringResponse();
+			}
+
 		}
 		System.err.println("We need some code written in Env Message for MountainCar.. unknown request received: "+theMessage);
 		Thread.dumpStack();

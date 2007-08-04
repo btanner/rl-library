@@ -192,8 +192,6 @@ public class GameState{
 			for( int x = 0; x < worldWidth; ++x){
 				System.out.print(worldState[y*worldWidth+x]);	
 			}
-			System.out.println();
-
 		}
 	}
 
