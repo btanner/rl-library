@@ -1,13 +1,8 @@
 
 
 import java.awt.Dimension;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 import javax.swing.WindowConstants;
 
 import rlViz.EnvVisualizerFactory;

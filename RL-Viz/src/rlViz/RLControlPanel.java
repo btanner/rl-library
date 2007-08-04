@@ -16,6 +16,19 @@ import javax.swing.event.ChangeListener;
 
 import rlVizLib.general.ParameterHolder;
 
+
+/**
+* This code was edited or generated using CloudGarden's Jigloo
+* SWT/Swing GUI Builder, which is free for non-commercial
+* use. If Jigloo is being used commercially (ie, by a corporation,
+* company or business for any purpose whatever) then you
+* should purchase a license for each developer using Jigloo.
+* Please visit www.cloudgarden.com for details.
+* Use of Jigloo implies acceptance of these licensing terms.
+* A COMMERCIAL LICENSE HAS NOT BEEN PURCHASED FOR
+* THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED
+* LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
+*/
 public class RLControlPanel extends JPanel implements ActionListener, ChangeListener {
 
 	/**
@@ -67,15 +80,6 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 		this.theGlueConnection=theGlueConnection;
 		setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 		
-		envListComboBox = new JComboBox(new String[]{"No Envs Available"});
-
-		ParameterHolderPanel envParamPanel=new ParameterHolderPanel(new SpringLayout());
-		envParamLogic=new ParameterHolderLogic(envParamPanel,theGlueConnection.getEnvNameList(),theGlueConnection.getEnvParamList());
-		add(envParamPanel);
-		envListComboBox.addActionListener(envParamLogic);
-		
-		
-		agentListComboBox = new JComboBox(new String[]{"No Agents Available"});
 
 		bLoad = new JButton("Load Experiment");
 		bLoad.addActionListener(this);
@@ -92,10 +96,6 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 		bStep = new JButton("Step");
 		bStep.addActionListener(this);
 		
-		setDefaultEnabling();
-		add(new JLabel("Choose an environment to load"));
-		add(envListComboBox);
-//		add(agentListComboBox);
 		add(bLoad);
 		add(bUnLoad);
 		add(bStart);
@@ -115,11 +115,25 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 		add(new JLabel("Simulation Speed (left is faster)"));
 		add(sleepTimeBetweenSteps);
 
+		envListComboBox = new JComboBox(new String[]{"No Envs Available"});
+		ParameterHolderPanel envParamPanel=new ParameterHolderPanel(new SpringLayout());
+		envParamLogic=new ParameterHolderLogic(envParamPanel,theGlueConnection.getEnvNameList(),theGlueConnection.getEnvParamList());
+		add(new JLabel("Choose an environment to load"));
+		add(envListComboBox);
+//		add(agentListComboBox);
+		add(envParamPanel);
+		envListComboBox.addActionListener(envParamLogic);
+		
+		
+		agentListComboBox = new JComboBox(new String[]{"No Agents Available"});
+
 //		numColsOrRowsForValueFunction = new JSlider(JSlider.HORIZONTAL,1, 100, 10);
 //		numColsOrRowsForValueFunction.addChangeListener(this);
 //		add(numColsOrRowsForValueFunction);
 
 		updateEnvList();
+		setDefaultEnabling();
+
 	}
 
 

@@ -1,6 +1,7 @@
 package rlViz;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.util.Map;
 import java.util.TreeMap;
@@ -99,8 +100,12 @@ public class ParameterHolderPanel extends JPanel {
 		}
 //		//Lay out the panel.
 		int numPairs=currentParamHolder.getParamCount();
+		for(int i=numPairs;i<15;i++){
+			addEmptyParameter();
+		}
+		
 		SpringUtilities.makeCompactGrid(this,
-				numPairs, 2, //rows, cols
+				15, 2, //rows, cols
 				6, 6,        //initX, initY
 				6, 6);       //xPad, yPad
 
@@ -109,6 +114,16 @@ public class ParameterHolderPanel extends JPanel {
 //		Not sure if this is the right thing to do
 		this.updateUI();
 
+	}
+	
+	private void addEmptyParameter() {
+		JLabel thisLabel=new JLabel("   ", JLabel.TRAILING);
+		JLabel thisOtherLabel=new JLabel("   ", JLabel.TRAILING);
+		allComponents.add(thisLabel);
+		allComponents.add(thisOtherLabel);
+
+		add(thisLabel);
+		add(thisOtherLabel);
 	}
 
 	private Component addIntParameter(String thisParamName, int theParam) {
