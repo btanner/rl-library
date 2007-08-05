@@ -21,7 +21,7 @@ export RLVIZLIBPATH=bin/RL-VizLib.jar
 export ENVSHELLPATH=bin/EnvShell.jar
 export AGENTPATH=bin/agent/
 export RLCLASSPATH=$RLGLUEPATH:$RLVIZPATH:$RLVIZLIBPATH:$ENVSHELLPATH:$AGENTPATH
-export RLGLUEEXECPATH=bin/RL_Glue
+export RLGLUEEXECPATH=bin/RL_glue
 
 echo "ClassPath $RLCLASSPATH"
 echo "Running the Glue"

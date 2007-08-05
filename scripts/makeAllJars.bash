@@ -1,4 +1,8 @@
 #!/bin/bash
+echo "============================"
+echo "Running makeAllJars.bin"
+echo "============================"
+
 echo "Making the Glue Jar"
 ./makeGlueJar.bash
 echo "---------------------------"
@@ -9,3 +13,4 @@ echo "---------------------------"
 echo "Making the Environment Jars"
 echo "---------------------------"
 ./makeEnvJars.bash
+
