@@ -1,4 +1,4 @@
-package visualizers.tetrlais;
+package visualizers.mountainCar;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -7,14 +7,11 @@ import java.awt.geom.AffineTransform;
 
 import rlVizLib.visualization.VizComponent;
 
-public class TetrlaisScoreComponent implements VizComponent{
-	private TetrlaisVisualizer tetVis = null;
+public class MountainCarScoreComponent implements VizComponent{
+	private MountainCarVisualizer mcVis = null;
 	
-	int lastScore=0;
-
-	public TetrlaisScoreComponent(TetrlaisVisualizer ev){
-		this.tetVis = ev;
-		lastScore=-1;
+	public MountainCarScoreComponent(MountainCarVisualizer mcVis){
+		this.mcVis = mcVis;
 	}
 
 	public void render(Graphics2D g) {
@@ -25,17 +22,14 @@ public class TetrlaisScoreComponent implements VizComponent{
 	    g.setColor(Color.BLACK);
 	    //DRAW STRING
 	    AffineTransform saveAT = g.getTransform();
-   	    g.scale(.01, .01);
-	    g.drawString("Lines: " +tetVis.getScore(),0.0f, 10.0f);
-	    g.drawString("E/S/T: " +tetVis.getEpisodeNumber()+"/"+tetVis.getTimeStep()+"/"+tetVis.getTotalSteps(),0.0f, 20.0f);
+   	    g.scale(.005, .005);
+	    g.drawString("S/E/T: " +mcVis.getEpisodeNumber()+"/"+mcVis.getTimeStep()+"/"+mcVis.getTotalTimeSteps(),0.0f, 10.0f);
 	    g.setTransform(saveAT);
 	}
 
 	public boolean update() {
-		this.tetVis.updateAgentState();
+		mcVis.updateAgentState();
 		return true;
-		
-		
 	}
 	
 	

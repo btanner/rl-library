@@ -51,4 +51,8 @@ public class TetrlaisVisualizer  extends AbstractVisualizer {
 		return currentState.getTimeStep();
 	}
 
+	public int getTotalSteps() {
+		return currentState.getTotalSteps();
+	}
+
 }

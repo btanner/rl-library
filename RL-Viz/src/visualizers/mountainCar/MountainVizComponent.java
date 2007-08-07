@@ -40,11 +40,10 @@ public class MountainVizComponent implements VizComponent {
 		double sizeEachComponent=1.0/(double)theHeights.size();
 	
 
-		g.setColor(Color.BLUE);
+		g.setColor(Color.BLACK);
 
 		double lastX=0.0d;
-		double lastY=theHeights.get(0);
-		
+		double lastY=1.0-UtilityShop.normalizeValue(theHeights.get(0),minHeight,maxHeight);
 		for(int i=1;i<theHeights.size();i++){
 			double thisX=lastX+sizeEachComponent;
 			double thisY=1.0-UtilityShop.normalizeValue(theHeights.get(i),minHeight,maxHeight);

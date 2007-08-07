@@ -4,7 +4,6 @@ import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.agent.AgentMessageParser;
 import rlVizLib.messaging.agent.AgentMessages;
 import rlVizLib.utilities.TaskSpecObject;
-import rlVizLib.utilities.TaskSpecParser;
 import rlVizLib.visualization.QueryableAgent;
 import rlglue.agent.Agent;
 import rlglue.types.Action;
@@ -60,7 +59,7 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 		this.epsilon=0.05f;
 		this.alpha=.25f;
 		this.MEMORY_SIZE=1<<20;
-		this.NUM_TILINGS=8;
+		this.NUM_TILINGS=16;
 		this.defaultDivider=.05f;
 		this.MAX_NONZERO_TRACES=100000;
 		observationDividers=null;
@@ -150,12 +149,11 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 		
 		System.out.println("Sarsa: Agent Init");
 		System.out.println("The task Spec is: "+taskSpec);
-		TaskSpecObject theTaskObject = TaskSpecParser.parse(taskSpec);
+		TaskSpecObject theTaskObject = new TaskSpecObject(taskSpec);
 
 		
 		actionCount=1+(int)theTaskObject.action_maxs[0];
 		
-		theTaskObject.num_discrete_action_dims=1;
 		System.out.println("The number of actions is: "+actionCount);
 		assert(actionCount>0);
 

@@ -59,20 +59,11 @@ public class RLControlPanel extends JPanel implements ActionListener, ChangeList
 		envListComboBox.removeAllItems();
 		Vector<String> envListVector = theGlueConnection.getEnvNameList();
 		
-		for (String thisEnv : envListVector) {
-			envListComboBox.addItem(thisEnv);
-		}
+		for (String thisEnv : envListVector)envListComboBox.addItem(thisEnv);
 		
 		envParamVector=theGlueConnection.getEnvParamList();
 		
-		for (ParameterHolder thisEnvParams : envParamVector) {
-			System.out.println("Received a parameter holder for an env jar and it is: "+thisEnvParams.stringSerialize());
-		}
-
-		
 		if(envListVector.size()==0)envListComboBox.addItem("No Envs Available");
-//		String[] agentListArray = theGlueConnection.getAgentList().toArray(new String[0]);
-
 	}
 
 	public RLControlPanel(RLGlueLogic theGlueConnection){

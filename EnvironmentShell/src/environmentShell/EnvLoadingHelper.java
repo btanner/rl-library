@@ -21,11 +21,12 @@ public class EnvLoadingHelper {
 		theParamHolders=new Vector<ParameterHolder>();
 		
 		String curDir = System.getProperty("user.dir");
-		File d= new File(curDir);
-		String workSpaceDir=d.getParent();
+		String targetDir=curDir+"/bin/environments";
+//		System.out.println("env shell is looking in: "+curDir);
+//		File d= new File(targetDir);
 
-
-		String envJarDirString=workSpaceDir+"/envJars/";
+//		String workSpaceDir=d.getParent();
+		String envJarDirString=targetDir;//workSpaceDir+"/envJars/";
 		
 
 		File envJarDir=new File(envJarDirString);
@@ -74,6 +75,8 @@ public class EnvLoadingHelper {
 		try {
 			URL theURL=new URL("file",null, theFileName);
 
+
+			//This is test code
 			boolean loadRemote=false;
 			if(loadRemote)theURL=new URL("http://rl-library.googlecode.com/svn/trunk/envJars/MountainCar.jar");
 
@@ -89,8 +92,6 @@ public class EnvLoadingHelper {
 			Method paramMakerMethod = theEnvClass.getDeclaredMethod("getDefaultParameters",reflectParamArray);
 			
 			if(paramMakerMethod!=null){
-				System.out.println("We found a param maker method in file: "+theFile);
-				System.out.println("The method is: "+paramMakerMethod);
 				theParamHolder=(ParameterHolder) paramMakerMethod.invoke(null,null);
 				}else{
 				System.out.println("NO param maker method in file: "+theFile);

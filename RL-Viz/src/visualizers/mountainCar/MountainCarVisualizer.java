@@ -36,11 +36,14 @@ public class MountainCarVisualizer  extends AbstractVisualizer implements ValueF
 //		VizComponent agentOnVF=new AgentOnValueFunctionVizComponent(this);
 		VizComponent mountain=new MountainVizComponent(this);
 		VizComponent carOnMountain=new CarOnMountainVizComponent(this);
+		VizComponent scoreComponent=new MountainCarScoreComponent(this);
 		
 //		super.addVizComponentAtPositionWithSize(theValueFunction,0,.5,1.0,.5);
 //		super.addVizComponentAtPositionWithSize(agentOnVF,0,.5,1.0,.5);
 		super.addVizComponentAtPositionWithSize(mountain, 0, 0, 1.0, 1.0);
 		super.addVizComponentAtPositionWithSize(carOnMountain, 0, 0, 1.0, 1.0);
+		super.addVizComponentAtPositionWithSize(scoreComponent, 0, 0, 1.0, 1.0);
+		
 }
 	
 	public void setValueFunctionResolution(int theValue) {
@@ -135,6 +138,18 @@ public class MountainCarVisualizer  extends AbstractVisualizer implements ValueF
 	public Vector<Double> getHeightsForPositions(Vector<Double> theQueryPositions) {
 		MCHeightResponse heightResponse=MCHeightRequest.Execute(theQueryPositions);
 		return heightResponse.getHeights();
+	}
+
+	public int getEpisodeNumber() {
+		return theCurrentState.getEpisodeNumber();
+	}
+
+	public int getTimeStep() {
+		return theCurrentState.getCurrentStep();
+	}
+
+	public int getTotalTimeSteps() {
+		return theCurrentState.getTotalSteps();
 	}
 
 

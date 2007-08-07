@@ -17,12 +17,19 @@ public class MCStateResponse extends AbstractResponse{
 	double height;
 	double deltaheight;
 
+	int episodeNumber;
+	int currentStep;
+	int totalSteps;
 
-	public MCStateResponse(double position, double velocity, double height,double deltaheight) {
+	public MCStateResponse(double position, double velocity, double height,double deltaheight, int episodeNumber, int currentStep, int totalSteps) {
 		this.position=position;
 		this.velocity=velocity;
 		this.height=height;
 		this.deltaheight=deltaheight;
+		
+		this.episodeNumber=episodeNumber;
+		this.currentStep=currentStep;
+		this.totalSteps=totalSteps;
 	}
 
 	public MCStateResponse(String responseMessage) throws NotAnRLVizMessageException {
@@ -37,6 +44,9 @@ public class MCStateResponse extends AbstractResponse{
 		velocity=Double.parseDouble(stateTokenizer.nextToken());
 		height=Double.parseDouble(stateTokenizer.nextToken());
 		deltaheight=Double.parseDouble(stateTokenizer.nextToken());
+		episodeNumber=Integer.parseInt(stateTokenizer.nextToken());
+		currentStep=Integer.parseInt(stateTokenizer.nextToken());
+		totalSteps=Integer.parseInt(stateTokenizer.nextToken());
 	}
 
 	@Override
@@ -67,6 +77,12 @@ public class MCStateResponse extends AbstractResponse{
 		theResponseBuffer.append(":");
 		theResponseBuffer.append(deltaheight);
 		theResponseBuffer.append(":");
+		theResponseBuffer.append(episodeNumber);
+		theResponseBuffer.append(":");
+		theResponseBuffer.append(currentStep);
+		theResponseBuffer.append(":");
+		theResponseBuffer.append(totalSteps);
+		theResponseBuffer.append(":");
 
 
 		return theResponseBuffer.toString();
@@ -87,4 +103,17 @@ public class MCStateResponse extends AbstractResponse{
 	public double getDeltaheight() {
 		return deltaheight;
 	}
+
+	public int getEpisodeNumber() {
+		return episodeNumber;
+	}
+
+	public int getCurrentStep() {
+		return currentStep;
+	}
+
+	public int getTotalSteps() {
+		return totalSteps;
+	}
+
 };

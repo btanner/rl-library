@@ -17,7 +17,6 @@ import rlVizLib.messaging.interfaces.ReceivesRunTimeParameterHolderInterface;
 import rlVizLib.messaging.interfaces.getEnvMaxMinsInterface;
 import rlVizLib.messaging.interfaces.getEnvObsForStateInterface;
 import rlVizLib.utilities.TaskSpecObject;
-import rlVizLib.utilities.TaskSpecParser;
 import rlglue.environment.Environment;
 import rlglue.types.Action;
 import rlglue.types.Observation;
@@ -59,18 +58,29 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 	private double rewardPerStep=-1.0d;
 	private double rewardAtGoal=0.0d;
 
+	private int episodeNumber=0;
+	private int currentStep=0;
+	private int totalSteps=0;
+	
 //	Stopping condition
 	private boolean inGoalRegion(){
 		return position >= goalPosition;
 	}
 
 	public String env_init() {
+		episodeNumber=0;
+		currentStep=0;
+		totalSteps=0;
+		
 		position = defaultInitPosition;
 		velocity = defaultInitVelocity;
 		return "1:e:2_[f,f]_["+minPosition+","+maxPosition+"]_["+minVelocity+","+maxVelocity+"]:1_[i]_[0,2]";
 	}
 
 	public Observation env_start() {
+		episodeNumber++;
+		currentStep=0;	
+		totalSteps++;
 		if(randomStarts){
 			position = (Math.random()*(maxPosition + Math.abs((minPosition))) - Math.abs(minPosition));
 			velocity = (Math.random()*maxVelocity*2) - Math.abs(maxVelocity);
@@ -83,6 +93,9 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 
 //	The constants of this height function could easily be parameterized
 	public Reward_observation env_step(Action theAction) {
+		currentStep++;	
+		totalSteps++;
+
 		int a=theAction.intArray[0];
 
 		if(a>2||a<0){
@@ -112,7 +125,7 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 		p.addDoubleParam("maxVelocity",.07d);
 
 		p.addDoubleParam("minPosition",-1.2d);
-		p.addDoubleParam("maxPosition",.4d);
+		p.addDoubleParam("maxPosition",.6d);
 		
 		return p;
 	}
@@ -165,7 +178,7 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 				double velocity=this.getVelocity();
 				double height= this.getHeight();
 				double deltaheight=this.getHeightAtPosition(position+.05);
-				MCStateResponse theResponseObject=new MCStateResponse(position,velocity,height,deltaheight);
+				MCStateResponse theResponseObject=new MCStateResponse(position,velocity,height,deltaheight,episodeNumber,currentStep,totalSteps);
 				return theResponseObject.makeStringResponse();
 			}
 			
@@ -269,7 +282,7 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 	public static void main(String args[]){
 		Environment mcEnv=new MountainCar();
 		String taskSpec=mcEnv.env_init();
-		TaskSpecObject parsedTaskSpec = TaskSpecParser.parse(taskSpec);
+		TaskSpecObject parsedTaskSpec = new TaskSpecObject(taskSpec);
 		System.out.println(parsedTaskSpec);
 
 	}

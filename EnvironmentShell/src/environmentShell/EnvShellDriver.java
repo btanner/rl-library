@@ -11,6 +11,9 @@ import java.util.jar.JarInputStream;
 
 import rlglue.environment.Environment;
 
+
+//This is old test code that the EnvironmentShell is  based on
+
 public class EnvShellDriver {
 
 	/**
