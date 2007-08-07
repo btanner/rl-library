@@ -50,6 +50,10 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 				if(p.getBooleanParam("LongBlock"))	possibleBlocks.add(TetrlaisPiece.makeLine());
 				if(p.getBooleanParam("SquareBlock"))	possibleBlocks.add(TetrlaisPiece.makeSquare());
 				if(p.getBooleanParam("TriBlock"))	possibleBlocks.add(TetrlaisPiece.makeTri());
+				if(p.getBooleanParam("SBlock"))	possibleBlocks.add(TetrlaisPiece.makeSShape());
+				if(p.getBooleanParam("ZBlock"))	possibleBlocks.add(TetrlaisPiece.makeZShape());
+				if(p.getBooleanParam("LBlock")) possibleBlocks.add(TetrlaisPiece.makeLShape());
+				if(p.getBooleanParam("JBlock")) possibleBlocks.add(TetrlaisPiece.makeJShape());
 			}
 		}
 		gameState=new GameState(width,height,possibleBlocks);
@@ -67,6 +71,10 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 		p.addBooleanParam("LongBlock",true);
 		p.addBooleanParam("SquareBlock",true);
 		p.addBooleanParam("TriBlock",true);
+		p.addBooleanParam("SBlock", true);
+		p.addBooleanParam("ZBlock", true);
+		p.addBooleanParam("LBlock", true);
+		p.addBooleanParam("JBlock", true);
 		return p;
 	}
 
