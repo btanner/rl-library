@@ -32,6 +32,7 @@ public class ParameterHolder {
 	public ParameterHolder(){
 
 	}
+	
 
 	public boolean isNull(){
 		return (allParams.size()==0);
@@ -39,7 +40,6 @@ public class ParameterHolder {
 
 	public ParameterHolder(final String theString){
 		this();
-
 		StringTokenizer iss=new StringTokenizer(theString,"_");
 
 		int numParams;
@@ -92,14 +92,14 @@ public class ParameterHolder {
 
 
 	public void setAlias(String thisAlias, String thisTarget) {
-		if(thisAlias.contains(" ")||thisAlias.contains(":")||thisAlias.contains("_")){
-			System.out.println("The name or alias of a parameter cannot contain a space or : or _");
+		if(thisAlias.contains(":")||thisAlias.contains("_")){
+			System.err.println("The name or alias of a parameter cannot contain a space or : or _");
 			Thread.dumpStack();
 			System.exit(1);
 		}
 		
 		if(allParams.get(thisTarget)==null){
-			System.out.println("Careful, you are setting an alias of: "+thisAlias+" to original: "+thisTarget+" but the original isn't in the parameter set!");
+			System.err.println("Careful, you are setting an alias of: "+thisAlias+" to original: "+thisTarget+" but the original isn't in the parameter set!");
 			Thread.dumpStack();
 			System.exit(1);
 		}
@@ -109,6 +109,18 @@ public class ParameterHolder {
 
 
 	public void addStringParam(String thisParamName, String thisParamValue) {
+		if(thisParamName.contains(":")||thisParamName.contains("_")){
+			System.err.println("The ParameterName " + thisParamName + " with Parameter Value " + thisParamValue +  " cannot contain a : or _");
+			Thread.dumpStack();
+			System.exit(1);
+		}
+		
+		if(thisParamValue.contains(":")||thisParamValue.contains("_")){
+			System.out.println("The ParameterName " + thisParamName + " with ParameterValue " + thisParamValue + " cannot contain a : or _");
+			Thread.dumpStack();
+			System.exit(1);
+		}
+			
 		addStringParam(thisParamName);
 		setStringParam(thisParamName,thisParamValue);
 	}
@@ -120,27 +132,55 @@ public class ParameterHolder {
 		if(!allParams.containsKey(name)){
 			System.err.println("Careful, you are setting the value of parameter: "+name+" but the parameter hasn't been added...");
 		}
-		stringParams.put(name, thisParamValue);}
+		
+		if(thisParamValue.contains(":")||thisParamValue.contains("_")){
+			System.out.println("The ParameterValue " + thisParamValue + " cannot contain a : or _");
+			Thread.dumpStack();
+			System.exit(1);
+		}
+		stringParams.put(name, thisParamValue);
+		
+	}
 
 
 
 	private void genericNewParam(String thisParamName){
+		if(thisParamName.contains(":")||thisParamName.contains("_")){
+			System.out.println("The ParameterName " + thisParamName + " cannot contain a : or _");
+			Thread.dumpStack();
+			System.exit(1);
+		}
 		allParamNames.add(thisParamName);
 		setAlias(thisParamName,thisParamName);
 	}
 	public void addStringParam(String thisParamName) {
+		if(thisParamName.contains(":")||thisParamName.contains("_")){
+			System.out.println("The ParameterName " + thisParamName + " cannot contain a : or _");
+			Thread.dumpStack();
+			System.exit(1);
+		}
 		allParams.put(thisParamName,stringParam);
 		allParamTypes.add(stringParam);
 		genericNewParam(thisParamName);
 	}
 
 	public void addIntParam(String thisParamName) {
+		if(thisParamName.contains(":")||thisParamName.contains("_")){
+			System.out.println("The ParameterName " + thisParamName + " cannot contain a : or _");
+			Thread.dumpStack();
+			System.exit(1);
+		}
 		allParams.put(thisParamName,intParam);
 		allParamTypes.add(intParam);
 		genericNewParam(thisParamName);
 	}
 
 	public void addDoubleParam(String thisParamName) {
+		if(thisParamName.contains(":")||thisParamName.contains("_")){
+			System.out.println("The ParameterName " + thisParamName + " cannot contain a : or _");
+			Thread.dumpStack();
+			System.exit(1);
+		}
 		allParams.put(thisParamName,doubleParam);
 		allParamTypes.add(doubleParam);
 		genericNewParam(thisParamName);
@@ -148,12 +188,22 @@ public class ParameterHolder {
 
 
 	public void addDoubleParam(String thisParamName, double thisParamValue) {
+		if(thisParamName.contains(":")||thisParamName.contains("_")){
+			System.out.println("The ParameterName " + thisParamName + " cannot contain a : or _");
+			Thread.dumpStack();
+			System.exit(1);
+		}
 		addDoubleParam(thisParamName);
 		setDoubleParam(thisParamName,thisParamValue);
 	}
 
 
 	public void setDoubleParam(String thisParamAlias, double thisParamValue) {
+		if(thisParamAlias.contains(":")||thisParamAlias.contains("_")){
+			System.out.println("The ParameterAlias " + thisParamAlias + " cannot contain a : or _");
+			Thread.dumpStack();
+			System.exit(1);
+		}
 		String name=getAlias(thisParamAlias);
 		if(!allParams.containsKey(name)){
 			System.err.println("Careful, you are setting the value of parameter: "+name+" but the parameter hasn't been added...");
@@ -163,6 +213,12 @@ public class ParameterHolder {
 
 
 	public void addBooleanParam(String thisParamName) {
+		
+		if(thisParamName.contains(":")||thisParamName.contains("_")){
+			System.out.println("The ParameterName " + thisParamName + " cannot contain a : or _");
+			Thread.dumpStack();
+			System.exit(1);
+		}
 		allParams.put(thisParamName,boolParam);
 		allParamTypes.add(boolParam);
 		genericNewParam(thisParamName);
@@ -170,12 +226,22 @@ public class ParameterHolder {
 
 
 	public void addBooleanParam(String thisParamName, boolean thisParamValue) {
+		if(thisParamName.contains(":")||thisParamName.contains("_")){
+			System.out.println("The ParameterName " + thisParamName + " cannot contain a : or _");
+			Thread.dumpStack();
+			System.exit(1);
+		}
 		addBooleanParam(thisParamName);
 		setBooleanParam(thisParamName,thisParamValue);
 	}
 
 
 	public void setBooleanParam(String thisParamAlias, boolean thisParamValue) {
+		if(thisParamAlias.contains(":")||thisParamAlias.contains("_")){
+			System.out.println("The ParameterAlias " + thisParamAlias + " cannot contain a : or _");
+			Thread.dumpStack();
+			System.exit(1);
+		}
 		String name=getAlias(thisParamAlias);
 		if(!allParams.containsKey(name)){
 			System.err.println("Careful, you are setting the value of parameter: "+name+" but the parameter hasn't been added...");
@@ -184,6 +250,11 @@ public class ParameterHolder {
 	}
 	
 	public void addIntParam(String thisParamName, int thisParamValue) {
+		if(thisParamName.contains(":")||thisParamName.contains("_")){
+			System.out.println("The ParameterName " + thisParamName + " cannot contain a : or _");
+			Thread.dumpStack();
+			System.exit(1);
+		}
 		addIntParam(thisParamName);
 		setIntParam(thisParamName,thisParamValue);
 	}
@@ -191,6 +262,11 @@ public class ParameterHolder {
 
 
 	public void setIntParam(String thisParamAlias,int thisParamValue) {
+		if(thisParamAlias.contains(":")||thisParamAlias.contains("_")){
+			System.out.println("The ParameterAlias " + thisParamAlias + " cannot contain a : or _");
+			Thread.dumpStack();
+			System.exit(1);
+		}
 		String name=getAlias(thisParamAlias);
 		if(!allParams.containsKey(name)){
 			System.err.println("Careful, you are setting the value of parameter: "+name+" but the parameter hasn't been added...");
@@ -201,6 +277,11 @@ public class ParameterHolder {
 
 
 	private String getAlias(String thisParamAlias) {
+		if(thisParamAlias.contains(":")||thisParamAlias.contains("_")){
+			System.out.println("The ParameterAlias " + thisParamAlias + " cannot contain a  : or _");
+			Thread.dumpStack();
+			System.exit(1);
+		}
 		if(!aliases.containsKey(thisParamAlias)){
 			System.err.println("You wanted to look up original for alias: "+thisParamAlias+", but that alias hasn't been set");
 			Thread.dumpStack();
