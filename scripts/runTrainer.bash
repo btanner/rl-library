@@ -1,34 +1,36 @@
 #!/bin/bash
 
-cd ../
-killall RL_Glue
 
-echo "---------------------------"
-echo "runTrainer.bash -- making all the jars"
-echo "---------------------------"
-./makeAllJars.bash
-echo "---------------------------"
-echo "runTrainer.bash -- making the training package"
-echo "---------------------------"
-./makeTrainingPackage.bash
+killall RL_glue
 
-cd trainingPack
+cd ../trainingPack
+pwd
 
-export RLGLUEPATH=bin/RL-Glue.jar
-export RLVIZPATH=bin/RL-Viz.jar
-export RLVIZLIBPATH=bin/RL-VizLib.jar
-export ENVSHELLPATH=bin/EnvShell.jar
-export AGENTPATH=bin/agent/
-export RLCLASSPATH=$RLGLUEPATH:$RLVIZPATH:$RLVIZLIBPATH:$ENVSHELLPATH:$AGENTPATH
-export RLGLUEEXECPATH=bin/RL_Glue
+#Just for now
+cp ~/ProgrammingProjects/rl-glue/Examples/Network_Java/bin/RL_glue bin/RL_glue
+export RLTRAINPATH=./bin/RL-Train.jar
+export AGENTPATH=./bin/agents/GenericSarsaLambdaJava/
+export EXPERIMENTPATH=./bin/trainingExperiments/trainJava/
+export RLCLASSPATH=$RLTRAINPATH:$AGENTPATH:$EXPERIMENTPATH
 
-echo $RLCLASSPATH
-echo "Running the Glue"
-$RLGLUEEXECPATH &
-echo "Running the Environment loader as: java -cp $RLCLASSPATH EnvironmentLoader environmentShell.EnvironmentShell &"
-java -cp $RLCLASSPATH rlglue.environment.EnvironmentLoader environmentShell.EnvironmentShell &
-java -cp $RLCLASSPATH rlglue.agent.AgentLoader GenericSarsaLambda.GenericSarsaLambda &
-java -cp $RLCLASSPATH:./bin/ JavaTrainer
-killall RL_Glue
+export GLUECOMMAND=bin/RL_glue
+export ENVCOMMAND="java -cp $RLCLASSPATH rlglue.environment.EnvironmentLoader environmentShell.EnvironmentShell"
+export AGENTCOMMAND="java -cp $RLCLASSPATH rlglue.agent.AgentLoader GenericSarsaLambda.GenericSarsaLambda"
+export EXPERIMENTCOMMAND="java -cp $RLCLASSPATH JavaTrainer"
+
+echo "Executing Glue: $GLUECOMMAND"
+
+$GLUECOMMAND &
+
+echo "Executing Environment: $ENVCOMMAND"
+$ENVCOMMAND &
+
+echo "Executing Agent: $AGENTCOMMAND"
+$AGENTCOMMAND &
+
+echo "Executing Experiment: $EXPERIMENTCOMMAND"
+$EXPERIMENTCOMMAND
+
+killall RL_glue
 killall java
 

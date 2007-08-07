@@ -4,48 +4,15 @@
 ## Create directories and stuff
 #################
 echo "============================"
-echo "Running makeTrainingPackage.bin"
+echo "Running updateTrainingPackage.bin"
 echo "============================"
-
-echo " * Making directories..."
-cd ../
-rm -Rf trainingPack
-mkdir trainingPack
-mkdir trainingPack/bin
-mkdir trainingPack/bin/build
-mkdir trainingPack/bin/environments
-
-mkdir trainingPack/bin/agents
-mkdir trainingPack/bin/agents/GenericSarsaLambdaJava
-
-mkdir trainingPack/bin/trainingExperiments
-mkdir trainingPack/bin/trainingExperiments/trainJava
-
-mkdir trainingPack/src
-mkdir trainingPack/src/agents
-mkdir trainingPack/src/agents/GenericSarsaLambdaJava
-
-mkdir trainingPack/src/trainingExperiments
-mkdir trainingPack/src/trainingExperiments/trainJava
-
-mkdir trainingPack/src/environments
-mkdir trainingPack/src/environments/mountainCar
-mkdir trainingPack/src/environments/Tetrlais
+cd ..
 
 echo " * Building the big jar..."
 ./scripts/makeBigJar.bash
 
 echo " * Copying that jar to the bin directory of training pack..."
-cp ./RL-Train.jar trainingPack/bin/
-
-
-echo " * Exporting a copy of rl-glue from google code repository to the training pack (quietly)"
-#Copy the RL-Glue source
-svn export -q https://rl-glue.googlecode.com/svn/trunk/ trainingPack/rl-glue
-
-echo " * Copying the Makefile for RL-Glue to Training Pack"
-cp ./scripts/Makefile ./trainingPack/
-
+mv -f ./RL-Train.jar trainingPack/bin/
 
 
 #################
@@ -54,11 +21,12 @@ cp ./scripts/Makefile ./trainingPack/
 echo " * Copying mountainCar source code to the training pack"
 ##Copy the source
 cd MountainCar
+rm -Rf ../trainingPack/src/environments/mountainCar/*
 cp -R src/* ../trainingPack/src/environments/mountainCar/
-
 echo " * Building the mountainCar jar and moving it to the trainingPack to the training pack"
 ##Make the MountainCar Jar
 cd bin
+rm ../../trainingPack/bin/environments/MountainCar.jar
 jar -cf ../../trainingPack/bin/environments/MountainCar.jar ./MountainCar/*.class
 cd ../../
 
@@ -68,10 +36,12 @@ cd ../../
 echo " * Copying Tetris source code to the training pack"
 ##Copy the source
 cd Tetrlais
+rm -Rf  ../trainingPack/src/environments/Tetrlais/*
 cp -R src/* ../trainingPack/src/environments/Tetrlais/
 
 echo " * Building the Tetris jar and moving it to the trainingPack to the training pack"
 cd bin
+rm ../../trainingPack/bin/environments/Tetrlais.jar
 jar -cf ../../trainingPack/bin/environments/Tetrlais.jar ./Tetrlais/*.class
 cd ../../
 
@@ -81,6 +51,8 @@ cd ../../
 #################
 #Copy source and binaries for GenericSarsaLambda
 echo " * Copying to source and binaries for GenericSarsaLamda"
+rm -Rf trainingPack/src/agents/GenericSarsaLambdaJava/*
+rm -Rf trainingPack/bin/agents/GenericSarsaLambdaJava/*
 cp -R GenericSarsaLambda/src/* trainingPack/src/agents/GenericSarsaLambdaJava/
 cp -R GenericSarsaLambda/bin/* trainingPack/bin/agents/GenericSarsaLambdaJava/
 
@@ -88,8 +60,10 @@ cp -R GenericSarsaLambda/bin/* trainingPack/bin/agents/GenericSarsaLambdaJava/
 ## Java Trainer
 #################
 echo " * Copying to source and binaries for Java Trainer"
-cp JavaTrainer/src/*.java trainingPack/src/trainingExperiments/trainJava/
-cp JavaTrainer/bin/*.class trainingPack/bin/trainingExperiments/trainJava/
+rm -Rf trainingPack/src/trainingExperiments/trainJava/*
+rm -Rf trainingPack/bin/trainingExperiments/trainJava/*
+cp -R JavaTrainer/src/* trainingPack/src/trainingExperiments/trainJava/
+cp -R JavaTrainer/bin/* trainingPack/bin/trainingExperiments/trainJava/
 cp scripts/runTrainer.bash trainingPack/
 cp scripts/runViz.bash trainingPack/
 
