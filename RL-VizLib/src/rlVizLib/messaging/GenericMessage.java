@@ -18,7 +18,7 @@ public class GenericMessage {
 			String fromString=theTokenizer.nextToken();
 			String typeString=theTokenizer.nextToken();
 			String valueString=theTokenizer.nextToken();
-			String payLoadString=theTokenizer.nextToken();
+			String payLoadString=theTokenizer.nextToken("\f");
 
 			from=GenericMessageParser.parseUser(fromString);
 			to=GenericMessageParser.parseUser(toString);
