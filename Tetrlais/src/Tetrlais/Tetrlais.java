@@ -129,8 +129,7 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 			ro.terminal=0;
 			gameState.update();
 			gameState.take_action(theAction);
-//			ro.r = 3.0d*(gameState.get_score() - tet_global_score) - .01d;
-			ro.r=1.0d;
+			ro.r = gameState.get_score() - currentScore;
 			currentScore = gameState.get_score();
 		}
 		else{
