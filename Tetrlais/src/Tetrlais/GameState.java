@@ -56,9 +56,13 @@ public class GameState{
 			worldObservation[i] = worldState[i];
 
 		writeCurrentBlock(worldObservation);
-		Observation o = new Observation(worldObservation.length,0);
-		for(int i=0; i< worldObservation.length; i++)
+		Observation o = new Observation(worldObservation.length + possibleBlocks.size(),0);
+		int i =0;
+		for(; i< worldObservation.length; i++)
 			o.intArray[i] = worldObservation[i];
+		for(int j=0; j< possibleBlocks.size(); ++j)
+			o.intArray[i+j] = 0;
+		o.intArray[i+currentBlockId] =1;
 
 		return o;
 	}
@@ -246,6 +250,9 @@ public class GameState{
 
 	public int [] getWorldState(){
 		return worldObservation;
+	}
+	public int getCurrentPiece(){
+		return currentBlockId;
 	}
 
 

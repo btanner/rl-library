@@ -17,8 +17,9 @@ public class TetrlaisStateResponse extends AbstractResponse {
 	private int timeStep=0;
 	private int episodeNumber=0;
 	private int totalSteps=0;
+	private int currentPiece =0;
 	
-	public TetrlaisStateResponse(int episodeNumber, int timeStep,int totalSteps,int score,int width, int height, int [] gs){
+	public TetrlaisStateResponse(int episodeNumber, int timeStep,int totalSteps,int score,int width, int height, int [] gs, int piece){
 		this.tet_global_score =score;
 		this.world_width = width;
 		this.world_height = height;
@@ -26,6 +27,7 @@ public class TetrlaisStateResponse extends AbstractResponse {
 		this.timeStep=timeStep;
 		this.episodeNumber=episodeNumber;
 		this.totalSteps=totalSteps;
+		this.currentPiece = piece;
 	}
 	
 	public TetrlaisStateResponse(String responseMessage)throws NotAnRLVizMessageException{
@@ -51,6 +53,7 @@ public class TetrlaisStateResponse extends AbstractResponse {
 			this.world[i] = Integer.parseInt(stateTokenizer.nextToken());
 			++i;
 		}
+		this.currentPiece = Integer.parseInt(stateTokenizer.nextToken());
 	}
 	
 	@Override
@@ -83,6 +86,8 @@ public class TetrlaisStateResponse extends AbstractResponse {
 		theResponseBuffer.append(":");
 		theResponseBuffer.append(world[i]);
 		}
+		theResponseBuffer.append(":");
+		theResponseBuffer.append(this.currentPiece);
 
 		return theResponseBuffer.toString();
 	}
@@ -105,6 +110,9 @@ public class TetrlaisStateResponse extends AbstractResponse {
 	}
 	public int getEpisodeNumber(){
 		return episodeNumber;
+	}
+	public int getCurrentPiece(){
+		return currentPiece;
 	}
 
 	@Override

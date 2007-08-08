@@ -23,7 +23,7 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 	private int currentScore =0;
 	private GameState gameState = null;
 
-	static final int terminalScore = -10;
+	static final int terminalScore = 0;
 
 //	/*Hold all the possible bricks that can fall*/
 	Vector<TetrlaisPiece> possibleBlocks=new Vector<TetrlaisPiece>();
@@ -180,7 +180,7 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 
 			if(theCustomType.equals("GETTETRLAISSTATE")){
 				//It is a request for the state
-				TetrlaisStateResponse theResponseObject=new TetrlaisStateResponse(episodeNumber,timeStep, totalSteps,currentScore,gameState.getWidth(), gameState.getHeight(), gameState.getWorldState());
+				TetrlaisStateResponse theResponseObject=new TetrlaisStateResponse(episodeNumber,timeStep, totalSteps,currentScore,gameState.getWidth(), gameState.getHeight(), gameState.getWorldState(), gameState.getCurrentPiece());
 				return theResponseObject.makeStringResponse();
 			}
 			System.out.println("We need some code written in Env Message for Tetrlais.. unknown custom message type received");

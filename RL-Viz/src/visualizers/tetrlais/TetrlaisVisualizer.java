@@ -54,5 +54,9 @@ public class TetrlaisVisualizer  extends AbstractVisualizer {
 	public int getTotalSteps() {
 		return currentState.getTotalSteps();
 	}
-
+	
+	public int getCurrentPiece(){
+		return currentState.getCurrentPiece();
+	}
+	
 }

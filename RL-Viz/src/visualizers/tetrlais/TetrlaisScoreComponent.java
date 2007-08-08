@@ -28,6 +28,7 @@ public class TetrlaisScoreComponent implements VizComponent{
    	    g.scale(.01, .01);
 	    g.drawString("Lines: " +tetVis.getScore(),0.0f, 10.0f);
 	    g.drawString("E/S/T: " +tetVis.getEpisodeNumber()+"/"+tetVis.getTimeStep()+"/"+tetVis.getTotalSteps(),0.0f, 20.0f);
+	    g.drawString("CurrentPiece: " + tetVis.getCurrentPiece(), 0.0f, 30.0f);
 	    g.setTransform(saveAT);
 	}
 
