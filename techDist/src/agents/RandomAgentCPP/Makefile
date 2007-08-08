@@ -1,8 +1,8 @@
-RL-GLUE = ../../../../../Code/rl-glue/RL-Glue
+RL-GLUE = ../../../rl-glue/RL-Glue
 BUILD_PATH = Build
 BIN_PATH = bin
 SRC_PATH = src
-UTILS = ../../../../../Code/rl-glue/Utils
+UTILS = ../../../rl-glue/Utils
 
 CC = g++
 CFLAGS = -I$(RL-GLUE)/ -I$(UTILS)/ -ansi -pedantic -Wall
