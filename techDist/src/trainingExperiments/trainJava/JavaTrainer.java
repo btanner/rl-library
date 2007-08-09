@@ -14,9 +14,9 @@ public class JavaTrainer {
 	 * @throws InterruptedException 
 	 */
 	public static void main(String[] args) throws InterruptedException {
-		String theEnv="Tetrlais";
+//		String theEnv="Tetrlais";
 //		String theEnv="MountainCar";
-
+		String theEnv="Helicopter";
 		EnvShellListResponse ListResponse = EnvShellListRequest.Execute();
 		
 		int thisEnvIndex=ListResponse.getTheEnvList().indexOf(theEnv);
@@ -30,7 +30,7 @@ public class JavaTrainer {
 		RLGlue.RL_init();
 		
 		int sum=0;
-		for(int i=0;i<100;i++){
+		for(int i=0;i<100000;i++){
 			RLGlue.RL_episode(1000);
 			sum+=RLGlue.RL_num_steps();
 			if(i%500==0){

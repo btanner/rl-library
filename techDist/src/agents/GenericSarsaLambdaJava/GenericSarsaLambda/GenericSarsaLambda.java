@@ -58,7 +58,7 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 		this.lambda=0.5f;
 		this.epsilon=0.05f;
 		this.alpha=.25f;
-		this.MEMORY_SIZE=1<<20;
+		this.MEMORY_SIZE=1<<16;
 		this.NUM_TILINGS=16;
 		this.defaultDivider=.05f;
 		this.MAX_NONZERO_TRACES=100000;
