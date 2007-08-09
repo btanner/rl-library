@@ -3,6 +3,11 @@
 
 killall RL_glue
 
+cd ../trainingPack
+pwd
+
+#Just for now
+cp ~/ProgrammingProjects/rl-glue/Examples/Network_Java/bin/RL_glue bin/RL_glue
 export RLTRAINPATH=./bin/RL-Train.jar
 export AGENTPATH=./bin/agents/GenericSarsaLambdaJava/
 export RLCLASSPATH=$RLTRAINPATH:$AGENTPATH
