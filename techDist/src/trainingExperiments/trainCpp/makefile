@@ -21,5 +21,4 @@ RL_network.o: $(RLGLUE)/Network/RL_network.c $(RLGLUE)/Network/RL_network.h
 	$(CXX) -c $(CXXFLAGS) $< -o $(BIN)/$@
 
 clean:
-	rm -fr *.o
 	rm -fr trainCpp
