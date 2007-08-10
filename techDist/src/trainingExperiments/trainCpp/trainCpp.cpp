@@ -24,7 +24,13 @@ int main(int argc, char *argv[])
 	char theRequest[128]={0};
 	sprintf(theRequest,"TO=%d FROM=%d CMD=%d VALTYPE=%d VALS=NULL",ENVSHELL, BENCHMARK, LISTQUERY, NOVALUE);
 
-	char *theResponse=RL_env_message(theRequest);
+	std::string theResponse=std::string(RL_env_message(theRequest));
+	std::string::size_type lastColonPos = theResponse.rfind (":",0);
+	std::string thePayLoad=theResponse.substr(lastColonPos+1);
+	
+	std::cout<<"The payLoad is: "<<thePayLoad<<std::endl;
+	
+	
 	
 	std::cout<<"The message is: "<<theRequest<<std::endl;
 		// EnvShellListResponse ListResponse = EnvShellListRequest.Execute();
