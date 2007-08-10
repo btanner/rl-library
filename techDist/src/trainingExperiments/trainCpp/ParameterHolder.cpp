@@ -10,11 +10,113 @@
 #include "ParameterHolder.h"
 
 #include <iostream>
+#include <sstream>
+ParameterHolder::ParameterHolder(const std::string theString){
+	 std::istringstream iss(theString);
+	 unsigned int numParams;
+	 std::string thisParamName;
+	
+	float fParamValue;
+	int iParamValue;
+	std::string bParamValue;
+	std::string sParamValue;
+
+	int tempType;
+	PHTypes thisParamType;
+	
+	//MAke sure the first bit of this isn't NULL!
+	std::string pointerType;
+	std::getline(iss,pointerType,'_');
+	
+	if(pointerType=="NULL")
+		return;
+		
+	iss>>numParams;
+	iss.ignore();
+	 for(size_t i=0;i<numParams;i++){
+		std::getline(iss,thisParamName,'_');
+		
+		iss>>tempType;
+		thisParamType=(PHTypes)tempType;
+		iss.ignore();
+
+		if(thisParamType==intParam){
+			iss>>iParamValue;
+			iss.ignore();
+			addIntParam(thisParamName,iParamValue);
+		}
+		if(thisParamType==floatParam){
+			iss>>fParamValue;
+			iss.ignore();
+			addFloatParam(thisParamName,fParamValue);
+			
+		}
+		if(thisParamType==boolParam){
+			std::getline(iss,bParamValue,'_');
+			addBoolParam(thisParamName,bParamValue=="true");
+		}
+		if(thisParamType==stringParam){
+			std::getline(iss,sParamValue,'_');
+			addStringParam(thisParamName,sParamValue);
+		}
+	}
+	
+	//Alias time
+	unsigned int numAliases;
+	iss>>numAliases;
+	
+	iss.ignore();
+	for(size_t i=0;i<numAliases;i++){
+		std::string thisAlias;
+		std::string thisTarget;
+		std::getline(iss,thisAlias,'_');
+		std::getline(iss,thisTarget,'_');
+		setAlias(thisAlias,thisTarget);
+	}
+
+		
+}
+std::string ParameterHolder::stringSerialize() {
+	std::ostringstream outs;  // Declare an output string stream.
+	
+//Do this here instead of externally later when we're ready
+	outs<<"PARAMHOLDER_";
+	//First, write the number of param names
+	outs<<allParamNames.size()<<"_";
+	for(size_t i=0;i<allParamNames.size();i++){
+		outs<<allParamNames[i]<<"_";
+		unsigned int paramType=allParamTypes[i];
+		outs<<paramType<<"_";
+		if(paramType==intParam)outs<<getIntParam(allParamNames[i])<<"_";
+		if(paramType==floatParam)outs<<getFloatParam(allParamNames[i])<<"_";
+		if(paramType==boolParam){
+			if(getBoolParam(allParamNames[i]))
+				outs<<"true";
+			else
+				outs<<"false";
+			
+			outs<<"_";
+		}
+		if(paramType==stringParam)outs<<getStringParam(allParamNames[i])<<"_";
+	}
+	
+	//Now write all of the aliases
+	outs<<allAliases.size()<<"_";
+	for(size_t i=0;i<allAliases.size();i++)outs<<allAliases[i]<<"_"<<getAlias(allAliases[i])<<"_";
+
+	return outs.str();
+}
+
+
+
+
+
+
 ParameterHolder::ParameterHolder(){}
 
 ParameterHolder::~ParameterHolder(){}
 
-std::string ParameterHolder::getAlias(std::string alias){
+std::string ParameterHolder::getAlias(std::string alias) {
 	if(aliases.count(alias)==0){
 		std::cerr<<"You wanted to look up original for alias: "<<alias<<", but that alias hasn't been set"<<std::endl;
 		exit(-1);
@@ -23,11 +125,13 @@ std::string ParameterHolder::getAlias(std::string alias){
 }
 
 void ParameterHolder::setAlias(std::string alias, std::string original){
+
 	if(allParams.count(original)==0){
 		std::cerr<<"Careful, you are setting an alias of:"<<alias<<" to: "<<original<<" but: "<<original<<" isn't in the parameter set"<<std::endl;
 		exit(1);
 	}
 	aliases[alias]=original;
+	allAliases.push_back(alias);
 }
 
 
@@ -49,27 +153,27 @@ void ParameterHolder::addStringParam(std::string name, std::string defaultValue)
 }
 
 void ParameterHolder::addIntParam(std::string name){
-	allParams[name]=INTPARAM;
+	allParams[name]=intParam;
 	allParamNames.push_back(name);
-	allParamTypes.push_back(INTPARAM);
+	allParamTypes.push_back(intParam);
 	setAlias(name,name);
 }
 void ParameterHolder::addFloatParam(std::string name){
-	allParams[name]=FLOATPARAM;
+	allParams[name]=floatParam;
 	allParamNames.push_back(name);
-	allParamTypes.push_back(FLOATPARAM);
+	allParamTypes.push_back(floatParam);
 	setAlias(name,name);
 }
 void ParameterHolder::addBoolParam(std::string name){
-	allParams[name]=BOOLPARAM;
+	allParams[name]=boolParam;
 	allParamNames.push_back(name);
-	allParamTypes.push_back(BOOLPARAM);
+	allParamTypes.push_back(boolParam);
 	setAlias(name,name);
 }
 void ParameterHolder::addStringParam(std::string name){
-	allParams[name]=STRINGPARAM;
+	allParams[name]=stringParam;
 	allParamNames.push_back(name);
-	allParamTypes.push_back(STRINGPARAM);
+	allParamTypes.push_back(stringParam);
 	setAlias(name,name);
 }
 
@@ -111,7 +215,7 @@ void ParameterHolder::setStringParam(std::string alias, std::string value){
 	}
 	stringParams[name]=value;
 }
-int ParameterHolder::getIntParam(std::string alias){
+int ParameterHolder::getIntParam(std::string alias) {
 	//Convert from an alias to the real name
 	std::string name=getAlias(alias);
 
@@ -120,7 +224,7 @@ int ParameterHolder::getIntParam(std::string alias){
 	int retVal=intParams[name];
 	return retVal;
 }
-float ParameterHolder::getFloatParam(std::string alias){
+float ParameterHolder::getFloatParam(std::string alias) {
 	//Convert from an alias to the real name
 	std::string name=getAlias(alias);
 
@@ -130,7 +234,7 @@ float ParameterHolder::getFloatParam(std::string alias){
 	float retVal=floatParams[name];
 	return retVal;
 }
-bool ParameterHolder::getBoolParam(std::string alias){
+bool ParameterHolder::getBoolParam(std::string alias) {
 	//Convert from an alias to the real name
 	std::string name=getAlias(alias);
 
@@ -141,7 +245,7 @@ bool ParameterHolder::getBoolParam(std::string alias){
 	return retVal;
 }
 
-std::string ParameterHolder::getStringParam(std::string alias){
+std::string ParameterHolder::getStringParam(std::string alias) {
 	//Convert from an alias to the real name
 	std::string name=getAlias(alias);
 
@@ -155,10 +259,10 @@ std::string ParameterHolder::getStringParam(std::string alias){
 int ParameterHolder::getParamCount(){
 	return allParamNames.size();
 }
-const char* ParameterHolder::getParamName(int which){
-	return allParamNames[which].c_str();
+std::string ParameterHolder::getParamName(int which){
+	return allParamNames[which];
 }
-int ParameterHolder::getParamType(int which){
+PHTypes ParameterHolder::getParamType(int which){
 	return allParamTypes[which];
 }
 

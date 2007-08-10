@@ -8,7 +8,6 @@
  */
 
 //Ok, so Parameter holder could make use of templates, should tell Andrew.
-// Ahahahahaha! -- Andrew
 
 #ifndef ParameterHolder_H
 #define ParameterHolder_H
@@ -16,16 +15,12 @@
 #include <vector>
 #include <map>
 
-//I think this stuff doens't need to exist.
-// You're right. I remember how this got in here, but not why... -- Andrew.
-//#pragma GCC visibility push(default)
-#include <string>
-//#pragma GCC visibility pop
-
-#define INTPARAM 0
-#define FLOATPARAM 1
-#define BOOLPARAM 2
-#define STRINGPARAM 3
+enum PHTypes{
+	intParam=0,
+	floatParam=1,
+	boolParam=2,
+	stringParam=3
+};
 
 
 class ParameterHolder{
@@ -37,6 +32,7 @@ private:
 
 	typedef std::vector<std::string> TStrVec;
 	typedef std::vector<int> TIntVec;
+	typedef std::vector<PHTypes> TPHTypesVec;
 	
 	TStrIntMap intParams;
 	TStrFloatMap floatParams;
@@ -45,13 +41,19 @@ private:
 	
 	TStrIntMap allParams;
 	//we'll let everything be an alias to itself, and then we'll always just look up aliases
-	TStrStrMap aliases;
+	mutable TStrStrMap aliases;
+
 	TStrVec allParamNames;
-	TIntVec allParamTypes;
+	TPHTypesVec allParamTypes;
+	TStrVec allAliases;
 	
 public:
+	ParameterHolder(const std::string stringRep);
+	
 	ParameterHolder();
 	virtual ~ParameterHolder();
+
+	std::string stringSerialize();
 
 	virtual std::string getAlias(std::string alias);
 	bool supportsParam(std::string alias);
@@ -81,8 +83,8 @@ public:
 	virtual std::string getStringParam(std::string alias);
 	
 	virtual int getParamCount();
-	virtual const char* getParamName(int which);
-	virtual int getParamType(int which);
+	virtual std::string getParamName(int which);
+	virtual PHTypes getParamType(int which);
 	
 	
 };

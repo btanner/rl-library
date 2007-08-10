@@ -32,7 +32,7 @@ public class JavaTrainer {
 		for(int i=0;i<100000;i++){
 			RLGlue.RL_episode(1000);
 			sum+=RLGlue.RL_num_steps();
-			if(i%500==0){
+			if(i%50==0){
 			System.out.println("Running episode: "+i+" total steps in last bunch is: "+sum);
 			sum=0;
 			}

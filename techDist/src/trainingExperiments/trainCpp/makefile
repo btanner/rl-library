@@ -5,10 +5,13 @@ CXX = g++
 CXXFLAGS = -ansi -pedantic -Wall -I$(RLGLUE)
 LDXFLAGS = 
 
-trainCpp: trainCpp.o ParameterHolder.o RL_client_experiment.o RL_network.o
-	$(CXX) $(BIN)/trainCpp.o $(BIN)/ParameterHolder.o $(BIN)/RL_client_experiment.o $(BIN)/RL_network.o -o $@ $(LDXFLAGS)
+trainCpp: trainCpp.o ParameterHolder.o RL_client_experiment.o RL_network.o CommunicationStuff.o
+	$(CXX) $(BIN)/trainCpp.o $(BIN)/CommunicationStuff.o $(BIN)/ParameterHolder.o $(BIN)/RL_client_experiment.o $(BIN)/RL_network.o -o $@ $(LDXFLAGS)
 
 trainCpp.o: trainCpp.cpp 
+	$(CXX) -c $(CXXFLAGS) $< -o $(BIN)/$@
+
+CommunicationStuff.o : CommunicationStuff.cpp CommunicationStuff.h
 	$(CXX) -c $(CXXFLAGS) $< -o $(BIN)/$@
 
 ParameterHolder.o: ParameterHolder.cpp ParameterHolder.h
