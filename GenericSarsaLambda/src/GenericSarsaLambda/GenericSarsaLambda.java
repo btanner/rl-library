@@ -24,6 +24,7 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 	int MEMORY_SIZE;
 	int NUM_TILINGS;
 	int MAX_NONZERO_TRACES;
+	double numGrids; // number of tiles for each observation variable
 	
 	double defaultDivider;
 
@@ -41,6 +42,12 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 	double theta[];							// modifyable parameter vector, aka memory, weights
 	double e[];								// eligibility traces
 	int tempF[];								// sets of features, one set per action
+
+	//I want to keep track of the mins and maxs' I've seen to do some smart tile coding. That sounds
+	//pretty clever. I think I shall do it.
+	double doubleMins[] = null;
+	double doubleMaxs[]=null;
+	boolean rangeDetermined = false;
 
 
 
@@ -97,7 +104,7 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 		/* Set up the variables which are consistant in all the constructors*/
 		sharedConstructorStuff();
 	}
-
+	
 
 	private void sharedConstructorStuff(){
 		/* sets up things that are the same for all the constructors. 
@@ -110,6 +117,8 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 		theta = new double[MEMORY_SIZE];
 		e = new double[MEMORY_SIZE];
 		gamma=1.0f;
+		rangeDetermined = false;
+		numGrids = 8.0f;
 
 		System.out.print("***********\nnew tile coding agent:");
 		System.out.print("lambda: "+lambda);
@@ -171,6 +180,9 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 
 		tempF = new int[actionCount*NUM_TILINGS];
 		tempQ = new double[actionCount];
+		this.doubleMins = new double[theTaskObject.num_continuous_obs_dims];
+		this.doubleMaxs = new double[theTaskObject.num_continuous_obs_dims];
+			
 		inited=true;
 	}
 
@@ -178,6 +190,10 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 	public Action agent_start(Observation Observations) {
 		/*Based on the initial observation, choose an action to take as your first step :)*/
 		DecayTraces(0.0);  // clear all traces
+		
+		//We are tracking the mins and maxs we've seen. These functions will adjust what our 
+		//recorded values are given the new observation
+		adjustRecordedRange(Observations);
 
 		// clear all traces
 		loadF(tempF,Observations); // compute features
@@ -202,8 +218,13 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 		return action;
 	}
 
+
 	public Action agent_step(double r, Observation theObservations) {	
 		/*The agent needs to update it's learning function in here and decide on what action to take. */
+		
+		//We are tracking the mins and maxs we've seen. These functions will adjust what our 
+		//recorded values are given the new observation
+		adjustRecordedRange(theObservations);
 		
 		DecayTraces(gamma*lambda);  // let traces fall
 
@@ -499,7 +520,31 @@ public class GenericSarsaLambda implements Agent, QueryableAgent {
 				ClearExistentTrace(f,loc);
 		}
 	}
-
+	
+	private void adjustRecordedRange(Observation Observations){
+		if(!this.rangeDetermined){
+			//if we haven't seen any observations yet, we initialize our min and max arrays to hold the 
+			//current values of the observation variables and then break
+			this.rangeDetermined = true;
+			for(int i=0; i< Observations.doubleArray.length; i++){
+				this.doubleMins[i] = Observations.doubleArray[i];
+				this.doubleMaxs[i] = Observations.doubleArray[i];
+			}
+			return;
+		}
+		
+		//updating our double Max and Mins
+		for(int i =0; i< Observations.doubleArray.length; i++){
+			if(Observations.doubleArray[i] < this.doubleMins[i])
+				this.doubleMins[i] = Observations.doubleArray[i];
+			if(Observations.doubleArray[i] > this.doubleMaxs[i])
+				this.doubleMaxs[i] = Observations.doubleArray[i];
+		}
+		
+		for(int i=0; i< this.observationDividers.length; i++)
+			this.observationDividers[i] = (this.doubleMaxs[i] - this.doubleMins[i])/numGrids;
+		
+	}
 
 
 }
