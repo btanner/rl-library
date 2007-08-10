@@ -23,7 +23,7 @@ public class MountainCarScoreComponent implements VizComponent{
 	    //DRAW STRING
 	    AffineTransform saveAT = g.getTransform();
    	    g.scale(.005, .005);
-	    g.drawString("S/E/T: " +mcVis.getEpisodeNumber()+"/"+mcVis.getTimeStep()+"/"+mcVis.getTotalTimeSteps(),0.0f, 10.0f);
+	    g.drawString("E/S/T: " +mcVis.getEpisodeNumber()+"/"+mcVis.getTimeStep()+"/"+mcVis.getTotalTimeSteps(),0.0f, 10.0f);
 	    g.setTransform(saveAT);
 	}
 
