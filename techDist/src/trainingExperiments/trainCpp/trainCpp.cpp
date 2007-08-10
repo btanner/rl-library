@@ -23,6 +23,8 @@ int main(int argc, char *argv[])
 
 	char theRequest[128]={0};
 	sprintf(theRequest,"TO=%d FROM=%d CMD=%d VALTYPE=%d VALS=NULL",ENVSHELL, BENCHMARK, LISTQUERY, NOVALUE);
+	std::cout<<"The message is: "<<theRequest<<std::endl;
+
 
 	std::string theResponse=std::string(RL_env_message(theRequest));
 	std::string::size_type lastColonPos = theResponse.rfind (":",0);
@@ -32,7 +34,6 @@ int main(int argc, char *argv[])
 	
 	
 	
-	std::cout<<"The message is: "<<theRequest<<std::endl;
 		// EnvShellListResponse ListResponse = EnvShellListRequest.Execute();
 		// 
 		// int thisEnvIndex=ListResponse.getTheEnvList().indexOf(theEnv);
