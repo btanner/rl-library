@@ -15,8 +15,7 @@ public class JavaTrainer {
 	 */
 	public static void main(String[] args) throws InterruptedException {
 //		String theEnv="Tetrlais";
-//		String theEnv="MountainCar";
-		String theEnv="Helicopter";
+		String theEnv="MountainCar";
 		EnvShellListResponse ListResponse = EnvShellListRequest.Execute();
 		
 		int thisEnvIndex=ListResponse.getTheEnvList().indexOf(theEnv);

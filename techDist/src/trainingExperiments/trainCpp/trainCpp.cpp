@@ -9,10 +9,35 @@ using std::cerr;
 const int kNumTrials = 10000;
 const int kNumSteps  = 1000;
 
+#define BENCHMARK 0
+#define ENVSHELL 1
+#define LISTQUERY 1
+#define NOVALUE 3
+
+
 int main(int argc, char *argv[])
 {
     int sum = 0;
+//		string theEnv="Tetrlais";
     string theEnv = "MountainCar";
+
+	char theRequest[128]={0};
+	sprintf(theRequest,"TO=%d FROM=%d CMD=%d VALTYPE=%d VALS=NULL",ENVSHELL, BENCHMARK, LISTQUERY, NOVALUE);
+
+	char *theResponse=RL_env_message(theRequest);
+	
+	std::cout<<"The message is: "<<theRequest<<std::endl;
+		// EnvShellListResponse ListResponse = EnvShellListRequest.Execute();
+		// 
+		// int thisEnvIndex=ListResponse.getTheEnvList().indexOf(theEnv);
+		// 
+		// ParameterHolder p = ListResponse.getTheParamList().get(thisEnvIndex);
+		// 
+		// System.out.println("Running with Parameter Settings: "+p);
+		// 
+		// EnvShellLoadRequest.Execute(theEnv,p);
+		// 
+
 
     cerr << "Running with Parameter Settings: " << "<put parameter holder here>\n";
     RL_init();
