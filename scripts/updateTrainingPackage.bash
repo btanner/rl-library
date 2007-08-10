@@ -55,19 +55,19 @@ cd ../../
 #################
 ## Helicopter
 #################
-echo " * Copying Helicopter source code to the training pack"
-##Copy the source
-cd Helicopter
-rm  ../techDist/src/environments/Helicopter/*.java
-rm  ../techDist/src/environments/Helicopter/Helicopter/*.java
-cp src/*.java ../techDist/src/environments/Helicopter/
-cp src/Helicopter/*.java ../techDist/src/environments/Helicopter/Helicopter/
-
-echo " * Building the Helicopter jar and moving it to the techDist to the training pack"
-cd bin
-rm ../../techDist/bin/environments/Helicopter.jar
-jar -cf ../../techDist/bin/environments/Helicopter.jar ./Helicopter/*.class
-cd ../../
+# echo " * Copying Helicopter source code to the training pack"
+# ##Copy the source
+# cd Helicopter
+# rm  ../techDist/src/environments/Helicopter/*.java
+# rm  ../techDist/src/environments/Helicopter/Helicopter/*.java
+# cp src/*.java ../techDist/src/environments/Helicopter/
+# cp src/Helicopter/*.java ../techDist/src/environments/Helicopter/Helicopter/
+# 
+# echo " * Building the Helicopter jar and moving it to the techDist to the training pack"
+# cd bin
+# rm ../../techDist/bin/environments/Helicopter.jar
+# jar -cf ../../techDist/bin/environments/Helicopter.jar ./Helicopter/*.class
+# cd ../../
 
 
 
