@@ -3,6 +3,8 @@ package visualizers.mountainCar;
 
 import java.util.Vector;
 
+import messages.MCGoalRequest;
+import messages.MCGoalResponse;
 import messages.MCHeightRequest;
 import messages.MCHeightResponse;
 import messages.MCStateRequest;
@@ -33,6 +35,8 @@ public class MountainCarVisualizer  extends AbstractVisualizer implements ValueF
 	Vector<Double> theHeights=null;
 	double minHeight= Double.MIN_VALUE;
 	double maxHeight = Double.MAX_VALUE;
+	
+	double goalPosition = 0.5;
 
 
 	public MountainCarVisualizer(){
@@ -171,6 +175,11 @@ public class MountainCarVisualizer  extends AbstractVisualizer implements ValueF
 	public Vector<Double> getHeightsForPositions(Vector<Double> theQueryPositions) {
 		MCHeightResponse heightResponse=MCHeightRequest.Execute(theQueryPositions);
 		return heightResponse.getHeights();
+	}
+	
+	public double getGoalPosition(){
+		MCGoalResponse goalResponse = MCGoalRequest.Execute();
+		return goalResponse.getGoalPosition();
 	}
 	
 	
