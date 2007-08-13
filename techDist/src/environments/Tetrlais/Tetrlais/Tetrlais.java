@@ -28,9 +28,9 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 //	/*Hold all the possible bricks that can fall*/
 	Vector<TetrlaisPiece> possibleBlocks=new Vector<TetrlaisPiece>();
 
-//Default width and height. Static because of the use in getDefaultParameters()
-	static int defaultWidth=6;
-	static int defaultHeight=12;
+//Defaults
+	static int width=6;
+	static int height=12;
 
 	public Tetrlais(){
 		super();
@@ -66,8 +66,8 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 	//This method creates the object that can be used to easily set different problem parameters
 	public static ParameterHolder getDefaultParameters(){
 		ParameterHolder p = new ParameterHolder();
-		p.addIntParam("Width",defaultWidth);
-		p.addIntParam("Height",defaultHeight);
+		p.addIntParam("Width",width);
+		p.addIntParam("Height",height);
 		p.addBooleanParam("LongBlock",true);
 		p.addBooleanParam("SquareBlock",true);
 		p.addBooleanParam("TriBlock",true);
