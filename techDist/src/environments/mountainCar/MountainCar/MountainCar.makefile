@@ -6,3 +6,4 @@ JCC = javac
 MountainCar:
 	$(JCC) -cp $(CLASSPATH) *.java
 	cd .. && jar cvf ../../../bin/environments/MountainCar.jar ./MountainCar/*.class
+	rm -f *.class
