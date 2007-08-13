@@ -78,7 +78,7 @@ public class RLGlueLogic {
 			theList.add(p);
 
 			p = new ParameterHolder();
-			p.addIntParam("sampleParam2",7);
+			p.addIntegerParam("sampleParam2",7);
 			theList.add(p);
 			return theList;
 		}

@@ -54,7 +54,7 @@ public class ParameterHolderPanel extends JPanel {
 
 			case ParameterHolder.intParam:
 				JTextField intField=(JTextField)theRelatedComponent;
-				currentParamHolder.setIntParam(thisParamName, Integer.parseInt(intField.getText()));
+				currentParamHolder.setIntegerParam(thisParamName, Integer.parseInt(intField.getText()));
 				break;
 
 			case ParameterHolder.doubleParam:
@@ -86,7 +86,7 @@ public class ParameterHolderPanel extends JPanel {
 				newField=addBoolParameter(thisParamName, currentParamHolder.getBooleanParam(thisParamName));
 				break;
 			case ParameterHolder.intParam:
-				newField=addIntParameter(thisParamName, currentParamHolder.getIntParam(thisParamName));
+				newField=addIntParameter(thisParamName, currentParamHolder.getIntegerParam(thisParamName));
 				break;
 			case ParameterHolder.doubleParam:
 				newField=addDoubleParameter(thisParamName, currentParamHolder.getDoubleParam(thisParamName));

@@ -60,7 +60,7 @@ public class ParameterHolder {
 
 			if(thisParamType==intParam){
 				int thisParamValue=Integer.parseInt(iss.nextToken());
-				addIntParam(thisParamName,thisParamValue);
+				addIntegerParam(thisParamName,thisParamValue);
 			}
 			if(thisParamType==doubleParam){
 				double thisParamValue=Double.parseDouble(iss.nextToken());
@@ -164,7 +164,7 @@ public class ParameterHolder {
 		genericNewParam(thisParamName);
 	}
 
-	public void addIntParam(String thisParamName) {
+	public void addIntegerParam(String thisParamName) {
 		if(thisParamName.contains(":")||thisParamName.contains("_")){
 			System.out.println("The ParameterName " + thisParamName + " cannot contain a : or _");
 			Thread.dumpStack();
@@ -249,19 +249,19 @@ public class ParameterHolder {
 		boolParams.put(name, thisParamValue);
 	}
 	
-	public void addIntParam(String thisParamName, int thisParamValue) {
+	public void addIntegerParam(String thisParamName, int thisParamValue) {
 		if(thisParamName.contains(":")||thisParamName.contains("_")){
 			System.out.println("The ParameterName " + thisParamName + " cannot contain a : or _");
 			Thread.dumpStack();
 			System.exit(1);
 		}
-		addIntParam(thisParamName);
-		setIntParam(thisParamName,thisParamValue);
+		addIntegerParam(thisParamName);
+		setIntegerParam(thisParamName,thisParamValue);
 	}
 
 
 
-	public void setIntParam(String thisParamAlias,int thisParamValue) {
+	public void setIntegerParam(String thisParamAlias,int thisParamValue) {
 		if(thisParamAlias.contains(":")||thisParamAlias.contains("_")){
 			System.out.println("The ParameterAlias " + thisParamAlias + " cannot contain a : or _");
 			Thread.dumpStack();
@@ -314,7 +314,7 @@ public class ParameterHolder {
 			outs.append(paramType);
 			outs.append("_");
 
-			if(paramType==intParam)outs.append(getIntParam(allParamNames.get(i)));
+			if(paramType==intParam)outs.append(getIntegerParam(allParamNames.get(i)));
 			if(paramType==doubleParam)outs.append(getDoubleParam(allParamNames.get(i)));
 			if(paramType==boolParam)outs.append(getBooleanParam(allParamNames.get(i)));
 			if(paramType==stringParam)outs.append(getStringParam(allParamNames.get(i)));
@@ -370,7 +370,7 @@ public class ParameterHolder {
 	}
 
 
-	public int getIntParam(String theAlias) {
+	public int getIntegerParam(String theAlias) {
 		//Convert from an alias to the real name
 		String name=getAlias(theAlias);
 
@@ -391,7 +391,7 @@ public String toString(){
 			theBuffer.append("boolParam: "+thisParamName+" = "+getBooleanParam(thisParamName));
 			break;
 		case ParameterHolder.intParam:
-			theBuffer.append("intParam: "+thisParamName+" = "+getIntParam(thisParamName));
+			theBuffer.append("intParam: "+thisParamName+" = "+getIntegerParam(thisParamName));
 			break;
 		case ParameterHolder.doubleParam:
 			theBuffer.append("doubleParam: "+thisParamName+" = "+getDoubleParam(thisParamName));
@@ -425,8 +425,8 @@ public String toString(){
 		p.addDoubleParam("Alpha",.1);
 		p.addDoubleParam("epsilon",.03);
 
-		p.addIntParam("StepCount",5);
-		p.addIntParam("Tiles",16);
+		p.addIntegerParam("StepCount",5);
+		p.addIntegerParam("Tiles",16);
 
 		p.addStringParam("AgentName","Dave");
 		p.addStringParam("AgentOccupation","Winner");
@@ -446,8 +446,8 @@ public String toString(){
 
 		System.out.println(p.getDoubleParam("Alpha"));
 		System.out.println(p.getDoubleParam("epsilon"));
-		System.out.println(p.getIntParam("StepCount"));
-		System.out.println(p.getIntParam("Tiles"));
+		System.out.println(p.getIntegerParam("StepCount"));
+		System.out.println(p.getIntegerParam("Tiles"));
 		System.out.println(p.getStringParam("AgentName"));
 		System.out.println(p.getStringParam("AgentOccupation"));
 		System.out.println(p.getBooleanParam("ISCool"));
@@ -457,8 +457,8 @@ public String toString(){
 		
 		System.out.println(unpackedP.getDoubleParam("Alpha"));
 		System.out.println(unpackedP.getDoubleParam("epsilon"));
-		System.out.println(unpackedP.getIntParam("StepCount"));
-		System.out.println(unpackedP.getIntParam("Tiles"));
+		System.out.println(unpackedP.getIntegerParam("StepCount"));
+		System.out.println(unpackedP.getIntegerParam("Tiles"));
 		System.out.println(unpackedP.getStringParam("AgentName"));
 		System.out.println(unpackedP.getStringParam("AgentOccupation"));
 		System.out.println(unpackedP.getBooleanParam("ISCool"));

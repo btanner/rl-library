@@ -45,8 +45,8 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 		super();
 		if(p!=null){
 			if(!p.isNull()){
-				width=p.getIntParam("Width");
-				height=p.getIntParam("Height");
+				width=p.getIntegerParam("Width");
+				height=p.getIntegerParam("Height");
 				System.out.println("Running tetris with: "+width+" x "+height);
 				if(p.getBooleanParam("LongBlock"))	possibleBlocks.add(TetrlaisPiece.makeLine());
 				if(p.getBooleanParam("SquareBlock"))	possibleBlocks.add(TetrlaisPiece.makeSquare());
@@ -67,8 +67,8 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 	//This method creates the object that can be used to easily set different problem parameters
 	public static ParameterHolder getDefaultParameters(){
 		ParameterHolder p = new ParameterHolder();
-		p.addIntParam("Width",6);
-		p.addIntParam("Height",12);
+		p.addIntegerParam("Width",6);
+		p.addIntegerParam("Height",12);
 		p.addBooleanParam("LongBlock",true);
 		p.addBooleanParam("SquareBlock",true);
 		p.addBooleanParam("TriBlock",true);
