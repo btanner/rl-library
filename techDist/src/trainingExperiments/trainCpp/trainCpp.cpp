@@ -22,13 +22,13 @@ int main(int argc, char *argv[])
 //Exactly what problem parameters are available for each are detailed in the README
 //Anything you don't set just keeps its default value
 	if(theEnv=="MountainCar"){
-		theParams->setBoolParam("randomStartStates",true);
-		theParams->setFloatParam("acceleration", .002);
+		theParams->setBooleanParam("randomStartStates",true);
+		theParams->setDoubleParam("acceleration", .002);
 	}
 
 	if(theEnv=="Tetrlais"){
-		theParams->setBoolParam("TriBlock",false);
-		theParams->setIntParam("Width", 8);
+		theParams->setBooleanParam("TriBlock",false);
+		theParams->setIntegerParam("Width", 8);
 	}
 	
 	printf("\n--------------\nAbout to load environment %s\n--------------\n",theEnv.c_str());

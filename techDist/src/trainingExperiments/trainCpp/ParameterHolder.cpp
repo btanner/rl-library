@@ -16,7 +16,7 @@ ParameterHolder::ParameterHolder(const std::string theString){
 	 unsigned int numParams;
 	 std::string thisParamName;
 	
-	float fParamValue;
+	double fParamValue;
 	int iParamValue;
 	std::string bParamValue;
 	std::string sParamValue;
@@ -43,17 +43,17 @@ ParameterHolder::ParameterHolder(const std::string theString){
 		if(thisParamType==intParam){
 			iss>>iParamValue;
 			iss.ignore();
-			addIntParam(thisParamName,iParamValue);
+			addIntegerParam(thisParamName,iParamValue);
 		}
-		if(thisParamType==floatParam){
+		if(thisParamType==doubleParam){
 			iss>>fParamValue;
 			iss.ignore();
-			addFloatParam(thisParamName,fParamValue);
+			addDoubleParam(thisParamName,fParamValue);
 			
 		}
 		if(thisParamType==boolParam){
 			std::getline(iss,bParamValue,'_');
-			addBoolParam(thisParamName,bParamValue=="true");
+			addBooleanParam(thisParamName,bParamValue=="true");
 		}
 		if(thisParamType==stringParam){
 			std::getline(iss,sParamValue,'_');
@@ -87,10 +87,10 @@ std::string ParameterHolder::stringSerialize() {
 		outs<<allParamNames[i]<<"_";
 		unsigned int paramType=allParamTypes[i];
 		outs<<paramType<<"_";
-		if(paramType==intParam)outs<<getIntParam(allParamNames[i])<<"_";
-		if(paramType==floatParam)outs<<getFloatParam(allParamNames[i])<<"_";
+		if(paramType==intParam)outs<<getIntegerParam(allParamNames[i])<<"_";
+		if(paramType==doubleParam)outs<<getDoubleParam(allParamNames[i])<<"_";
 		if(paramType==boolParam){
-			if(getBoolParam(allParamNames[i]))
+			if(getBooleanParam(allParamNames[i]))
 				outs<<"true";
 			else
 				outs<<"false";
@@ -135,36 +135,36 @@ void ParameterHolder::setAlias(std::string alias, std::string original){
 }
 
 
-void ParameterHolder::addIntParam(std::string name, int defaultValue){
-	addIntParam(name);
-	setIntParam(name, defaultValue);
+void ParameterHolder::addIntegerParam(std::string name, int defaultValue){
+	addIntegerParam(name);
+	setIntegerParam(name, defaultValue);
 }
-void ParameterHolder::addFloatParam(std::string name, float defaultValue){
-	addFloatParam(name);
-	setFloatParam(name, defaultValue);
+void ParameterHolder::addDoubleParam(std::string name, double defaultValue){
+	addDoubleParam(name);
+	setDoubleParam(name, defaultValue);
 }
-void ParameterHolder::addBoolParam(std::string name, bool defaultValue){
-	addBoolParam(name);
-	setBoolParam(name, defaultValue);
+void ParameterHolder::addBooleanParam(std::string name, bool defaultValue){
+	addBooleanParam(name);
+	setBooleanParam(name, defaultValue);
 }
 void ParameterHolder::addStringParam(std::string name, std::string defaultValue){
 	addStringParam(name);
 	setStringParam(name, defaultValue);
 }
 
-void ParameterHolder::addIntParam(std::string name){
+void ParameterHolder::addIntegerParam(std::string name){
 	allParams[name]=intParam;
 	allParamNames.push_back(name);
 	allParamTypes.push_back(intParam);
 	setAlias(name,name);
 }
-void ParameterHolder::addFloatParam(std::string name){
-	allParams[name]=floatParam;
+void ParameterHolder::addDoubleParam(std::string name){
+	allParams[name]=doubleParam;
 	allParamNames.push_back(name);
-	allParamTypes.push_back(floatParam);
+	allParamTypes.push_back(doubleParam);
 	setAlias(name,name);
 }
-void ParameterHolder::addBoolParam(std::string name){
+void ParameterHolder::addBooleanParam(std::string name){
 	allParams[name]=boolParam;
 	allParamNames.push_back(name);
 	allParamTypes.push_back(boolParam);
@@ -178,7 +178,7 @@ void ParameterHolder::addStringParam(std::string name){
 }
 
 
-void ParameterHolder::setIntParam(std::string alias, int value){
+void ParameterHolder::setIntegerParam(std::string alias, int value){
 	//Convert from an alias to the real name
 	std::string name=getAlias(alias);
 	if(allParams.count(name)==0){
@@ -187,16 +187,16 @@ void ParameterHolder::setIntParam(std::string alias, int value){
 	intParams[name]=value;
 }
 
-void ParameterHolder::setFloatParam(std::string alias, float value){
+void ParameterHolder::setDoubleParam(std::string alias, double value){
 	//Convert from an alias to the real name
 	std::string name=getAlias(alias);
 	if(allParams.count(name)==0){
 		std::cerr<<"Careful, you are setting the value of parameter: "<<name<<" but the parameter hasn't been added...\n"<<std::endl;
 	}
-	floatParams[name]=value;
+	doubleParams[name]=value;
 }
 
-void ParameterHolder::setBoolParam(std::string alias, bool value){
+void ParameterHolder::setBooleanParam(std::string alias, bool value){
 	//Convert from an alias to the real name
 	std::string name=getAlias(alias);
 
@@ -215,7 +215,7 @@ void ParameterHolder::setStringParam(std::string alias, std::string value){
 	}
 	stringParams[name]=value;
 }
-int ParameterHolder::getIntParam(std::string alias) {
+int ParameterHolder::getIntegerParam(std::string alias) {
 	//Convert from an alias to the real name
 	std::string name=getAlias(alias);
 
@@ -224,17 +224,17 @@ int ParameterHolder::getIntParam(std::string alias) {
 	int retVal=intParams[name];
 	return retVal;
 }
-float ParameterHolder::getFloatParam(std::string alias) {
+double ParameterHolder::getDoubleParam(std::string alias) {
 	//Convert from an alias to the real name
 	std::string name=getAlias(alias);
 
 	if(allParams.count(name)==0){std::cerr<<"Careful, you are getting the value of parameter: "<<name<<" but the parameter hasn't been added...\n"<<std::endl;exit(1);}
-	if(floatParams.count(name)==0){std::cerr<<"Careful, you are getting the value of parameter: "<<name<<" but the parameter isn't an float parameter...\n"<<std::endl;exit(1);}
+	if(doubleParams.count(name)==0){std::cerr<<"Careful, you are getting the value of parameter: "<<name<<" but the parameter isn't an double parameter...\n"<<std::endl;exit(1);}
 
-	float retVal=floatParams[name];
+	double retVal=doubleParams[name];
 	return retVal;
 }
-bool ParameterHolder::getBoolParam(std::string alias) {
+bool ParameterHolder::getBooleanParam(std::string alias) {
 	//Convert from an alias to the real name
 	std::string name=getAlias(alias);
 

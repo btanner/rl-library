@@ -17,7 +17,7 @@
 
 enum PHTypes{
 	intParam=0,
-	floatParam=1,
+	doubleParam=1,
 	boolParam=2,
 	stringParam=3
 };
@@ -26,7 +26,7 @@ enum PHTypes{
 class ParameterHolder{
 private:
 	typedef std::map<std::string, int> TStrIntMap;
-	typedef std::map<std::string, float> TStrFloatMap;
+	typedef std::map<std::string, double> TStrDoubleMap;
 	typedef std::map<std::string, bool> TStrBoolMap;
 	typedef std::map<std::string, std::string> TStrStrMap;
 
@@ -35,7 +35,7 @@ private:
 	typedef std::vector<PHTypes> TPHTypesVec;
 	
 	TStrIntMap intParams;
-	TStrFloatMap floatParams;
+	TStrDoubleMap doubleParams;
 	TStrBoolMap boolParams;
 	TStrStrMap stringParams;
 	
@@ -60,26 +60,26 @@ public:
 
 	virtual void setAlias(std::string alias, std::string original);
 
-	virtual void setIntParam(std::string alias, int value);
-	virtual void setFloatParam(std::string alias, float value);
-	virtual void setBoolParam(std::string alias, bool value);
+	virtual void setIntegerParam(std::string alias, int value);
+	virtual void setDoubleParam(std::string alias, double value);
+	virtual void setBooleanParam(std::string alias, bool value);
 	virtual void setStringParam(std::string alias, std::string value);
 
-	virtual void addIntParam(std::string alias);
-	virtual void addFloatParam(std::string alias);
-	virtual void addBoolParam(std::string alias);
+	virtual void addIntegerParam(std::string alias);
+	virtual void addDoubleParam(std::string alias);
+	virtual void addBooleanParam(std::string alias);
 	virtual void addStringParam(std::string alias);
 
 //Should have done this a while ago
-	virtual void addIntParam(std::string alias, int defaultValue);
-	virtual void addFloatParam(std::string alias, float defaultValue);
-	virtual void addBoolParam(std::string alias, bool defaultValue);
+	virtual void addIntegerParam(std::string alias, int defaultValue);
+	virtual void addDoubleParam(std::string alias, double defaultValue);
+	virtual void addBooleanParam(std::string alias, bool defaultValue);
 	virtual void addStringParam(std::string alias, std::string defaultValue);
 
 
-	virtual int getIntParam(std::string alias);
-	virtual float getFloatParam(std::string alias);
-	virtual bool getBoolParam(std::string alias);
+	virtual int getIntegerParam(std::string alias);
+	virtual double getDoubleParam(std::string alias);
+	virtual bool getBooleanParam(std::string alias);
 	virtual std::string getStringParam(std::string alias);
 	
 	virtual int getParamCount();
