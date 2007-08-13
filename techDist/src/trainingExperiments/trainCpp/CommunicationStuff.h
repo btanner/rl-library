@@ -11,6 +11,7 @@
 
 ParameterHolder *getParameterHolderForEnvironment(std::string envName);
 void loadEnvironment(std::string envName, ParameterHolder *theParamHolder);
+void unloadEnvironment();
 
 
 

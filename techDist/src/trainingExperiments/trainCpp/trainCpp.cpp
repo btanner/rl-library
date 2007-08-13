@@ -9,54 +9,68 @@
 using std::string;
 using std::cerr;
 
+void runTrial();
 
 int main(int argc, char *argv[])
 {
-		string theEnv="Tetrlais";
+	string theEnv="Tetrlais";
 //    string theEnv = "MountainCar";
 
 	ParameterHolder *theParams = getParameterHolderForEnvironment(theEnv);
+//Some examples of how to set problem paramemters	
+
+//Exactly what problem parameters are available for each are detailed in the README
+//Anything you don't set just keeps its default value
+	if(theEnv=="MountainCar"){
+		theParams->setBoolParam("randomStartStates",true);
+		theParams->setFloatParam("acceleration", .002);
+	}
+
+	if(theEnv=="Tetrlais"){
+		theParams->setBoolParam("TriBlock",false);
+		theParams->setIntParam("Width", 8);
+	}
 	
-	//IF env == MountainCa
-//	theParams->setBoolParam("randomStartStates",true);
+	printf("\n--------------\nAbout to load environment %s\n--------------\n",theEnv.c_str());
+	loadEnvironment(theEnv,theParams);
 	
+	runTrial();
+
+	unloadEnvironment();
+	
+	//Now just run with the default params for the other problem
+	theEnv="MountainCar";
+	printf("\n--------------\nAbout to load environment %s\n--------------\n",theEnv.c_str());
+
+	theParams = getParameterHolderForEnvironment(theEnv);
+
 	loadEnvironment(theEnv,theParams);
 
-    RL_init();
+	runTrial();
 
-    int sum = 0;
-	unsigned int numEpisodes = 5000;
-    for (int i = 0; i < numEpisodes; ++i)
-    {
-        RL_episode(100000);
-        sum += RL_num_steps();
 
-        if ( (i+1) % 100 == 0 )
-        {
-            cerr << "Running episode: " << i << " total steps in last bunch is: " << sum << "\n";
-            sum = 0;
-        }    
-    }
-    RL_cleanup();
     cerr << "Program over\n";
 
     return 0;
 }
 
 
+void runTrial(){
+    RL_init();
 
-/*
+    int sum = 0;
+	unsigned int numEpisodes = 100;
+    for (unsigned int i = 0; i < numEpisodes; ++i)
+    {
+        RL_episode(100000);
+        sum += RL_num_steps();
 
-	public static void main(String[] args) throws InterruptedException {
-		EnvShellListResponse ListResponse = EnvShellListRequest.Execute();
-		
-		int thisEnvIndex=ListResponse.getTheEnvList().indexOf(theEnv);
-
-		ParameterHolder p = ListResponse.getTheParamList().get(thisEnvIndex);
-		
-		EnvShellLoadRequest.Execute(theEnv,p);
-
-		RLGlue.RL_init();
+        if ( (i+1) % 5== 0 )
+        {
+            cerr << "Running episode: " << (i+1) << " total steps in last bunch is: " << sum << "\n";
+            sum = 0;
+        }    
+    }
+    RL_cleanup();
 }
 
-*/

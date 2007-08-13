@@ -10,6 +10,7 @@
 #define NOVALUE 3
 #define STRINGLIST 0
 #define LOADQUERY 2
+#define UNLOADQUERY 3
 
 
 
@@ -50,11 +51,17 @@ ParameterHolder *getParameterHolderForEnvironment(std::string envName){
 }
 
 
+void unloadEnvironment(){
+	char theRequest[1024]={0};
+
+	sprintf(theRequest,"TO=%d FROM=%d CMD=%d VALTYPE=%d VALS=NULL",ENVSHELL, BENCHMARK, UNLOADQUERY, NOVALUE);
+	RL_env_message(theRequest);
+}
+
 void loadEnvironment(std::string envName, ParameterHolder *theParamHolder){
 	char theRequest[1024]={0};
 	std::string loadPayLoad=envName+":"+theParamHolder->stringSerialize();
 	
-	std::cout<<"The payload we're sending is: "<<loadPayLoad<<std::endl;
 	sprintf(theRequest,"TO=%d FROM=%d CMD=%d VALTYPE=%d VALS=%s",ENVSHELL, BENCHMARK, LOADQUERY, STRINGLIST,loadPayLoad.c_str());
 	RL_env_message(theRequest);
 }

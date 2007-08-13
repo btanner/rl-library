@@ -1,12 +1,13 @@
 RLGLUE = ../../../rl-glue/RL-Glue
-BIN = ../../../bin
+BIN = ../../../bin/trainingExperiments/trainCpp
 
 CXX = g++
 CXXFLAGS = -ansi -pedantic -Wall -I$(RLGLUE)
 LDXFLAGS = 
 
 trainCpp: trainCpp.o ParameterHolder.o RL_client_experiment.o RL_network.o CommunicationStuff.o
-	$(CXX) $(BIN)/trainCpp.o $(BIN)/CommunicationStuff.o $(BIN)/ParameterHolder.o $(BIN)/RL_client_experiment.o $(BIN)/RL_network.o -o $@ $(LDXFLAGS)
+	$(CXX) $(BIN)/trainCpp.o $(BIN)/CommunicationStuff.o $(BIN)/ParameterHolder.o $(BIN)/RL_client_experiment.o $(BIN)/RL_network.o -o $(BIN)/$@ $(LDXFLAGS)
+	rm -fr $(BIN)/*.o
 
 trainCpp.o: trainCpp.cpp 
 	$(CXX) -c $(CXXFLAGS) $< -o $(BIN)/$@
@@ -24,4 +25,4 @@ RL_network.o: $(RLGLUE)/Network/RL_network.c $(RLGLUE)/Network/RL_network.h
 	$(CXX) -c $(CXXFLAGS) $< -o $(BIN)/$@
 
 clean:
-	rm -fr trainCpp
+	rm -fr $(BIN)/*
