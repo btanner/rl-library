@@ -13,8 +13,8 @@ import rlVizLib.visualization.VizComponent;
 public class MountainVizComponent implements VizComponent {
 	private MountainCarVisualizer theVizualizer=null;
 
-	Vector<Double> theQueryPositions=null;
 	Vector<Double> theHeights=null;
+	boolean firstTime = true;
 
 	public MountainVizComponent(MountainCarVisualizer theVizualizer){
 		this.theVizualizer=theVizualizer;
@@ -28,14 +28,7 @@ public class MountainVizComponent implements VizComponent {
 		x.concatenate(theScaleTransform);
 		g.setTransform(x);
 		
-		
-		double maxHeight=Double.MIN_VALUE;
-		double minHeight=Double.MAX_VALUE;
-		for (Double thisHeight : theHeights) {
-			if(thisHeight>maxHeight)maxHeight=thisHeight;
-			if(thisHeight<minHeight)minHeight=thisHeight;
-		}
-
+		theHeights = theVizualizer.getSampleHeights();
 
 		double sizeEachComponent=1.0/(double)theHeights.size();
 	
@@ -43,10 +36,10 @@ public class MountainVizComponent implements VizComponent {
 		g.setColor(Color.BLACK);
 
 		double lastX=0.0d;
-		double lastY=1.0-UtilityShop.normalizeValue(theHeights.get(0),minHeight,maxHeight);
+		double lastY=1.0-UtilityShop.normalizeValue(theHeights.get(0),theVizualizer.getMinHeight(),theVizualizer.getMaxHeight());
 		for(int i=1;i<theHeights.size();i++){
 			double thisX=lastX+sizeEachComponent;
-			double thisY=1.0-UtilityShop.normalizeValue(theHeights.get(i),minHeight,maxHeight);
+			double thisY=1.0-UtilityShop.normalizeValue(theHeights.get(i),theVizualizer.getMinHeight(),theVizualizer.getMaxHeight());
 			
 			Line2D thisLine=new Line2D.Double(100.0d*lastX, 100.0d*lastY,100.0d* thisX,100.0d*thisY);
 			
@@ -62,22 +55,11 @@ public class MountainVizComponent implements VizComponent {
 	}
 
 	public boolean update() {
-		if(theQueryPositions==null){
-			double minPosition=theVizualizer.getMinValueForDim(0);
-			double maxPosition=theVizualizer.getMaxValueForDim(0);
-
-			int pointsToDraw=100;
-			double theRangeSize=maxPosition-minPosition;
-			double pointIncrement=theRangeSize/(double)pointsToDraw;
-
-			theQueryPositions=new Vector<Double>();
-			for(double i=minPosition;i<maxPosition;i+=pointIncrement){
-				theQueryPositions.add(i);
-			}
-
-			theHeights=theVizualizer.getHeightsForPositions(theQueryPositions);
+		if(firstTime){
+			firstTime = false;
 			return true;
 		}
+			
 		return false;
 	}
 

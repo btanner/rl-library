@@ -28,6 +28,11 @@ public class MountainCarVisualizer  extends AbstractVisualizer implements ValueF
 	int currentValueFunctionResolution=5;
 	
 	MCStateResponse theCurrentState=null;
+	
+	Vector<Double> theQueryPositions=null;
+	Vector<Double> theHeights=null;
+	double minHeight= Double.MIN_VALUE;
+	double maxHeight = Double.MAX_VALUE;
 
 
 	public MountainCarVisualizer(){
@@ -122,6 +127,34 @@ public class MountainCarVisualizer  extends AbstractVisualizer implements ValueF
 	public double getHeight(){
 		return theCurrentState.getHeight();		
 	}
+	
+	public double getMaxHeight(){
+		if(theQueryPositions==null){
+			initializeHeights();
+		}
+		return minHeight;
+	}
+	
+	public double getMinHeight(){
+		if(theQueryPositions==null){
+			initializeHeights();
+		}
+		return maxHeight;
+	}
+	
+	public Vector<Double> getSampleHeights(){
+		if(theHeights == null)
+			initializeHeights();
+		return theHeights;
+		
+	}
+	
+	public Vector<Double> getSamplePositions(){
+		if(theQueryPositions==null)
+			initializeHeights();
+		return theQueryPositions;
+	}
+	
 	public double getDeltaHeight(){
 		return theCurrentState.getDeltaheight();
 	}
@@ -139,6 +172,9 @@ public class MountainCarVisualizer  extends AbstractVisualizer implements ValueF
 		MCHeightResponse heightResponse=MCHeightRequest.Execute(theQueryPositions);
 		return heightResponse.getHeights();
 	}
+	
+	
+	
 
 	public int getEpisodeNumber() {
 		return theCurrentState.getEpisodeNumber();
@@ -150,6 +186,34 @@ public class MountainCarVisualizer  extends AbstractVisualizer implements ValueF
 
 	public int getTotalTimeSteps() {
 		return theCurrentState.getTotalSteps();
+	}
+	
+	public void initializeHeights(){
+		//Because we can change the shape of the curve we have no guarantees what 
+		// the max and min heights of the mountains may turn out to be...
+		// this takes a quick sample based approach to find out what is a good approximation
+		//for the min and the max.
+		double minPosition=getMinValueForDim(0);
+		double maxPosition=getMaxValueForDim(0);
+
+		int pointsToDraw=100;
+		double theRangeSize=maxPosition-minPosition;
+		double pointIncrement=theRangeSize/(double)pointsToDraw;
+
+		theQueryPositions=new Vector<Double>();
+		for(double i=minPosition;i<maxPosition;i+=pointIncrement){
+			theQueryPositions.add(i);
+		}
+
+		theHeights=this.getHeightsForPositions(theQueryPositions);
+		
+		maxHeight=Double.MIN_VALUE;
+		minHeight=Double.MAX_VALUE;
+		for (Double thisHeight : theHeights) {
+			if(thisHeight>maxHeight)maxHeight=thisHeight;
+			if(thisHeight<minHeight)minHeight=thisHeight;
+		}
+		
 	}
 
 
