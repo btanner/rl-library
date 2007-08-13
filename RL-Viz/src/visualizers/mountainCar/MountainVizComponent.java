@@ -49,8 +49,37 @@ public class MountainVizComponent implements VizComponent {
 			g.draw(thisLine);
 		}
 
+		
+		
+		
 		g.setTransform(origTransform);
+		/*
+		g.setColor(Color.GREEN);
 
+		//to bring things back into the window
+		double minPosition=theVizualizer.getMinValueForDim(0);	
+		double maxPosition=theVizualizer.getMaxValueForDim(0);	
+		
+		double goalHeight = 0;
+		Vector<Double> tempVec = new Vector<Double>(0);
+		tempVec.add(theVizualizer.getGoalPosition());
+		
+		goalHeight = theVizualizer.getHeightsForPositions(tempVec).get(0);
+		
+		double transX = UtilityShop.normalizeValue( theVizualizer.getGoalPosition(),minPosition,maxPosition);
+		//need to get he actual height ranges
+		double transY = UtilityShop.normalizeValue(
+				goalHeight,
+				theVizualizer.getMinHeight(),
+				theVizualizer.getMaxHeight()
+				);
+		transY= (1.0-transY);
+		
+		double rectWidth=.05;
+		double rectHeight=.05;
+		Rectangle2D fillRect=new Rectangle2D.Double(transX-rectWidth/2.0d,transY-rectHeight/2.0d,rectWidth,rectHeight);
+		g.fill(fillRect);
+*/
 
 	}
 
