@@ -196,7 +196,7 @@ public class MountainCarVisualizer  extends AbstractVisualizer implements ValueF
 		double minPosition=getMinValueForDim(0);
 		double maxPosition=getMaxValueForDim(0);
 
-		int pointsToDraw=100;
+		int pointsToDraw=500;
 		double theRangeSize=maxPosition-minPosition;
 		double pointIncrement=theRangeSize/(double)pointsToDraw;
 
