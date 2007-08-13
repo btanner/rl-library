@@ -47,7 +47,6 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 			if(!p.isNull()){
 				width=p.getIntParam("Width");
 				height=p.getIntParam("Height");
-				System.out.println("Running tetris with: "+width+" x "+height);
 				if(p.getBooleanParam("LongBlock"))	possibleBlocks.add(TetrlaisPiece.makeLine());
 				if(p.getBooleanParam("SquareBlock"))	possibleBlocks.add(TetrlaisPiece.makeSquare());
 				if(p.getBooleanParam("TriBlock"))	possibleBlocks.add(TetrlaisPiece.makeTri());
@@ -213,11 +212,13 @@ public class Tetrlais extends EnvironmentBase implements RLVizEnvInterface {
 	/*RL-Viz Methods*/
 	@Override
 	protected Observation makeObservation() {
+		// TODO Auto-generated method stub
 		return gameState.get_observation();
 	}
 	/*End of RL-Viz Methods*/
 
 	public RLVizVersion getTheVersionISupport() {
+		// TODO Auto-generated method stub
 		return new RLVizVersion(1,0);
 	}
 
