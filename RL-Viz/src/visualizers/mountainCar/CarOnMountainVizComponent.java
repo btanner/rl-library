@@ -35,7 +35,7 @@ public class CarOnMountainVizComponent implements VizComponent {
 		double minPosition=mcv.getMinValueForDim(0);	
 		double maxPosition=mcv.getMaxValueForDim(0);	
 		
-		double transX = UtilityShop.normalizeValue( this.mcv.getCurrentStateInDimension(0),	minPosition,				maxPosition);
+		double transX = UtilityShop.normalizeValue( this.mcv.getCurrentStateInDimension(0),	minPosition,maxPosition);
 		
 		//need to get he actual height ranges
 		double transY = UtilityShop.normalizeValue(
