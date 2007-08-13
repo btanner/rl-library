@@ -51,6 +51,10 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 	private double minVelocity = -0.07;    
 	private double maxVelocity = 0.07;    
 	private double goalPosition = 0.5;
+	
+	
+	private double acceleration_factor = 0.001;
+	private double gravity_factor = -0.0025;
 
 	private double defaultInitPosition=-0.5d;
 	private double defaultInitVelocity=0.0d;
@@ -104,7 +108,7 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 			System.exit(1);
 		}
 		
-		velocity += ((a-1))*0.001 + Math.cos(3.0f*position)*(-0.0025);
+		velocity += ((a-1))*acceleration_factor + Math.cos(3.0f*position)*(gravity_factor);
 		if (velocity > maxVelocity) velocity = maxVelocity;
 		if (velocity < minVelocity) velocity = minVelocity;
 		position += velocity;
@@ -127,6 +131,8 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 		p.addDoubleParam("minPosition",-1.2d);
 		p.addDoubleParam("maxPosition",.6d);
 		
+		p.addDoubleParam("acceleration", 0.001);
+		p.addDoubleParam("gravity", -0.0025);
 		return p;
 	}
 
@@ -141,6 +147,8 @@ public class MountainCar extends EnvironmentBase implements getEnvMaxMinsInterfa
 				this.minPosition=p.getDoubleParam("minPosition");
 				this.maxPosition=p.getDoubleParam("maxPosition");
 				
+				this.acceleration_factor = p.getDoubleParam("acceleration");
+				this.gravity_factor = p.getDoubleParam("gravity");
 				System.out.println("MountainCar Max and Min Velocity are: "+minVelocity+" and "+maxVelocity);
 			}
 		}
