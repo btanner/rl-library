@@ -10,6 +10,6 @@ clean:
 	cd ./RL-Glue/Examples/Glue_Only && make clean
 	cd ./agents/RandomAgentJava/ && make clean
 	cd ./agents/TetrisAgentJava/ && make clean
-	cd ./agents/MountainCarAgentCPP/ && make
+	cd ./agents/MountainCarAgentCPP/ && make clean
 	cd ./trainers/consoleTrainerJava/ && make clean
 	cd ./trainers/consoleTrainerCPP/ && make clean
