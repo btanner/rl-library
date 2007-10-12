@@ -1,4 +1,4 @@
-package RandomAgent;
+package TetrisAgent;
 
 import java.util.Random;
 
@@ -8,7 +8,7 @@ import rlglue.agent.Agent;
 import rlglue.types.Action;
 import rlglue.types.Observation;
 
-public class RandomAgent implements Agent {
+public class TetrisAgent implements Agent {
 	private Action action;
 	private int numInts =1;
 	private int numDoubles =0;
@@ -18,7 +18,7 @@ public class RandomAgent implements Agent {
 	
 
         
-        public RandomAgent(){
+        public TetrisAgent(){
         }
 
 	public void agent_cleanup() {
@@ -86,7 +86,7 @@ public class RandomAgent implements Agent {
                 TaskSpecObject specObj = new TaskSpecObject(taskSpec);
 		// TODO Auto-generated method stub
 		Action theaction = new Action(specObj.num_discrete_action_dims,specObj.num_continuous_action_dims);
-                RandomAgent ra = new RandomAgent();
+                TetrisAgent ra = new TetrisAgent();
                 ra.agent_init(taskSpec);
                 Observation o = new Observation(1,1);
                 for(int i=0; i< 50; i++){

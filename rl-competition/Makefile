@@ -1,11 +1,13 @@
 all:
 	cd ./RL-Glue/Examples/Glue_Only && make
-	cd ./agents/RandomAgent/ && make
+	cd ./agents/RandomAgentJava/ && make
+	cd ./agents/TetrisAgentJava/ && make
 	cd ./trainers/consoleTrainerJava/ && make
 	cd ./trainers/consoleTrainerCPP/ && make
 
 clean:
 	cd ./RL-Glue/Examples/Glue_Only && make clean
-	cd ./agents/RandomAgent/ && make clean
+	cd ./agents/RandomAgentJava/ && make clean
+	cd ./agents/TetrisAgentJava/ && make clean
 	cd ./trainers/consoleTrainerJava/ && make clean
 	cd ./trainers/consoleTrainerCPP/ && make clean
