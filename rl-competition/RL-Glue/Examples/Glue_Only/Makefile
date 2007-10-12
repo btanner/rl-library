@@ -15,8 +15,8 @@ GLUE_OBJECTS = RL_glue.o RL_network.o RL_server_experiment.o RL_server_agent.o R
 all: RL_glue
 
 clean: 
-	rm $(BUILD_PATH)/*.o
-	rm $(BIN_PATH)/RL_glue
+	rm -Rf $(BUILD_PATH)/*
+	rm -f $(BIN_PATH)/RL_glue
 
 # Link everything together
 RL_glue: $(GLUE_OBJECTS)
