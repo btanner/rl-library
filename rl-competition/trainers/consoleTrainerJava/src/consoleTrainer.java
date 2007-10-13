@@ -37,13 +37,14 @@ public class consoleTrainer {
 		//of episodes run. You have 100 000 steps per episode to terminate in, other wise 
 		// the glue terminates the episode
 		int episodeCount=10;
-		int maxEpisodeLength=1000;
+		int maxEpisodeLength=20000;
 		
 		int totalSteps=0;
 
 		for(int i=0;i<episodeCount;i++){
 			RLGlue.RL_episode(maxEpisodeLength);
 			totalSteps+=RLGlue.RL_num_steps();
+			System.out.println("Episode: "+i+" steps: "+RLGlue.RL_num_steps());
 		}
 		
 		System.out.println("totalSteps is: "+totalSteps);

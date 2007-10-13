@@ -50,17 +50,18 @@ int main(int argc, char *argv[])
 		//of episodes run. You have 100 000 steps per episode to terminate in, other wise 
 		// the glue terminates the episode
 		int episodeCount=10;
-		int maxEpisodeLength=1000;
+		int maxEpisodeLength=20000;
 		
 		int totalSteps=0;
 
 		for(int i=0;i<episodeCount;i++){
 			RL_episode(maxEpisodeLength);
+			std::cout<<"Episode: "<<i<<" steps: "<<RL_num_steps()<<std::endl;
 			totalSteps+=RL_num_steps();
 		}
 		
-		std::cout<<"totalSteps is: "<<totalSteps<<std::endl;
-		
+
+		std::cout<<"Total Steps : "<<totalSteps<<std::endl;		
 		
 
 		//clean up the environment and end the program
