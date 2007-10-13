@@ -50,10 +50,9 @@ double alpha;                      // step size parameter
 double lambda;                     // trace-decay parameters
 double RLgamma=1.0;                // discount-rate parameters
 
-Action oldAction;						//action selected on previous time step
-Action newAction;						//action selected on current time step
+Action oldAction={0};						//action selected on previous time step
+Action newAction={0};						//action selected on current time step
 
-Observation currentObservation;			//current observation on current time step
 
 //Helper functions
 void computeActionValues();                         

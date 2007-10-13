@@ -38,8 +38,7 @@ public class RandomAgent implements Agent {
         }
 
 	public void agent_cleanup() {
-            // TODO Auto-generated method stub
-		
+		System.out.println("\t -- agent_cleanup called in RandomAgent");
 	}
 
 	public void agent_end(double arg0) {

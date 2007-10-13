@@ -34,8 +34,8 @@ void runTrial();
 int main(int argc, char *argv[])
 {
 //Another option:
-//		runMountainCarExperiment();
-
+		runMountainCarExperiment();
+		exit(1);
 //You should write a bit of code to look at command line args to see what you want to run I guess.
 //		loadTetris(0);
 		loadMountainCar(0);
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 		
 		int episodesToRun=10;
 		
-		int totalSteps=runEpisodes(episodesToRun,1000);
+		int totalSteps=runEpisodes(episodesToRun,10000);
 		
 		double averageSteps=(double)totalSteps/(double)episodesToRun;
 		printf("Average steps per episode: %.2f\n",averageSteps);

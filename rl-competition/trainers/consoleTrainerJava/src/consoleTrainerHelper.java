@@ -18,10 +18,19 @@ import rlVizLib.general.ParameterHolder;
 import rlVizLib.messaging.environmentShell.EnvShellListRequest;
 import rlVizLib.messaging.environmentShell.EnvShellListResponse;
 import rlVizLib.messaging.environmentShell.EnvShellLoadRequest;
+import rlVizLib.messaging.environmentShell.EnvShellUnLoadRequest;
 
 public class consoleTrainerHelper{
+	private static boolean currentlyLoaded=false;
+	
+	private static void unload(){
+		EnvShellUnLoadRequest.Execute();
+	}
 	private static void load(String envNameString, ParameterHolder theParams){
+		if(currentlyLoaded)unload();
+		
 		EnvShellLoadRequest.Execute(envNameString,theParams);
+		currentlyLoaded=true;
 	}
 	
 	private static ParameterHolder preload(String envNameString){

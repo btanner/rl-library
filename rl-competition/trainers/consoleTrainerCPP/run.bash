@@ -1,6 +1,5 @@
 #/bin/bash
 
-
 #Variables
 libPath=../../libraries
 
@@ -24,3 +23,4 @@ echo "-- Killing RL_glue - PID=$gluePID"
 kill $gluePID
 echo " --Killing dynamic environment loader - PID=$envShellPID"
 kill $envShellPID
+

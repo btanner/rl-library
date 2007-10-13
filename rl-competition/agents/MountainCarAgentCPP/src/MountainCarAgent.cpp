@@ -23,6 +23,9 @@
 #include "MountainCarAgent.h"
 #include "tiles.h"
 
+
+
+
 // RLGLUE INTERFACE FUNCTIONS ----------------------------------------------
 void agent_init(Task_specification ts)
 {
@@ -100,8 +103,22 @@ void agent_end(Reward r)
 
 void agent_cleanup()
 {
-	free(oldAction.intArray);
-	free(newAction.intArray);
+	if(oldAction.intArray!=0){
+		free(oldAction.intArray);
+		oldAction.intArray=0;
+	}
+	if(oldAction.doubleArray!=0){
+		free(oldAction.doubleArray);
+		oldAction.doubleArray=0;
+	}
+	if(newAction.intArray!=0){
+		free(newAction.intArray);
+		newAction.intArray=0;
+	}
+	if(newAction.doubleArray!=0){
+		free(newAction.doubleArray);
+		newAction.doubleArray=0;
+	}
 }
  
 void agent_freeze()
