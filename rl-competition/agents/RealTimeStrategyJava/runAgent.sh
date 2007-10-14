@@ -1,3 +1,9 @@
-#!/bin/sh
-java -cp ../../RL-Glue/RL-Glue/Java/RL-Glue.jar:. rlglue.agent.AgentLoader OLAgent
+#/bin/bash
+#Variables
+compLib=../../libraries/RLVizLib.jar
+
+
+java -Xmx128M -cp $compLib:./bin rlglue.agent.AgentLoader OLAgent
+
+echo "-- Agent is complete"
 
