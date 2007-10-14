@@ -26,6 +26,8 @@ are treated separately.
 To upgrade RL-Glue sources included in this code, do the following: 
 (note: no upgrade is required for the competition)
 
+(scripts/upgrade-RLGlue.sh does this automatically now) 
+
   Download and unpack the latest RL-Glue distribution package. 
 
   copy these files to libs/rl-glue/src:
