@@ -1,0 +1,15 @@
+
+The C++ trainer is bundled under the domains/realTimeStrategy source tree. 
+
+In particular, the file of most importance is: 
+
+   domains/realTimeStrategy/apps/rlgagent/src/rlglue_agent.C
+
+To build the trainer, run 
+
+   make rlgexp 
+
+In the main source tree directory.
+
+Please read domains/realTimeStrategy/README.rlglue for more information.
+

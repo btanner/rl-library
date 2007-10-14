@@ -1,0 +1,66 @@
+# $Id: app3.rules 5582 2007-08-05 03:16:58Z mburo $
+
+# This is an ORTS file (c) Michael Buro, licensed under the GPL
+# This file compiles QT applications
+# input:
+
+# APP             : application name
+# APP_DIR         : application directory
+# APP_SOURCES     : local source files to build APP (*_main.* will be filtered out!)
+# APP_LIBS        : library dependencies
+#$(warning "::: parameters: " $(APP) $(APP_DIR) sources="$(APP_SOURCES)" libs="$(APP_LIBS)")
+
+# output:
+#
+# - adds application APP to APP_LIST
+# - creates rule to link bin/$(APP)
+include config/qtmisc.inc
+
+APP_LIST := $(APP_LIST) $(APP)
+
+APP_EXEC := bin/$(APP)
+
+HERE := apps/$(APP_SDIRS)/src/
+
+# compute list of library .o files
+
+DEP_DIRS  := $(patsubst %, libs/%/src, $(APP_LIBS))
+
+FILES     := $(foreach dir, $(DEP_DIRS), $(wildcard $(dir)/*))
+$(eval $(call create_O_FILES))
+APP_LIB_OBJS := $(addprefix $(OBJ)/, $(O_FILES))
+#$(warning "APP_LIB_OBJS=" $(APP_LIB_OBJS))
+
+#search for files in the application directory
+VPATH := apps/$(APP_DIR)/src
+#$(warning "VPATH=" $(VPATH))
+
+# compute list of local .o files from qmake makefile
+JUNK := $(shell cd $(HERE); awk -f ../../../config/qthelp.awk appname=$(HERE) $(APP).pro > ../../../new.pro; \
+	mv $(APP).pro $(APP).pro.tmp; cd ../../..; qmake; \
+	mv Makefile $(HERE)qtmakefile; cd $(HERE); \
+	grep -A 1000 Files qtmakefile | grep -B 1000 -m 1 DIST > qtinc1.inc; \
+	grep -A 1000 FORCE qtmakefile > qtinc2; \
+	awk -f ../../../config/qthelp2.awk qtinc2 > qtinc2.inc; \
+	cd ../../..; rm new.pro apps/$(APP_DIR)/src/qtmakefile; cd $(HERE); \
+	rm qtinc2; \
+	mv $(APP).pro.tmp $(APP).pro) 
+include $(HERE)qtinc1.inc $(HERE)qtinc2.inc
+
+# add some qt app specific things to the include path
+INC_OPTS := $(INC_OPTS) -Iapps/$(APP_DIR)/src -Iapps/$(APP_DIR)/src/.ui -Iapps/$(APP_DIR)/src/.moc 
+#$(warning "INC_OPTS=" $(INC_OPTS))
+#the qt makefile nicely lays out the objects in the OBJECTS variable
+APP_LOCAL_OBJS := $(OBJECTS)
+
+# trigger gch compilation and linking
+
+$(APP) : $(CONFIG)/$(ALLGCHMODE) link_gch $(APP_EXEC)
+
+#$(warning ">>>>> RULE:" $(APP_EXEC) : $(APP_LOCAL_OBJS) $(APP_LIB_OBJS) )
+
+$(APP_EXEC) : $(APP_LOCAL_OBJS) $(UIDECLS) $(APP_LIB_OBJS) $(OBJMOC)
+	@ echo "### linking $@"
+	$(VERBOSE) $(LD) $(LDOPTS) -o $@ $^ $(SHARED_LIBS)
+
+	
