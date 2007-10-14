@@ -3,7 +3,10 @@
 
 realTimeStrategyDirectory="$PWD"
 basedir=`basename $realTimeStrategyDirectory`
-DEST_DIR="../../support"
+
+# When building boost, this will point to rl-competition/support
+# note: path has no spaces, as written. It might work as a trick.. 
+DEST_DIR="../../../../support"
 
 if [ "$basedir" != "realTimeStrategy" ]
 then
