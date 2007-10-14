@@ -18,7 +18,7 @@ $rtsEXE &
 rtsPID=$!
 echo "Starting up real time strategy game - PID=$rtsPID"
 
-java -Xmx128M -cp $compLib:./bin/ OLExperiment
+java -Xmx128M -cp $compLib:./bin/ realTimeStrategyTrainerJava
 
 echo "-- Console Real Time Strategy Trainer finished"
 

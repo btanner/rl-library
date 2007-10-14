@@ -1,7 +1,7 @@
 import rlglue.RLGlue;
 import java.io.IOException;
 
-public class OLExperiment
+public class realTimeStrategyTrainerJava
 {
 	protected static final int kNumEpisodes = 100;
 	protected static int rlNumSteps[];
@@ -24,8 +24,8 @@ public class OLExperiment
 		double avgSteps = 0.0;
 		double avgReturn = 0.0;
 
-		rlNumSteps = new int[OLExperiment.kNumEpisodes];
-		rlReturn = new double[OLExperiment.kNumEpisodes];
+		rlNumSteps = new int[realTimeStrategyTrainerJava.kNumEpisodes];
+		rlReturn = new double[realTimeStrategyTrainerJava.kNumEpisodes];
 
 		System.err.println("+ RL_agent_message: query_agent");
 		String agent_response = RLGlue.RL_agent_message("query_agent");
@@ -51,18 +51,18 @@ public class OLExperiment
 			RLGlue.RL_cleanup();
 
 			// add up all the steps and all the returns
-			for (int i = 0; i < OLExperiment.kNumEpisodes; ++i) {
+			for (int i = 0; i < realTimeStrategyTrainerJava.kNumEpisodes; ++i) {
 				avgSteps += rlNumSteps[i];
 				avgReturn += rlReturn[i];
 			}
 
 			// average steps and returns
-			avgSteps /= (double)OLExperiment.kNumEpisodes;
-			avgReturn /= (double)OLExperiment.kNumEpisodes;
+			avgSteps /= (double)realTimeStrategyTrainerJava.kNumEpisodes;
+			avgReturn /= (double)realTimeStrategyTrainerJava.kNumEpisodes;
 
 			//print out results
 			System.out.println("\n-----------------------------------------------\n");
-			System.out.println("Number of episodes: " + OLExperiment.kNumEpisodes);
+			System.out.println("Number of episodes: " + realTimeStrategyTrainerJava.kNumEpisodes);
 			System.out.println("Average number of steps per episode: " +  avgSteps);
 			System.out.println("Average return per episode: " + avgReturn);
 			System.out.println("-----------------------------------------------\n");
