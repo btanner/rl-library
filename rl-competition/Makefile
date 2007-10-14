@@ -3,6 +3,7 @@ all:
 	cd ./agents/RandomAgentJava/ && make
 	cd ./agents/TetrisAgentJava/ && make
 	cd ./agents/MountainCarAgentCPP/ && make
+	cd ./agents/RealTimeStrategyJava/ && make
 	cd ./trainers/consoleTrainerJava/ && make
 	cd ./trainers/consoleTrainerCPP/ && make
 
@@ -11,5 +12,6 @@ clean:
 	cd ./agents/RandomAgentJava/ && make clean
 	cd ./agents/TetrisAgentJava/ && make clean
 	cd ./agents/MountainCarAgentCPP/ && make clean
+	cd ./agents/RealTimeStrategyJava/ && make clean
 	cd ./trainers/consoleTrainerJava/ && make clean
 	cd ./trainers/consoleTrainerCPP/ && make clean

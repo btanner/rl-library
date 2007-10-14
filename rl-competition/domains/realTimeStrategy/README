@@ -13,8 +13,8 @@ To compile ortslite:
        compiles and runs, then boost is already installed. 
 
          cd misc
-         tar xjvf boost-1_34_1.tar.bz2
-         cd boost-1_34_1
+         tar xjvf boost_1_34_1.tar.bz2
+	 cd boost_1_34_1
          ./configure --prefix=$HOME
          make
          make install

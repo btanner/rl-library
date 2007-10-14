@@ -16,7 +16,7 @@ The relevant RL-Glue C/C++ files are:
   apps/rlgagent/src/rlglue_agent.C
   apps/rlgexp/src/rlgexp_main.C
 
-The releveant RL-Glue Java files are in misc/rlgjava and 
+The relevant RL-Glue Java files are in misc/rlgjava and 
 are treated separately. 
 
 
