@@ -8,13 +8,15 @@ To compile ortslite:
 
      - boost >= 1.33
 
+       (Note: run scripts/install-boost.bash to do all this automatically)
+
        If running on a Linux system, this is probably already done
        for you. Try building the boost test in misc/boost_test. If it
        compiles and runs, then boost is already installed. 
 
          cd misc
          tar xjvf boost_1_34_1.tar.bz2
-	 cd boost_1_34_1
+         cd boost_1_34_1
          ./configure --prefix=$HOME
          make
          make install
