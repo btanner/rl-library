@@ -1,13 +1,14 @@
 
-RL-GLUE = ../../RL-Glue/RL-Glue
-SRC_PATH = .
-BIN_PATH = .
+RLVizPath = ../../libraries
+SRC_PATH = src
+BIN_PATH = bin
+
 
 all: 
-	javac $(SRC_PATH)/*.java -d $(BIN_PATH) -cp $(RL-GLUE)/Java/RL-Glue.jar
+	javac $(SRC_PATH)/*.java -d $(BIN_PATH) -cp $(RLVizPath)/RLVizLib.jar
 
 RL_experiment:
-	javac $(SRC_PATH)/OLExperiment.java -d $(BIN_PATH)/ -cp $(RL-GLUE)/Java/RL-Glue.jar
+	javac $(SRC_PATH)/OLExperiment.java -d $(BIN_PATH)/ -cp $(RLVizPath)/RLVizLib.jar
 
 clean:
-	-rm -rf *.class
+	-rm -rf $(BIN_PATH)/*.class
