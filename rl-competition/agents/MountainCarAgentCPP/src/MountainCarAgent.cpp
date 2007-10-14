@@ -103,6 +103,7 @@ void agent_end(Reward r)
 
 void agent_cleanup()
 {
+  printf("cleanup\n");
 	if(oldAction.intArray!=0){
 		free(oldAction.intArray);
 		oldAction.intArray=0;

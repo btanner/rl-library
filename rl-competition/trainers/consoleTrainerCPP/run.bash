@@ -18,9 +18,16 @@ echo "Starting up dynamic environment loader - PID=$envShellPID"
 
 ./bin/consoleTrainer
 
-echo "-- Console Trainer was killed"
-echo "-- Killing RL_glue - PID=$gluePID"
-kill $gluePID
-echo " --Killing dynamic environment loader - PID=$envShellPID"
-kill $envShellPID
+
+echo "-- Console Trainer is finished"
+
+echo "-- Waiting for the Environment to die..."
+wait $envShellPID
+echo "   + Environment terminated"
+echo "-- Waiting for the Glue to die..."
+wait $gluePID
+echo "   + Glue terminated"
+
+
+
 

@@ -21,8 +21,13 @@ echo "Starting up dynamic environment loader - PID=$envShellPID"
 
 java -Xmx128M -cp $compLib:$guiLib:./bin/rlViz.jar btViz.GraphicalDriver
 
-echo "-- Visualizer was killed"
-echo "-- Killing RL_glue - PID=$gluePID"
-kill $gluePID
-echo " --Killing dynamic environment loader - PID=$envShellPID"
-kill $envShellPID
+echo "-- Visualizer is finished"
+
+echo "-- Waiting for the Environment to die..."
+wait $envShellPID
+echo "   + Environment terminated"
+echo "-- Waiting for the Glue to die..."
+wait $gluePID
+echo "   + Glue terminated"
+
+
