@@ -16,17 +16,78 @@ The relevant RL-Glue C/C++ files are:
   apps/rlgagent/src/rlglue_agent.C
   apps/rlgexp/src/rlgexp_main.C
 
-The relevant RL-Glue Java files are in misc/rlgjava and 
-are treated separately. 
+The relevant RL-Glue Java files are in: 
 
+  agents/realTimeStrategyJava
+  trainers/realTimeStrategyJava
 
+== The RL-Glue Protocol
+=========================
 
-=============================================================================
+At each time step, the RL-GLue agent receives a series of integers that 
+describes the state of the world as perceived by the collection of units.  
+
+The first integer is a global piece of information, the amount of minerals
+available to your empire. Minerals are monetary funds; they are used to 
+build units. 
+
+The remaining integers represent a set of units, where units are always 
+described by a constant () number of integers, described below: 
+
+  0. type 
+        worker = 0
+        marine = 1
+        base = 2
+        mineral patch = 3
+  1. id
+  2. owner of this unit (player id)
+  3. x-coordinate of current position
+  4. y-coordinate of current position
+  5. radius of unit
+  6. sight range of unit
+  7. hit points
+  8. armor
+  9. max_speed 
+       if non-mobile unit, this value is meaningless
+  10. is moving
+       0 = false
+       1 = true
+       if non-mobile unit, this value is meaningless
+  11. amount of minerals carrying
+       if non-worker unit, this value is meaningless
+
+This data is parsed into a world state object upon arrival. 
+
+At each step, the action taken by the agent is simply the composition of 
+actions for each individual unit, executed simultaneously. 
+
+Each action is also a sequence of integers. The overall action is the 
+sequence obtained by concatenating all of the action sequences, in any 
+order. Each action has the form: 
+
+  0. unit id
+  1. action type
+       move = 0
+       build base = 1
+       stop = 2
+       train worker = 3
+       train marine = 4
+  2. target x-coordinate
+       if unit is non-mobile, value is meaningless
+  3. target y-coordinate
+       if unit is non-mobile, value is meaningless
+  4. speed
+       if unit is non-mobile, value is meaningless
+  5. training type
+       (currently unused)
+
+== Upgrading RL-Glue
+======================
 
 To upgrade RL-Glue sources included in this code, do the following: 
 (note: no upgrade is required for the competition)
 
-(scripts/upgrade-RLGlue.sh does this automatically now) 
+(also note: scripts/upgrade-RLGlue.sh does this automatically) 
 
   Download and unpack the latest RL-Glue distribution package. 
 
