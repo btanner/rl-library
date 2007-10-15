@@ -37,8 +37,11 @@ class ParameterHolder:
 	def __init__(self,stringRep=None):
 		if stringRep == None:
 			return
+		print "paramHolder: stringRep is:",stringRep
 		arrayRep = stringRep.split('_')
-		
+		pointerType = arrayRep.pop(0)
+		if pointerType == "NULL":
+			return
 		numParams = arrayRep.pop(0)
 		numParams = int(numParams)
 		for i in range(numParams):
@@ -46,182 +49,182 @@ class ParameterHolder:
 			thisParamType = int(arrayRep.pop(0))
 			if thisParamType == INT_PARAM:
 				iParamValue = int(arrayRep.pop(0))
-				addIntegerParam(thisParamName,iParamValue)
+				self.addIntegerParamWithDefault(thisParamName,iParamValue)
 			elif thisParamType == DOUBLE_PARAM:
 				fParamValue = float(arrayRep.pop(0))
-				addDoubleParam(thisParamName,fParamValue)
+				self.addDoubleParamWithDefault(thisParamName,fParamValue)
 			elif thisParamType == BOOL_PARAM:
 				bParamValue = arrayRep.pop(0)
 				if bParamValue == "true":
-					addBoolParam(thisParamName,True)
+					self.addBoolParamWithDefault(thisParamName,True)
 				else:
-					addBoolParam(thisParamName,False)
+					self.addBoolParamWithDefault(thisParamName,False)
 			elif thisParamType == STRING_PARAM:
 				sParamValue = arrayRep.pop(0)
-				addStringParam(thisParamName,sParamValue)
+				self.addStringParamWithDefault(thisParamName,sParamValue)
 		
 		numAliases = arrayRep.pop(0)
 		numAliases = int(numAliases)
 		for i in range(numAliases):
 			thisAlias = arrayRep.pop(0)
 			thisTarget = arrayRep.pop(0)
-			setAlias(thisAlias,thisTarget)
+			self.setAlias(thisAlias,thisTarget)
 
 
 	def stringSerialize(self): #return string
-		outString = "PARAMHOLDER_%d_" % (len(allParamNames))
-		for i in range(len(allParamNames)):
-			paramType = allParamTypes[i]
-			outString = outString + "%s_%d_" % (allParamNames[i],paramType)
+		outString = "PARAMHOLDER_%d_" % (len(self.allParamNames))
+		for i in range(len(self.allParamNames)):
+			paramType = self.allParamTypes[i]
+			outString = outString + "%s_%d_" % (self.allParamNames[i],paramType)
 			if paramType == INT_PARAM:
-				outString = outString + "%d_" % (getIntegerParam(allParamNames[i]))
+				outString = outString + "%d_" % (self.getIntegerParam(self.allParamNames[i]))
 			elif paramType == DOUBLE_PARAM:
-				outString = outString + "%f_" % (getDoubleParam(allParamNames[i]))
+				outString = outString + "%f_" % (self.getDoubleParam(self.allParamNames[i]))
 			elif paramType == BOOL_PARAM:
-				if (getBoolParam(allParamNames[i])):
+				if (self.getBoolParam(self.allParamNames[i])):
 					outString = outString + "true_"
-				else
+				else:
 					outString = outString + "false_"
-			else
-				outString = outString + getStringParam(allParamNames[i])
+			else:
+				outString = outString + self.getStringParam(self.allParamNames[i])
 			
-		outString = outString + "%d_" % (len(allAliases))
-		for i in range(len(allAliases)):
-			outString = outString + "%s_%s_" % (allAliases[i],getAlias(allAliases[i]))
+		outString = outString + "%d_" % (len(self.allAliases))
+		for i in range(len(self.allAliases)):
+			outString = outString + "%s_%s_" % (self.allAliases[i],self.getAlias(self.allAliases[i]))
 		
 		return outString
 
 
 	def getAlias(self,alias): #return string
-		if not aliases.has_key(alias):
+		if not self.aliases.has_key(alias):
 			sys.stderr.write("You wanted to look up original for alias: %s, but that alias hasn't been set\n" % (alias))
 			sys.exit(-1)
-		return aliases[alias]
+		return self.aliases[alias]
 	
 	def supportsParam(self,alias): #return bool
-		return aliases.has_key(alias)
+		return self.aliases.has_key(alias)
 
 	def setAlias(self,alias,original): #void
-		if not allParams.has_key(original):
+		if not self.allParams.has_key(original):
 			sys.stderr.write("C++ Parameter Holder::Careful, you are setting an alias of:%s to: %s but: %s isn't in the parameter set\n" % (alias,original,original))
 			sys.exit(1)
-		aliases[alias] = original
-		allAliases.append(alias)
+		self.aliases[alias] = original
+		self.allAliases.append(alias)
 		
 
 	def setIntegerParam(self,alias,value): #void
-		name = getAlias(alias)
-		if not allParams.has_key(name):
+		name = self.getAlias(alias)
+		if not self.allParams.has_key(name):
 			sys.stderr.write("Careful, you are setting the value of parameter: %s but the parameter hasn't been added...\n" % (name))
-		intParams[name] = value
+		self.intParams[name] = value
 	
 	def setDoubleParam(self,alias,value): #void
-		name = getAlias(alias)
-		if not allParams.has_key(name):
+		name = self.getAlias(alias)
+		if not self.allParams.has_key(name):
 			sys.stderr.write("Careful, you are setting the value of parameter: %s but the parameter hasn't been added...\n" % (name))
-		doubleParams[name] = value
+		self.doubleParams[name] = value
 	
 	def setBoolParam(self,alias,value): #void
-		name = getAlias(alias)
-		if not allParams.has_key(name):
+		name = self.getAlias(alias)
+		if not self.allParams.has_key(name):
 			sys.stderr.write("Careful, you are setting the value of parameter: %s but the parameter hasn't been added...\n" % (name))
-		boolParams[name] = value
+		self.boolParams[name] = value
 	
 	def setStringParam(self,alias,value): #void
-		name = getAlias(alias)
-		if not allParams.has_key(name):
+		name = self.getAlias(alias)
+		if not self.allParams.has_key(name):
 			sys.stderr.write("Careful, you are setting the value of parameter: %s but the parameter hasn't been added...\n" % (name))
-		boolParams[name] = value
+		self.boolParams[name] = value
 
 	def addIntegerParam(self,alias): #void
-		allParams[name] = INT_PARAM
-		allParamNames.append(name)
-		allParamTypes.append(intParam)
-		setAlias(name,name)
+		self.allParams[alias] = INT_PARAM
+		self.allParamNames.append(alias)
+		self.allParamTypes.append(INT_PARAM)
+		self.setAlias(alias,alias)
 	
 	def addDoubleParam(self,alias): #void
-		allParams[name] = DOUBLE_PARAM
-		allParamNames.append(name)
-		allParamTypes.append(doubleParam)
-		setAlias(name,name)
+		self.allParams[alias] = DOUBLE_PARAM
+		self.allParamNames.append(alias)
+		self.allParamTypes.append(DOUBLE_PARAM)
+		self.setAlias(alias,alias)
 	
 	def addBoolParam(self,alias): #void
-		allParams[name] = BOOL_PARAM
-		allParamNames.append(name)
-		allParamTypes.append(boolParam)
-		setAlias(name,name)
+		self.allParams[alias] = BOOL_PARAM
+		self.allParamNames.append(alias)
+		self.allParamTypes.append(BOOL_PARAM)
+		self.setAlias(alias,alias)
 	
 	def addStringParam(self,alias): #void
-		allParams[name] = STRING_PARAM
-		allParamNames.append(name)
-		allParamTypes.append(stringParam)
-		setAlias(name,name)
+		self.allParams[alias] = STRING_PARAM
+		self.allParamNames.append(alias)
+		self.allParamTypes.append(STRING_PARAM)
+		self.setAlias(alias,alias)
 
 	#Should have done this a while ago
-	def addIntegerParam(self,alias,defaultValue): #void
-		addIntegerParam(name)
-		setIntegerParam(name, defaultValue)
+	def addIntegerParamWithDefault(self,alias,defaultValue): #void
+		self.addIntegerParam(alias)
+		self.setIntegerParam(alias, defaultValue)
 	
-	def addDoubleParam(self,alias,defaultValue): #void
-		addDoubleParam(name)
-		setDoubleParam(name, defaultValue)
+	def addDoubleParamWithDefault(self,alias,defaultValue): #void
+		self.addDoubleParam(alias)
+		self.setDoubleParam(alias, defaultValue)
 	
-	def addBoolParam(self,alias,defaultValue): #void
-		addBoolParam(name)
-		setBoolParam(name, defaultValue)
+	def addBoolParamWithDefault(self,alias,defaultValue): #void
+		self.addBoolParam(alias)
+		self.setBoolParam(alias, defaultValue)
 	
-	def addStringParam(self,alias,defaultValue): #void
-		addStringParam(name)
-		setStringParam(name, defaultValue)
+	def addStringParamWithDefault(self,alias,defaultValue): #void
+		self.addStringParam(alias)
+		self.setStringParam(alias, defaultValue)
 
 	def getIntegerParam(self,alias): #int
-		name = getAlias(alias)
-		if not allParams.has_key(name):
+		name = self.getAlias(alias)
+		if not self.allParams.has_key(name):
 			sys.stderr.write("Careful, you are getting the value of parameter: %s but the parameter hasn't been added...\n" % (name))
 			sys.exit(1)
-		if not intParams.has_key(name):
+		if not self.intParams.has_key(name):
 			sys.stderr.write("Careful, you are getting the value of parameter: %s but the parameter isn't an int parameter...\n" % (name))
 			sys.exit(1)
-		return intParams[name]
+		return self.intParams[name]
 	
 	def getDoubleParam(self,alias): #double
-		name = getAlias(alias)
-		if not allParams.has_key(name):
+		name = self.getAlias(alias)
+		if not self.allParams.has_key(name):
 			sys.stderr.write("Careful, you are getting the value of parameter: %s but the parameter hasn't been added...\n" % (name))
 			sys.exit(1)
-		if not doubleParams.has_key(name):
+		if not self.doubleParams.has_key(name):
 			sys.stderr.write("Careful, you are getting the value of parameter: %s but the parameter isn't a double parameter...\n" % (name))
 			sys.exit(1)
-		return doubleParams[name]
+		return self.doubleParams[name]
 	
 	def getBoolParam(self,alias): #bool
-		name = getAlias(alias)
-		if not allParams.has_key(name):
+		name = self.getAlias(alias)
+		if not self.allParams.has_key(name):
 			sys.stderr.write("Careful, you are getting the value of parameter: %s but the parameter hasn't been added...\n" % (name))
 			sys.exit(1)
-		if not boolParams.has_key(name):
+		if not self.boolParams.has_key(name):
 			sys.stderr.write("Careful, you are getting the value of parameter: %s but the parameter isn't a boolean parameter...\n" % (name))
 			sys.exit(1)
-		return boolParams[name]
+		return self.boolParams[name]
 	
 	def getStringParam(self,alias): #string
-		name = getAlias(alias)
-		if not allParams.has_key(name):
+		name = self.getAlias(alias)
+		if not self.allParams.has_key(name):
 			sys.stderr.write("Careful, you are getting the value of parameter: %s but the parameter hasn't been added...\n" % (name))
 			sys.exit(1)
-		if not stringParams.has_key(name):
+		if not self.stringParams.has_key(name):
 			sys.stderr.write("Careful, you are getting the value of parameter: %s but the parameter isn't a string parameter...\n" % (name))
 			sys.exit(1)
-		return stringParams[name]
+		return self.stringParams[name]
 
 	def getParamCount(self): #int
-		return len(allParams)
+		return len(self.allParams)
 	
 	def getParamName(self,which): #string
-		return allParamNames[which]
+		return self.allParamNames[which]
 	
 	def getParamType(self,which): #PHTypes
-		return allParamTypes[which]
+		return self.allParamTypes[which]
 
 
 

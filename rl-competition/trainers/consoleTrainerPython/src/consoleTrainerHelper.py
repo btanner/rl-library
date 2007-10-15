@@ -16,6 +16,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. 
 
 from RL_experiment import *
+from ParameterHolder import *
 
 BENCHMARK = 0
 ENVSHELL = 1
@@ -35,13 +36,16 @@ def load(envNameString, theParams):
 def preload(envNameString):
 	theRequest = "TO=%d FROM=%d CMD=%d VALTYPE=%d VALS=NULL" % (ENVSHELL, BENCHMARK, LISTQUERY, NOVALUE)
 	theResponse = RL_env_message(theRequest)
+	print "theResponse is ", theResponse
 	lastColonPos = theResponse.rfind("=")
 	thePayLoad = theResponse[lastColonPos+1:]
-	
+	if thePayLoad[-1] == ':':
+		thePayLoad = thePayLoad[:-1]
+	print "payload is ",thePayLoad
 	items = thePayLoad.split(':')
 	theNames = []
 	theParamHolders = []
-	for i in range(0,len(items),2):
+	for i in range(1,len(items),2):
 		theNames.append(items[i])
 		theParamHolders.append(ParameterHolder(items[i+1]))
 	
