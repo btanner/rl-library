@@ -11,12 +11,16 @@ To make the four RL-Glue binaries:
 
 These will make the executables and place them in bin/
 
-The relevant RL-Glue C/C++ files are:
+To start the simulation via RL-Glue, you need to start the main executable
+first (bin/rlglue), and then connect the environment (bin/rlgenv), then 
+connect the agent and experiment, available in C++ and Java. 
+
+The relevant RL-Glue C/C++ agent and experiment files are:
 
   apps/rlgagent/src/rlglue_agent.C
   apps/rlgexp/src/rlgexp_main.C
 
-The relevant RL-Glue Java files are in: 
+The relevant RL-Glue Java agent and experiment files are in: 
 
   agents/realTimeStrategyJava
   trainers/realTimeStrategyJava

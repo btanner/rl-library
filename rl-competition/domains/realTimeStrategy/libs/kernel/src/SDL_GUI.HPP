@@ -18,7 +18,9 @@ const sint4 CLIFF  = 3;
 
 const sint4 TILE_POINTS = 1;
 
-static sint4 CMD_H = 128; // command window height
+//static sint4 CMD_H = 128; // command window height
+// disable command window for now
+static sint4 CMD_H = 0; // command window height
 
 const sint4 ALPHA = 255;
 #endif
@@ -182,7 +184,8 @@ void SDL_GUI<State>::display(const GameObjBase *obj1, const GameObjBase *obj2, b
 
   // draw minimap and mark active view
   // do this first so that the clipping rectangle is still good after display()
-  display_minimap(views[active_view]);
+  // lanctot: Removed so we can see the whole playing field 
+  //display_minimap(views[active_view]);
 
   FORALL (views, it) {
     correct_view();
@@ -226,13 +229,63 @@ void SDL_GUI<State>::unlock()
 //===================================================================
 
 template <class State>
-void SDL_GUI<State>::display_health_bars(const GfxView2 &/*gv*/)
+void SDL_GUI<State>::display_health_bars(const GfxView2 &gv)
 {
+  const RGB black(0,0,0);
+  const RGB white(255,255,255);
+  
+  Vector<GameObjBase*> objs(state->all_objs.begin(), state->all_objs.end());
+  std::random_shuffle(objs.begin(), objs.end());
+  
+  FORALL (objs, it) {
+    GameObjBase* gob = (*it); 
+    if (gob == 0) continue; 
+   
+    sint4 cur_hp = (sint4)gob->hp;
+    if(cur_hp < 0) cur_hp = 0;
+    sint4 max_hp = (sint4)gob->max_hp;
+    if (max_hp <= 0) max_hp = 1;
+    
+    sint4 x0, w, y;
+  
+    sint4 x = gob->x;
+    if(x < 0) continue;
+  
+    sint4 radius = gob->radius;
+  
+    x0 = x - radius;
+    w  = 2 * radius + 1;
+    y  = gob->y - radius - 3;
+  
+    SDL_Rect rect;
+    rect.x = scale(x0, gv.mag) - gv.mx;
+    rect.y = scale(y, gv.mag) - gv.my;
+    rect.w = scale(w, gv.mag);
+    rect.h = scale(2, gv.mag);
+    SDL_FillRect(screen, &rect, black.color());
+  
+    if (cur_hp >= 1) {
+      rect.x = scale(x0, gv.mag) - gv.mx;
+      rect.y = scale(y, gv.mag) - gv.my;
+      rect.w = scale(w * cur_hp / max_hp, gv.mag);
+      rect.h = scale(2, gv.mag);
+      SDL_FillRect(screen, &rect, white.color());
+    }
+  }
+  
 #if 0
   // fixme
   const RGB black(0,0,0);
   const RGB white(255,255,255);
 
+  Vector<GameObjBase*> objs(state->all_objs.begin(), state->all_objs.end());
+  std::random_shuffle(objs.begin(), objs.end());
+  
+  FORALL (objs, i) {
+    GameObj* gob = (*it(); 
+    if (gob == 0) continue; 
+  }
+  
   FORS (i, state->PLAYER_NUM+1) {
     FORALL (game->get_objs(i), it) {
       GameObj *gob = (*it)->get_GameObj();

@@ -160,8 +160,8 @@ struct MiniGameParameters
   
   MiniGameParameters()
   {
-    width                   = 64*FINE_POINTS;
-    height                  = 64*FINE_POINTS;
+    width                   = 72*FINE_POINTS;
+    height                  = 54*FINE_POINTS;
 
     // -------------
 

@@ -17,6 +17,9 @@ public:
   int sight_range;
   int hp;
   int armor;
+  
+  // non-serialized
+  int max_hp; 
 
   virtual void serialize_members(bool /*allied_view*/, std::ostream &os) const
   {
@@ -91,7 +94,7 @@ public:
     //os << get_type();
     serialize_members(allied_view, os);
   }
-  
+
   void deserialize(const std::string & str) {
     
     //std::cout << "deserializing " << get_type() << ": " << str << std::endl;

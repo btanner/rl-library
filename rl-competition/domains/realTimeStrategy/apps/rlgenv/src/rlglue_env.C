@@ -7,6 +7,7 @@
 #include "SDL_init.H"
 
 #include <stdlib.h>
+#include <time.h>
 
 #include <iostream>
 #include <map>
@@ -33,7 +34,7 @@ void init_gui(MiniGameState & state)
 {
   SDL_init::video_init();
   markers["worker"] = SDL_GUI<MiniGameState>::MARKER_H; // mark workers
-  gui.init(1024, 768, state, markers);
+  gui.init(parms->width, parms->height, state, markers);
   gui.display();
 }
 /* RL-Glue Interface */
@@ -45,6 +46,8 @@ void init_gui(MiniGameState & state)
 Task_specification env_init()
 {    
   DPR << "RLG> Starting env_init ..." << endl;
+  
+  srand(time(NULL)); 
   
   time_step = 1;
   
@@ -199,9 +202,8 @@ Random_seed_key env_get_random_seed()
 }
 
 Message env_message(const Message inMessage) {
-/*no messages currently implemented*/
   DPR << "received message" << inMessage << endl;
-  return "mines.c does not respond to any messages.";
+  return "rlgenv does not respond to any messages.";
 }
 
 

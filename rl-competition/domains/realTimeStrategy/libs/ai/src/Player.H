@@ -53,6 +53,7 @@ public:
 
 class TestPlayer : public Player
 {
+protected:
   bool init; 
   int time;   
   int done_base_time, done_marine_time, done_worker_time;
@@ -60,20 +61,26 @@ class TestPlayer : public Player
   int base_x, base_y;
   int mp_x, mp_y; // mineral patch
   
+  std::map<int, bool> actionsSet; // objId -> true/false:
   
+  // Called right after received actions and objects setup
+  // Select actions from global plan
+  virtual void commanderPlan(); 
+  
+  // Called individually in big loop
+  virtual std::string chooseAction(int objId, Worker* workerPtr, 
+                                   MiniGameState& state, MiniGameParameters& parms);
+  
+  virtual std::string chooseAction(int objId, Marine* marinePtr, 
+                                   MiniGameState& state, MiniGameParameters& parms);
+  
+  virtual std::string chooseAction(int objId, Base* basePtr, 
+                                   MiniGameState& state, MiniGameParameters& parms);
+    
 public:
   TestPlayer(int num); 
   virtual ~TestPlayer(); 
   virtual std::string receive_actions(std::string view, MiniGameParameters& parms);  
-  
-  std::string chooseAction(int objId, Worker* workerPtr, 
-                           MiniGameState& state, MiniGameParameters& parms);
-  
-  std::string chooseAction(int objId, Marine* marinePtr, 
-                           MiniGameState& state, MiniGameParameters& parms);
-  
-  std::string chooseAction(int objId, Base* basePtr, 
-                           MiniGameState& state, MiniGameParameters& parms);
   
 };
 

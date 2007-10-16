@@ -34,6 +34,12 @@ TestPlayer::~TestPlayer()
      delete statePtr;  
 }
 
+void TestPlayer::commanderPlan()
+{
+  // no global planning. to be overridden
+}
+
+
 string TestPlayer::receive_actions(string view, MiniGameParameters& parms)
 {
   build_state(view); 
@@ -50,6 +56,19 @@ string TestPlayer::receive_actions(string view, MiniGameParameters& parms)
   
   if (time == done_base_time)
     done_base_time = 0;
+  
+  // clear the actionsSet map
+
+  FORALL(statePtr->all_objs, iter)
+  {
+    GameObj<MiniGameState> * objPtr = (*iter);
+    int objId = objPtr->view_ids[playerNum];
+    actionsSet[objId] = false; 
+  }
+  
+  // select actions from global plan
+  
+  commanderPlan();
   
   // fill the vector will strings of actions
   // eg. actions: 
@@ -73,10 +92,13 @@ string TestPlayer::receive_actions(string view, MiniGameParameters& parms)
     
     //cout << "obj->owner = " << objPtr->owner << ", playerNum = " << playerNum << endl; 
     
+    // iterate over each one, choose an object
+    
     int objId = objPtr->view_ids[playerNum];
     
     if (   objPtr->owner == playerNum 
-        && objPtr->get_type() == "worker")
+        && objPtr->get_type() == "worker"
+        && !actionsSet[objId])
     {
       Worker* workerPtr  = (Worker*)objPtr;            
       string act = chooseAction(objId, workerPtr, *statePtr, parms);
@@ -86,7 +108,8 @@ string TestPlayer::receive_actions(string view, MiniGameParameters& parms)
       //cout << "   --> action is " << act << endl;           
     }
     else if (   objPtr->owner == playerNum 
-             && objPtr->get_type() == "marine")
+             && objPtr->get_type() == "marine"
+             && !actionsSet[objId])
     {
       Marine* marinePtr  = (Marine*)objPtr;
       string act = chooseAction(objId, marinePtr, *statePtr, parms);      
@@ -96,7 +119,8 @@ string TestPlayer::receive_actions(string view, MiniGameParameters& parms)
       //cout << "   --> action is " << act << endl; 
     }
     else if (   objPtr->owner == playerNum 
-             && objPtr->get_type() == "base")
+             && objPtr->get_type() == "base"
+             && !actionsSet[objId])
     {
       have_base = true;
        
