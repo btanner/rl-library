@@ -9,9 +9,7 @@
 #ifndef GLUE_UTIL_H
 #define GLUE_UTIL_H
 
-double ZERO = 0.0;
-
-#define GLUE_INFINITY ((1.0)/(ZERO))
+#define GLUE_INFINITY (1.0/0.0)
 #define GLUE_NAN (sqrt(-1.0))
 
 typedef struct 
@@ -33,6 +31,7 @@ typedef struct
 		double reward_min;
 		double reward_max;
 } task_spec_struct;
+
 
 void parse_task_spec(const char* ts, task_spec_struct* ps);
 
