@@ -46,11 +46,14 @@ To compile ortslite:
 
        export OSTYPE="LINUX"
 
-  2. If it's the first time compiling the software:
+  3. Choose whether you want to enable server-side visualization. Enabling this
+     requires SDL. Set the variable ENABLE_GUI in the Makefile to either 0 or 1. 
+
+  4. If it's the first time compiling the software:
 
        make init
 
-  3. Try making the ol app:
+  5. Try making the ol app:
 
        make
 
