@@ -1,4 +1,4 @@
-/* Random Agent
+/* Random Agent that works in all domains
 * Copyright (C) 2007, Brian Tanner brian@tannerpages.com (http://brian.tannerpages.com/)
 * 
 * This program is free software; you can redistribute it and/or
