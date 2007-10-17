@@ -61,12 +61,6 @@ protected:
   int base_x, base_y;
   int mp_x, mp_y; // mineral patch
   
-  std::map<int, bool> actionsSet; // objId -> true/false:
-  
-  // Called right after received actions and objects setup
-  // Select actions from global plan
-  virtual void commanderPlan(); 
-  
   // Called individually in big loop
   virtual std::string chooseAction(int objId, Worker* workerPtr, 
                                    MiniGameState& state, MiniGameParameters& parms);

@@ -25,7 +25,6 @@ TestPlayer::TestPlayer(int num)
   have_base = false; 
   base_y = base_x = 0; 
   mp_x = mp_y = 0;
-  srand48(std::time(0));
 }
 
 TestPlayer::~TestPlayer()
@@ -33,12 +32,6 @@ TestPlayer::~TestPlayer()
   if (statePtr != 0)
      delete statePtr;  
 }
-
-void TestPlayer::commanderPlan()
-{
-  // no global planning. to be overridden
-}
-
 
 string TestPlayer::receive_actions(string view, MiniGameParameters& parms)
 {
@@ -56,20 +49,7 @@ string TestPlayer::receive_actions(string view, MiniGameParameters& parms)
   
   if (time == done_base_time)
     done_base_time = 0;
-  
-  // clear the actionsSet map
-
-  FORALL(statePtr->all_objs, iter)
-  {
-    GameObj<MiniGameState> * objPtr = (*iter);
-    int objId = objPtr->view_ids[playerNum];
-    actionsSet[objId] = false; 
-  }
-  
-  // select actions from global plan
-  
-  commanderPlan();
-  
+    
   // fill the vector will strings of actions
   // eg. actions: 
   //   [objId] move [x] [y] [speed] 
@@ -96,9 +76,7 @@ string TestPlayer::receive_actions(string view, MiniGameParameters& parms)
     
     int objId = objPtr->view_ids[playerNum];
     
-    if (   objPtr->owner == playerNum 
-        && objPtr->get_type() == "worker"
-        && !actionsSet[objId])
+    if (objPtr->owner == playerNum && objPtr->get_type() == "worker")
     {
       Worker* workerPtr  = (Worker*)objPtr;            
       string act = chooseAction(objId, workerPtr, *statePtr, parms);
@@ -107,9 +85,7 @@ string TestPlayer::receive_actions(string view, MiniGameParameters& parms)
       //cout << "  found worker, id=" << objId << " : " << oss.str() << endl;
       //cout << "   --> action is " << act << endl;           
     }
-    else if (   objPtr->owner == playerNum 
-             && objPtr->get_type() == "marine"
-             && !actionsSet[objId])
+    else if (objPtr->owner == playerNum && objPtr->get_type() == "marine")     
     {
       Marine* marinePtr  = (Marine*)objPtr;
       string act = chooseAction(objId, marinePtr, *statePtr, parms);      
@@ -118,9 +94,7 @@ string TestPlayer::receive_actions(string view, MiniGameParameters& parms)
       //cout << "  found marine, id=" << objId << " : " << oss.str() << endl;
       //cout << "   --> action is " << act << endl; 
     }
-    else if (   objPtr->owner == playerNum 
-             && objPtr->get_type() == "base"
-             && !actionsSet[objId])
+    else if (objPtr->owner == playerNum && objPtr->get_type() == "base")             
     {
       have_base = true;
        
