@@ -19,8 +19,10 @@ public:
     sight_range = gp.base_sight_range;
     hp          = gp.base_hp;
     armor       = gp.base_armor;
+    max_hp      = gp.base_hp; 
     
     tick_worker_ready = tick_marine_ready = 0;
+    
   }
   
   void execute();

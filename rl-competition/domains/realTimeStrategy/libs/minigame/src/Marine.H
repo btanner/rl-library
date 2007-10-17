@@ -19,6 +19,7 @@ public:
     sight_range = gp.marine_sight_range;
     hp          = gp.marine_hp;
     armor       = gp.marine_armor;
+    max_hp      = gp.marine_hp; 
 
     max_speed   = gp.marine_max_speed;
     is_moving   = false;

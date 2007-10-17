@@ -18,6 +18,7 @@ public:
     sight_range = gp.mineral_patch_sight_range;
     hp          = gp.mineral_patch_hp;
     armor       = gp.mineral_patch_armor;
+    max_hp      = gp.mineral_patch_hp; 
 
     minerals_left = state->gp.mineral_patch_capacity;
   }

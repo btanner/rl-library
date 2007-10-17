@@ -20,6 +20,7 @@ public:
     sight_range = gp.worker_sight_range;
     hp          = gp.worker_hp;
     armor       = gp.worker_armor;
+    max_hp      = gp.worker_hp;
 
     max_speed   = gp.worker_max_speed;
     is_moving   = false;

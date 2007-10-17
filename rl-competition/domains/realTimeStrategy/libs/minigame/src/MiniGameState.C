@@ -37,22 +37,13 @@ GameObj<MiniGameState>* MiniGameState::new_game_object(const std::string & type)
   GameObj<MiniGameState>* ptr = 0;
   
   if (type == "worker")
-  {
     ptr = new Worker(this);
-    ptr->max_hp = gp.worker_hp;
-  }
-  else if (type == "marine") {
+  else if (type == "marine") 
     ptr = new Marine(this);
-    ptr->max_hp = gp.marine_hp;
-  }
-  else if (type == "base") {
+  else if (type == "base") 
     ptr = new Base(this);
-    ptr->max_hp = gp.base_hp;
-  }
-  else if (type == "mineral_patch") {
+  else if (type == "mineral_patch") 
     ptr = new MineralPatch(this);
-    ptr->max_hp = gp.mineral_patch_hp;
-  }
   
   return ptr;
 }

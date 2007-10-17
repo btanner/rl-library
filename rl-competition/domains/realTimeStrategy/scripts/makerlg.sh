@@ -1,7 +1,9 @@
 #!/bin/sh
 
-echo "make rlglue" && make rlglue && \
-echo "make rlgenv" && make rlgenv && \
-echo "make rlgagent" && make rlgagent && \
-echo "make rlgexp" && make rlgexp 
+MAKE="make -j2"
+
+echo "make rlglue" && $MAKE rlglue && \
+echo "make rlgenv" && $MAKE rlgenv && \
+echo "make rlgagent" && $MAKE rlgagent && \
+echo "make rlgexp" && $MAKE rlgexp 
 
