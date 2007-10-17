@@ -257,14 +257,15 @@ void SDL_GUI<State>::display_health_bars(const GfxView2 &gv)
     w  = 2 * radius + 1;
     y  = gob->y - radius - 3;
   
-    SDL_Rect rect;
-    rect.x = scale(x0, gv.mag) - gv.mx;
-    rect.y = scale(y, gv.mag) - gv.my;
-    rect.w = scale(w, gv.mag);
-    rect.h = scale(2, gv.mag);
-    SDL_FillRect(screen, &rect, black.color());
-  
-    if (cur_hp >= 1) {
+    if (cur_hp >= 1)
+    {
+      SDL_Rect rect;
+      rect.x = scale(x0, gv.mag) - gv.mx;
+      rect.y = scale(y, gv.mag) - gv.my;
+      rect.w = scale(w, gv.mag);
+      rect.h = scale(2, gv.mag);
+      SDL_FillRect(screen, &rect, black.color());
+    
       rect.x = scale(x0, gv.mag) - gv.mx;
       rect.y = scale(y, gv.mag) - gv.my;
       rect.w = scale(w * cur_hp / max_hp, gv.mag);
