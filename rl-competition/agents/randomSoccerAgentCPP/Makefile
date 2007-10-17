@@ -1,5 +1,5 @@
 
-AGENT_OBJECTS = MountainCarAgent.o Glue_utilities.o RLStruct_util.o tiles.o
+AGENT_OBJECTS = RandomAgent.o Glue_utilities.o
 
 AGENT_SRC_PATH = src
 BUILD_PATH = bin
@@ -16,13 +16,7 @@ include $(RL_GLUE_PATH)/RL_glue.makefile
 RL_agent: $(addprefix $(BUILD_PATH)/,$(AGENT_OBJECTS)) $(BUILD_PATH)/RL_client_agent.o $(BUILD_PATH)/RL_network.o
 	$(CC) -o $(BIN_PATH)/RL_agent $^
 
-$(BUILD_PATH)/MountainCarAgent.o: $(AGENT_SRC_PATH)/MountainCarAgent.cpp
-	$(CC) -c $(CFLAGS) $^ -o $@
-
-$(BUILD_PATH)/RLStruct_util.o: $(AGENT_SRC_PATH)/RLStruct_util.cpp
-	$(CC) -c $(CFLAGS) $^ -o $@
-
-$(BUILD_PATH)/tiles.o: $(AGENT_SRC_PATH)/tiles.cpp
+$(BUILD_PATH)/RandomAgent.o: $(AGENT_SRC_PATH)/RandomAgent.c
 	$(CC) -c $(CFLAGS) $^ -o $@
 
 clean:
