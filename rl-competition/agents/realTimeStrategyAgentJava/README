@@ -1,0 +1,15 @@
+
+This is the documentation for the RTS Java RL-Glue agent. 
+
+To make the agent, run: 
+
+   make 
+
+To run the agent, run:
+
+   ./run.bash
+
+The layout of the code is quite straight-forward. 
+
+See also rl-competition/domains/realTimeStrategy/README*
+

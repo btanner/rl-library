@@ -1,0 +1,41 @@
+
+The structure of ortslite is as follows: 
+
+  Applications
+  ------------
+
+  Aplications are under the apps/ subdirectory. An application is a set of
+  source files which are used to create a binary executable file. Each
+  application is built by invoking
+
+     make <app name> 
+  
+  which creates bin/<app name> . 
+  
+  Every application under the apps/ directory must have a src/ directory 
+  which has source files with extentions .C and .H. Every .C will be 
+  compiled when the app is built. 
+  
+  The file 'app.mk' describes the application. The name of the application 
+  is in this file, for instance. Dependencies between other shared source 
+  files (libraries) are also handled by this file. 
+
+  Libraries
+  ---------
+
+  Libraries are collections of source code, each under a subdirectory of 
+  lib/ intended to be shared among one or more applications. Libraries are
+  essentially collections of classes and/or functions that help an 
+  application do what it needs to do. Most of the code for any application
+  should be in a library; the application should just contain code that 
+  drives the actual execution. 
+
+  Libraries do not have dependencies between each other. They can be used
+  in conjunction, though. One library can use functionality from a 
+  different library, for instance. The kernel library contains a lot of 
+  generally useful functions which most libraries use. Note, however, that
+  library dependencies are specified in the particular application being 
+  built which must include all the libraries that each depend on. For 
+  example, if the ai library depends on code from the kernel library, the
+  application must list kernel and ai as dependencies. 
+

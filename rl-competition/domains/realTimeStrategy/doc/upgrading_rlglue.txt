@@ -1,0 +1,44 @@
+
+== Upgrading RL-Glue
+======================
+
+To upgrade RL-Glue sources included in this code, do the following: 
+(note: no upgrade is required for the competition)
+
+(also note: scripts/upgrade-RLGlue.sh does this automatically) 
+
+  Download and unpack the latest RL-Glue distribution package. 
+
+  copy these files to libs/rl-glue/src:
+
+    Glue_utilities.c  
+    Glue_utilities.cpp
+    Glue_utilities.h
+    RL_common.h
+    RL_glue.h
+    RL_network.c
+    RL_network_glue.c             (new as of svn code)
+    RL_network_agent.c            (new as of svn code)
+    RL_network_experiment.c       (new as of svn code)
+    RL_network_environment.c      (new as of svn code)
+
+
+  copy these files to libs/rl-glue/src/Network
+
+    RL_network.h
+
+  copy these files to apps/rlglue/src:
+
+    RL_glue.c
+    RL_server_agent.c
+    RL_server_environment.c
+
+  copy and rename:
+
+    rl-glue/RL-Glue/Network/Agent/RL_client_agent.c -> apps/rlgagent/src/rlgagent_main.C
+    rl-glue/RL-Glue/Network/Environment/RL_client_environment.c -> apps/rlgenv/src/rlgenv_main.C
+    rl-glue/RL-Glue/Network/Glue/RL_server_experiment.c -> apps/rlglue/src/rlglue_main.C
+    
+    rl-glue/RL-Glue/Network/Experiment/RL_client_experiment.c -> apps/rlgexp/src/rlglue_exp.C
+    
+  

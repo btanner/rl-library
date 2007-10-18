@@ -2,131 +2,26 @@
 First, please read the README and make sure the required dependencies are
 installed and the build system is initialized (make init). 
 
-To make the four RL-Glue binaries: 
+To make the RL-Glue environment:
+
+  make rlgenv
+
+To make the RL-Glue C++ agent: 
 
   make rlgagent
-  make rlgenv
-  make rlgexp
-  make rlglue
 
-These will make the executables and place them in bin/
+To make the Java agent, please see
+rl-competition/agents/realTimeStrategyAgentJava/README
 
-To start the simulation via RL-Glue, you need to start the main executable
-first (bin/rlglue), and then connect the environment (bin/rlgenv), then 
-connect the agent and experiment, available in C++ and Java. 
+These will make the executables and place them in bin/ . These
+executables are two components of the RL-Glue framework
 
-The relevant RL-Glue C/C++ agent and experiment files are:
+The most relevant RL-Glue C/C++ agent file is:
 
   apps/rlgagent/src/rlglue_agent.C
-  apps/rlgexp/src/rlgexp_main.C
 
-The relevant RL-Glue Java agent and experiment files are in: 
+The relevant RL-Glue Java agent files are in:
 
   agents/realTimeStrategyJava
-  trainers/realTimeStrategyJava
 
-== The RL-Glue Protocol
-=========================
-
-At each time step, the RL-GLue agent receives a series of integers that 
-describes the state of the world as perceived by the collection of units.  
-
-The first integer is a global piece of information, the amount of minerals
-available to your empire. Minerals are monetary funds; they are used to 
-build units. 
-
-The remaining integers represent a set of units, where units are always 
-described by a constant () number of integers, described below: 
-
-  0. type 
-        worker = 0
-        marine = 1
-        base = 2
-        mineral patch = 3
-  1. id
-  2. owner of this unit (player id)
-  3. x-coordinate of current position
-  4. y-coordinate of current position
-  5. radius of unit
-  6. sight range of unit
-  7. hit points
-  8. armor
-  9. max_speed 
-       if non-mobile unit, this value is meaningless
-  10. is moving
-       0 = false
-       1 = true
-       if non-mobile unit, this value is meaningless
-  11. amount of minerals carrying
-       if non-worker unit, this value is meaningless
-
-This data is parsed into a world state object upon arrival. 
-
-At each step, the action taken by the agent is simply the composition of 
-actions for each individual unit, executed simultaneously. 
-
-Each action is also a sequence of integers. The overall action is the 
-sequence obtained by concatenating all of the action sequences, in any 
-order. Each action has the form: 
-
-  0. unit id
-  1. action type
-       move = 0
-       build base = 1
-       stop = 2
-       train worker = 3
-       train marine = 4
-  2. target x-coordinate
-       if unit is non-mobile, value is meaningless
-  3. target y-coordinate
-       if unit is non-mobile, value is meaningless
-  4. speed
-       if unit is non-mobile, value is meaningless
-  5. training type
-       (currently unused)
-
-== Upgrading RL-Glue
-======================
-
-To upgrade RL-Glue sources included in this code, do the following: 
-(note: no upgrade is required for the competition)
-
-(also note: scripts/upgrade-RLGlue.sh does this automatically) 
-
-  Download and unpack the latest RL-Glue distribution package. 
-
-  copy these files to libs/rl-glue/src:
-
-    Glue_utilities.c  
-    Glue_utilities.cpp
-    Glue_utilities.h
-    RL_common.h
-    RL_glue.h
-    RL_network.c
-    RL_network_glue.c             (new as of svn code)
-    RL_network_agent.c            (new as of svn code)
-    RL_network_experiment.c       (new as of svn code)
-    RL_network_environment.c      (new as of svn code)
-
-
-  copy these files to libs/rl-glue/src/Network
-
-    RL_network.h
-
-  copy these files to apps/rlglue/src:
-
-    RL_glue.c
-    RL_server_agent.c
-    RL_server_environment.c
-
-  copy and rename:
-
-    rl-glue/RL-Glue/Network/Agent/RL_client_agent.c -> apps/rlgagent/src/rlgagent_main.C
-    rl-glue/RL-Glue/Network/Environment/RL_client_environment.c -> apps/rlgenv/src/rlgenv_main.C
-    rl-glue/RL-Glue/Network/Glue/RL_server_experiment.c -> apps/rlglue/src/rlglue_main.C
-    
-    rl-glue/RL-Glue/Network/Experiment/RL_client_experiment.c -> apps/rlgexp/src/rlglue_exp.C
-    
-
-  
 
