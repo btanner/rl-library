@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd ../
 echo "Making..."
 make
 
