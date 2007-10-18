@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
   //	exit(1);
 //You should write a bit of code to look at command line args to see what you want to run I guess.
 //		loadTetris(0);
-/		loadMountainCar(0);
+		loadMountainCar(0);
 //		loadHelicopter();
 
 
