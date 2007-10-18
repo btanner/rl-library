@@ -100,6 +100,8 @@ string AggressivePlayer::receive_actions(string view, MiniGameParameters& parms)
   
   vector<string> actions;
   
+  determineScouts(parms);
+  
   //DPR << "TP" << playerNum << ": view is " << view << endl;
   //DPR << "TP" << playerNum << ": Iterating through objects" << endl; 
   
