@@ -13,7 +13,7 @@
 using namespace std;
 using namespace boost;
 
-#define DEBUG 1
+static bool debug = false;
 
 /*  Agent's variables  */
 static MiniGameParameters * parms = NULL;

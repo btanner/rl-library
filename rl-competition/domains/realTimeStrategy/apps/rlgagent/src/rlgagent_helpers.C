@@ -1,4 +1,5 @@
 
+#include "Global.H"
 #include "MiniGameState.H"
 #include "Worker.H"
 #include "rlglue_agent.H"
@@ -9,6 +10,8 @@
 #include <vector>
 
 using namespace std;
+
+static bool debug = false; 
 
 string build_state_string(Observation & o)
 {
@@ -42,7 +45,7 @@ void get_actions(vector<int> & vector,
   // eg. actions: 
   //   [objId] move [x] [y] [speed] 
 
-  cout << "Iterating through objects" << endl; 
+  DPR << "Iterating through objects" << endl; 
   
   FORALL(state.all_objs, iter)
   {
@@ -56,7 +59,7 @@ void get_actions(vector<int> & vector,
     {
       Worker* workerPtr  = (Worker*)objPtr;
       
-      cout << "  found worker, id=" << objId << " : " << oss.str() << endl;
+      DPR << "  found worker, id=" << objId << " : " << oss.str() << endl;
     
       int x = rand() % parms.width; 
       int y = rand() % parms.height; 

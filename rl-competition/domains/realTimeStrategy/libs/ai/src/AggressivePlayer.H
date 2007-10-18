@@ -1,6 +1,7 @@
 #ifndef AGGRESSIVEPLAYER_H
 #define AGGRESSIVEPLAYER_H
 
+#include "GameObj.H"
 #include "MiniGameState.H"
 #include "Worker.H"
 #include "Marine.H"
@@ -23,6 +24,8 @@ class AggressivePlayer : public Player
   std::map<int,GameObj<MiniGameState>* > scouts; 
   bool found_ob, found_mp; 
   int sc_x, sc_y; 
+  int obx, oby;  
+  int minerals;
   
   void determineScouts(MiniGameParameters& parms);
 
@@ -34,6 +37,10 @@ class AggressivePlayer : public Player
   
   virtual std::string chooseAction(int objId, Base* basePtr, 
                                    MiniGameState& state, MiniGameParameters& parms);  
+
+  virtual std::string chooseScoutingAction(int objId, MobileObj<MiniGameState>* objPtr, 
+                                           MiniGameState& state, MiniGameParameters& parms);  
+  
   
 public:
   AggressivePlayer(int num); 

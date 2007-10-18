@@ -126,6 +126,9 @@ template <class T, int N1, int N2, int N3, int N4> class array4 :
 
 #define REM(x) remstr << "REMARK: " << x << std::endl;
 #define REM2(x,y) remstr << "REMARK: " << (x) << " " << (y) << std::endl;
+  
+// bool debug is defined as static, per file for easy shutting on/off dbg msgs
+#define DPR if (debug) std::cout
 
 struct StringHash 
 {

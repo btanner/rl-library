@@ -17,6 +17,8 @@
 
 using namespace std;
 
+static bool debug = false; 
+
 // Number of attributes per object. See README.rlglue
 #define RLG_OBJ_ATTRS           12
 
@@ -147,7 +149,7 @@ static void serializeGameState(int* array, const MiniGameState& state)
     }
   }
   
-  cout << "serialize game state index = " << index << endl; 
+  DPR << "serialize game state index = " << index << endl; 
 }
 
 static void deserializeGameState(MiniGameState& state, int* array, int length)
@@ -207,7 +209,7 @@ static void deserializeGameState(MiniGameState& state, int* array, int length)
     state.all_objs.push_back(objPtr);
   }
   
-  cout << "serialize game state index = " << index << endl; 
+  DPR << "serialize game state index = " << index << endl; 
 }
 
 void rlg_view2obs(Observation& obs, const MiniGameState& state)
@@ -277,7 +279,7 @@ std::string rlg_action2str(const Action& action)
 void rlg_vector2action(Action& action, const std::vector<int>& integers)
 {
   int length = integers.size(); 
-  //cout << "length = " << length << endl;
+  //DPR << "length = " << length << endl;
   if (length == 0) {
     action.numInts = 0;
     return;

@@ -5,6 +5,8 @@
 
 using namespace std;
 
+bool debug = false; 
+
 static std::string type = "worker";
 
 const std::string &Worker::get_type() const { return type; }
@@ -50,12 +52,12 @@ void Worker::execute()
       // starts erecting a base
       
       if (off_map()) {
-        REM("execute worker action: build, but off map");
+        REM("execute worker action: build, but off map, o=" << owner);
         goto other_actions;
       }
       
       if (pi.pd.bases >= 1) {
-        REM("already have a base");
+        REM("already have a base, o=" << owner);
         goto other_actions;
       }
       
@@ -81,7 +83,7 @@ void Worker::execute()
 
     tick_base_built = 0; 
 
-    cout << "Building base!" << endl;
+    DPR << "Building base!" << endl;
         
     Base * base = new Base(state);
     base->x = x_old;
@@ -113,7 +115,7 @@ void Worker::execute()
         // close to patch, wait a while
         
         MineralPatch *mp = dynamic_cast<MineralPatch*>(*i);
-        cout << "Worker.C (mining) " << mp->minerals_left << " " << state->gp.worker_mineral_capacity << endl;
+        DPR << "Worker.C (mining) " << mp->minerals_left << " " << state->gp.worker_mineral_capacity << endl;
       
         if (++mineral_patch_intersection_time >= state->gp.worker_mining_time) {
         

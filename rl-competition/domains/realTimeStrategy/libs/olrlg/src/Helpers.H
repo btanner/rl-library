@@ -8,8 +8,6 @@
 #include <map>
 #include <string>
 
-#define DPR if (DEBUG) cout
-
 void merge_actions(const std::map<int, std::string> & p0_actions, 
                    const std::map<int, std::string> & p1_actions,
                    boost::array<std::string, MiniGameState::PLAYER_NUM> & acts); 

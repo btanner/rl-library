@@ -24,4 +24,8 @@ The relevant RL-Glue Java agent files are in:
 
   agents/realTimeStrategyJava
 
+In GUI visualization for the RL Competition: 
+
+  GREEN = Player 0 (Opponent AI)
+  RED = Player 1 (RL agent AI)
 

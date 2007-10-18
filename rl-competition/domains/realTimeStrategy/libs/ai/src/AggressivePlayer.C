@@ -1,4 +1,5 @@
 
+#include "Global.H"
 #include "GameObj.H"
 #include "MiniGameState.H" 
 #include "Worker.H" 
@@ -14,6 +15,11 @@
 
 using namespace std;
 
+#define SGN(x)          ((x) < 0 ? (-1) : 1)
+#define ABS(x)          ((x) < 0 ? (-(x)) : (x))
+
+static bool debug = true; 
+
 AggressivePlayer::AggressivePlayer(int num)
   : Player::Player(num)
 {
@@ -27,6 +33,7 @@ AggressivePlayer::AggressivePlayer(int num)
   have_base = false; 
   base_y = base_x = 0; 
   mp_x = mp_y = 0;
+  obx = oby = -1;
   
   found_ob = found_mp = false;
   
@@ -40,6 +47,9 @@ AggressivePlayer::~AggressivePlayer()
 
 void AggressivePlayer::determineScouts(MiniGameParameters& parms)
 {
+  if (!have_base)
+    return; 
+  
   sc_x = sc_y = 0;
   
   FORALL(statePtr->all_objs, iter)
@@ -57,7 +67,7 @@ void AggressivePlayer::determineScouts(MiniGameParameters& parms)
     }
     else if (objPtr->owner == playerNum && objPtr->get_type() == "marine")
     {
-      if (!found_ob) {
+      if (!found_ob) { 
         scouts[objId] = objPtr; 
         sc_x += objPtr->x;
         sc_y += objPtr->y;
@@ -86,10 +96,12 @@ string AggressivePlayer::receive_actions(string view, MiniGameParameters& parms)
   if (time == done_base_time)
     done_base_time = 0;
     
+  minerals = statePtr->player_infos[playerNum].pd.minerals; 
+  
   vector<string> actions;
   
-  cout << "TP" << playerNum << ": view is " << view << endl;
-  cout << "TP" << playerNum << ": Iterating through objects" << endl; 
+  //DPR << "TP" << playerNum << ": view is " << view << endl;
+  //DPR << "TP" << playerNum << ": Iterating through objects" << endl; 
   
   int numObjs = 0;
   
@@ -110,9 +122,19 @@ string AggressivePlayer::receive_actions(string view, MiniGameParameters& parms)
     
     if (objPtr->owner == playerNum && objPtr->get_type() == "worker")
     {
-      Worker* workerPtr  = (Worker*)objPtr;            
-      string act = chooseAction(objId, workerPtr, *statePtr, parms);
-      actions.push_back(act); 
+      Worker* workerPtr  = (Worker*)objPtr;
+      
+      if (scouts[objId] == objPtr) 
+      {
+        DPR << "W SCOUTING" << endl; 
+        string act = chooseScoutingAction(objId, workerPtr, *statePtr, parms);
+        actions.push_back(act);                
+      }
+      else
+      {
+        string act = chooseAction(objId, workerPtr, *statePtr, parms);
+        actions.push_back(act);        
+      }
         
       //cout << "  found worker, id=" << objId << " : " << oss.str() << endl;
       //cout << "   --> action is " << act << endl;           
@@ -120,8 +142,18 @@ string AggressivePlayer::receive_actions(string view, MiniGameParameters& parms)
     else if (objPtr->owner == playerNum && objPtr->get_type() == "marine")
     {
       Marine* marinePtr  = (Marine*)objPtr;
-      string act = chooseAction(objId, marinePtr, *statePtr, parms);      
-      actions.push_back(act);       
+      
+      if (scouts[objId] == objPtr) 
+      {
+        DPR << "M SCOUTING" << endl; 
+        string act = chooseScoutingAction(objId, marinePtr, *statePtr, parms);
+        actions.push_back(act);                
+      }
+      else
+      {
+        string act = chooseAction(objId, marinePtr, *statePtr, parms);      
+        actions.push_back(act);
+      }
        
       //cout << "  found marine, id=" << objId << " : " << oss.str() << endl;
       //cout << "   --> action is " << act << endl; 
@@ -142,6 +174,16 @@ string AggressivePlayer::receive_actions(string view, MiniGameParameters& parms)
       //cout << "  found base, id=" << objId << " : " << oss.str() << endl;
       //cout << "   --> action is " << act << endl; 
     }
+    else if (objPtr->owner != playerNum && objPtr->get_type() == "base")
+    {
+      found_ob = true;
+       
+      Base* basePtr = (Base*)objPtr;
+      
+      obx = basePtr->x;
+      oby = basePtr->y;
+    }
+    
     else if (objPtr->get_type() == "mineral_patch")
     {
       mp_x = objPtr->x;
@@ -153,11 +195,11 @@ string AggressivePlayer::receive_actions(string view, MiniGameParameters& parms)
     
   }
   
-  cout << "numObjs = " << numObjs << endl;
+  //DPR << "numObjs = " << numObjs << endl;
   
   string actionstr = join(actions, "#");
   
-  cout << "actionstr = " << actionstr << endl; 
+  //DPR << "actionstr = " << actionstr << endl; 
   
   return actionstr;
 }
@@ -172,12 +214,12 @@ string AggressivePlayer::chooseAction(int objId, Worker* workerPtr,
     
   if (workerPtr->is_moving) {    
     double roll = drand48();
-    if (roll <= 0.01)
+    if (roll <= 0.05 && !have_base && onMap(workerPtr, parms))
     {
       done_base_time = time + parms.base_build_time;
       return compose_action(objId, "build_base");
     }
-    else if (roll <= 0.05)
+    if (roll <= 0.05)
       return compose_action(objId, "stop");    
     else
       return ""; 
@@ -196,25 +238,23 @@ string AggressivePlayer::chooseAction(int objId, Worker* workerPtr,
           return compose_action(objId, "stop");    
         else 
         {
-          cout << "Worker Mining, minerals = " << workerPtr->carried_minerals << endl;
+          //DPR << "Worker Mining, minerals = " << workerPtr->carried_minerals << endl;
           return ""; // automatically mine until full
         }
       }
       else
       {
         // when full, move to base
-        cout << "Worker full, minerals = " << workerPtr->carried_minerals << endl;
-        
-        ostringstream oss; 
-        oss << objId << " move " << base_x << " " << base_y << " " << workerPtr->max_speed;
-        return oss.str();        
+        //DPR << "Worker full, minerals = " << workerPtr->carried_minerals << endl;
+
+        return compose_move_action(objId, base_x, base_y, workerPtr->max_speed);
       }
     }
 
     // when full, move to base
     if (workerPtr->carried_minerals >= parms.worker_mineral_capacity)
     {
-      cout << "Worker full, minerals = " << workerPtr->carried_minerals << endl;
+      //DPR << "Worker full, minerals = " << workerPtr->carried_minerals << endl;
       
       ostringstream oss; 
       oss << objId << " move " << base_x << " " << base_y << " " << workerPtr->max_speed;
@@ -232,6 +272,9 @@ string AggressivePlayer::chooseAction(int objId, Worker* workerPtr,
 string AggressivePlayer::chooseAction(int objId, Marine* marinePtr,
                                 MiniGameState& state, MiniGameParameters& parms)
 {  
+  if (found_ob)
+    return compose_move_action(objId, obx, oby, marinePtr->max_speed);
+  
   if (marinePtr->is_moving) {    
     double roll = drand48();
     if (roll <= 0.05)
@@ -251,18 +294,47 @@ string AggressivePlayer::chooseAction(int objId, Base* basePtr,
 
   if (roll < 0.5)
     return "";
-  else if (roll < 0.75 && done_worker_time <= 0)
+  else if (roll < 0.75 && done_worker_time <= 0 
+           && minerals >= parms.worker_cost)
   {
     done_worker_time = time + parms.worker_training_time;
     return compose_action(objId, "train worker");
   }
-  else if (roll < 1 && done_marine_time <= 0)
+  else if (roll < 1 && done_marine_time <= 0
+           && minerals >= parms.marine_cost)
   {
     done_marine_time = time + parms.marine_training_time; 
     return compose_action(objId, "train marine"); 
   }
   
   return "";
+}
+
+string AggressivePlayer::chooseScoutingAction(int objId, MobileObj<MiniGameState>* objPtr, 
+                                              MiniGameState& state, MiniGameParameters& parms)
+{  
+  double delta_x = objPtr->x - sc_x; 
+  double delta_y = objPtr->y - sc_y;
+  
+  int target_x = -1, target_y = -1;
+
+  if (ABS(delta_x) > ABS(delta_y))
+  {
+    int shift_x = (int)(SGN(delta_x)*10.0);
+    int shift_y = (int)(shift_x*delta_y/delta_x); 
+    target_x = objPtr->x + shift_x; 
+    target_y = objPtr->y + shift_y;
+  }
+  else
+  {
+    int shift_y = (int)(SGN(delta_y)*10.0);
+    int shift_x = (int)(shift_y*delta_x/delta_y); 
+    target_x = objPtr->x + shift_x; 
+    target_y = objPtr->y + shift_y;
+  }
+  
+  return compose_move_action(objId, target_x, target_y, objPtr->max_speed);
+  
 }
 
 

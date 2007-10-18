@@ -62,5 +62,10 @@ To compile ortslite:
 For information on how the RL-Glue applications work, please see README.rlglue. 
 It is important to read README.rlglue for the Reinforcement Learning competition. 
 
+In visualization, 
+
+  GREEN = Player 0
+  RED = Player 1 
+
 There is more documentation on ortslite in docs/
 

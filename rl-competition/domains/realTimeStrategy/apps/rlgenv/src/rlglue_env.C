@@ -2,6 +2,7 @@
 #include "Helpers.H"
 #include "MiniGameState.H"
 #include "Player.H"
+#include "AggressivePlayer.H"
 #include "rlglue_env.H"
 #include "SDL_GUI.H"
 #include "SDL_init.H"
@@ -13,9 +14,9 @@
 #include <map>
 #include <string>
 
-#define DEBUG 1
-
 using namespace std;
+
+static bool debug = false; 
 
 static MiniGameState * statePtr;
 static MiniGameParameters * parms;
@@ -28,7 +29,7 @@ static int time_step;
 static string task_spec;
 static char * task_spec_cstr = NULL; 
 static Observation obs; 
-static Reward_observation rewobs; 
+static Reward_observation rewobs;
 
 void init_gui(MiniGameState & state) 
 {
@@ -58,7 +59,8 @@ Task_specification env_init()
 
   statePtr = new MiniGameState; 
   //opponent = new RandomPlayer(0);
-  opponent = new TestPlayer(0);
+  //opponent = new TestPlayer(0);
+  opponent = new AggressivePlayer(0);
   parms = new MiniGameParameters;
   
   statePtr->init(*parms);
@@ -122,8 +124,8 @@ Reward_observation env_step(Action a)
   //actions[1] = rlg_convert_actions(a);
   actions[1] = rlg_action2str(a); 
   
-  cout << "opp actions = " << actions[0] << endl; 
-  cout << "rlagent actions = " << actions[1] << endl; 
+  DPR << "opp actions = " << actions[0] << endl; 
+  DPR << "rlagent actions = " << actions[1] << endl; 
   
   statePtr->simulation_step(actions, views);
   
@@ -140,8 +142,8 @@ Reward_observation env_step(Action a)
   // The RL agent will always be player 1. The opponent is player 0.  
   //string statestr = statePtr->srv_encode_view(1);
   string statestr = views[1];
-  cout << "statestr is "; 
-  prettyPrintView(views[1]);
+  DPR << "statestr is "; 
+  if (debug) prettyPrintView(views[1]);
 
   // convert the string to a char array
   //rlg_convert_view(rewobs.o, statestr);

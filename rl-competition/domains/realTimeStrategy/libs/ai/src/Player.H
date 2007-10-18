@@ -19,7 +19,9 @@ protected:
   
   void build_state(const std::string & view);
   std::string compose_action(int id, const std::string& act);
-
+  std::string compose_move_action(int id, int x, int y, int speed);
+  bool onMap(GameObj<MiniGameState>* ptr, MiniGameParameters& parms); 
+  
 public: 
   Player(); 
   Player(int num); 

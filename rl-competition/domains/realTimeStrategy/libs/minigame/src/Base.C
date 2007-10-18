@@ -86,7 +86,7 @@ void Base::execute()
       return;
     }
       
-    REM("execute base action: train failed");
+    REM("execute base action: train failed, o=" << owner);
     return;
   }
 

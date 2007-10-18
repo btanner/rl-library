@@ -115,7 +115,7 @@ void StateImpl<GameParameters,PlayerData,State>
     
     split(actions, acts[i], boost::is_any_of("#"), boost::token_compress_on); 
 
-    std::cout << "actions: " << acts[i] << std::endl;
+    //DPR << "actions: " << acts[i] << std::endl;
 
     FORALL (actions, j) {
 
@@ -167,7 +167,7 @@ void StateImpl<GameParameters,PlayerData,State>
   std::random_shuffle(all.begin(), all.end());
 
   FORALL (all, i) {
-    std::cout << "execute action: " << (*i)->action << std::endl;
+    //DPR << "execute action: " << (*i)->action << std::endl;
     (*i)->execute();
   }
 }
@@ -293,7 +293,7 @@ void StateImpl<GameParameters,PlayerData,State>::encode_view(int player, std::os
 
       // remove id from map
       if (pi.id2obj.erase(id) == 0) {
-        //std::cout << id << " " << player << std::endl; 
+        //DPR << id << " " << player << std::endl; 
         REM("id not in map");
       }
       id = 0; // obj no longer known
@@ -377,7 +377,7 @@ std::string StateImpl<GameParameters,PlayerData,State>::decode_view(int player, 
 {
   //clear_obj(); 
   
-  //std::cout << "decode_view, view = #" << view << "#" << std::endl;
+  //DPR << "decode_view, view = #" << view << "#" << std::endl;
   
   std::vector<std::string> view_parts; 
   splitup(view_parts, view, "#");
@@ -394,7 +394,7 @@ std::string StateImpl<GameParameters,PlayerData,State>::decode_view(int player, 
   FORALL(active_objs, obj_iter) {
     std::string entire_objstr = *obj_iter;
     
-    //std::cout << "state.hpp deserializing " << entire_objstr << std::endl;
+    //DPR << "state.hpp deserializing " << entire_objstr << std::endl;
     
     std::vector<std::string> obj_props;  
     splitup(obj_props, entire_objstr, ",");

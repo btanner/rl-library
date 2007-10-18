@@ -55,6 +55,21 @@ string Player::compose_action(int id, const std::string& act)
   return oss.str(); 
 }
 
+std::string Player::compose_move_action(int id, int x, int y, int speed)
+{
+  ostringstream oss; 
+  oss << id << " move " << x << " " << y << " " << speed; 
+  return oss.str(); 
+}
+
+bool Player::onMap(GameObj<MiniGameState>* ptr, MiniGameParameters & parms)
+{ 
+  return (   ptr->x >= 0 && ptr->y >= 0 
+          && ptr->x < parms.width
+          && ptr->y < parms.height);  
+}
+
+
 
 /****** Null Player ******/
  
