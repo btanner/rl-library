@@ -16,7 +16,7 @@
 
 using namespace std;
 
-static bool debug = false; 
+static bool debug = true; 
 
 static MiniGameState * statePtr;
 static MiniGameParameters * parms;
@@ -204,8 +204,14 @@ Random_seed_key env_get_random_seed()
 }
 
 Message env_message(const Message inMessage) {
-  DPR << "received message" << inMessage << endl;
-  return "rlgenv does not respond to any messages.";
+  DPR << "received message " << inMessage << endl;
+  
+  if (strcmp(inMessage, "TO=3 FROM=0 CMD=4 VALTYPE=3 VALS=NULL") == 0)
+    return "TO=0 FROM=3 CMD=0 VALTYPE=0 VALS=1_1";
+  else if (strcmp(inMessage, "TO=3 FROM=0 CMD=6 VALTYPE=3 VALS=NULL"))
+    return "TO=0 FROM=3 CMD=0 VALTYPE=0 VALS=visualizers.RealTimeStrategyVisualizer.RealTimeStrategyVisualizer";
+  
+  return "message not handled. "; 
 }
 
 
