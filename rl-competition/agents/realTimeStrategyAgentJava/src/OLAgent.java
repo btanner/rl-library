@@ -47,15 +47,15 @@ public class OLAgent implements Agent
 
   public void agent_init(final String taskSpec)
   {
-    System.out.println("RLG> Received task spec: " + taskSpec);
+    //System.out.println("RLG> Received task spec: " + taskSpec);
 
     parms = new Parameters();
     state = new State(parms);
     
-    System.out.println("parsing task spec...");
+    //System.out.println("parsing task spec...");
     parms.parseTaskSpec(taskSpec);
     
-    System.out.println("starting gui ...");
+    //System.out.println("starting gui ...");
     
     gui = new GUI(parms, state);
     gui.setVisible(true);
@@ -65,8 +65,8 @@ public class OLAgent implements Agent
   {	
     time++;
     
-    System.out.println("RLG> agent_start. Received observation. ");
-    System.out.println("integer array is " + Helpers.intArrayToString(o.intArray));
+    //System.out.println("RLG> agent_start. Received observation. ");
+    //System.out.println("integer array is " + Helpers.intArrayToString(o.intArray));
     
     state.applyObservation(o);
     gui.repaint();
@@ -80,8 +80,8 @@ public class OLAgent implements Agent
   {
     time++;
     
-    System.out.println("RLG> agent_step. Received observation. ");
-    System.out.println("integer array is " + Helpers.intArrayToString(o.intArray));
+    //System.out.println("RLG> agent_step. Received observation. ");
+    //System.out.println("integer array is " + Helpers.intArrayToString(o.intArray));
 
     state.reset();
     
@@ -160,7 +160,7 @@ public class OLAgent implements Agent
     }
 
     Action a = Helpers.convertActionList(actionList);
-    System.out.println("action int array is " + Helpers.intArrayToString(a.intArray));
+    //System.out.println("action int array is " + Helpers.intArrayToString(a.intArray));
 
     return a;
   }

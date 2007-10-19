@@ -90,7 +90,7 @@ public class State
         index++;
       }
       
-      System.out.println("Adding object " + obj);
+      //System.out.println("Adding object " + obj);
       
       objects.add(obj);
     }
