@@ -24,9 +24,15 @@ public class consoleTrainer {
 		//runMountainCarExperiment();
 
 //You should write a bit of code to look at command line args to see what you want to run I guess.
-//		consoleTrainerHelper.loadTetris(0);
-		consoleTrainerHelper.loadMountainCar(0);
-//		consoleTrainerHelper.loadHelicopter();
+		if(args.length == 0)
+			consoleTrainerHelper.loadMountainCar(0);
+		else if(args[0].equals("tetris"))
+			consoleTrainerHelper.loadTetris(0);
+		else if(args[0].equals("helicopter"))
+			consoleTrainerHelper.loadHelicopter();		
+		else
+			consoleTrainerHelper.loadMountainCar(0);
+
 
 
 		RLGlue.RL_init();
