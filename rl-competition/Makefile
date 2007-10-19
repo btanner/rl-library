@@ -1,5 +1,16 @@
-all:
-	cd ./RL-Glue/Examples/Glue_Only && make
+BIN_PATH = ./libraries
+RL_GLUE_PATH = ./RL-Glue/RL-Glue
+BUILD_PATH = ./build
+
+AGENT_NETWORKED=1
+ENV_NETWORKED=1
+EXP_NETWORKED=1
+
+CFLAGS = -I$(RL_GLUE_PATH)
+
+include $(RL_GLUE_PATH)/RL_glue.makefile
+
+all: $(BIN_PATH)/RL_glue
 	cd ./agents/randomAgentJava/ && make
 	cd ./agents/tetrisAgentJava/ && make
 	cd ./agents/mountainCarAgentCPP/ && make
@@ -9,7 +20,8 @@ all:
 	cd ./trainers/consoleRealTimeStrategyTrainerJava/ && make
 
 clean:
-	cd ./RL-Glue/Examples/Glue_Only && make clean
+	-rm $(BUILD_PATH)/*
+	-rm ./libraries/RL_glue
 	cd ./agents/randomAgentJava/ && make clean
 	cd ./agents/tetrisAgentJava/ && make clean
 	cd ./agents/mountainCarAgentCPP/ && make clean

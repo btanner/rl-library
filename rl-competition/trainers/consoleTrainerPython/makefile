@@ -20,4 +20,4 @@ RL_experiment: $(EXPERIMENT) RL_network.py RL_common.py ParameterHolder.py conso
 	chmod u+x $@
 	
 clean:
-	rm -f RL_experiment RL_experiment.py RL_network.py RL_common.py ParameterHolder.py consoleTrainerHelper.py
+	rm -f *.pyc RL_experiment RL_experiment.py RL_network.py RL_common.py ParameterHolder.py consoleTrainerHelper.py
