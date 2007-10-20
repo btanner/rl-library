@@ -14,9 +14,12 @@
 #include <map>
 #include <string>
 
+#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/replace.hpp>
+
 using namespace std;
 
-static bool debug = true; 
+static bool debug = false; 
 
 static MiniGameState * statePtr;
 static MiniGameParameters * parms;
@@ -26,6 +29,7 @@ static SDL_GUI<MiniGameState> gui;
 static std::map<std::string, SDL_GUI<MiniGameState>::Marker> markers;
 
 static int time_step;
+static bool inited = false; 
 static string task_spec;
 static char * task_spec_cstr = NULL; 
 static Observation obs; 
@@ -38,16 +42,9 @@ void init_gui(MiniGameState & state)
   gui.init(parms->width, parms->height, state, markers);
   gui.display();
 }
-/* RL-Glue Interface */
 
-/** 
- * Creates the necessary data structures. 
- * Returns a description of the environment at the start of the episode. 
- */
-Task_specification env_init()
-{    
-  DPR << "RLG> Starting env_init ..." << endl;
-  
+static void init() 
+{
   srand(time(NULL)); 
   
   time_step = 1;
@@ -74,7 +71,23 @@ Task_specification env_init()
   
   task_spec_cstr = (char *)malloc(len*sizeof(char));
   memset(task_spec_cstr, 0, len); 
-  strcpy(task_spec_cstr, task_spec.c_str()); 
+  strcpy(task_spec_cstr, task_spec.c_str());
+  
+  inited = true;
+}
+
+/* RL-Glue Interface */
+
+/** 
+ * Creates the necessary data structures. 
+ * Returns a description of the environment at the start of the episode. 
+ */
+Task_specification env_init()
+{    
+  DPR << "RLG> Starting env_init ..." << endl;
+  
+  if (!inited)
+    init(); 
   
   return (Task_specification)task_spec_cstr; 
 }
@@ -207,9 +220,35 @@ Message env_message(const Message inMessage) {
   DPR << "received message " << inMessage << endl;
   
   if (strcmp(inMessage, "TO=3 FROM=0 CMD=4 VALTYPE=3 VALS=NULL") == 0)
-    return "TO=0 FROM=3 CMD=0 VALTYPE=0 VALS=1_1";
-  else if (strcmp(inMessage, "TO=3 FROM=0 CMD=6 VALTYPE=3 VALS=NULL"))
-    return "TO=0 FROM=3 CMD=0 VALTYPE=0 VALS=visualizers.RealTimeStrategyVisualizer.RealTimeStrategyVisualizer";
+  {
+    char * resp = "TO=0 FROM=3 CMD=0 VALTYPE=0 VALS=1_1"; 
+    DPR << "responding: " << resp << endl; 
+    return resp; 
+  }
+  else if (strcmp(inMessage, "TO=3 FROM=0 CMD=6 VALTYPE=3 VALS=NULL") == 0)
+  {
+    char * resp = "TO=0 FROM=3 CMD=0 VALTYPE=0 VALS=visualizers.RealTimeStrategyVisualizer.RealTimeStrategyVisualizer";
+    DPR << "responding: " << resp << endl;
+    return resp;
+  }
+  else if (strcmp(inMessage, "TO=3 FROM=0 CMD=3 VALTYPE=1 VALS=GetRTSSpec") == 0)
+  {
+    if (!inited)
+      init(); 
+    
+    // construct it all
+    string tmpts = task_spec;
+    boost::replace_all(tmpts, "=", "$");
+    
+    // task_spec_cstr
+    //boost::replace_all(tmpts, " ", "_");
+    string resp = "TO=0 FROM=3 CMD=0 VALTYPE=1 VALS=";    
+    resp.append(tmpts);
+    
+    cout << "responding: " << resp << endl; 
+    
+    return (char*)resp.c_str();
+  }
   
   return "message not handled. "; 
 }

@@ -56,9 +56,10 @@ public class OLAgent implements Agent
     parms.parseTaskSpec(taskSpec);
     
     //System.out.println("starting gui ...");
-    
-    gui = new GUI(parms, state);
-    gui.setVisible(true);
+
+    //gui = new GUI(parms, state);
+    //gui.setVisible(true);
+    gui = null;        // now done via the visualizer
   }
 
   public Action agent_start(Observation o)
@@ -69,7 +70,7 @@ public class OLAgent implements Agent
     //System.out.println("integer array is " + Helpers.intArrayToString(o.intArray));
     
     state.applyObservation(o);
-    gui.repaint();
+    if (gui != null) gui.repaint();
     
     Action a = getAction();
 
@@ -85,8 +86,8 @@ public class OLAgent implements Agent
 
     state.reset();
     
-    state.applyObservation(o);
-    gui.repaint();
+    state.applyObservation(o);    
+    if (gui != null) gui.repaint();
     
     Action a = getAction();
 
