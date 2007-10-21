@@ -127,6 +127,9 @@ void Worker::execute()
           int mined_minerals = ::min(mp->minerals_left, mineral_potential);
           mp->minerals_left -= mined_minerals;
           carried_minerals += mined_minerals;
+          
+          if (mp->minerals_left <= 0) // check full depletion
+            mp->hp = 0;
         }
 
         acted = true;
@@ -148,11 +151,46 @@ void Worker::execute()
           
           pi.pd.minerals += carried_minerals;
           carried_minerals = 0;
+          
+          acted = true; 
         }
+      }
+    }    
+  }
+
+  if (!acted)
+  {
+    // attack closest enemy
+  
+    double min_dist = 100000000;
+    GameObj<MiniGameState>* closest_enemy = 0;
+    
+    FORALL(state->all_objs, iter)
+    {
+      GameObj<MiniGameState>* obj = *iter;
+    
+      // don't attack your own units!
+      if (obj->owner == owner)
+        continue;
+      
+      double dist = square((double)obj->x - x) + square((double)obj->y - y);
+      
+      // check if in attack range
+      
+      if (dist <= square(obj->radius + attack_range)) {
+        if (dist < min_dist) {
+          min_dist = dist; 
+          closest_enemy = obj;
+        }
+      }      
+    }
+  
+    if (closest_enemy != 0) {
+      if (attack_value > closest_enemy->armor) {
+        closest_enemy->hp -= attack_value;
       }
     }
   }
-
   
   advance();
 }

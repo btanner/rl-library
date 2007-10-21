@@ -963,7 +963,7 @@ template <class State>
 void SDL_GUI<State>::delay(int d)
 {
 #ifdef SDL
-  SDL_Delay(125);
+  SDL_Delay(d);
 #endif
 }
 

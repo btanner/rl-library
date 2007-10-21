@@ -11,6 +11,9 @@ public:
   int mineral_patch_intersection_time; // #steps worker close to mineral patch ("mining")
   int carried_minerals;
   int tick_base_built; 
+  
+  int attack_value;
+  int attack_range;  
 
   Worker(MiniGameState *s) : MobileObj<MiniGameState>(s)
   {
@@ -28,6 +31,9 @@ public:
     mineral_patch_intersection_time = 0;
     carried_minerals = 0;
     tick_base_built = 0;
+    
+    attack_range = gp.worker_atk_range;
+    attack_value = gp.worker_atk_value;
   }
 
   virtual void serialize_members(bool allied_view, std::ostream &os) const

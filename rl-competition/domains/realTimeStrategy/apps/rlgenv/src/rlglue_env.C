@@ -165,7 +165,8 @@ Reward_observation env_step(Action a)
   {
     gui.event();
     gui.display();
-    gui.delay(125);
+    //gui.delay(125);
+    gui.delay(50);
   }
   
   if (statePtr->finished()) {

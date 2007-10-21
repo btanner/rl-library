@@ -43,9 +43,14 @@ void Base::execute()
   }
 
   // no new action?
-  if (!is) return;
-
-  if (op == "stop") {
+  //if (!is) return;
+  bool acted = false;
+  
+  if (!is)
+  {
+    acted = false; 
+  }
+  else if (op == "stop") {
 
     // stops training (money back)
 
@@ -57,11 +62,10 @@ void Base::execute()
       tick_marine_ready = 0;
       pi.pd.minerals += state->gp.marine_cost;
     }
-
-    return;
+    
+    acted = true;
   }
-
-  if (op == "train") {
+  else if (op == "train") {
 
     // train worker|marine
     
@@ -72,24 +76,66 @@ void Base::execute()
     // pending actions?
       
     if (tick_worker_ready || tick_marine_ready)
-      return;
+    {
+      acted = true;
+      goto other_actions;
+    }
 
     if (what == "worker" && pi.pd.minerals >= state->gp.worker_cost) {
       pi.pd.minerals -= state->gp.worker_cost;      
       tick_worker_ready = state->tick + state->gp.worker_training_time;
-      return;
+      
+      acted = true; 
+      goto other_actions;
     }
       
     if (what == "marine" && pi.pd.minerals >= state->gp.marine_cost) {
       pi.pd.minerals -= state->gp.marine_cost;
       tick_marine_ready = state->tick + state->gp.marine_training_time;
-      return;
+      
+      acted = true;
+      goto other_actions;
     }
       
     REM("execute base action: train failed, o=" << owner);
-    return;
+    //return;
   }
 
-  REM("execute base action: illegal action " << op);
-  return;
+  other_actions:;
+  
+    if (!acted)
+    {
+      // attack closest enemy
+    
+      double min_dist = 100000000;
+      GameObj<MiniGameState>* closest_enemy = 0;
+      
+      FORALL(state->all_objs, iter)
+      {
+        GameObj<MiniGameState>* obj = *iter;
+      
+        // don't attack your own units!
+        if (obj->owner == owner)
+          continue;
+        
+        double dist = square((double)obj->x - x) + square((double)obj->y - y);
+        
+        // check if in attack range
+        
+        if (dist <= square(obj->radius + attack_range)) {
+          if (dist < min_dist) {
+            min_dist = dist; 
+            closest_enemy = obj;
+          }
+        }      
+      }
+    
+      if (closest_enemy != 0) {
+        if (attack_value > closest_enemy->armor) {
+          closest_enemy->hp -= attack_value;
+        }
+      }
+    }
+  
+  
 }

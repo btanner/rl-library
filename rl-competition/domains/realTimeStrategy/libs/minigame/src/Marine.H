@@ -24,8 +24,8 @@ public:
     max_speed   = gp.marine_max_speed;
     is_moving   = false;
     
-    attack_value = state->gp.marine_attack_value;
-    attack_range = state->gp.marine_attack_range;
+    attack_value = state->gp.marine_atk_value;
+    attack_range = state->gp.marine_atk_range;
   }
 
   virtual bool deserialize_member(const std::string & key, const std::string & val)
