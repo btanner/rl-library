@@ -37,6 +37,8 @@ class Base extends GameObj
 
 class MineralPatch extends GameObj
 {
+  int capacity; 
+
   public String getType() { return "mineral_patch"; }
 }
 

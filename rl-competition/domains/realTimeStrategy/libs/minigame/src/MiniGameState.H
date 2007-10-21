@@ -14,7 +14,8 @@ struct MiniGameParameters
   static const int FPS         = 8;  // frames per second
   
   int width;                   
-  int height;                  
+  int height;        
+  int mineral_patches; 
 
   // -------------
 
@@ -162,6 +163,7 @@ struct MiniGameParameters
   {
     width                   = 54*FINE_POINTS;
     height                  = 54*FINE_POINTS;
+    mineral_patches         = 10;
 
     // -------------
 
@@ -256,6 +258,8 @@ public:
   int score(int player) const;
 
   void object_setup();
+  
+  void setMPstr(const std::string& mpstr);
   
   virtual GameObj<MiniGameState>* new_game_object(const std::string & type); 
   

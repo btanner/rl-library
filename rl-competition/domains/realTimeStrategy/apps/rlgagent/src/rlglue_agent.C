@@ -20,6 +20,7 @@ static MiniGameParameters * parms = NULL;
 static MiniGameState * state = NULL;
 static string statestr;
 static string tsstr;
+static string mpstr;
 
 static Action myAction;
 
@@ -35,7 +36,12 @@ void agent_init(const Task_specification task_spec)
   
   parms = new MiniGameParameters;
   
-  tsstr = ""; 
+  string ts;
+  ts.append(task_spec);
+  string::size_type loc = ts.find("mps=", 0 );
+  string tsstr = ts.substr(0, loc-1);
+  mpstr = ts.substr(loc+4);
+  
   tsstr.append(task_spec); // convert to a string 
 
   DPR << "Received task spec: " << tsstr << endl;
@@ -51,6 +57,7 @@ Action agent_start(Observation o)
   
   if (state != NULL) delete state;
   state = new MiniGameState;
+  state->setMPstr(mpstr); 
   
   //string statestr = build_state_string(o);     
   //DPR << "State string is " << statestr << endl; 
@@ -79,6 +86,7 @@ Action agent_step(Reward r, Observation o)
 
   if (state != NULL) delete state;
   state = new MiniGameState;
+  state->setMPstr(mpstr);
   
   // What to do with the reward .... hmmm... ?
   

@@ -26,6 +26,7 @@ static MiniGameParameters * parms;
 static Player * opponent; 
 boost::array<std::string, MiniGameState::PLAYER_NUM> views;
 static SDL_GUI<MiniGameState> gui;
+static bool use_gui = true; 
 static std::map<std::string, SDL_GUI<MiniGameState>::Marker> markers;
 
 static int time_step;
@@ -37,10 +38,13 @@ static Reward_observation rewobs;
 
 void init_gui(MiniGameState & state) 
 {
-  SDL_init::video_init();
-  markers["worker"] = SDL_GUI<MiniGameState>::MARKER_H; // mark workers
-  gui.init(parms->width, parms->height, state, markers);
-  gui.display();
+  if (use_gui)
+  {
+    SDL_init::video_init();
+    markers["worker"] = SDL_GUI<MiniGameState>::MARKER_H; // mark workers
+    gui.init(parms->width, parms->height, state, markers);
+    gui.display();
+  }
 }
 
 static void init() 
@@ -67,11 +71,26 @@ static void init()
   parms->serialize(os); 
   task_spec = os.str(); 
   
+  // append mineral patch coords
+  ostringstream os2;
+  os2 << ",mps=";
+  FORALL(statePtr->all_objs, iter)
+  {
+    GameObj<MiniGameState> * objPtr = (*iter);
+    if (objPtr->get_type() == "mineral_patch")    
+      os2 << objPtr->x << "-" << objPtr->y << "-";     
+  }
+  
+  string mps = os2.str();
+  mps = mps.substr(0, mps.length()-1);
+  
+  task_spec = task_spec + mps;  
+
   int len = task_spec.length()+1;
   
   task_spec_cstr = (char *)malloc(len*sizeof(char));
   memset(task_spec_cstr, 0, len); 
-  strcpy(task_spec_cstr, task_spec.c_str());
+  strcpy(task_spec_cstr, task_spec.c_str());  
   
   inited = true;
 }
@@ -142,9 +161,12 @@ Reward_observation env_step(Action a)
   
   statePtr->simulation_step(actions, views);
   
-  gui.event();
-  gui.display();
-  gui.delay(125);  
+  if (use_gui)
+  {
+    gui.event();
+    gui.display();
+    gui.delay(125);
+  }
   
   if (statePtr->finished()) {
     // Game is done! 

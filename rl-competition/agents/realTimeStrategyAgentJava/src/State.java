@@ -20,6 +20,7 @@ import rlglue.types.Observation;
 public class State
 {
   ArrayList<GameObj> objects;
+  ArrayList<MineralPatch> mps;
   Parameters parms;
   
   // global info
@@ -29,11 +30,38 @@ public class State
   {
     this.parms = parms;
     this.objects = new ArrayList<GameObj>(); 
+    this.mps = new ArrayList<MineralPatch>();
   }
   
   public void reset()
   {
     objects.clear();
+    objects.addAll(mps);
+  }
+
+  public void setMPs(String mpstr)
+  {
+    String[] coords = mpstr.split("-");
+
+    for (int i = 0; i < coords.length; i++)
+    {
+      int x = Integer.parseInt(coords[i]);
+      i++;
+      int y = Integer.parseInt(coords[i]);
+
+      MineralPatch mp = new MineralPatch(); 
+      mp.x = x;
+      mp.y = y;
+      mp.radius = parms.mineral_patch_radius;
+      mp.sight_range = parms.mineral_patch_sight_range;
+      mp.hp = parms.mineral_patch_hp;
+      mp.armor = parms.mineral_patch_armor;  
+      mp.capacity = parms.mineral_patch_capacity; 
+      
+      mps.add(mp);
+    }
+
+    objects.addAll(mps);
   }
   
   public void applyObservation(Observation o)

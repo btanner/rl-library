@@ -77,9 +77,9 @@ void StateImpl<GameParameters,PlayerData,State>::init(const GameParameters &gp)
 
   tick = 0;
   
-  apply_new_objs();
-  
   object_setup();
+  
+  apply_new_objs();  
 }
 
 template <class GameParameters, class PlayerData, class State>

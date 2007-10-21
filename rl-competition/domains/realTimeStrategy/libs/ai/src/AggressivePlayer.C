@@ -18,7 +18,7 @@ using namespace std;
 #define SGN(x)          ((x) < 0 ? (-1) : 1)
 #define ABS(x)          ((x) < 0 ? (-(x)) : (x))
 
-static bool debug = true; 
+static bool debug = false; 
 
 AggressivePlayer::AggressivePlayer(int num)
   : Player::Player(num)

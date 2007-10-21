@@ -52,8 +52,13 @@ public class OLAgent implements Agent
     parms = new Parameters();
     state = new State(parms);
     
+    int indexOfMPs = taskSpec.indexOf("mps=");
+    String mpstr = taskSpec.substring(indexOfMPs+4); 
+    String taskSpec2 = taskSpec.substring(0, indexOfMPs-1); 
+
     //System.out.println("parsing task spec...");
-    parms.parseTaskSpec(taskSpec);
+    parms.parseTaskSpec(taskSpec2);
+    state.setMPs(mpstr);
     
     //System.out.println("starting gui ...");
 
