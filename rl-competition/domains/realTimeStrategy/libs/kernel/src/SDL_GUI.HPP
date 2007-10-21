@@ -231,6 +231,7 @@ void SDL_GUI<State>::unlock()
 template <class State>
 void SDL_GUI<State>::display_health_bars(const GfxView2 &gv)
 {
+#ifdef SDL
   const RGB black(0,0,0);
   const RGB white(255,255,255);
   
@@ -275,7 +276,7 @@ void SDL_GUI<State>::display_health_bars(const GfxView2 &gv)
   }
   
 #if 0
-  // fixme
+  // old code
   const RGB black(0,0,0);
   const RGB white(255,255,255);
 
@@ -337,7 +338,8 @@ void SDL_GUI<State>::display_health_bars(const GfxView2 &gv)
       }
     }
   }
-#endif
+#endif   // 0
+#endif   // SDL
 }
 
 template <class State>
