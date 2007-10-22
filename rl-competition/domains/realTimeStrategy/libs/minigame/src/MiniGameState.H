@@ -268,7 +268,15 @@ struct MiniPlayerData
 
 class MiniGameState : public StateImpl<MiniGameParameters, MiniPlayerData, MiniGameState>
 {
+  bool p0_base_constructed; 
+  bool p1_base_constructed;  
+  
 public:
+  
+  MiniGameState() { 
+    p0_base_constructed = false; 
+    p1_base_constructed = false;
+  }
 
   bool finished() const;
 
@@ -283,6 +291,8 @@ public:
   virtual GameObj<MiniGameState>* getorcreate_game_object(int id, int player, const std::string & type, bool & newobj); 
 
   int encode_view_rlg(int player, int* & array, int attrs_per_unit);  
+  
+  int check_win();
   
   friend class Base;
   friend class MineralPatch;

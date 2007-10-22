@@ -18,16 +18,18 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/replace.hpp>
 
+#define MAX_STEPS 10000
+
 using namespace std;
 
-static bool debug = false; 
+static bool debug = false;
 
 static MiniGameState * statePtr;
 static MiniGameParameters * parms;
 static Player * opponent; 
 boost::array<std::string, MiniGameState::PLAYER_NUM> views;
 static SDL_GUI<MiniGameState> gui;
-static bool use_gui = false; 
+static bool use_gui = true; 
 static int gui_delay = 25;
 static std::map<std::string, SDL_GUI<MiniGameState>::Marker> markers;
 
@@ -213,10 +215,20 @@ Reward_observation env_step(Action a)
 
   //profiler.stamp("env_step 4");        
   
-  if (statePtr->finished()) {
+  int gameVal = statePtr->check_win();
+  if (gameVal >= 0 || time_step >= MAX_STEPS) {
     // Game is done! 
     // determine winner & reward
     rewobs.terminal = 1; 
+    
+    if (gameVal == 0)
+      rewobs.r = 0;
+    else if (gameVal == 1)
+      rewobs.r = 100;
+    else if (gameVal == 2 || time_step >= MAX_STEPS)
+      rewobs.r = 50; 
+    
+    return rewobs;
   }
   
   // The RL agent will always be player 1. The opponent is player 0.  

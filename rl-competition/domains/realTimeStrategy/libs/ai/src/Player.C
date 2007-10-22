@@ -13,6 +13,7 @@ using namespace std;
 Player::Player() 
 {
   statePtr = 0; 
+  do_not_free = false;
 }
 
 Player::Player(int num) 
@@ -23,7 +24,7 @@ Player::Player(int num)
 
 Player::~Player()
 {
-  if (statePtr != 0)
+  if (statePtr != 0 && !do_not_free)
     delete statePtr;
 }
 
@@ -52,6 +53,7 @@ void Player::build_state(const string & view)
 void Player::set_state(MiniGameState * stateptr)
 {
   statePtr = stateptr; 
+  do_not_free = true;
 }
 
 

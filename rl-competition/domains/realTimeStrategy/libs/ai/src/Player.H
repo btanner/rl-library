@@ -11,6 +11,8 @@
 
 class Player
 {
+  bool do_not_free;
+  
 protected:
   std::string name;
   std::string view;

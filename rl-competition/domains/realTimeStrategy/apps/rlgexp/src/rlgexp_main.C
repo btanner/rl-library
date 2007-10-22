@@ -36,8 +36,10 @@ int main(int argc, char *argv[]) {
   RL_init();
   
   cout << "Running episodes" << endl; 
-  run(200);
+  run(1);
 
+  cout << "Return is " << RL_return() << endl; 
+  
   cout << "Cleaning up" << endl; 
   RL_cleanup();
   

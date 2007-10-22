@@ -94,6 +94,59 @@ GameObj<MiniGameState>* MiniGameState::getorcreate_game_object(int id, int playe
   return ptr; 
 }
 
+int MiniGameState::check_win()
+{
+  int p0_base = 0, p1_base = 0;
+  int p0_units = 0, p1_units = 0; 
+  
+  FORALL (all_objs, i) {
+    GameObj<MiniGameState>* objPtr = *i;
+   
+    if (objPtr->hp >= 1 && objPtr->owner == 0)
+    {
+      p0_units++;
+      if (objPtr->get_type() == "base") {
+        p0_base_constructed = true;
+        p0_base = 1;
+      }
+    }
+    else if (objPtr->hp >= 1 && objPtr->owner == 1)
+    {
+      p1_units++;
+      if (objPtr->get_type() == "base") {
+        p1_base_constructed = true;
+        p1_base = 1;
+      }      
+    }
+  }
+  
+  if (p0_units <= 0 && p1_units > 0)
+    return 1;
+  
+  if (p1_units <= 0 && p0_units > 0)
+    return 0;
+  
+  if (p0_units <= 0 && p1_units <= 0)
+    return 2;
+  
+  if (p0_base_constructed && p0_base == 0)
+  {
+    if (p1_base_constructed && p1_base == 0) // destroyed at same time
+      return 2;
+    else
+      return 1;
+  }
+  
+  if (p1_base_constructed && p1_base == 0)
+  {
+    if (p0_base_constructed && p0_base == 0) // destroyed at same time
+      return 2;
+    else
+      return 0;
+  }
+
+  return -1;
+}
 
 int MiniGameState::encode_view_rlg(int player, int* & array, int attrs_per_unit)
 {
