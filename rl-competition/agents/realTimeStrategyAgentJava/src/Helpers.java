@@ -93,4 +93,14 @@ public class Helpers
     actionList.add(-1);               
   }
   
+  public static void addAttackAction(ArrayList<Integer> actionList, int objId, int targetId)
+  {
+    actionList.add(objId);
+    actionList.add(5);        // action id
+    actionList.add(-1);
+    actionList.add(-1);
+    actionList.add(-1);
+    actionList.add(targetId);               
+  }
+  
 }
