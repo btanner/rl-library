@@ -112,7 +112,7 @@ static void init()
   memset(task_spec_cstr, 0, len); 
   strcpy(task_spec_cstr, task_spec.c_str());  
   
-  timing_start();
+  //timing_start();
   
   //profiler.disable();
   //profiler.start();
@@ -179,10 +179,10 @@ Reward_observation env_step(Action a)
   DPR << endl << "### Starting time step " << time_step << endl;   
   DPR << "RLG> Starting env_step" << endl;
   
-  if (time_step == 10000) { 
-    timing_end();
-    exit(-1);
-  }
+  //if (time_step == 10000) { 
+  //  timing_end();
+  //  exit(-1);
+  //}
   
   boost::array<std::string, MiniGameState::PLAYER_NUM> actions;
 
