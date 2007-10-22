@@ -27,6 +27,11 @@ void get_actions(std::vector<int> & vector,
                  MiniGameParameters & parms);
 
 void add_move_action(std::vector<int>& actions, int objId, int x, int y, int max_speed);
+void add_build_base_action(std::vector<int>& actions, int objId);
+void add_stop_action(std::vector<int>& actions, int objId);
+void add_train_worker_action(std::vector<int>& actions, int objId);
+void add_train_marine_action(std::vector<int>& actions, int objId);
+void add_attack_action(std::vector<int>& actions, int objId, int targetId);
 
 
 #endif

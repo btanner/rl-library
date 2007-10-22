@@ -367,6 +367,8 @@ std::string rlg_action2str(const Action& action)
       oss << objId << " train worker";
     else if (actionId == 4)
       oss << objId << " train marine";
+    else if (actionId == 5)
+      oss << objId << " attack " << f4;
     
     // to shut up compiler for now      
     f1 = f1;

@@ -14,6 +14,8 @@ void Marine::execute()
 
   MiniGameState::PlayerInfo &pi = state->player_infos[owner];
   
+  bool acted = false;
+  
   if (!!is) {
 
     if (op == "move") {
@@ -23,12 +25,13 @@ void Marine::execute()
       string r = move_action(is);
       if (!r.empty()) 
         REM("execute marine action move: " << r << ", got: " << action);
-
+      
     } else if (op == "stop") {
 
       // stops motion
       
       is_moving = false;
+      
       
     } else if (op == "attack") {
       
@@ -64,42 +67,47 @@ void Marine::execute()
         }
       }
       
+      acted = true;       
+      
     } else
       REM("execute marine action: illegal action : " << action);
   }
 
   other_actions:;
   
-    // attack closest enemy
-  
-    double min_dist = 100000000;
-    GameObj<MiniGameState>* closest_enemy = 0;
-    
-    FORALL(state->all_objs, iter)
+    if (!acted)
     {
-      GameObj<MiniGameState>* obj = *iter;
+      // attack lowest enemy nearby
     
-      // don't attack your own units!
-      if (obj->owner == owner)
-        continue;
+      double min_hp = 100000000;
+      GameObj<MiniGameState>* lowest_enemy = 0;
       
-      double dist = square((double)obj->x - x) + square((double)obj->y - y);
+      FORALL(state->all_objs, iter)
+      {
+        GameObj<MiniGameState>* obj = *iter;
       
-      // check if in attack range
-      
-      if (dist <= square(obj->radius + attack_range)) {
-        if (dist < min_dist) {
-          min_dist = dist; 
-          closest_enemy = obj;
+        // don't attack your own units!
+        if (obj->owner == owner)
+          continue;
+        
+        double dist = square((double)obj->x - x) + square((double)obj->y - y);
+        
+        // check if in attack range
+        
+        if (dist <= square(obj->radius + attack_range)) {
+          if (obj->hp < min_hp) {
+            min_hp = obj->hp; 
+            lowest_enemy = obj;
+          }
+        }      
+      }
+    
+      if (lowest_enemy != 0) {
+        if (attack_value > lowest_enemy->armor) {
+          lowest_enemy->hp -= attack_value;
         }
-      }      
-    }
-
-    if (closest_enemy != 0) {
-      if (attack_value > closest_enemy->armor) {
-        closest_enemy->hp -= attack_value;
       }
     }
-    
+      
     advance();
 }

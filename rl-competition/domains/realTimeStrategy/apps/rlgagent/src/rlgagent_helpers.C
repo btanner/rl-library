@@ -36,6 +36,58 @@ void add_move_action(std::vector<int>& actions, int objId, int x, int y, int max
   actions.push_back(-1);  // training type
 }
 
+void add_build_base_action(std::vector<int>& actions, int objId)
+{
+  actions.push_back(objId);
+  actions.push_back(1); // action id
+  actions.push_back(-1);
+  actions.push_back(-1);
+  actions.push_back(-1);
+  actions.push_back(-1);  // training type
+}
+
+void add_stop_action(std::vector<int>& actions, int objId)
+{
+  actions.push_back(objId);
+  actions.push_back(2); // action id
+  actions.push_back(-1);
+  actions.push_back(-1);
+  actions.push_back(-1);
+  actions.push_back(-1);  // training type
+}
+
+void add_train_worker_action(std::vector<int>& actions, int objId)
+{
+  actions.push_back(objId);
+  actions.push_back(3); // action id
+  actions.push_back(-1);
+  actions.push_back(-1);
+  actions.push_back(-1);
+  actions.push_back(-1);  // training type
+}
+
+void add_train_marine_action(std::vector<int>& actions, int objId)
+{
+  actions.push_back(objId);
+  actions.push_back(3); // action id
+  actions.push_back(-1);
+  actions.push_back(-1);
+  actions.push_back(-1);
+  actions.push_back(-1);  // training type
+}
+
+
+void add_attack_action(std::vector<int>& actions, int objId, int targetId)
+{
+  actions.push_back(objId);
+  actions.push_back(5); // action id
+  actions.push_back(-1);
+  actions.push_back(-1);
+  actions.push_back(-1);
+  actions.push_back(targetId);  // training type
+}
+
+
 
 void get_actions(vector<int> & vector, 
                  MiniGameState & state, 

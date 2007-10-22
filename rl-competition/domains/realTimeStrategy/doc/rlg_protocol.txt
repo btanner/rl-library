@@ -50,12 +50,13 @@ order. Each action has the form:
        stop = 2
        train worker = 3
        train marine = 4
+       attack = 5
   2. target x-coordinate
        if unit is non-mobile, value is meaningless
   3. target y-coordinate
        if unit is non-mobile, value is meaningless
   4. speed
        if unit is non-mobile, value is meaningless
-  5. training type
-       (currently unused)
+  5. training type or target id
+       (currently used only for target id in attack actions)
 

@@ -99,16 +99,52 @@ void Base::execute()
       
     REM("execute base action: train failed, o=" << owner);
     //return;
+    
+  } else if (op == "attack") {
+    
+    // attack obj
+    // one shot
+    
+    MiniGameState::ObjId id;
+
+    is >> id;
+    if (!is) {
+      REM("execute base action: corrupt target id :" << action);
+      goto other_actions;
+    }
+
+    // target known?
+    
+    FIND (pi.id2obj, i, id);
+    if (i == pi.id2obj.end()) {
+      REM("execute base action: unknown target " << id);
+      goto other_actions;
+    }
+
+    // target hull within range?
+
+    double dist2 = square((double)i->second->x - x) + square((double)i->second->y - y);
+
+    if (dist2 <= square(i->second->radius + attack_range)) {
+      
+      // yes! decrease hp of target if armor is insufficient
+
+      if (attack_value > i->second->armor) {
+        i->second->hp -= attack_value;
+      }
+    }
+    
+    acted = true;       
   }
 
   other_actions:;
   
     if (!acted)
     {
-      // attack closest enemy
+      // attack lowest enemy nearby
     
-      double min_dist = 100000000;
-      GameObj<MiniGameState>* closest_enemy = 0;
+      double min_hp = 100000000;
+      GameObj<MiniGameState>* lowest_enemy = 0;
       
       FORALL(state->all_objs, iter)
       {
@@ -123,16 +159,16 @@ void Base::execute()
         // check if in attack range
         
         if (dist <= square(obj->radius + attack_range)) {
-          if (dist < min_dist) {
-            min_dist = dist; 
-            closest_enemy = obj;
+          if (obj->hp < min_hp) {
+            min_hp = obj->hp; 
+            lowest_enemy = obj;
           }
         }      
       }
     
-      if (closest_enemy != 0) {
-        if (attack_value > closest_enemy->armor) {
-          closest_enemy->hp -= attack_value;
+      if (lowest_enemy != 0) {
+        if (attack_value > lowest_enemy->armor) {
+          lowest_enemy->hp -= attack_value;
         }
       }
     }
