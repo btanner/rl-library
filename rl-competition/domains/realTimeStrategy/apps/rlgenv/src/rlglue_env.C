@@ -29,7 +29,7 @@ static MiniGameParameters * parms;
 static Player * opponent; 
 boost::array<std::string, MiniGameState::PLAYER_NUM> views;
 static SDL_GUI<MiniGameState> gui;
-static bool use_gui = true; 
+static bool use_gui = false; 
 static int gui_delay = 25;
 static std::map<std::string, SDL_GUI<MiniGameState>::Marker> markers;
 
@@ -340,7 +340,7 @@ Message env_message(const Message inMessage) {
     string resp = "TO=0 FROM=3 CMD=0 VALTYPE=1 VALS=";    
     resp.append(tmpts);
     
-    cout << "responding: " << resp << endl; 
+    DPR << "responding: " << resp << endl; 
     
     return (char*)resp.c_str();
   }
