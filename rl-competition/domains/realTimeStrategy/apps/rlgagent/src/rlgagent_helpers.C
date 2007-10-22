@@ -50,8 +50,9 @@ void get_actions(vector<int> & vector,
   FORALL(state.all_objs, iter)
   {
     GameObj<MiniGameState> * objPtr = (*iter);
+    
     ostringstream oss; 
-    objPtr->serialize(true, oss); 
+    if (debug) objPtr->serialize(true, oss); 
     
     int objId = objPtr->view_ids[1];
     

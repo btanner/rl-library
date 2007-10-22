@@ -3,6 +3,7 @@
 #include "Helpers.H"
 #include "MiniGameState.H"
 #include "rlglue_agent.H"
+#include "Profiler.H"
 
 #include <stdlib.h>
 #include <time.h>
@@ -23,6 +24,8 @@ static string tsstr;
 static string mpstr;
 
 static Action myAction;
+
+static Profiler profiler; 
 
 void agent_init(const Task_specification task_spec)
 {
@@ -48,10 +51,14 @@ void agent_init(const Task_specification task_spec)
   
   DPR << "Deserializing parameters ..." << endl;
   parms->deserialize(tsstr);
+  
+  //profiler.setFilename("rlgagent_profiler.log");
 }
 
 Action agent_start(Observation o)
 {  
+  //profiler.start();
+  
   DPR << "RLG> Calling agent_start" << endl;
   DPR << "Received state: " << intArray2string(o.intArray, o.numInts) << endl;
   
@@ -81,12 +88,14 @@ Action agent_start(Observation o)
 
 Action agent_step(Reward r, Observation o)
 {
+  //profiler.stamp("agent_step 0");
+  
   DPR << "RLG> Starting agent_step" << endl;
   DPR << "Received state: " << intArray2string(o.intArray, o.numInts) << endl;
 
-  if (state != NULL) delete state;
-  state = new MiniGameState;
-  state->setMPstr(mpstr);
+  //if (state != NULL) delete state;
+  //state = new MiniGameState;
+  //state->setMPstr(mpstr);
   
   // What to do with the reward .... hmmm... ?
   
@@ -98,18 +107,23 @@ Action agent_step(Reward r, Observation o)
   //state->decode_view(1, statestr);
   rlg_obs2view(*state, o);
 
+  //profiler.stamp("agent_step 1");
   
   // Build up a set of actions
   // eg. 1 move 10 20 5#2 move 20 10 2 # ... 
   
   vector<int> actions;
   get_actions(actions, *state, *parms); 
+
+  //profiler.stamp("agent_step 2");
   
   //string actionstr = join(actions, "#"); 
   //DPR << "action string is " << actionstr << endl; 
   //rlg_convert_actionstr(myAction, actionstr);  
   rlg_vector2action(myAction, actions);
   
+  //profiler.stamp("agent_step 3");
+
   return myAction;
 }
 

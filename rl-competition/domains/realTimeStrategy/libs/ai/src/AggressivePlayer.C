@@ -37,12 +37,17 @@ AggressivePlayer::AggressivePlayer(int num)
   
   found_ob = found_mp = false;
   
+  //profiler.disable();
+  //profiler.setFilename("ap_profile.log");
+  //profiler.start();
+  
 }
 
 AggressivePlayer::~AggressivePlayer()
 {
-  if (statePtr != 0)
-     delete statePtr;  
+  // (uses) set_state
+  //if (statePtr != 0)
+  //   delete statePtr;  
 }
 
 void AggressivePlayer::determineScouts(MiniGameParameters& parms)
@@ -83,7 +88,12 @@ void AggressivePlayer::determineScouts(MiniGameParameters& parms)
 
 string AggressivePlayer::receive_actions(string view, MiniGameParameters& parms)
 {
-  build_state(view); 
+  //profiler.stamp("rec_actions 0");  
+  
+  // now uses set_state before hand
+  //build_state(view); 
+
+  //profiler.stamp("rec_actions 1");  
   
   time++;
   
@@ -97,6 +107,8 @@ string AggressivePlayer::receive_actions(string view, MiniGameParameters& parms)
     done_base_time = 0;
     
   minerals = statePtr->player_infos[playerNum].pd.minerals; 
+
+  //profiler.stamp("rec_actions 2");    
   
   vector<string> actions;
   
@@ -106,6 +118,8 @@ string AggressivePlayer::receive_actions(string view, MiniGameParameters& parms)
   //DPR << "TP" << playerNum << ": Iterating through objects" << endl; 
   
   int numObjs = 0;
+  
+  //profiler.stamp("rec_actions 3");  
   
   FORALL(statePtr->all_objs, iter)
   {
@@ -176,7 +190,15 @@ string AggressivePlayer::receive_actions(string view, MiniGameParameters& parms)
       //cout << "  found base, id=" << objId << " : " << oss.str() << endl;
       //cout << "   --> action is " << act << endl; 
     }
-    else if (objPtr->owner != playerNum && objPtr->get_type() == "base")
+    else if (objPtr->get_type() == "mineral_patch")
+    {
+      mp_x = objPtr->x;
+      mp_y = objPtr->y;
+      
+      //cout << "  found mineral_patch, id=" << objId << " : " << oss.str() << endl;      
+    }
+    else if (objPtr->owner != playerNum && objPtr->get_type() == "base"
+             && statePtr->is_visible(objPtr, playerNum))   // don't want to cheat
     {
       found_ob = true;
        
@@ -186,20 +208,17 @@ string AggressivePlayer::receive_actions(string view, MiniGameParameters& parms)
       oby = basePtr->y;
     }
     
-    else if (objPtr->get_type() == "mineral_patch")
-    {
-      mp_x = objPtr->x;
-      mp_y = objPtr->y;
-      
-      //cout << "  found mineral_patch, id=" << objId << " : " << oss.str() << endl;      
-    }
    
     
   }
   
+  //profiler.stamp("rec_actions 4");    
+  
   //DPR << "numObjs = " << numObjs << endl;
   
   string actionstr = join(actions, "#");
+
+  //profiler.stamp("rec_actions 5");    
   
   //DPR << "actionstr = " << actionstr << endl; 
   

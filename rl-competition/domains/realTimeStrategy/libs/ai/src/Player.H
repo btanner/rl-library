@@ -18,6 +18,7 @@ protected:
   int playerNum;
   
   void build_state(const std::string & view);
+  
   std::string compose_action(int id, const std::string& act);
   std::string compose_move_action(int id, int x, int y, int speed);
   bool onMap(GameObj<MiniGameState>* ptr, MiniGameParameters& parms); 
@@ -25,7 +26,9 @@ protected:
 public: 
   Player(); 
   Player(int num); 
-  virtual ~Player(); 
+  virtual ~Player();
+  
+  void set_state(MiniGameState * stateptr); 
   
   virtual std::string receive_actions(std::string view, MiniGameParameters& parms)  = 0;  
 

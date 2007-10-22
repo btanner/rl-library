@@ -24,6 +24,13 @@ bool to_bool(const std::string & str)
   return x;  
 }
 
+string to_string(int x)
+{
+  ostringstream oss; 
+  oss << x; 
+  return oss.str();
+}
+
 #if 0
 std::string trim(const std::string & str)
 {

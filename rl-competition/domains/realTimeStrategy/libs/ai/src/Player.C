@@ -40,13 +40,20 @@ string Player::rnd_move_action(int objId, MiniGameParameters& parms, int speed)
 
 void Player::build_state(const string & view)
 {
-  if (statePtr != 0)
-    delete statePtr; 
-  
-  statePtr = new MiniGameState; 
+  //if (statePtr != 0)
+  //  delete statePtr; 
+  if (statePtr == NULL)
+    statePtr = new MiniGameState; 
   
   statePtr->decode_view(playerNum, view);
 }
+
+
+void Player::set_state(MiniGameState * stateptr)
+{
+  statePtr = stateptr; 
+}
+
 
 string Player::compose_action(int id, const std::string& act)
 {

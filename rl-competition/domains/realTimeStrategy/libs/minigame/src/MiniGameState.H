@@ -279,6 +279,10 @@ public:
   void setMPstr(const std::string& mpstr);
   
   virtual GameObj<MiniGameState>* new_game_object(const std::string & type); 
+
+  virtual GameObj<MiniGameState>* getorcreate_game_object(int id, int player, const std::string & type, bool & newobj); 
+
+  int encode_view_rlg(int player, int* & array, int attrs_per_unit);  
   
   friend class Base;
   friend class MineralPatch;

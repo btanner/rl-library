@@ -223,6 +223,30 @@ bool StateImpl<GameParameters,PlayerData,State>::a_sees_b(GameObjBase &a, GameOb
 */
 
 template <class GameParameters, class PlayerData, class State>
+bool StateImpl<GameParameters,PlayerData,State>::is_visible(GameObjBase* obj, int player)
+{
+  if (obj->owner == player)
+    return true; 
+  
+  Vector<GameObjBase*> playerObjs;
+
+  // collect player objs
+  
+  FORALL (all_objs, i)
+    if ((*i)->owner == player)
+      playerObjs.push_back(*i);
+  
+  bool visible = false;
+  
+  FORALL (playerObjs, j) {
+    if (a_sees_b(**j, *obj))
+    { visible = true; break; }
+  }  
+
+  return visible;
+}
+
+template <class GameParameters, class PlayerData, class State>
 void StateImpl<GameParameters,PlayerData,State>::encode_view(int player, std::ostream &os)
 {
   PlayerInfo &pi = player_infos[player];
@@ -318,8 +342,6 @@ void StateImpl<GameParameters,PlayerData,State>::encode_view(int player, std::os
 }
 
 
-
-
 template <class GameParameters, class PlayerData, class State>
 void StateImpl<GameParameters,PlayerData,State>
 ::simulation_step(const boost::array<std::string, PLAYER_NUM> &acts,
@@ -344,6 +366,30 @@ void StateImpl<GameParameters,PlayerData,State>
   }
 }
 
+template <class GameParameters, class PlayerData, class State>
+void StateImpl<GameParameters,PlayerData,State>
+::simulation_step(const boost::array<std::string, PLAYER_NUM> &acts,
+                  boost::array<std::string, PLAYER_NUM> &views,
+                  int only_this_view)
+{
+  tick++;
+  
+  // add pending new objects
+  apply_new_objs();
+  
+  // execute actions
+  execute_actions(acts);
+
+  // add pending new objects
+  apply_new_objs();
+  
+  // compute single view  
+  std::ostringstream os; 
+  encode_view(only_this_view, os);
+  views[only_this_view] = os.str();   
+}
+
+
 
   // collect action string for player
 template <class GameParameters, class PlayerData, class State>
@@ -363,6 +409,13 @@ void StateImpl<GameParameters,PlayerData,State>::collect_actions(int player, std
   acts = os.str();
 }
 
+template <class GameParameters, class PlayerData, class State>
+GameObj<State>* StateImpl<GameParameters,PlayerData,State>::getorcreate_game_object (int id, 
+int player, const std::string & type, bool & newobj)
+{      
+  // to be overridden
+  return NULL;
+}
 
 
 // ------ client functions
@@ -372,10 +425,12 @@ void StateImpl<GameParameters,PlayerData,State>::collect_actions(int player, std
   Decodes (AKA deserializes) the view. See encode_view for view format.
    
 */
+
+
 template <class GameParameters, class PlayerData, class State>
 std::string StateImpl<GameParameters,PlayerData,State>::decode_view(int player, const std::string &view)
 {
-  //clear_obj(); 
+  clear_obj(); 
   
   //DPR << "decode_view, view = #" << view << "#" << std::endl;
   
@@ -408,7 +463,7 @@ std::string StateImpl<GameParameters,PlayerData,State>::decode_view(int player, 
     int id = to_int(obj_props[2]);
     
     std::string objstr = join(obj_props, ",", 3);
-    GameObjBase * gameObj = new_game_object(type);
+    GameObjBase * gameObj = new_game_object(type); 
     gameObj->deserialize(objstr); 
         
     gameObj->view_ids[player] = id; 

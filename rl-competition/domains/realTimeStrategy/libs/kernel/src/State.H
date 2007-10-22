@@ -86,6 +86,10 @@ public:
   void simulation_step(const boost::array<std::string, PLAYER_NUM> &acts,
                         boost::array<std::string, PLAYER_NUM> &views);
 
+  void simulation_step(const boost::array<std::string, PLAYER_NUM> &acts,
+                        boost::array<std::string, PLAYER_NUM> &views, int only_this_view);
+  
+  
   // collect action string for player
   void collect_actions(int player, std::string &acts);
 
@@ -104,13 +108,18 @@ public:
   // encode actions for player (who_am_i), also clears action slots
   std::string encode_actions();
   
+  virtual GameObjBase* getorcreate_game_object(int id, int player, const std::string & type, bool & newobj); 
+  
+  bool is_visible(GameObjBase*, int player);
+  
+  void clear_obj(); 
+  
 protected:
   
   // object registration
 
   void new_obj(GameObjBase *obj, int owner);
   void delete_obj(GameObjBase *obj);
-  void clear_obj(); 
   
   void apply_new_objs();
 

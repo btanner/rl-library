@@ -162,7 +162,7 @@ WARN      := -Wall
 #WARN += -Wundef 
 #endif 
 
-OPT:=-O3
+OPT:=-O2
 
 ifneq ("$(ORTS_MTUNE)","") 
   OPT:=$(OPT) -mtune=$(ORTS_MTUNE)
@@ -293,7 +293,7 @@ endif
 # otherwise use MODE if passed, or dbg otherwise
 
 ifeq ("$(ORTS_MODE)", "") 
-  MODE := dbg
+  MODE := opt
 else
   MODE := $(ORTS_MODE)
 endif

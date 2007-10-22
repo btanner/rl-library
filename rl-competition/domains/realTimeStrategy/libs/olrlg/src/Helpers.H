@@ -8,6 +8,13 @@
 #include <map>
 #include <string>
 
+// Number of attributes per object. See README.rlglue
+#define RLG_OBJ_ATTRS           12
+
+// Number of attributes per action. See README.rlglue
+#define RLG_ACT_ATTRS           6
+
+
 void merge_actions(const std::map<int, std::string> & p0_actions, 
                    const std::map<int, std::string> & p1_actions,
                    boost::array<std::string, MiniGameState::PLAYER_NUM> & acts); 
@@ -24,6 +31,7 @@ void rlg_convert_actionstr(Action & a, const std::string& actionstr);
 // Converts the states/actions to a list of integers. 
 // Format is described in README.rlglue
 void rlg_view2obs(Observation& obs, const MiniGameState& state);
+void rlg_view2obs(Observation& obs, const std::string view, int playernum);
 void rlg_obs2view(MiniGameState& state, const Observation& obs);
 std::string rlg_action2str(const Action& action);
 void rlg_vector2action(Action& action, const std::vector<int>& integers);

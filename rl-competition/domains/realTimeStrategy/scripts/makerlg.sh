@@ -1,9 +1,10 @@
 #!/bin/sh
 
 MAKE="make -j2"
+OPTS=$@
 
-echo "make rlglue" && $MAKE rlglue && \
-echo "make rlgenv" && $MAKE rlgenv && \
-echo "make rlgagent" && $MAKE rlgagent && \
-echo "make rlgexp" && $MAKE rlgexp 
+echo "make rlglue" && $MAKE $OPTS rlglue && \
+echo "make rlgenv" && $MAKE $OPTS rlgenv && \
+echo "make rlgagent" && $MAKE $OPTS rlgagent && \
+echo "make rlgexp" && $MAKE $OPTS rlgexp 
 

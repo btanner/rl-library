@@ -19,12 +19,6 @@ using namespace std;
 
 static bool debug = false; 
 
-// Number of attributes per object. See README.rlglue
-#define RLG_OBJ_ATTRS           12
-
-// Number of attributes per action. See README.rlglue
-#define RLG_ACT_ATTRS           6
-
 static string join(const map<int,string> & actions)
 {
   stringstream ss; 
@@ -154,6 +148,8 @@ static void serializeGameState(int* array, const MiniGameState& state)
 
 static void deserializeGameState(MiniGameState& state, int* array, int length)
 {
+  state.clear_obj(); 
+  
   // ASSUMING RL PLAYER
   int player = 1;
   
@@ -165,6 +161,9 @@ static void deserializeGameState(MiniGameState& state, int* array, int length)
     
     int type = array[index++];
     
+    // id
+    int id = array[index++];
+    
     GameObj<MiniGameState>* objPtr = 0;
     if   (type == 0) objPtr = state.new_game_object("worker");
     else if (type == 1) objPtr = state.new_game_object("marine");
@@ -172,7 +171,7 @@ static void deserializeGameState(MiniGameState& state, int* array, int length)
     else if (type == 3) objPtr = state.new_game_object("mineral_patch");
     
     // id
-    objPtr->view_ids[player] = array[index++];
+    objPtr->view_ids[player] = id;
     
     // all the other stuff
     objPtr->owner = array[index++];
@@ -232,6 +231,106 @@ void rlg_view2obs(Observation& obs, const MiniGameState& state)
   obs.numInts = length;
 }
 
+void rlg_view2obs(Observation& obs, const std::string view, int playernum)
+{
+  /* view looks like:
+    minerals=1000 # K,worker,1,o=1,x=494,y=509,r=4,sr=64,hp=50,armor=0,max_speed=2,is_moving=1,carried_minerals=0
+     K,mineral_patch,2,o=2,x=532,y=521,r=16,sr=0,hp=1,armor=1000000000
+     K,marine,3,o=0,x=539,y=481,r=4,sr=64,hp=50,armor=0,max_speed=2,is_moving=1 # #
+   */ 
+  
+  vector<string> lists;
+  boost::split(lists, view, boost::is_any_of("#"));
+  
+  vector<string> units;
+  boost::split(units, lists[1], boost::is_any_of(" ")); 
+  
+  int length = 1+units.size()*RLG_OBJ_ATTRS; 
+  
+  void * ptr = realloc(obs.intArray, length*(sizeof(int))); 
+
+  if (ptr == NULL) 
+    ERR("Out of memory allocating in rlg_convert_view"); 
+
+  memset(ptr, 0, length); 
+  
+  obs.intArray = (int*)ptr;
+  int * array = obs.intArray;
+
+  vector<string> mparts;
+  boost::split(mparts, lists[0], boost::is_any_of("="));
+  obs.intArray[0] = to_int(mparts[1]);
+  
+  int index = 1;
+  
+  vector<string>::iterator iter;
+  for (iter = units.begin(); iter != units.end(); iter++)
+  {
+    if ((*iter).size() <= 1)
+      continue;
+    
+    //cout << "processing " << *iter << ", size is " << (*iter).size() << endl;
+    
+    vector<string> attrs;
+    boost::split(attrs, *iter, boost::is_any_of(","));
+    
+    // type
+    if      (attrs[1] == "worker") array[index] = 0;
+    else if (attrs[1] == "marine") array[index] = 1;
+    else if (attrs[1] == "base") array[index] = 2;
+    else if (attrs[1] == "mineral_patch") array[index] = 3;
+    else array[index] = -1;
+    index++;
+    
+    // id
+    array[index++] = to_int(attrs[2]); 
+
+    // owner, x, y, radius, sight_range, hp, armor
+    for (int attri = 3; attri <= 9; attri++)
+    {
+      vector<string> aparts; 
+      boost::split(aparts, attrs[attri], boost::is_any_of("="));
+      array[index++] = to_int(aparts[1]);    
+    }
+    
+    // all the rest
+    
+    if (attrs[1] == "worker")
+    {
+      // max_speed, is_moving, carried_minerals
+      for (int attri = 10; attri <= 12; attri++)
+      {
+        vector<string> aparts; 
+        boost::split(aparts, attrs[attri], boost::is_any_of("="));
+        array[index++] = to_int(aparts[1]);
+      }
+    }
+    else if (attrs[1] == "marine")
+    {
+      // max_speed, is_moving
+      for (int attri = 10; attri <= 11; attri++)
+      {
+        vector<string> aparts; 
+        boost::split(aparts, attrs[attri], boost::is_any_of("="));
+        array[index++] = to_int(aparts[1]);
+      }
+      
+      array[index++] = -1;     
+    }
+    else
+    {
+      array[index++] = -1;
+      array[index++] = -1;
+      array[index++] = -1;
+    }    
+  }
+
+  obs.numInts = index;
+}
+
+
+
+
 void rlg_obs2view(MiniGameState& state, const Observation& obs)
 {
   int length = obs.numInts; 
@@ -240,9 +339,16 @@ void rlg_obs2view(MiniGameState& state, const Observation& obs)
 
 std::string rlg_action2str(const Action& action)
 {
-  vector<string> actions; 
+  bool first = true;
+  ostringstream oss; 
   
   FORU(i, action.numInts) {
+    
+    if (!first)
+      oss << "#";
+
+    first = false; 
+    
     int objId = action.intArray[i++]; 
     int actionId = action.intArray[i++];
     
@@ -250,9 +356,7 @@ std::string rlg_action2str(const Action& action)
     int f2 = action.intArray[i++];
     int f3 = action.intArray[i++];
     int f4 = action.intArray[i++];
-    
-    ostringstream oss; 
-    
+        
     if (actionId == 0)  
       oss << objId << " move " << f1 <<  " " << f2 << " " << f3;
     else if (actionId == 1)
@@ -269,11 +373,9 @@ std::string rlg_action2str(const Action& action)
     f2 = f2;
     f3 = f3;
     f4 = f4; 
-    
-    actions.push_back(oss.str());
   }
 
-  return join(actions, "#");
+  return oss.str();
 }
 
 void rlg_vector2action(Action& action, const std::vector<int>& integers)

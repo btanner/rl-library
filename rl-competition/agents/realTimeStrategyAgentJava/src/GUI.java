@@ -136,7 +136,7 @@ class GUIPanel extends JPanel
         
     if (obj.owner == parent.myId)
       c = Color.RED;
-    else if (obj.owner == 2)
+    else if (obj.owner == 2 || obj.getType().equals("mineral_patch"))
       c = Color.BLUE;
     else
       c = Color.GREEN;

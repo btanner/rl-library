@@ -7,6 +7,7 @@
 #include "Marine.H"
 #include "Player.H"
 #include "Base.H"
+#include "Profiler.H"
 
 #include <map>
 #include <string>
@@ -26,6 +27,8 @@ class AggressivePlayer : public Player
   int sc_x, sc_y; 
   int obx, oby;  
   int minerals;
+  
+  Profiler profiler; 
   
   void determineScouts(MiniGameParameters& parms);
 
