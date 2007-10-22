@@ -45,7 +45,7 @@ void Base::execute()
   // no new action?
   //if (!is) return;
   bool acted = false;
-  
+    
   if (!is)
   {
     acted = false; 
@@ -64,7 +64,7 @@ void Base::execute()
     }
     
     acted = true;
-  }
+  }  
   else if (op == "train") {
 
     // train worker|marine
@@ -101,6 +101,12 @@ void Base::execute()
     //return;
     
   } else if (op == "attack") {
+    
+    if (tick_worker_ready || tick_marine_ready)
+    {
+      acted = true;
+      goto other_actions;
+    }
     
     // attack obj
     // one shot
