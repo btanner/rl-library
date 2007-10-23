@@ -231,13 +231,15 @@ public class OLAgent implements Agent
 
     if (roll < 0.5)
       return;
-    else if (roll < 0.75 && done_worker_time <= 0)
+    else if (roll < 0.75 && done_worker_time <= 0
+             && state.minerals >= parms.worker_cost)
     {
       done_worker_time = time + parms.worker_training_time;
       Helpers.addTrainWorkerAction(actionList, base.id);
       return;
     }
-    else if (roll < 1 && done_marine_time <= 0)
+    else if (roll < 1 && done_marine_time <= 0
+             && state.minerals >= parms.marine_cost)
     {
       done_marine_time = time + parms.marine_training_time;
       Helpers.addTrainMarineAction(actionList, base.id);
