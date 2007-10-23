@@ -2,13 +2,15 @@
 
 
 #Variables
-libPath=../../libraries
+basePath=../..
+systemPath=$basePath/system
+libPath=$systemPath/libraries
 
 compLib=$libPath/RLVizLib.jar
+
+glueExe=$systemPath/RL_glue
 guiLib=$libPath/forms-1.1.0.jar
 envShellLib=$libPath/EnvironmentShell.jar
-
-glueExe=$libPath/RL_glue
 
 $glueExe &
 gluePID=$!

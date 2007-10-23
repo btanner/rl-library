@@ -3,11 +3,12 @@
 
 #Variables
 basePath=../..
-libPath=$basePath/libraries
+systemPath=$basePath/system
+libPath=$systemPath/libraries
 
 compLib=$libPath/RLVizLib.jar
 
-glueExe=$libPath/RL_glue
+glueExe=$systemPath/RL_glue
 rtsEXE=$basePath/domains/realTimeStrategy/bin/rlgenv
 
 $glueExe &
