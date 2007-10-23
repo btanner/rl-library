@@ -3,11 +3,12 @@
 
 #Variables
 #Variables
-basePath=../../
+basePath=../..
 systemPath=$basePath/system
 libPath=$systemPath/libraries
 
 compLib=$libPath/RLVizLib.jar
+envShellLib=$libPath/EnvironmentShell.jar 
 
 glueExe=$systemPath/RL_glue
 
@@ -15,9 +16,9 @@ $glueExe &
 gluePID=$!
 echo "Starting up RL-glue - PID=$gluePID"
 
-
-java -Xmx128M -cp $compLib:$envShellLib rlglue.environment.EnvironmentLoader environmentShell.EnvironmentShell &
+java -DRLVIZ_LIB_PATH=$PWD/$libPath -Xmx128M -cp $compLib:$envShellLib rlglue.environment.EnvironmentLoader environmentShell.EnvironmentShell  &
 envShellPID=$!
+
 echo "Starting up dynamic environment loader - PID=$envShellPID"
 
 java -Xmx128M -cp $compLib:./bin/ consoleTrainer

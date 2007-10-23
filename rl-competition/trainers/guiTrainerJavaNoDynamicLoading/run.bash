@@ -17,7 +17,6 @@ $glueExe &
 gluePID=$!
 echo "Starting up RL-glue - PID=$gluePID"
 
-
 java -Xmx128M -cp $compLib:$guiLib:./bin/rlViz.jar btViz.NoDynamicLoadingGraphicalDriver
 
 echo "-- Visualizer is finished"

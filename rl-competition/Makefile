@@ -21,7 +21,7 @@ all: $(BIN_PATH)/RL_glue
 
 clean:
 	-rm $(BUILD_PATH)/*
-	-rm ./libraries/RL_glue
+	-rm $(BIN_PATH)/RL_glue
 	cd ./agents/randomAgentJava/ && make clean
 	cd ./agents/tetrisAgentJava/ && make clean
 	cd ./agents/mountainCarAgentCPP/ && make clean
