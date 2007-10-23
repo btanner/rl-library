@@ -20,6 +20,10 @@ public class consoleTrainer {
 
 //A better example of an actual experiment is to call the runMountainCarExperiment() method
 	public static void main(String[] args) throws InterruptedException {
+//		runTimeTrials();
+//		System.exit(1);
+
+
 //Another option:
 		//runMountainCarExperiment();
 
@@ -90,6 +94,43 @@ public class consoleTrainer {
 
 		RLGlue.RL_cleanup();
 		
+	}
+	
+	
+	private static void runTimeTrial(int totalSteps){
+		RLGlue.RL_init();
+
+	int stepsUsed=0;
+		long startTime=System.currentTimeMillis();
+
+		while(stepsUsed<totalSteps){
+			RLGlue.RL_episode(totalSteps-stepsUsed);
+			stepsUsed+=RLGlue.RL_num_steps();
+		}
+		long endTime=System.currentTimeMillis();
+
+		double seconds=((double)(endTime-startTime))/1000.0d;
+		double stepsPerSecond=(double)stepsUsed/seconds;
+
+		System.out.println("Time to run: "+stepsUsed+" steps is: "+seconds+"seconds, average steps/second is: "+stepsPerSecond);
+
+		//clean up the environment and end the program
+		RLGlue.RL_cleanup();
+	}
+	
+	
+
+	
+	private static void runTimeTrials(){
+		consoleTrainerHelper.loadKeepAway();
+		runTimeTrial(10000);
+		
+		consoleTrainerHelper.loadMountainCar(0);
+		runTimeTrial(100000);
+		consoleTrainerHelper.loadTetris(0);
+		runTimeTrial(100000);
+//		consoleTrainerHelper.loadHelicopter();		
+//		runTimeTrial(10000);
 	}
 	
 	

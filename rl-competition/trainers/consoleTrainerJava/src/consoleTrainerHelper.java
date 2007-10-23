@@ -72,6 +72,10 @@ public class consoleTrainerHelper{
 		load(theEnvString, theParams);
 	}
 	
+	public static void loadKeepAway(){
+		String theEnvString="KeepAway - Java";
+		preloadAndLoad(theEnvString);
+	}
 	/*
 	* Helicopter has no user controllable parameters
 	*/
