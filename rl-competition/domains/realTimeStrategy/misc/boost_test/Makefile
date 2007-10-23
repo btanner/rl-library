@@ -1,5 +1,5 @@
 
-CPPFLAGS=-I../../../../support/include -I$(HOME)/include -I/usr/local/include
+CPPFLAGS=-I../../../../system/include -I$(HOME)/include -I/usr/local/include
 
 boost_test: boost_test.o
 	g++ -o boost_test boost_test.o

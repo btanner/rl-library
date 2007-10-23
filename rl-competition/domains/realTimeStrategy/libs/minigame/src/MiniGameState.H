@@ -174,22 +174,22 @@ struct MiniGameParameters
   
   MiniGameParameters()
   {
-    width                   = 20*FINE_POINTS;
-    height                  = 20*FINE_POINTS;
+    width                   = 35*FINE_POINTS;
+    height                  = 35*FINE_POINTS;
     mineral_patches         = 10;
 
     // -------------
 
     base_radius             = FINE_POINTS;
-    base_sight_range        = 4*FINE_POINTS;
-    base_atk_range          = 2*FINE_POINTS;
+    base_sight_range        = 6*FINE_POINTS;
+    base_atk_range          = 0*FINE_POINTS;
     base_hp                 = 50;
     base_armor              = 0;
     
     base_cost               = 400;
     //base_build_time         = 10*FPS; 
     base_build_time         = 10;
-    base_atk_value          = 2;
+    base_atk_value          = 0;
 
     // -------------
     

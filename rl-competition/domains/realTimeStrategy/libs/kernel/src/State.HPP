@@ -25,12 +25,10 @@ void StateImpl<GameParameters,PlayerData,State>::new_obj(GameObjBase *obj, int o
   new_objs.push_back(obj); 
 }
 
-/*
- * I don't know why this doesn't compile.
 template <class GameParameters, class PlayerData, class State>
-void StateImpl<GameParameters,PlayerData,State>::delete_obj(GameObjBase* obj, Vector<GameObjBase*>::iterator & iter)
+void StateImpl<GameParameters,PlayerData,State>::delete_obj(GameObjBase* obj)
 {
-  iter = all_objs.erase(iter);
+  all_objs.erase(all_objs.find(obj)); 
   
   //if (all_objs.erase(obj) == 0) ERR("State::delete_obj: double delete!");
 
@@ -44,7 +42,6 @@ void StateImpl<GameParameters,PlayerData,State>::delete_obj(GameObjBase* obj, Ve
     }
   }
 }
-*/
 
 // needed by the client, for when they deserialize and add objects
 template <class GameParameters, class PlayerData, class State>
@@ -192,15 +189,16 @@ void StateImpl<GameParameters,PlayerData,State>::remove_dead_objs()
   FORALL (all_objs, i) {
     if ((*i)->dead()) {
       killed.push_back(*i);
-      i = all_objs.erase(i)-1;
     }
   }
   
   FORALL (killed, j) {
     //delete_obj(*j, j); <-- method does not compile.. why?
     // code below follows
-
+    
     GameObjBase* obj = *j;
+
+    delete_obj(obj);    
     
     // remove obj from all id2obj maps
 

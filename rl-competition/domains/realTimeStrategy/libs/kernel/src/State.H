@@ -122,7 +122,7 @@ protected:
   void new_obj(GameObjBase *obj, int owner);
   
   // This second one does not compile
-  //void delete_obj(GameObjBase *obj); (old)
+  void delete_obj(GameObjBase *obj); 
   //void delete_obj(GameObjBase* obj, Vector<GameObjBase*>::iterator & iter);
   
   void apply_new_objs();

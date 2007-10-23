@@ -85,7 +85,7 @@ OSTYPE := $(shell echo -n "$(OSTYPE)" | tr a-z A-Z )
 
 # Enable GUI (eg. compile+link with SDL) or not? 
 # Enabled = 1, disabled = 0
-ENABLE_GUI=0
+ENABLE_GUI=1
 
 # tar file name
 PROJ := ortslite
@@ -175,7 +175,7 @@ AWK := gawk
 EXE_SUFFIX :=
 
 # default include paths
-INC_OPTS=-I$(HOME)/include -I/usr/local/include -I../../support/include
+INC_OPTS=-I$(HOME)/include -I/usr/local/include -I../../system/include
 
 #ifeq ("$(OSTYPE)", "$(OSTYPE_MAC)") 
 ifneq (,$(findstring $(OSTYPE_MAC),$(OSTYPE)))

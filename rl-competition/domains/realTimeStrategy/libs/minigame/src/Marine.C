@@ -86,8 +86,8 @@ void Marine::execute()
       {
         GameObj<MiniGameState>* obj = *iter;
       
-        // don't attack your own units!
-        if (obj->owner == owner)
+        // don't attack yout own units or neutral units
+        if (obj->owner == owner || obj->owner == 2)
           continue;
         
         double dist = square((double)obj->x - x) + square((double)obj->y - y);

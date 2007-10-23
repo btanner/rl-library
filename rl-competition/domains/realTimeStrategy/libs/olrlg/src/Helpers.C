@@ -374,7 +374,7 @@ std::string rlg_action2str(const Action& action)
     else if (actionId == 5)
       oss << objId << " attack " << f4;
     else 
-      REM("Unknown action" << objId);
+      REM("rlg_action2str: Unknown action " << objId);
     
     // to shut up compiler for now      
     f1 = f1;

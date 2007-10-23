@@ -77,6 +77,8 @@ static void init()
   obs.doubleArray = NULL; 
   rewobs.o.intArray = NULL; 
   rewobs.o.doubleArray = NULL; 
+  rewobs.terminal = 0;
+  rewobs.r = 0;
 
   statePtr = new MiniGameState; 
   //opponent = new RandomPlayer(0);
@@ -92,6 +94,7 @@ static void init()
   task_spec = os.str(); 
   
   // append mineral patch coords
+  /*
   ostringstream os2;
   os2 << ",mps=";
   FORALL(statePtr->all_objs, iter)
@@ -105,7 +108,8 @@ static void init()
   mps = mps.substr(0, mps.length()-1);
   
   task_spec = task_spec + mps;  
-
+  */
+  
   int len = task_spec.length()+1;
   
   task_spec_cstr = (char *)malloc(len*sizeof(char));
@@ -120,6 +124,29 @@ static void init()
   //viewStatePtr = NULL;
   
   inited = true;
+}
+
+void uninit()
+{
+  if (statePtr != NULL)
+  { delete statePtr; statePtr = NULL; }
+  
+  if (opponent != NULL)
+  { delete opponent; opponent = NULL; }
+  
+  if (parms != NULL)
+  { delete parms; parms = NULL; }
+
+  if (task_spec_cstr != NULL)
+  { free(task_spec_cstr); task_spec_cstr = NULL; }
+  
+  if (obs.intArray != NULL) 
+  { free(obs.intArray); obs.intArray = NULL; } 
+
+  if (obs.doubleArray != NULL) 
+  { free(obs.doubleArray); obs.doubleArray = NULL; } 
+  
+  inited = false;   
 }
 
 /* RL-Glue Interface */
@@ -147,6 +174,9 @@ Observation env_start()
   DPR << endl << "### Starting time step " << time_step << endl; 
   DPR << "RLG> Starting env_start ..." << endl;
   
+  if (!inited)
+    init();   
+  
   FORS (i, MiniGameState::PLAYER_NUM) {
     ostringstream os;
     statePtr->encode_view(i, os);
@@ -163,7 +193,7 @@ Observation env_start()
   MiniGameState* viewStatePtr = new MiniGameState;
   viewStatePtr->decode_view(1, views[1]);
   rlg_view2obs(obs, *viewStatePtr);
-  //delete viewStatePtr;
+  delete viewStatePtr;
   
   return obs;
 }
@@ -228,6 +258,8 @@ Reward_observation env_step(Action a)
     else if (gameVal == 2 || time_step >= MAX_STEPS)
       rewobs.r = 50; 
     
+    uninit();
+    
     return rewobs;
   }
   
@@ -267,26 +299,14 @@ void env_cleanup()
 {
   DPR << "RLG> Starting env_cleanup" << endl; 
   
-  delete statePtr; 
-  delete opponent;
-  delete parms;
-
-  if (task_spec_cstr != NULL)
-    free(task_spec_cstr);
-  
-  if (obs.intArray != NULL) 
-    free(obs.intArray); 
-
-  if (obs.doubleArray != NULL) 
-    free(obs.doubleArray); 
+  uninit();
   
   if (rewobs.o.intArray != NULL) 
-    free(rewobs.o.intArray); 
+  { free(rewobs.o.intArray); rewobs.o.intArray = NULL; } 
 
   if (rewobs.o.doubleArray != NULL) 
-    free(rewobs.o.doubleArray); 
-  
-  inited = false; 
+  { free(rewobs.o.doubleArray); rewobs.o.doubleArray = NULL; } 
+    
 }
 
 void env_set_state(State_key sk)

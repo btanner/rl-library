@@ -59,7 +59,7 @@ void Worker::execute()
       }
       
       if (pi.pd.bases >= 1) {
-        REM("already have a base, o=" << owner);
+        //REM("already have a base, o=" << owner);
         goto other_actions;
       }
       
@@ -209,8 +209,8 @@ void Worker::execute()
     {
       GameObj<MiniGameState>* obj = *iter;
     
-      // don't attack your own units!
-      if (obj->owner == owner)
+      // don't attack your own units or neutral objs!
+      if (obj->owner == owner || obj->owner == 2)
         continue;
       
       double dist = square((double)obj->x - x) + square((double)obj->y - y);
