@@ -1,6 +1,6 @@
 BIN_PATH = ./libraries
 RL_GLUE_PATH = ./RL-Glue/RL-Glue
-BUILD_PATH = ./build
+BUILD_PATH = ./support/build
 
 AGENT_NETWORKED=1
 ENV_NETWORKED=1
@@ -29,4 +29,3 @@ clean:
 	cd ./trainers/consoleTrainerJava/ && make clean
 	cd ./trainers/consoleTrainerCPP/ && make clean
 	cd ./trainers/consoleRealTimeStrategyTrainerJava/ && make clean
-	
