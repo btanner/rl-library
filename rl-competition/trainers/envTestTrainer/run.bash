@@ -8,7 +8,7 @@ systemPath=$basePath/system
 libPath=$systemPath/libraries
 
 compLib=$libPath/RLVizLib.jar
-
+envShellLib=$libPath/EnvironmentShell.jar
 glueExe=$systemPath/RL_glue
 
 $glueExe &
