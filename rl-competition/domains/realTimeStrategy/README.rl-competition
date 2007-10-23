@@ -1,6 +1,16 @@
 
-First, please read the README and make sure the required dependencies are
-installed and the build system is initialized (make init). 
+The competition web site is http://www.rl-competition.org/ 
+If there are any questions regarding installation or use of this
+code, please use the discussion boards on the web site. 
+
+This document decribes the RTS problem for the 2008 RL Competition. 
+
+Build Instructions
+==================
+
+Before continuing please read the README and make sure the required 
+dependencies are installed and the build system is initialized 
+(make init). 
 
 To make the RL-Glue environment:
 
