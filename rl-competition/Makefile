@@ -1,4 +1,4 @@
-BIN_PATH = ./system/libraries
+BIN_PATH = ./system
 RL_GLUE_PATH = ./system/RL-Glue/RL-Glue
 BUILD_PATH = ./system/build
 
