@@ -100,6 +100,8 @@ public:
   // call when game is finished
   virtual int score(int player) const = 0;
 
+  // update score after a unit is killed
+  virtual void update_score(GameObjBase* obj) = 0;
 
   // ------ client functions (not implemented yet)
   
@@ -122,7 +124,7 @@ protected:
   void new_obj(GameObjBase *obj, int owner);
   
   // This second one does not compile
-  void delete_obj(GameObjBase *obj); 
+  void remove_obj(GameObjBase *obj); 
   //void delete_obj(GameObjBase* obj, Vector<GameObjBase*>::iterator & iter);
   
   void apply_new_objs();
@@ -144,6 +146,7 @@ protected:
 
   GameParameters gp;
 
+  
   // template <class X> friend class GameObj;
 };
 

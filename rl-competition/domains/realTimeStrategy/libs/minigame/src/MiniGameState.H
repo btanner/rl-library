@@ -213,7 +213,7 @@ struct MiniGameParameters
     mineral_patch_hp          = 1;
     mineral_patch_armor       = 1000000000; // invincible
 
-    mineral_patch_capacity    = 100;
+    mineral_patch_capacity    = 500;
 
     // -------------
     
@@ -271,16 +271,24 @@ class MiniGameState : public StateImpl<MiniGameParameters, MiniPlayerData, MiniG
   bool p0_base_constructed; 
   bool p1_base_constructed;  
   
+  boost::array<int, PLAYER_NUM> destruct_cost;
+  
 public:
   
   MiniGameState() { 
     p0_base_constructed = false; 
-    p1_base_constructed = false;
+    p1_base_constructed = false;    
+    
+    FORS(i, PLAYER_NUM) {
+      destruct_cost[i] = 0;
+    }
   }
 
   bool finished() const;
 
   int score(int player) const;
+  
+  void update_score(GameObjBase* obj);    
 
   void object_setup();
   
@@ -291,6 +299,8 @@ public:
   virtual GameObj<MiniGameState>* getorcreate_game_object(int id, int player, const std::string & type, bool & newobj); 
 
   int encode_view_rlg(int player, int* & array, int attrs_per_unit);  
+  
+  int get_score(int player); 
   
   int check_win();
   

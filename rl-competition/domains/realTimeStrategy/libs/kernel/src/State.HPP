@@ -26,7 +26,7 @@ void StateImpl<GameParameters,PlayerData,State>::new_obj(GameObjBase *obj, int o
 }
 
 template <class GameParameters, class PlayerData, class State>
-void StateImpl<GameParameters,PlayerData,State>::delete_obj(GameObjBase* obj)
+void StateImpl<GameParameters,PlayerData,State>::remove_obj(GameObjBase* obj)
 {
   all_objs.erase(all_objs.find(obj)); 
   
@@ -198,7 +198,7 @@ void StateImpl<GameParameters,PlayerData,State>::remove_dead_objs()
     
     GameObjBase* obj = *j;
 
-    delete_obj(obj);    
+    remove_obj(obj);    
     
     // remove obj from all id2obj maps
 
@@ -210,6 +210,8 @@ void StateImpl<GameParameters,PlayerData,State>::remove_dead_objs()
         player_infos[i].id2obj.erase(id);
       }
     }
+    
+    update_score(obj);
     
     dead_objs.push_back(obj);    
   }

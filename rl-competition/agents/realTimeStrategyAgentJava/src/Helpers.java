@@ -42,6 +42,12 @@ public class Helpers
     
     return action;
   }
+
+  public static boolean offMap(Worker w, Parameters p)
+  {
+    return (   w.x < 0 || w.y < 0 
+            || w.x > p.width || w.y > p.height);
+  }
   
   public static void addMoveAction(ArrayList<Integer> actionList, int objId, int x, int y, int max_speed)
   {

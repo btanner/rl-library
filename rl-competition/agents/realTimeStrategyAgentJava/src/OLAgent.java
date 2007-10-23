@@ -43,34 +43,38 @@ public class OLAgent implements Agent
 
   public void agent_init(final String taskSpec)
   {
+    // only called once per exp. 
+    parms = new Parameters();
+
+    //System.out.println("RLG> Received task spec: " + taskSpec);
+
+    /* 
+    int indexOfMPs = taskSpec.indexOf("mps=");
+    String mpstr = taskSpec.substring(indexOfMPs+4); 
+    String taskSpec2 = taskSpec.substring(0, indexOfMPs-1); 
+    */
+
+    //System.out.println("parsing task spec...");
+    parms.parseTaskSpec(taskSpec);
+    
+  }
+
+  public Action agent_start(Observation o)
+  {
     time = 0;
     done_base_time = 0;
     mp_x = mp_y = 0;
     have_base = false;
     freeze = false; 
 
-    //System.out.println("RLG> Received task spec: " + taskSpec);
-
-    parms = new Parameters();
-    state = new State(parms);
-    
-    int indexOfMPs = taskSpec.indexOf("mps=");
-    String mpstr = taskSpec.substring(indexOfMPs+4); 
-    String taskSpec2 = taskSpec.substring(0, indexOfMPs-1); 
-
-    //System.out.println("parsing task spec...");
-    parms.parseTaskSpec(taskSpec2);
-    state.setMPs(mpstr);
-    
     //System.out.println("starting gui ...");
+    state = new State(parms);
 
     //gui = new GUI(parms, state);
     //gui.setVisible(true);
     gui = null;        // now done via the visualizer
-  }
 
-  public Action agent_start(Observation o)
-  {	
+
     time++;
     
     //System.out.println("RLG> agent_start. Received observation. ");
@@ -176,6 +180,9 @@ public class OLAgent implements Agent
   public void chooseAction(ArrayList<Integer> actionList, Worker worker)
   { 
     if (done_base_time > 0)
+      return;
+
+    if (Helpers.offMap(worker, parms)) // workers off map when building
       return;
     
     if (worker.is_moving == 1) {    

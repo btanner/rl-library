@@ -11,9 +11,8 @@
 
 using namespace std;
 
-
+// these are not used!
 bool MiniGameState::finished() const { return false; }
-
 int MiniGameState::score(int /*player*/) const { return 0; }
 
 void MiniGameState::object_setup()
@@ -252,4 +251,40 @@ int MiniGameState::encode_view_rlg(int player, int* & array, int attrs_per_unit)
     
 }
 
+int MiniGameState::get_score(int player)
+{
+  PlayerInfo &pi = player_infos[player];
+  
+  int score = pi.pd.minerals/2;
+  score += destruct_cost[player]; 
+  
+  FORALL (all_objs, i)
+  {
+    GameObjBase* objPtr = *i; 
+    
+    if (objPtr->dead())
+      continue;
+    
+    if (objPtr->get_type() == "worker")
+      score += gp.worker_cost;
+    else if (objPtr->get_type() == "marine")
+      score += gp.marine_cost;
+    else if (objPtr->get_type() == "base")
+      score += gp.base_cost; 
+  }
+  
+  return score;
+}
+
+void MiniGameState::update_score(GameObjBase* obj)
+{
+  int target_player = (obj->owner == 0 ? 1 : 0);
+  
+  if (obj->get_type() == "worker")
+    destruct_cost[target_player] += gp.worker_cost;
+  else if (obj->get_type() == "marine")
+    destruct_cost[target_player] += gp.marine_cost;
+  else if (obj->get_type() == "base")
+    destruct_cost[target_player] += gp.base_cost;
+}
 

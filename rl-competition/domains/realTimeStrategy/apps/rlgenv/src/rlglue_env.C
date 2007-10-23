@@ -18,7 +18,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/replace.hpp>
 
-#define MAX_STEPS 10000
+#define MAX_STEPS 2000
 
 using namespace std;
 
@@ -249,17 +249,27 @@ Reward_observation env_step(Action a)
   if (gameVal >= 0 || time_step >= MAX_STEPS) {
     // Game is done! 
     // determine winner & reward
-    rewobs.terminal = 1; 
-    
     if (gameVal == 0)
       rewobs.r = 0;
     else if (gameVal == 1)
-      rewobs.r = 100;
+      rewobs.r = 100 - (int)(15*((double)time_step) / ((double)MAX_STEPS)); 
     else if (gameVal == 2 || time_step >= MAX_STEPS)
-      rewobs.r = 50; 
+    {
+      int sc0 = statePtr->get_score(0);
+      int sc1 = statePtr->get_score(1);
+      
+      if (sc1 == sc0)
+        rewobs.r = 50;
+      else if (sc1 > sc0)
+        rewobs.r = 55;
+      else
+        rewobs.r = 45;
+    }
+    
+    rewobs.terminal = 1; 
     
     uninit();
-    
+
     return rewobs;
   }
   
