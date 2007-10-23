@@ -293,7 +293,7 @@ endif
 # otherwise use MODE if passed, or dbg otherwise
 
 ifeq ("$(ORTS_MODE)", "") 
-  MODE := opt
+  MODE := dbg
 else
   MODE := $(ORTS_MODE)
 endif

@@ -285,6 +285,8 @@ void env_cleanup()
 
   if (rewobs.o.doubleArray != NULL) 
     free(rewobs.o.doubleArray); 
+  
+  inited = false; 
 }
 
 void env_set_state(State_key sk)
