@@ -71,6 +71,9 @@ public class State
 
     //System.out.println("Obs length = " + length);
     
+    if (array.length <= 0)
+      return;
+    
     minerals = array[0];
     
     int index = 1;
