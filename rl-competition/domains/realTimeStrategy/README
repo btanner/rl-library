@@ -8,11 +8,14 @@ To compile ortslite:
 
      - boost >= 1.33
 
-       (Note: run scripts/install-boost.bash to do all this automatically)
-
        If running on a Linux system, this is probably already done
        for you. Try building the boost test in misc/boost_test. If it
-       compiles and runs, then boost is already installed. 
+       compiles and runs, then boost is already installed. If not, then 
+       it's likely easily obtained by using your package manager; search
+       for packages named "boost" and/or "boost-dev". Otherwise, follow
+       instructions below.
+
+       (Note: run scripts/install-boost.bash to do all this automatically)
 
          cd misc
          tar xjvf boost_1_34_1.tar.bz2
@@ -33,13 +36,7 @@ To compile ortslite:
        Now, build and run the test program in misc/boost_test to verify
        that it worked. 
 
-     - SDL (optional)
-
-       SDL is needed for server-side visualization, which may be helpful for debugging
-       but is not required. See the makefile for how to enable/disable compiling with
-       SDL graphics. 
-
-       To install SDL, please follow the instructions at http://www.libsdl.org/
+     - gawk (only if installing on Linux). 
 
   2. Set the OSTYPE variable. Supported values are LINUX and DARWIN. It is recommended
      to set this environment variable in your shell's startup script. 
@@ -64,7 +61,7 @@ It is important to read README.rlglue for the Reinforcement Learning competition
 
 In visualization, 
 
-  GREEN = Player 0
+  GREEN = Player 0 
   RED = Player 1 
 
 There is more documentation on ortslite in docs/

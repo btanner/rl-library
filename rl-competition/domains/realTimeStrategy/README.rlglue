@@ -16,6 +16,18 @@ rl-competition/agents/realTimeStrategyAgentJava/README
 These will make the executables and place them in bin/ . These
 executables are two components of the RL-Glue framework
 
+To run an experiment, you must do three things: 
+ 
+  - Start the RLViz App
+    in trainers/guiTrainerJavaNoDynamicLoading, run ./run.bash
+  
+  - Connect the agent, either: 
+      (Java) in agents/realTimeStrategyAgentJava, run ./run.bash
+      (C++) in domains/realTimeStrategy, run bin/rlagent
+
+  - Connect the environment
+    in domains/realTimeStrategy, run bin/rlgenv
+
 The most relevant RL-Glue C/C++ agent file is:
 
   apps/rlgagent/src/rlglue_agent.C
