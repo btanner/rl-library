@@ -12,16 +12,17 @@ glueExe=$systemPath/RL_glue
 guiLib=$libPath/forms-1.1.0.jar
 envShellLib=$libPath/EnvironmentShell.jar
 
+RLVIZ_LIB_PATH=$PWD/$libPath
+
 $glueExe &
 gluePID=$!
 echo "Starting up RL-glue - PID=$gluePID"
 
-
-java -Xmx128M -cp $compLib:$envShellLib rlglue.environment.EnvironmentLoader environmentShell.EnvironmentShell &
+java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH -cp $compLib:$envShellLib rlglue.environment.EnvironmentLoader environmentShell.EnvironmentShell &
 envShellPID=$!
 echo "Starting up dynamic environment loader - PID=$envShellPID"
 
-java -Xmx128M -cp $compLib:$guiLib:./bin/rlViz.jar btViz.GraphicalDriver
+java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH -cp $compLib:$guiLib:./bin/rlViz.jar btViz.GraphicalDriver
 
 echo "-- Visualizer is finished"
 

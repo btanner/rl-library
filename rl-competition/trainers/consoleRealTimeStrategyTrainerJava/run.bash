@@ -5,6 +5,7 @@
 basePath=../..
 systemPath=$basePath/system
 libPath=$systemPath/libraries
+RLVIZ_LIB_PATH=$PWD/$libPath
 
 compLib=$libPath/RLVizLib.jar
 
@@ -19,7 +20,7 @@ $rtsEXE &
 rtsPID=$!
 echo "Starting up real time strategy game - PID=$rtsPID"
 
-java -Xmx128M -cp $compLib:./bin/ realTimeStrategyTrainerJava
+java -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH -Xmx128M -cp $compLib:./bin/ realTimeStrategyTrainerJava
 
 echo "-- Console Real Time Strategy Trainer finished"
 

@@ -6,6 +6,9 @@
 basePath=../..
 systemPath=$basePath/system
 libPath=$systemPath/libraries
+RLVIZ_LIB_PATH=$PWD/$libPath
+
+
 
 compLib=$libPath/RLVizLib.jar
 
@@ -17,7 +20,7 @@ $glueExe &
 gluePID=$!
 echo "Starting up RL-glue - PID=$gluePID"
 
-java -Xmx128M -cp $compLib:$guiLib:./bin/rlViz.jar btViz.NoDynamicLoadingGraphicalDriver
+java -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH -Xmx128M -cp $compLib:$guiLib:./bin/rlViz.jar btViz.NoDynamicLoadingGraphicalDriver
 
 echo "-- Visualizer is finished"
 
