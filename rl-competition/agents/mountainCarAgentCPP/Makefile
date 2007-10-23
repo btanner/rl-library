@@ -4,8 +4,8 @@ AGENT_OBJECTS = MountainCarAgent.o Glue_utilities.o RLStruct_util.o tiles.o
 AGENT_SRC_PATH = src
 BUILD_PATH = bin
 BIN_PATH = bin
-RL_GLUE_PATH = ../../RL-Glue/RL-Glue
-UTILS_PATH = ../../RL-Glue/Utils
+RL_GLUE_PATH = ../../system/RL-Glue/RL-Glue
+UTILS_PATH = ../../system/RL-Glue/Utils
 CC = g++
 CFLAGS = -I$(RL_GLUE_PATH) -I$(UTILS_PATH) -I$(AGENT_SRC_PATH) -Wall -g
 
