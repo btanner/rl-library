@@ -1,4 +1,5 @@
+RLVizPath=../../system/libraries
 all:
-	javac -d bin -cp ../../libraries/RLVizLib.jar src/*.java 
+	javac -d bin -cp $(RLVizPath)/RLVizLib.jar src/*.java 
 clean:
 	-rm -Rf bin/*

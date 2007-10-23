@@ -1,5 +1,5 @@
-RLGLUE = ../../RL-Glue/RL-Glue
-EXTERNALSRC = ../../includes
+RLGLUE = ../../system/RL-Glue/RL-Glue
+EXTERNALSRC = ../../system/includes
 BIN = bin
 SRC = src
 

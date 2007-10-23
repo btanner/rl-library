@@ -1,5 +1,5 @@
 
-RLVizPath = ../../libraries
+RLVizPath = ../../system/libraries
 SRC_PATH = src
 BIN_PATH = bin
 

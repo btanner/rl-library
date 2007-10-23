@@ -2,13 +2,13 @@ EXPERIMENT = src/consoleTrainer.py
 
 
 # Path to RL-Glue to find RL_interface and related files.
-RL_GLUE_PATH = ../../RL-Glue/RL-Glue
-
+RL_GLUE_PATH = ../../system/RL-Glue/RL-Glue
+INCLUDES_PATH = ../../system/includes
 all: RL_experiment
 
 include $(RL_GLUE_PATH)/RL_glue.makefile
 
-ParameterHolder.py: $(RL_GLUE_PATH)/../../includes/ParameterHolder.py
+ParameterHolder.py: $(INCLUDES_PATH)/ParameterHolder.py
 	cp $^ $@
 
 consoleTrainerHelper.py: src/consoleTrainerHelper.py
