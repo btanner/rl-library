@@ -25,10 +25,14 @@ void StateImpl<GameParameters,PlayerData,State>::new_obj(GameObjBase *obj, int o
   new_objs.push_back(obj); 
 }
 
+/*
+ * I don't know why this doesn't compile.
 template <class GameParameters, class PlayerData, class State>
-void StateImpl<GameParameters,PlayerData,State>::delete_obj(GameObjBase *obj)
+void StateImpl<GameParameters,PlayerData,State>::delete_obj(GameObjBase* obj, Vector<GameObjBase*>::iterator & iter)
 {
-  if (all_objs.erase(obj) == 0) ERR("State::delete_obj: double delete!");
+  iter = all_objs.erase(iter);
+  
+  //if (all_objs.erase(obj) == 0) ERR("State::delete_obj: double delete!");
 
   // remove obj from all id2obj maps
 
@@ -40,6 +44,7 @@ void StateImpl<GameParameters,PlayerData,State>::delete_obj(GameObjBase *obj)
     }
   }
 }
+*/
 
 // needed by the client, for when they deserialize and add objects
 template <class GameParameters, class PlayerData, class State>
@@ -47,8 +52,13 @@ void StateImpl<GameParameters,PlayerData,State>::clear_obj()
 {
   FORALL (all_objs, iter)
     delete (*iter); 
-    
+
   all_objs.clear(); 
+
+  FORALL (dead_objs, iter)
+    delete (*iter);
+  
+  dead_objs.clear();
 }
 
 
@@ -182,11 +192,28 @@ void StateImpl<GameParameters,PlayerData,State>::remove_dead_objs()
   FORALL (all_objs, i) {
     if ((*i)->dead()) {
       killed.push_back(*i);
+      i = all_objs.erase(i)-1;
     }
   }
   
   FORALL (killed, j) {
-    delete_obj(*j);
+    //delete_obj(*j, j); <-- method does not compile.. why?
+    // code below follows
+
+    GameObjBase* obj = *j;
+    
+    // remove obj from all id2obj maps
+
+    FORS (i, PLAYER_NUM) {
+      ObjId id = obj->view_ids[i];
+
+      if (id != 0) {
+        //if (player_infos[i].id2obj.erase(id) == 0) ERR("obj id not in id2obj map");
+        player_infos[i].id2obj.erase(id);
+      }
+    }
+    
+    dead_objs.push_back(obj);    
   }
 }
 
@@ -358,6 +385,9 @@ void StateImpl<GameParameters,PlayerData,State>
   // add pending new objects
   apply_new_objs();
   
+  // remove dead ones
+  remove_dead_objs();  
+  
   // compute views
   FORS (i, PLAYER_NUM) {
     std::ostringstream os;
@@ -382,7 +412,10 @@ void StateImpl<GameParameters,PlayerData,State>
 
   // add pending new objects
   apply_new_objs();
-  
+
+  // remove dead ones
+  remove_dead_objs();
+
   // compute single view  
   std::ostringstream os; 
   encode_view(only_this_view, os);

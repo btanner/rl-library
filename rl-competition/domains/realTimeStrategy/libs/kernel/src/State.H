@@ -58,11 +58,12 @@ public:
 
   Vector<GameObjBase*> all_objs; // owner
   Vector<GameObjBase*> new_objs; // objects to be added
+  Vector<GameObjBase*> dead_objs; // objects to be added
   
   // [PLAYER_NUM]: neutral
   boost::array<PlayerInfo, PLAYER_NUM+1> player_infos;
 
-  virtual ~StateImpl() { }
+  virtual ~StateImpl() { clear_obj(); }
 
 public:
 
@@ -119,7 +120,10 @@ protected:
   // object registration
 
   void new_obj(GameObjBase *obj, int owner);
-  void delete_obj(GameObjBase *obj);
+  
+  // This second one does not compile
+  //void delete_obj(GameObjBase *obj); (old)
+  //void delete_obj(GameObjBase* obj, Vector<GameObjBase*>::iterator & iter);
   
   void apply_new_objs();
 
