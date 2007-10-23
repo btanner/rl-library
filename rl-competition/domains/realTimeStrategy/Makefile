@@ -175,7 +175,7 @@ AWK := gawk
 EXE_SUFFIX :=
 
 # default include paths
-INC_OPTS=-I$(HOME)/include -I/usr/local/include -I../../system/include
+INC_OPTS=-I$(HOME)/include -I/usr/local/include -I../../system/boost/include
 
 #ifeq ("$(OSTYPE)", "$(OSTYPE_MAC)") 
 ifneq (,$(findstring $(OSTYPE_MAC),$(OSTYPE)))

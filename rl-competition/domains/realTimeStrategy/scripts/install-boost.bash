@@ -6,7 +6,7 @@ basedir=`basename $realTimeStrategyDirectory`
 
 # When building boost, this will point to rl-competition/system
 # note: path has no spaces, as written. It might work as a trick.. 
-DEST_DIR="../../../../system"
+DEST_DIR="../../../../system/boost"
 
 if [ "$basedir" != "realTimeStrategy" ]
 then
@@ -14,6 +14,8 @@ then
   echo "eg.   scripts/install-boost.bash"
   exit -1; 
 fi
+
+mkdir -p $DEST_DIR
 
 echo "Installing boost .."
 cd misc
