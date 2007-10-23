@@ -174,8 +174,8 @@ struct MiniGameParameters
   
   MiniGameParameters()
   {
-    width                   = 54*FINE_POINTS;
-    height                  = 54*FINE_POINTS;
+    width                   = 20*FINE_POINTS;
+    height                  = 20*FINE_POINTS;
     mineral_patches         = 10;
 
     // -------------
