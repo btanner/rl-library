@@ -195,7 +195,7 @@ SYS_FRAME := /System/Library/Frameworks
 INC_OPTS += $(SDL_INC) \
             -L$(USR_FRAME) -L$(SYS_FRAME) 
 
-SHARED_LIBS0 := -lc -lz  -lpthread \
+SHARED_LIBS0 := -lc  -lpthread \
                $(SDL_LIBS) \
                -framework Foundation \
                -framework AppKit
@@ -224,7 +224,7 @@ endif
 MACROS   := -DOS_LINUX -DGCC -D_WIN32=1 -DTRANSFORM_MOUSE_Y=1 -DHAS_TYPEOF=1
 MACROS   += -DGLUT_NO_LIB_PRAGMA -DGLUT_NO_WARNING_DISABLE
 INC_OPTS += $(SDL_INC) -I/local/include 
-SHARED_LIBS0  := -lm -lzlib1 -lmingw32 $(SDL_LIBS) -lpthreadGC2 -lstdc++
+SHARED_LIBS0  := -lm -lmingw32 $(SDL_LIBS) -lpthreadGC2 -lstdc++
 
 else
 
@@ -250,7 +250,7 @@ endif
 
 MACROS += -DOS_LINUX
 #SHARED_LIBS0  += -L/usr/lib -L/usr/local/lib -L/usr/X11R6/lib -lm -lz -lSDLmain -lSDL -lSDL_net -lpthread -lGL -lGLU -lXi -lXmu -lglut -lGLEW $(MODEL_LIBS) -lstdc++
-SHARED_LIBS0  += -L$(HOME)/lib -lm -lz $(SDL_LIBS) -lpthread -lstdc++
+SHARED_LIBS0  += -L$(HOME)/lib -lm $(SDL_LIBS) -lpthread -lstdc++
 # -lefence
 
 else 
@@ -273,7 +273,7 @@ MACROS += -DOS_CYGWIN -DSTDC_HEADERS=1 -DGLUT_IS_PRESENT=1
 #$(warning "INC_OPTS=" $(INC_OPTS))
 # fixme: /lib/SDL_main.o -> -lSDLmain (didn't get SDL to compile on Cygwin)
 # adjust paths if necessary
-SHARED_LIBS0 := $(SDL_LIBS) -lpthread  -lz -lstdc++ 
+SHARED_LIBS0 := $(SDL_LIBS) -lpthread  -lstdc++ 
 
 # GLEW not checked under cygwin!
 
