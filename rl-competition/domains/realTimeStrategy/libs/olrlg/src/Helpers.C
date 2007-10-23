@@ -342,7 +342,11 @@ std::string rlg_action2str(const Action& action)
   bool first = true;
   ostringstream oss; 
   
-  FORU(i, action.numInts) {
+  //cout << "received int array " << intArray2string(action.intArray, action.numInts) << endl;
+  
+  unsigned int i = 0; 
+  
+  while (i < action.numInts) {
     
     if (!first)
       oss << "#";
@@ -369,6 +373,8 @@ std::string rlg_action2str(const Action& action)
       oss << objId << " train marine";
     else if (actionId == 5)
       oss << objId << " attack " << f4;
+    else 
+      REM("Unknown action" << objId);
     
     // to shut up compiler for now      
     f1 = f1;
@@ -376,7 +382,7 @@ std::string rlg_action2str(const Action& action)
     f3 = f3;
     f4 = f4; 
   }
-
+  
   return oss.str();
 }
 

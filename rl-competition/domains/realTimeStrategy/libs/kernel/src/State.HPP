@@ -157,7 +157,7 @@ void StateImpl<GameParameters,PlayerData,State>
       FIND(player_infos[i].id2obj, k, id);
 
       if (k == player_infos[i].id2obj.end()) {
-        REM("State::execute_actions: obj does not exist : " << (*j));
+        REM("State::execute_actions: obj does not exist : " << (*j) << ", player = " << i);
         continue;
       }
 

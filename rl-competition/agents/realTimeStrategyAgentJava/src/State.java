@@ -50,6 +50,7 @@ public class State
       int y = Integer.parseInt(coords[i]);
 
       MineralPatch mp = new MineralPatch(); 
+      mp.owner = 2; // neutral
       mp.x = x;
       mp.y = y;
       mp.radius = parms.mineral_patch_radius;
@@ -62,6 +63,17 @@ public class State
     }
 
     objects.addAll(mps);
+  }
+
+  public GameObj get(int id)
+  {
+    for (GameObj obj : objects)
+    {
+      if (id == obj.id)
+        return obj;
+    }
+
+    return null;
   }
   
   public void applyObservation(Observation o)

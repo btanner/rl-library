@@ -22,7 +22,7 @@ import java.util.Random;
 
 public class OLAgent implements Agent
 {
-  boolean freeze = true;
+  boolean freeze = false;
   Parameters parms;
   State state;
   GUI gui;
@@ -39,14 +39,16 @@ public class OLAgent implements Agent
 
   public OLAgent() 
   {
-    time = 0;
-    done_base_time = 0;
-    mp_x = mp_y = 0;
-    have_base = false;
   }
 
   public void agent_init(final String taskSpec)
   {
+    time = 0;
+    done_base_time = 0;
+    mp_x = mp_y = 0;
+    have_base = false;
+    freeze = false; 
+
     //System.out.println("RLG> Received task spec: " + taskSpec);
 
     parms = new Parameters();
@@ -179,7 +181,7 @@ public class OLAgent implements Agent
     if (worker.is_moving == 1) {    
       
       double roll = Helpers.RNG.nextDouble();
-      if (roll <= 0.01)
+      if (roll <= 0.01 && !have_base)
       {
         done_base_time = time + parms.base_build_time;
         Helpers.addBuildBaseAction(actionList, worker.id);
