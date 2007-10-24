@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-from RL_experiment import *
+import rlglue.RLGlue as RLGlue
 from consoleTrainerHelper import *
 
 def main():
@@ -32,26 +32,26 @@ def main():
 
 # A sample trainer to run through the different mountain car training values
 def runMountainCarExperiment():
-	for paramSet in range(10):
-		loadMountainCar(paramSet)
-		runExperiment()
+	#for paramSet in range(10):
+	loadMountainCar(0)
+	runExperiment()
 
 # Run a certain number of episodes and return the total number of steps
 def runEpisodes(episodeCount, maxEpisodeLength):
 	totalSteps = 0
 	for i in range(episodeCount):
-		RL_episode(maxEpisodeLength)
-		totalSteps += RL_num_steps()
+		RLGlue.RL_episode(maxEpisodeLength)
+		totalSteps += RLGlue.RL_num_steps()
 	return totalSteps
 
 # Runs 10 episodes and reports the average number of steps for each
 def runExperiment():
-	RL_init()
+	RLGlue.RL_init()
 	episodesToRun = 10
 	totalSteps = runEpisodes(episodesToRun,1000)
 	averageSteps = float(totalSteps)/float(episodesToRun)
 	print "Average steps per episode: %.2f\n" % (averageSteps)
-	RL_cleanup()
+	RLGlue.RL_cleanup()
 
 if __name__ == "__main__":
 	main()

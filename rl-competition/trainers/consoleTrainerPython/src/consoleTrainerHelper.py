@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. 
 
-from RL_experiment import *
+import rlglue.RLGlue as RLGlue
 from ParameterHolder import *
 
 BENCHMARK = 0
@@ -30,18 +30,16 @@ UNLOADQUERY = 3
 def load(envNameString, theParams):
 	loadPayLoad = envNameString+":"+theParams.stringSerialize()
 	theRequest = "TO=%d FROM=%d CMD=%d VALTYPE=%d VALS=%s" % (ENVSHELL, BENCHMARK, LOADQUERY, STRINGLIST,loadPayLoad)
-	RL_env_message(theRequest)
+	RLGlue.RL_env_message(theRequest)
 
 #(string) -> ParameterHolder
 def preload(envNameString):
 	theRequest = "TO=%d FROM=%d CMD=%d VALTYPE=%d VALS=NULL" % (ENVSHELL, BENCHMARK, LISTQUERY, NOVALUE)
-	theResponse = RL_env_message(theRequest)
-	print "theResponse is ", theResponse
+	theResponse = RLGlue.RL_env_message(theRequest)
 	lastColonPos = theResponse.rfind("=")
 	thePayLoad = theResponse[lastColonPos+1:]
 	if thePayLoad[-1] == ':':
 		thePayLoad = thePayLoad[:-1]
-	print "payload is ",thePayLoad
 	items = thePayLoad.split(':')
 	theNames = []
 	theParamHolders = []

@@ -37,7 +37,6 @@ class ParameterHolder:
 	def __init__(self,stringRep=None):
 		if stringRep == None:
 			return
-		print "paramHolder: stringRep is:",stringRep
 		arrayRep = stringRep.split('_')
 		pointerType = arrayRep.pop(0)
 		if pointerType == "NULL":

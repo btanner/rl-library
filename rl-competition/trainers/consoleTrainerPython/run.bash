@@ -1,10 +1,11 @@
 #/bin/bash
 
-
 #Variables
+
 systemPath=../../system
 libPath=$systemPath/libraries
 RLVIZ_LIB_PATH=$PWD/$libPath
+
 
 compLib=$libPath/RLVizLib.jar
 envShellLib=$libPath/EnvironmentShell.jar
@@ -20,7 +21,7 @@ java -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH -Xmx128M -cp $compLib:$envShellLib rlglue.
 envShellPID=$!
 echo "Starting up dynamic environment loader - PID=$envShellPID"
 
-python ./RL_experiment
+./RL_experiment
 
 echo "-- Console Trainer finished"
 
