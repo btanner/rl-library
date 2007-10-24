@@ -124,7 +124,7 @@ You should see an experiment unfold as the sample mountain-car agent learns.
 ----------------------------------------------------
 Making your first agent
 ----------------------------------------------------
-
+TODO: Fill this in
 
 
 ----------------------------------------------------
