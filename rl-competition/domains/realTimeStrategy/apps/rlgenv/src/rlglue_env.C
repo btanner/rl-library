@@ -83,7 +83,7 @@ static void init()
   statePtr = new MiniGameState; 
   //opponent = new RandomPlayer(0);
   //opponent = new TestPlayer(0);
-  opponent = new AggressivePlayer(0);
+  opponent = new AggressivePlayer(0); 
   parms = new MiniGameParameters;
   
   statePtr->init(*parms);

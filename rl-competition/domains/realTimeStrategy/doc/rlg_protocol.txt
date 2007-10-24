@@ -10,7 +10,7 @@ available to your empire. Minerals are monetary funds; they are used to
 build units. 
 
 The remaining integers represent a set of units, where units are always 
-described by a constant () number of integers, described below: 
+described by a constant number of integers, described below: 
 
   0. type 
         worker = 0
@@ -18,7 +18,8 @@ described by a constant () number of integers, described below:
         base = 2
         mineral patch = 3
   1. id
-  2. owner of this unit (player id)
+  2. owner of this unit (player id). 
+      (RL player is always player id 1, opponent is 0)
   3. x-coordinate of current position
   4. y-coordinate of current position
   5. radius of unit
@@ -34,7 +35,7 @@ described by a constant () number of integers, described below:
   11. amount of minerals carrying
        if non-worker unit, this value is meaningless
 
-This data is parsed into a world state object upon arrival. 
+This data must be parsed into a world state object upon arrival. 
 
 At each step, the action taken by the agent is simply the composition of 
 actions for each individual unit, executed simultaneously. 

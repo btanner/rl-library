@@ -1,14 +1,21 @@
 
+===
+====== RL Competition 2008 RTS Problem
+==========================================
+
 The competition web site is http://www.rl-competition.org/ 
-If there are any questions regarding installation or use of this
-code, please use the discussion boards on the web site. 
 
-This document decribes the RTS problem for the 2008 RL Competition. 
+This document describes most of what you need to know for 
+the RTS problem. 
 
-Build Instructions
-==================
+If there are any questions regarding installation or use of 
+this code, please use the discussion boards on the web site. 
 
-Before continuing please read the README and make sure the required 
+===
+====== Build Instructions
+===============================
+
+Before continuing please read INSTALL and make sure the required 
 dependencies are installed and the build system is initialized 
 (make init). 
 
@@ -50,4 +57,103 @@ In GUI visualization for the RL Competition:
 
   GREEN = Player 0 (Opponent AI)
   RED = Player 1 (RL agent AI)
+
+===
+====== Problem Description and Game Mechanics
+=====================================================
+
+Here is the high-level description taken from the web site: 
+
+"The RTS problem is a simplified real-time strategy game domain with two types 
+of units: workers and marines. Workers help gather minerals by finding mineral 
+patches, and minerals are used to train marines or more workers. Marines are 
+used for combat. There is a single base controlled by each player. The goal 
+is to destroy the opponent's base. The opponent will play a strategy chosen 
+from a set of fixed strategies. The domain is continuous. At each step, the 
+action taken by the learning agent is the composition of all actions taken by 
+the workers and marines, so the dimensionality of the action space can grow 
+or shrink over time. Reward is based purely on the outcome of the game.  
+In the case of a tie, scores are assigned based on the relative accomplishments 
+of both players."
+
+The game description relies on a paremeter set that includes the width and 
+height of the game field, maximum hit points of units, speeds of units, 
+costs of units, radii of units, sight and attack ranges, etc.. These parameters 
+will always be fixed from episode to episode in a given phase of the 
+competition, but they may change from training to testing. The logic for the
+opponent AI (the "bot") may change as well. 
+
+Your task is to build a learning algorithm that learns how to play effectively
+and generally using Reinforcement Learning techniques. This is a single-agent
+problem: the environment includes a "bot opponent" which employs a fixed policy. 
+
+The RTS problem is built on the RL-Glue framework. The environment and 
+communication are implemented. You have to build a learning agent. There are 
+default Java and C++ agents included in this distribution, but you are free to 
+implement an agent in any language you like. The communication protocol is 
+described in doc/rlg_protocol.txt. 
+
+Game dynamics take place simultaneously in simulated (discrete) lock-step 
+motion. At each time step, the bot and learning agent each submit an action.
+The action is a composition of all individual unit actions (orders). All 
+actions are executed and resolved simultaneously, and then the loop starts
+over. There is no collision detection, so units are free to roam everywhere
+inside the boundaries. Each unit has a circular geometry; its size is 
+described by its radius attribute. 
+
+Observations describe the world as the agent sees it. An observation is 
+simply some global information (amount of minerals) and a collection of 
+units that are visible from all of the agent's units. Note, in particular, 
+that in general the agent is not given the full view of world state unless
+its units' sight ranges cover every spot on the field. 
+
+Each episode starts with a fixed number of mineral patches randomly scattered
+on the field, and two workers (one belonging to each player) randomly placed
+in the field. The first thing these workers must do is build the base, but 
+they can wander around the world before doing so (at great risk!). When 
+building a base, the worker is temporarily unavailable. 
+
+There are, in fact, 4 types of units: workers, marines, bases, and mineral 
+patches. Workers can mine minerals, marines are used for greater attack 
+strength, bases are used to train more units, and mineral patches are mined
+by workers to build funds to train more units. The profiles of each unit 
+(for the training period) are: 
+
+                        Workers     Marines      Bases
+
+     radius                4           4           16 
+     sight range           64          64          96
+     attack range          16          48          0
+     attack value          1           3           0
+     max hp                30          50          100
+     armor                 0           0           0
+     cost                  30          50          
+     training time         3           5
+     mineral capacity      10          0
+
+Units automatically attack enemies unless they are busy (workers mining, 
+attacking someone else). The target unit in the auto-attack is the one with
+the lowest hit points in the vacinity. This auto-attack can be overridden 
+by issuing a specific attack action for the unit. 
+
+Attacks work like so: if the target unit is within the attack range of an
+attacking unit, and the attacking unit's attack value is greater than or
+equal to the target unit's armor, then the hit points of the target unit
+is decreased by the attack value. 
+
+The goal is to take out the opponent's base or to take out all of the
+opponent's units. The reward for winning is 100 - 15*ts/maxt, where ts is
+the current time step and maxt is the maximum number of time steps per 
+episode. A tie happens if the episode reaches the maximum number of time
+steps, both bases are taken out at the same time, or there are no units 
+left on both sides (simultaneously). In the case of a tie, the agent with 
+the highest score gets 55, lower score 45, unless the scores are equal in
+which case both get 50. The score is determined by the sum of:
+   - half of number of minerals left
+   - total cost of units remaining
+   - total cost of units destroyed during game
+
+The winner will be the agent with the highest cumulative return. 
+
+Good Luck!
 

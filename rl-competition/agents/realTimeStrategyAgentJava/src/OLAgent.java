@@ -188,7 +188,7 @@ public class OLAgent implements Agent
     if (worker.is_moving == 1) {    
       
       double roll = Helpers.RNG.nextDouble();
-      if (roll <= 0.01 && !have_base)
+      if (roll <= 0.03 && !have_base)
       {
         done_base_time = time + parms.base_build_time;
         Helpers.addBuildBaseAction(actionList, worker.id);

@@ -183,7 +183,7 @@ struct MiniGameParameters
     base_radius             = FINE_POINTS;
     base_sight_range        = 6*FINE_POINTS;
     base_atk_range          = 0*FINE_POINTS;
-    base_hp                 = 50;
+    base_hp                 = 100;
     base_armor              = 0;
     
     base_cost               = 400;
@@ -220,12 +220,12 @@ struct MiniGameParameters
     worker_radius             = FINE_POINTS/4;
     worker_sight_range        = 4*FINE_POINTS;
     worker_atk_range          = 1*FINE_POINTS;
-    worker_hp                 = 50;
+    worker_hp                 = 30;
     worker_armor              = 0;
 
     worker_max_speed          = FINE_POINTS/8;    
     
-    worker_cost               = 40;
+    worker_cost               = 30;
     //worker_training_time      = 4*FPS;
     worker_training_time      = 4;
     //worker_mining_time        = 3*FPS;
