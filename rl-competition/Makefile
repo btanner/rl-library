@@ -16,6 +16,7 @@ all: $(BIN_PATH)/RL_glue
 	cd ./agents/mountainCarAgentCPP/ && make
 	cd ./agents/realTimeStrategyAgentJava/ && make
 	cd ./trainers/consoleTrainerJava/ && make
+	cd ./trainers/consoleTrainerPython/ && make
 	cd ./trainers/consoleTrainerCPP/ && make
 	cd ./trainers/consoleRealTimeStrategyTrainerJava/ && make
 
@@ -27,5 +28,6 @@ clean:
 	cd ./agents/mountainCarAgentCPP/ && make clean
 	cd ./agents/realTimeStrategyAgentJava/ && make clean
 	cd ./trainers/consoleTrainerJava/ && make clean
+	cd ./trainers/consoleTrainerPython/ && make clean
 	cd ./trainers/consoleTrainerCPP/ && make clean
 	cd ./trainers/consoleRealTimeStrategyTrainerJava/ && make clean
