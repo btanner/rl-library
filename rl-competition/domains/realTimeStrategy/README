@@ -90,8 +90,8 @@ problem: the environment includes a "bot opponent" which employs a fixed policy.
 The RTS problem is built on the RL-Glue framework. The environment and 
 communication are implemented. You have to build a learning agent. There are 
 default Java and C++ agents included in this distribution, but you are free to 
-implement an agent in any language you like. The communication protocol is 
-described in doc/rlg_protocol.txt. 
+implement an agent in any language supported by RL-Glue: Java, C, C++, or Pyhton. 
+The communication protocol is described in doc/rlg_protocol.txt. 
 
 Game dynamics take place simultaneously in simulated (discrete) lock-step 
 motion. At each time step, the bot and learning agent each submit an action.
