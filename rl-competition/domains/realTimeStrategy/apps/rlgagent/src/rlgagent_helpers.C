@@ -93,6 +93,12 @@ void add_attack_action(std::vector<int>& actions, int objId, int targetId)
   actions.push_back(targetId);  // training type
 }
 
+bool on_map(Worker * workerPtr, MiniGameParameters & parms)
+{
+  int x = workerPtr->x, y = workerPtr->y;
+  return (x >= 0 && y >= 0 && x < parms.width && y < parms.height);
+}
+
 
 /* 
  * It might be better if there was an AI object which kept 
@@ -108,6 +114,8 @@ void get_actions(vector<int> & vector,
   //   [objId] move [x] [y] [speed] 
 
   DPR << "Iterating through objects" << endl;
+  
+  int minerals = state.player_infos[1].pd.minerals; 
   
   if (build_time > 0)
   {
@@ -133,9 +141,9 @@ void get_actions(vector<int> & vector,
             
       DPR << "  found worker, id=" << objId << " : " << oss.str() << endl;
     
-      if (roll < 0.03 && !have_base)
+      if (roll < 0.03 && !have_base && on_map(workerPtr, parms))
         add_build_base_action(vector, objId); 
-      else if (roll < 0.01)
+      else if (roll < 0.01 && on_map(workerPtr, parms))
       {
         int x = rand() % parms.width; 
         int y = rand() % parms.height; 
@@ -169,14 +177,18 @@ void get_actions(vector<int> & vector,
       
       if (build_time == 0)
       {
-        build_time = 1;
-
         double roll = drand48(); 
         
-        if (roll < 0.5) 
+        if (roll < 0.5 && minerals >= parms.worker_cost)
+        {
+          build_time = 1;
           add_train_worker_action(vector, objId);
-        else 
+        }
+        else if (roll <= 1.0 && minerals >= parms.marine_cost)
+        {
+          build_time = 1;
           add_train_marine_action(vector, objId);
+        }
       }
     }
   }
