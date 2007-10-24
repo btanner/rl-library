@@ -58,6 +58,10 @@ In GUI visualization for the RL Competition:
   GREEN = Player 0 (Opponent AI)
   RED = Player 1 (RL agent AI)
 
+For more information on the structure, layout, or behavior of the 
+implementation, please refer to the documentation in the doc/ 
+directory. 
+
 ===
 ====== Problem Description and Game Mechanics
 =====================================================
