@@ -4,7 +4,7 @@
 #include "MiniGameState.H" 
 #include "Worker.H" 
 #include "Player.H"
-#include "AggressivePlayer.H"
+#include "RLComp08Bot1.H"
 
 #include <stdlib.h>
 #include <time.h>
@@ -20,7 +20,7 @@ using namespace std;
 
 static bool debug = false; 
 
-AggressivePlayer::AggressivePlayer(int num)
+RLComp08Bot1::RLComp08Bot1(int num)
   : Player::Player(num)
 {
   statePtr = 0; 
@@ -43,14 +43,14 @@ AggressivePlayer::AggressivePlayer(int num)
   
 }
 
-AggressivePlayer::~AggressivePlayer()
+RLComp08Bot1::~RLComp08Bot1()
 {
   // (uses) set_state
   //if (statePtr != 0)
   //   delete statePtr;  
 }
 
-void AggressivePlayer::determineScouts(MiniGameParameters& parms)
+void RLComp08Bot1::determineScouts(MiniGameParameters& parms)
 {
   if (!have_base)
     return; 
@@ -86,7 +86,7 @@ void AggressivePlayer::determineScouts(MiniGameParameters& parms)
 
 
 
-string AggressivePlayer::receive_actions(string view, MiniGameParameters& parms)
+string RLComp08Bot1::receive_actions(string view, MiniGameParameters& parms)
 {
   //profiler.stamp("rec_actions 0");  
   
@@ -225,7 +225,7 @@ string AggressivePlayer::receive_actions(string view, MiniGameParameters& parms)
   return actionstr;
 }
 
-string AggressivePlayer::chooseAction(int objId, Worker* workerPtr, 
+string RLComp08Bot1::chooseAction(int objId, Worker* workerPtr, 
                                 MiniGameState& state, MiniGameParameters& parms)
 {
   if (done_base_time > 0) {
@@ -290,7 +290,7 @@ string AggressivePlayer::chooseAction(int objId, Worker* workerPtr,
   return rnd_move_action(objId, parms, workerPtr->max_speed);  
 }
 
-string AggressivePlayer::chooseAction(int objId, Marine* marinePtr,
+string RLComp08Bot1::chooseAction(int objId, Marine* marinePtr,
                                 MiniGameState& state, MiniGameParameters& parms)
 {  
   if (found_ob)
@@ -308,7 +308,7 @@ string AggressivePlayer::chooseAction(int objId, Marine* marinePtr,
   return rnd_move_action(objId, parms, marinePtr->max_speed);  
 }
 
-string AggressivePlayer::chooseAction(int objId, Base* basePtr, 
+string RLComp08Bot1::chooseAction(int objId, Base* basePtr, 
                                 MiniGameState& state, MiniGameParameters& parms)
 {
   double roll = drand48();
@@ -331,7 +331,7 @@ string AggressivePlayer::chooseAction(int objId, Base* basePtr,
   return "";
 }
 
-string AggressivePlayer::chooseScoutingAction(int objId, MobileObj<MiniGameState>* objPtr, 
+string RLComp08Bot1::chooseScoutingAction(int objId, MobileObj<MiniGameState>* objPtr, 
                                               MiniGameState& state, MiniGameParameters& parms)
 {  
   double delta_x = objPtr->x - sc_x; 

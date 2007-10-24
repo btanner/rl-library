@@ -1,5 +1,5 @@
-#ifndef AGGRESSIVEPLAYER_H
-#define AGGRESSIVEPLAYER_H
+#ifndef RLCOMP08BOT1_H
+#define RLCOMP08BOT1_H
 
 #include "GameObj.H"
 #include "MiniGameState.H"
@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 
-class AggressivePlayer : public Player
+class RLComp08Bot1 : public Player
 {
   bool init; 
   int time;   
@@ -46,8 +46,8 @@ class AggressivePlayer : public Player
   
   
 public:
-  AggressivePlayer(int num); 
-  virtual ~AggressivePlayer();
+  RLComp08Bot1(int num); 
+  virtual ~RLComp08Bot1();
   
   virtual std::string receive_actions(std::string view, MiniGameParameters& parms);  
   

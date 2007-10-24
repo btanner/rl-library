@@ -2,7 +2,7 @@
 #include "Helpers.H"
 #include "MiniGameState.H"
 #include "Player.H"
-#include "AggressivePlayer.H"
+#include "RLComp08Bot1.H"
 #include "rlglue_env.H"
 #include "SDL_GUI.H"
 #include "SDL_init.H"
@@ -29,7 +29,7 @@ static MiniGameParameters * parms;
 static Player * opponent; 
 boost::array<std::string, MiniGameState::PLAYER_NUM> views;
 static SDL_GUI<MiniGameState> gui;
-static bool use_gui = false; 
+static bool use_gui = true; 
 static int gui_delay = 25;
 static std::map<std::string, SDL_GUI<MiniGameState>::Marker> markers;
 
@@ -83,7 +83,7 @@ static void init()
   statePtr = new MiniGameState; 
   //opponent = new RandomPlayer(0);
   //opponent = new TestPlayer(0);
-  opponent = new AggressivePlayer(0); 
+  opponent = new RLComp08Bot1(0); 
   parms = new MiniGameParameters;
   
   statePtr->init(*parms);

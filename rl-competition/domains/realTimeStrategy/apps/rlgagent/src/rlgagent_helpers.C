@@ -2,6 +2,8 @@
 #include "Global.H"
 #include "MiniGameState.H"
 #include "Worker.H"
+#include "Marine.H"
+#include "Base.H"
 #include "rlglue_agent.H"
 
 #include <stdlib.h>
@@ -12,6 +14,10 @@
 using namespace std;
 
 static bool debug = false; 
+
+/* AI state vars */
+static bool have_base = false;
+static int build_time = 0;
 
 string build_state_string(Observation & o)
 {
@@ -69,7 +75,7 @@ void add_train_worker_action(std::vector<int>& actions, int objId)
 void add_train_marine_action(std::vector<int>& actions, int objId)
 {
   actions.push_back(objId);
-  actions.push_back(3); // action id
+  actions.push_back(4); // action id
   actions.push_back(-1);
   actions.push_back(-1);
   actions.push_back(-1);
@@ -88,7 +94,11 @@ void add_attack_action(std::vector<int>& actions, int objId, int targetId)
 }
 
 
-
+/* 
+ * It might be better if there was an AI object which kept 
+ * state variables as members and had helper functions encapsulated
+ * in the class ... 
+ */
 void get_actions(vector<int> & vector, 
                  MiniGameState & state, 
                  MiniGameParameters & parms)
@@ -97,7 +107,14 @@ void get_actions(vector<int> & vector,
   // eg. actions: 
   //   [objId] move [x] [y] [speed] 
 
-  DPR << "Iterating through objects" << endl; 
+  DPR << "Iterating through objects" << endl;
+  
+  if (build_time > 0)
+  {
+    build_time++;
+    if (build_time > 5)
+      build_time = 0;
+  }
   
   FORALL(state.all_objs, iter)
   {
@@ -112,15 +129,55 @@ void get_actions(vector<int> & vector,
     {
       Worker* workerPtr  = (Worker*)objPtr;
       
+      double roll = drand48(); 
+            
       DPR << "  found worker, id=" << objId << " : " << oss.str() << endl;
     
-      int x = rand() % parms.width; 
-      int y = rand() % parms.height; 
-    
-      //ostringstream actionos;
-      //actionos << objId << " move " << x << " " << y << " " << workerPtr->max_speed;
-      add_move_action(vector, objId, x, y, workerPtr->max_speed); 
+      if (roll < 0.03 && !have_base)
+        add_build_base_action(vector, objId); 
+      else if (roll < 0.01)
+      {
+        int x = rand() % parms.width; 
+        int y = rand() % parms.height; 
       
+        //ostringstream actionos;
+        //actionos << objId << " move " << x << " " << y << " " << workerPtr->max_speed;
+        add_move_action(vector, objId, x, y, workerPtr->max_speed); 
+      }
+    }
+    else if (objPtr->owner == PLAYER_NUM && objPtr->get_type() == "marine")
+    {
+      Marine* marinePtr  = (Marine*)objPtr;
+      
+      DPR << "  found worker, id=" << objId << " : " << oss.str() << endl;
+    
+      double roll = drand48(); 
+
+      if (roll < 0.01)
+      {
+        int x = rand() % parms.width; 
+        int y = rand() % parms.height; 
+      
+        //ostringstream actionos;
+        //actionos << objId << " move " << x << " " << y << " " << workerPtr->max_speed;
+        add_move_action(vector, objId, x, y, marinePtr->max_speed);
+      }      
+    }
+    else if (objPtr->owner == PLAYER_NUM && objPtr->get_type() == "base")
+    {
+      have_base = true;    
+      
+      if (build_time == 0)
+      {
+        build_time = 1;
+
+        double roll = drand48(); 
+        
+        if (roll < 0.5) 
+          add_train_worker_action(vector, objId);
+        else 
+          add_train_marine_action(vector, objId);
+      }
     }
   }
 }
