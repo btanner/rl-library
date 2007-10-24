@@ -43,7 +43,6 @@ public class TaskSpecObject
 		 * The action data 
 		 */
     	taskSpecString = this.removeWhiteSpace(taskSpecString);
-    	System.err.println(taskSpecString);
 		StringTokenizer tokenizer = new StringTokenizer(taskSpecString, ":");		
 
 		String versionString = tokenizer.nextToken();
