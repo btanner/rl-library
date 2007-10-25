@@ -45,7 +45,10 @@ int main()
   MiniGameParameters gp;
   
   TestPlayer p0(0); 
-  TestPlayer p1(1); 
+  p0.set_parms(&gp);
+  
+  TestPlayer p1(1);
+  p1.set_parms(&gp);
 
   s.init(gp);
 
@@ -89,8 +92,8 @@ int main()
 
     // send views + receive actions ...
 
-    acts[0] = p0.receive_actions(views[0], gp);
-    acts[1] = p1.receive_actions(views[1], gp);        
+    acts[0] = p0.receive_actions(views[0]);
+    acts[1] = p1.receive_actions(views[1]);        
     
     // create random move actions (now handled in Player objects)
     // these will be used for separate opponent policies.
