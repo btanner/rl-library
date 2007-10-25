@@ -85,7 +85,7 @@ OSTYPE := $(shell echo -n "$(OSTYPE)" | tr a-z A-Z )
 
 # Enable GUI (eg. compile+link with SDL) or not? 
 # Enabled = 1, disabled = 0
-ENABLE_GUI=1
+ENABLE_GUI=0
 
 # tar file name
 PROJ := ortslite
