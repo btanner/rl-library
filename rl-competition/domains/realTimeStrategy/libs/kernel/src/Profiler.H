@@ -16,6 +16,10 @@ class Profiler
   bool enabled; 
   
   struct timeval starttv, currenttv, prevtv; 
+    
+  struct timeval sw_start, sw_end;
+  long sw_total;
+  int sw_times; 
   
 public:
   
@@ -23,6 +27,7 @@ public:
   {
     enabled = true;
     filename = "profile.log";
+    sw_times = 0;
   }
   
   Profiler(const std::string & _filename)
@@ -39,6 +44,9 @@ public:
   void stamp(const std::string& msg, bool puttime = true);
   void end(); 
   
+  void stopwatch_start();
+  void stopwatch_stop();
+  double stopwatch_avg(); 
 };
 
 #endif

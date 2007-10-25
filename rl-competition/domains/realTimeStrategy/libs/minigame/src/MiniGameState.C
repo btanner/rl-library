@@ -28,7 +28,7 @@ void MiniGameState::object_setup()
   w = new Worker(this);
   new_obj(w, 1);
   w->x = rand() % width;
-  w->y = height-5;
+  w->y = rand() % height;
 
   for (int i = 0; i < gp.mineral_patches; i++)
   {

@@ -18,7 +18,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/replace.hpp>
 
-#define MAX_STEPS 2000
+#define MAX_STEPS 10000
 
 using namespace std;
 
@@ -29,7 +29,7 @@ static MiniGameParameters * parms;
 static Player * opponent; 
 boost::array<std::string, MiniGameState::PLAYER_NUM> views;
 static SDL_GUI<MiniGameState> gui;
-static bool use_gui = true; 
+static bool use_gui = false; 
 static int gui_delay = 25;
 static std::map<std::string, SDL_GUI<MiniGameState>::Marker> markers;
 

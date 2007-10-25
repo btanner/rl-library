@@ -53,3 +53,21 @@ void Profiler::end()
   file.close(); 
 }
 
+void Profiler::stopwatch_start()
+{
+  gettimeofday(&sw_start, NULL);
+}
+
+void Profiler::stopwatch_stop()
+{
+  gettimeofday(&sw_end, NULL);
+  sw_total += diff(sw_end, sw_start);
+  sw_times++;
+}
+
+double Profiler::stopwatch_avg()
+{
+  return ((double)sw_total)/((double)sw_times);
+}
+
+

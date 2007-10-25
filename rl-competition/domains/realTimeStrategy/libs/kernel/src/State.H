@@ -115,7 +115,9 @@ public:
   
   bool is_visible(GameObjBase*, int player);
   
-  void clear_obj(); 
+  void clear_obj();
+  
+  static bool a_sees_b(GameObjBase &a, GameObjBase &b);  
   
 protected:
   
@@ -139,8 +141,6 @@ protected:
   // remove killed objects
   
   void remove_dead_objs();
-
-  static bool a_sees_b(GameObjBase &a, GameObjBase &b);
 
   // game parameters
 

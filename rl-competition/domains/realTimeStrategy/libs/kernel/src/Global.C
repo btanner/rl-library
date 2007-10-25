@@ -31,6 +31,14 @@ string to_string(int x)
   return oss.str();
 }
 
+string to_string(double x)
+{
+  ostringstream oss; 
+  oss << x; 
+  return oss.str();
+}
+
+
 #if 0
 std::string trim(const std::string & str)
 {
