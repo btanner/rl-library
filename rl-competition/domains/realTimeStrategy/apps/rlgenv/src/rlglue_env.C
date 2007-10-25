@@ -218,7 +218,8 @@ Reward_observation env_step(Action a)
 
   // get the opponent's actions
   opponent->set_state(statePtr);
-  actions[0] = opponent->receive_actions(views[0], *parms);
+  opponent->set_parms(parms); 
+  actions[0] = opponent->receive_actions(views[0]);
 
   //profiler.stamp("env_step 1");  
   

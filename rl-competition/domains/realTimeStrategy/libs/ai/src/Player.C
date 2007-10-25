@@ -13,12 +13,14 @@ using namespace std;
 Player::Player() 
 {
   statePtr = 0; 
+  parmsPtr = 0;
   do_not_free = false;
 }
 
 Player::Player(int num) 
 {
-  statePtr = 0; 
+  statePtr = 0;
+  parmsPtr = 0;
   playerNum = num; 
 }
 
@@ -26,12 +28,14 @@ Player::~Player()
 {
   if (statePtr != 0 && !do_not_free)
     delete statePtr;
+  
+  // parms are se externally either way, so no freeing needed
 }
 
-string Player::rnd_move_action(int objId, MiniGameParameters& parms, int speed) 
+string Player::rnd_move_action(int objId, int speed) 
 {
-  int x = rand() % parms.width; 
-  int y = rand() % parms.height; 
+  int x = rand() % parmsPtr->width; 
+  int y = rand() % parmsPtr->height; 
 
   ostringstream actionos;
   actionos << objId << " move " << x << " " << y << " " << speed;
@@ -49,13 +53,16 @@ void Player::build_state(const string & view)
   statePtr->decode_view(playerNum, view);
 }
 
-
 void Player::set_state(MiniGameState * stateptr)
 {
   statePtr = stateptr; 
   do_not_free = true;
 }
 
+void Player::set_parms(MiniGameParameters * parmsptr)
+{
+  parmsPtr = parmsptr;
+}
 
 string Player::compose_action(int id, const std::string& act)
 {
@@ -71,11 +78,11 @@ std::string Player::compose_move_action(int id, int x, int y, int speed)
   return oss.str(); 
 }
 
-bool Player::onMap(GameObj<MiniGameState>* ptr, MiniGameParameters & parms)
+bool Player::onMap(GameObj<MiniGameState>* ptr)
 { 
   return (   ptr->x >= 0 && ptr->y >= 0 
-          && ptr->x < parms.width
-          && ptr->y < parms.height);  
+          && ptr->x < parmsPtr->width
+          && ptr->y < parmsPtr->height);  
 }
 
 
@@ -86,6 +93,7 @@ NullPlayer::NullPlayer(int num)
 {
   name = "NullPlayer";
   statePtr = 0; 
+  parmsPtr = 0;
   playerNum = num;   
 }
 
@@ -93,7 +101,7 @@ NullPlayer::~NullPlayer()
 {  
 }
 
-string NullPlayer::receive_actions(string view, MiniGameParameters& parms)
+string NullPlayer::receive_actions(string view)
 {
   return "";
 }
@@ -114,7 +122,7 @@ RandomPlayer::~RandomPlayer()
      delete statePtr;  
 }
 
-string RandomPlayer::receive_actions(string view, MiniGameParameters& parms)
+string RandomPlayer::receive_actions(string view)
 {
   build_state(view); 
   
@@ -140,7 +148,7 @@ string RandomPlayer::receive_actions(string view, MiniGameParameters& parms)
       
       cout << "  found worker, id=" << objId << " : " << oss.str() << endl;
       
-      string act = rnd_move_action(objId, parms, workerPtr->max_speed); 
+      string act = rnd_move_action(objId, workerPtr->max_speed); 
       cout << "action is " << act << endl; 
           
       actions.push_back(act); 

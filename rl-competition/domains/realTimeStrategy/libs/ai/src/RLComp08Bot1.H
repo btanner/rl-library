@@ -12,6 +12,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <sstream> 
 
 class RLComp08Bot1 : public Player
 {
@@ -22,6 +23,8 @@ class RLComp08Bot1 : public Player
   int base_x, base_y;
   int mp_x, mp_y; // mineral patch  
   
+  MiniGameParameters parms;   
+  
   std::map<int,GameObj<MiniGameState>* > scouts; 
   bool found_ob, found_mp; 
   int sc_x, sc_y; 
@@ -30,26 +33,28 @@ class RLComp08Bot1 : public Player
   
   Profiler profiler; 
   
-  void determineScouts(MiniGameParameters& parms);
+  int phase; 
+  
+  void determineScouts();
 
-  virtual std::string chooseAction(int objId, Worker* workerPtr, 
-                                   MiniGameState& state, MiniGameParameters& parms);
+  virtual std::string chooseAction(int objId, Worker* workerPtr, MiniGameState& state);
   
-  virtual std::string chooseAction(int objId, Marine* marinePtr, 
-                                   MiniGameState& state, MiniGameParameters& parms);
+  virtual std::string chooseAction(int objId, Marine* marinePtr, MiniGameState& state);
   
-  virtual std::string chooseAction(int objId, Base* basePtr, 
-                                   MiniGameState& state, MiniGameParameters& parms);  
+  virtual std::string chooseAction(int objId, Base* basePtr, MiniGameState& state);  
 
   virtual std::string chooseScoutingAction(int objId, MobileObj<MiniGameState>* objPtr, 
-                                           MiniGameState& state, MiniGameParameters& parms);  
+                                           MiniGameState& state);  
+    
+  std::string defaultAct(std::string view);   
+  void phase1(std::ostringstream & actstream, MiniGameState& state); 
   
   
 public:
   RLComp08Bot1(int num); 
   virtual ~RLComp08Bot1();
   
-  virtual std::string receive_actions(std::string view, MiniGameParameters& parms);  
+  virtual std::string receive_actions(std::string view);  
   
   // inherited
   //virtual std::string receive_actions(std::string view, MiniGameParameters& parms);  
