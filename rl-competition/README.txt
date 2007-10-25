@@ -74,7 +74,7 @@ We have provided several sample trainers, implemented in C/C++, Python, and Java
 These console trainers will allow run any of the Java domains, Mountain Car, Tetris, or Helicopter.  Check the source code in /trainers/<someTrainer>/src/ for an idea how to select which problem the trainer will select.  Special training programs are required for real time strategy and keep-away.
 
 To run any trainer, go into its directory and type:
-$>run.bash
+$>./run.bash
 
 To rebuild a trainer, in that trainer's directory type:
 $>make clean;make
@@ -83,7 +83,7 @@ The graphical trainer that will run for any of the Java domains is in:
 /trainers/guiTrainerJava
 
 To run this trainer, go into its directory and type:
-$>run.bash
+$>./run.bash
 
 The source of this trainer is not provided, it is provided on an AS-IS basis.
 
