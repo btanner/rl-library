@@ -24,6 +24,7 @@ protected:
   
   std::string compose_action(int id, const std::string& act);
   std::string compose_move_action(int id, int x, int y, int speed);
+  std::string compose_attack_action(int id, int target_id);
   bool onMap(GameObj<MiniGameState>* ptr); 
   
 public: 

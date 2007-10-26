@@ -36,6 +36,8 @@ RLComp08Bot1::RLComp08Bot1(int num)
   base_y = base_x = 0; 
   mp_x = mp_y = 0;
   obx = oby = -1;
+  ob_id = 0;
+  obPtr = NULL;
   
   found_ob = found_mp = false;
   
@@ -456,6 +458,9 @@ void RLComp08Bot1::phase2(ostringstream & actstream, MiniGameState& state)
       {
         obx = (*iter)->x;
         oby = (*iter)->y;
+        ob_id = (*iter)->view_ids[playerNum];   
+        obPtr = (Base*)(*iter);
+        break;
       }
     }
   }
@@ -475,20 +480,19 @@ void RLComp08Bot1::phase3(ostringstream & actstream, MiniGameState& state)
     p3_y = rand() % parmsPtr->height;
   }
   
-  if (obx < 0 || oby < 0)
+  FORALL(opp_vobjs, iter)
   {
-    FORALL(opp_vobjs, iter)
+    GameObj<MiniGameState> * objPtr = *iter;
+    if (objPtr->get_type() == "base")
     {
-      GameObj<MiniGameState> * objPtr = *iter;
-      if (objPtr->get_type() == "base")
-      {
-        obx = objPtr->x; 
-        oby = objPtr->y;
-        break;
-      }
+      obx = objPtr->x; 
+      oby = objPtr->y;
+      ob_id = (*iter)->view_ids[playerNum];   
+      obPtr = (Base*)(*iter);        
+      break;
     }
   }
-    
+  
   FORALL(my_vobjs, iter) 
   {
     if ((*iter)->get_type() == "base")
@@ -497,8 +501,30 @@ void RLComp08Bot1::phase3(ostringstream & actstream, MiniGameState& state)
     MobileObj<MiniGameState>* objPtr = (MobileObj<MiniGameState>*)(*iter);
     int objId = objPtr->view_ids[playerNum];
    
-    if (obx >= 0 || oby >= 0) 
-      ADD_ACTION(actstream, compose_move_action(objId, obx, oby, objPtr->max_speed));
+    if (obx >= 0 || oby >= 0)
+    {      
+      double dist2 = square((double)objPtr->x - obx) + square((double)objPtr->y - oby);
+      int attack_range = 0;
+      
+      if (objPtr->get_type() == "worker")
+      {
+        Worker* worker = (Worker*)objPtr;
+        attack_range = worker->attack_range;
+      }
+      else if (objPtr->get_type() == "marine")
+      {
+        Marine* marine = (Marine*)objPtr;
+        attack_range = marine->attack_range;
+      }
+      
+      if (   a_sees_loc(objPtr, obx, oby, parmsPtr->base_radius)
+          && dist2 <= square(parmsPtr->base_radius + attack_range))
+      {
+        ADD_ACTION(actstream, compose_attack_action(objId, ob_id));
+      }
+      else
+        ADD_ACTION(actstream, compose_move_action(objId, obx, oby, objPtr->max_speed));      
+    }
     else if (objPtr->is_moving)
     {      
     }

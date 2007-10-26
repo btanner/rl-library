@@ -78,6 +78,14 @@ std::string Player::compose_move_action(int id, int x, int y, int speed)
   return oss.str(); 
 }
 
+std::string Player::compose_attack_action(int id, int target_id)
+{
+  ostringstream oss; 
+  oss << id << " attack " << target_id; 
+  return oss.str(); 
+}
+
+
 bool Player::onMap(GameObj<MiniGameState>* ptr)
 { 
   return (   ptr->x >= 0 && ptr->y >= 0 

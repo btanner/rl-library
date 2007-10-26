@@ -44,6 +44,8 @@ class RLComp08Bot1 : public Player
   int training_end_time;
   int next_guard_post;
   int p3_x, p3_y;
+  int ob_id; 
+  Base * obPtr; 
   std::vector<GameObj<MiniGameState>* > my_vobjs;   // visible objs only 
   std::vector<GameObj<MiniGameState>* > opp_vobjs;  // visible objs only 
   std::vector<GameObj<MiniGameState>* > vmps;       // visible mps only
