@@ -320,7 +320,7 @@ void env_cleanup()
   { free(rewobs.o.doubleArray); rewobs.o.doubleArray = NULL; } 
     
   if (msg_response != NULL)
-    free(msg_response);
+  { free(msg_response); msg_response = NULL; }
   
 }
 
