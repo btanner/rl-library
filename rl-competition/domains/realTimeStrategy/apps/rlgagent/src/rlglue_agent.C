@@ -27,6 +27,9 @@ static Action myAction;
 
 static Profiler profiler; 
 
+/*
+ * Initializes the agent. This function is called only once per experiment. 
+ */
 void agent_init(const Task_specification task_spec)
 {
   srand(time(NULL));
@@ -38,15 +41,7 @@ void agent_init(const Task_specification task_spec)
   myAction.doubleArray = NULL;
   
   parms = new MiniGameParameters;
-  
-  /*
-  string ts;
-  ts.append(task_spec);
-  string::size_type loc = ts.find("mps=", 0 );
-  string tsstr = ts.substr(0, loc-1);
-  mpstr = ts.substr(loc+4);
-  */
-  
+    
   string tsstr;
   tsstr.append(task_spec); // convert to a string 
 
@@ -58,78 +53,61 @@ void agent_init(const Task_specification task_spec)
   //profiler.setFilename("rlgagent_profiler.log");
 }
 
+/*
+ * Chooses an action for the first time step of an epsisode. 
+ */
 Action agent_start(Observation o)
 {  
-  //profiler.start();
-  
   DPR << "RLG> Calling agent_start" << endl;
   DPR << "Received state: " << intArray2string(o.intArray, o.numInts) << endl;
   
   if (state != NULL) delete state;
   state = new MiniGameState;
-  //state->setMPstr(mpstr); 
-  
-  //string statestr = build_state_string(o);     
-  //DPR << "State string is " << statestr << endl; 
-  
-  // now deserialize it. remember, we are always player 1
-  //state.clear_obj(); 
-  //state->decode_view(1, statestr);
+
+  // Fill the game state from the RL-Glue data
   rlg_obs2view(*state, o);
   
   // Build up a set of actions
   // eg. 1 move 10 20 5#2 move 20 10 2 # ... 
   vector<int> actions;
   get_actions(actions, *state, *parms); 
-  //string actionstr = join(actions, "#"); 
-  //DPR << "action string is " << actionstr << endl; 
-  //rlg_convert_actionstr(myAction, actionstr);
+
+  // convert the actions to RL-Glue format
   rlg_vector2action(myAction, actions);
   
+  // Return the action data
   return myAction;
 }
 
+/*
+ * Chooses an action given the observation and reward obtained
+ * from the previously chosen action. 
+ */
 Action agent_step(Reward r, Observation o)
 {
-  //profiler.stamp("agent_step 0");
-  
   DPR << "RLG> Starting agent_step" << endl;
   DPR << "Received state: " << intArray2string(o.intArray, o.numInts) << endl;
 
-  //if (state != NULL) delete state;
-  //state = new MiniGameState;
-  //state->setMPstr(mpstr);
-  
-  // What to do with the reward .... hmmm... ?
-  
-  //string statestr = build_state_string(o);   
-  //DPR << "State string is " << statestr << endl; 
-  
-  // now deserialize it. remember, we are always player 1
-  //state.clear_obj(); 
-  //state->decode_view(1, statestr);
+  // First, convert the RL-Glue observation to our game state
   rlg_obs2view(*state, o);
 
-  //profiler.stamp("agent_step 1");
-  
   // Build up a set of actions
   // eg. 1 move 10 20 5#2 move 20 10 2 # ... 
   
   vector<int> actions;
   get_actions(actions, *state, *parms); 
 
-  //profiler.stamp("agent_step 2");
-  
-  //string actionstr = join(actions, "#"); 
-  //DPR << "action string is " << actionstr << endl; 
-  //rlg_convert_actionstr(myAction, actionstr);  
+  // Convert the set of actions to RL-Glue format
   rlg_vector2action(myAction, actions);
   
-  //profiler.stamp("agent_step 3");
-
+  // Return the action data
   return myAction;
 }
 
+/* 
+ * Called on the last (terminal) step to indicate the terminal 
+ * reward that received from the last chosen action.  
+ */  
 void agent_end(Reward r)
 {
   DPR << "RLG> Starting agent_end" << endl;
@@ -157,8 +135,7 @@ Message agent_message(const Message msg)
 
 void agent_freeze(){
   DPR << "RLG> Starting agent_freeze" << endl;
-  
-  /*sets the agent to freeze mode*/
-  //freeze = 1;
+
+  // unimplemented
 }
 

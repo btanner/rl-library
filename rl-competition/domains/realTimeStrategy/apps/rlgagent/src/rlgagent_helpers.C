@@ -104,6 +104,8 @@ bool on_map(Worker * workerPtr, MiniGameParameters & parms)
  * It might be better if there was an AI object which kept 
  * state variables as members and had helper functions encapsulated
  * in the class ... 
+ * 
+ * This code should be replaced by clever RL techniques! 
  */
 void get_actions(vector<int> & vector, 
                  MiniGameState & state, 

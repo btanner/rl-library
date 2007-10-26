@@ -22,17 +22,21 @@
 
 using namespace std;
 
+// Set to true for DPR messages to print. 
 static bool debug = false;
 
+// GUI vars. To enable SDL GUI, set use_gui to true 
+// *and* ENABLE_GUI=1 in Makefile
+static SDL_GUI<MiniGameState> gui;
+static bool use_gui = false; 
+static std::map<std::string, SDL_GUI<MiniGameState>::Marker> markers;
+
+// State variables
 static MiniGameState * statePtr;
 static MiniGameParameters * parms;
 static Player * opponent; 
 boost::array<std::string, MiniGameState::PLAYER_NUM> views;
-static SDL_GUI<MiniGameState> gui;
-static bool use_gui = false; 
 static int gui_delay = 25;
-static std::map<std::string, SDL_GUI<MiniGameState>::Marker> markers;
-
 static int time_step;
 static bool inited = false; 
 static string task_spec;
@@ -40,8 +44,8 @@ static char * task_spec_cstr = NULL;
 static char * msg_response = NULL; 
 static Observation obs; 
 static Reward_observation rewobs;
-//static MiniGameState* viewStatePtr; 
 
+// Only sometimes used for testing timing
 static Profiler profiler;  
 
 void timing_start()
@@ -82,8 +86,6 @@ static void init()
   rewobs.r = 0;
 
   statePtr = new MiniGameState; 
-  //opponent = new RandomPlayer(0);
-  //opponent = new TestPlayer(0);
   opponent = new RLComp08Bot1(0); 
   parms = new MiniGameParameters;
   
@@ -94,35 +96,11 @@ static void init()
   parms->serialize(os); 
   task_spec = os.str(); 
   
-  // append mineral patch coords
-  /*
-  ostringstream os2;
-  os2 << ",mps=";
-  FORALL(statePtr->all_objs, iter)
-  {
-    GameObj<MiniGameState> * objPtr = (*iter);
-    if (objPtr->get_type() == "mineral_patch")    
-      os2 << objPtr->x << "-" << objPtr->y << "-";     
-  }
-  
-  string mps = os2.str();
-  mps = mps.substr(0, mps.length()-1);
-  
-  task_spec = task_spec + mps;  
-  */
-  
   int len = task_spec.length()+1;
   
   task_spec_cstr = (char *)malloc(len*sizeof(char));
   memset(task_spec_cstr, 0, len); 
   strcpy(task_spec_cstr, task_spec.c_str());  
-  
-  //timing_start();
-  
-  //profiler.disable();
-  //profiler.start();
-  
-  //viewStatePtr = NULL;
   
   inited = true;
 }
@@ -150,7 +128,7 @@ void uninit()
   inited = false;   
 }
 
-/* RL-Glue Interface */
+/* RL-Glue Interface functions */
 
 /** 
  * Creates the necessary data structures. 
@@ -199,54 +177,42 @@ Observation env_start()
   return obs;
 }
 
+/* 
+ * Send observation after execution action. 
+ */ 
 Reward_observation env_step(Action a)
 {
   time_step++;
   
-  //string first = "es 0 ts=";
-  //first = first + to_string(time_step);
-  //profiler.stamp(first);
-  
   DPR << endl << "### Starting time step " << time_step << endl;   
   DPR << "RLG> Starting env_step" << endl;
   
-  //if (time_step == 10000) { 
-  //  timing_end();
-  //  exit(-1);
-  //}
-  
   boost::array<std::string, MiniGameState::PLAYER_NUM> actions;
 
-  // get the opponent's actions
+  // get the opponent's (bot's) actions
   opponent->set_state(statePtr);
   opponent->set_parms(parms); 
   actions[0] = opponent->receive_actions(views[0]);
 
-  //profiler.stamp("env_step 1");  
-  
-  // convert the RL to ortslite actions
-  //actions[1] = rlg_convert_actions(a);
+  // convert the actions to RL-Glue format
   actions[1] = rlg_action2str(a); 
 
-  //profiler.stamp("env_step 2");    
-  
   DPR << "opp actions = " << actions[0] << endl; 
   DPR << "rlagent actions = " << actions[1] << endl; 
-  
+
+  // simulate a time step. all game mechanics happen in this call
+  // views is populated with the strings that correspond to the view of the players
   statePtr->simulation_step(actions, views);
 
-  //profiler.stamp("env_step 3");      
-  
+  // if using the gui, update the display now
   if (use_gui)
   {
     gui.event();
     gui.display();
-    //gui.delay(125);
     gui.delay(gui_delay);
   }
 
-  //profiler.stamp("env_step 4");        
-  
+  // check if the game is ended.   
   int gameVal = statePtr->check_win();
   if (gameVal >= 0 || time_step >= MAX_STEPS) {
     // Game is done! 
@@ -276,34 +242,15 @@ Reward_observation env_step(Action a)
   }
   
   // The RL agent will always be player 1. The opponent is player 0.  
-  //string statestr = statePtr->srv_encode_view(1);
   string statestr = views[1]; 
   DPR << "statestr is "; 
   if (debug) prettyPrintView(views[1]);
 
-  //profiler.stamp("env_step 5");          
-  
-  // convert the string to a char array
-  //rlg_convert_view(rewobs.o, statestr);
-  //MiniGameState* viewStatePtr = new MiniGameState;
-
-  //profiler.stamp("env_step 6");          
-  
-  //statePtr->decode_view(1, views[1]);
-  
-  //profiler.stamp("env_step 7");          
-  
-  //rlg_view2obs(rewobs.o, *viewStatePtr);
-  //rlg_view2obs(rewobs.o, views[1], 1);
+  // convert the the RL agent's view to RL-Glue format  
   int total = statePtr->encode_view_rlg(1, rewobs.o.intArray, RLG_OBJ_ATTRS);
   rewobs.o.numInts = total;
 
-  //profiler.stamp("env_step 8");          
-  
-  //delete viewStatePtr;
-
-  //profiler.stamp("env_step 9");            
-  
+  // send back the observation
   return rewobs;
 }
 
@@ -348,6 +295,9 @@ Random_seed_key env_get_random_seed()
   return theKey;
 }
 
+/*
+ * Responds to message sent from the RL-Viz app. 
+ */
 Message env_message(const Message inMessage) {
   DPR << "received message " << inMessage << endl;
 
@@ -375,8 +325,6 @@ Message env_message(const Message inMessage) {
     string tmpts = task_spec;
     boost::replace_all(tmpts, "=", "$");
     
-    // task_spec_cstr
-    //boost::replace_all(tmpts, " ", "_");
     string resp = "TO=0 FROM=3 CMD=0 VALTYPE=1 VALS=";    
     resp.append(tmpts);
     

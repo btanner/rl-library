@@ -27,6 +27,12 @@ To make the RL-Glue C++ agent:
 
   make rlgagent
 
+These will build the binaries in the default mode (MODE=dbg) which
+compiles with debug symbol information and no optimization. You may
+prefer to compile with MODE=opt to produce faster, optimized code
+without debug symbols. Please see the Makefile for more information
+on how to do this. 
+
 To make the Java agent, please see
 rl-competition/agents/realTimeStrategyAgentJava/README
 
