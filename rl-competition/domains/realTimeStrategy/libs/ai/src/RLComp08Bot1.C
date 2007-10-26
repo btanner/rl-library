@@ -229,6 +229,21 @@ void RLComp08Bot1::check_mp_gone()
   }
 }
 
+void RLComp08Bot1::bounds_fix(int * x, int * y)
+{
+  if (*x < 0) 
+    *x = 0;
+  else if (*x >= parmsPtr->width)
+    *x = parmsPtr->width-1;
+  
+  if (*y < 0) 
+    *y = 0;
+  else if (*y >= parmsPtr->height)
+    *y = parmsPtr->height-1; 
+}
+
+
+
 void RLComp08Bot1::set_gather(std::ostringstream & actstream, MiniGameState& state, Worker* worker)
 {
   pair<int, int> mploc;
@@ -281,13 +296,27 @@ void RLComp08Bot1::set_onguard(std::ostringstream & actstream, MiniGameState& st
       case 9: gx = -2; gy = -2; break;    // scout
     }
     
-    post.first = gx;
-    post.second = gy; 
-    guardposts[objId] = post; 
+    if (gx < 0 || gy < 0)
+    {
+      post.first = gx;
+      post.second = gy; 
+      guardposts[objId] = post; 
     
-    next_guard_post = (next_guard_post + 1) % 10; 
+      next_guard_post = (next_guard_post + 1) % 10;
+    }
+    else
+    { 
+      bounds_fix(&gx,&gy);
     
-    ADD_ACTION(actstream, compose_move_action(objId, gx, gy, marine->max_speed));
+      post.first = gx;
+      post.second = gy; 
+      guardposts[objId] = post; 
+    
+      next_guard_post = (next_guard_post + 1) % 10;
+      
+      if (gx >= 0 && gy >= 0)    
+        ADD_ACTION(actstream, compose_move_action(objId, gx, gy, marine->max_speed));
+    }
   }
   else if (marine->x == post.first && marine->y == post.second)
     ADD_ACTION(actstream, compose_action(objId, "stop"));
@@ -311,9 +340,15 @@ void RLComp08Bot1::set_onguard(std::ostringstream & actstream, MiniGameState& st
       int y = rand() % 11;
       
       int dx = parmsPtr->width/10;
-      int dy = parmsPtr->height/10;      
+      int dy = parmsPtr->height/10;   
       
-      ADD_ACTION(actstream, compose_move_action(objId, x*dx, y*dy, marine->max_speed));
+      int new_x = x*dx; 
+      int new_y = y*dy;
+      
+      bounds_fix(&new_x, &new_y);
+      //cout << "Adding " << new_x << ", " << new_y << endl;
+      
+      ADD_ACTION(actstream, compose_move_action(objId, new_x, new_y, marine->max_speed));
     }
   }
 }
@@ -475,7 +510,12 @@ void RLComp08Bot1::phase3(ostringstream & actstream, MiniGameState& state)
       int dx = parmsPtr->width/10;
       int dy = parmsPtr->height/10;      
       
-      ADD_ACTION(actstream, compose_move_action(objId, x*dx, y*dy, objPtr->max_speed));
+      int new_x = x*dx;
+      int new_y = y*dy; 
+      
+      bounds_fix(&new_x, &new_y);
+      
+      ADD_ACTION(actstream, compose_move_action(objId, new_x, new_y, objPtr->max_speed));
     }
   }
   

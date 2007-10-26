@@ -24,7 +24,7 @@ void Marine::execute()
 
       string r = move_action(is);
       if (!r.empty()) 
-        REM("execute marine action move: " << r << ", got: " << action);
+        REM("execute marine action move: " << r << ", got: " << action << ", owner = " << owner);
       
     } else if (op == "stop") {
 

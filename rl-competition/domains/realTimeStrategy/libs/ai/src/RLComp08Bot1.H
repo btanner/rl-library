@@ -74,6 +74,7 @@ class RLComp08Bot1 : public Player
   void set_onguard(std::ostringstream & actstream, MiniGameState& state, Marine* marine);
   
   void preprocess(); 
+  void bounds_fix(int * x, int * y); 
   void phase1(std::ostringstream & actstream, MiniGameState& state); 
   void phase2(std::ostringstream & actstream, MiniGameState& state); 
   void phase3(std::ostringstream & actstream, MiniGameState& state); 

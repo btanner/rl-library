@@ -31,7 +31,7 @@ void Worker::execute()
 
       string r = move_action(is);
       if (!r.empty()) 
-        REM("execute worker action move: " << r << ", got: " << action);
+        REM("execute worker action move: " << r << ", got: " << action << ", owner = " << owner);
       goto other_actions;
 
     } else if (op == "stop") {
