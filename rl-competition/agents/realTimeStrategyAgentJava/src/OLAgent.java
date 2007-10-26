@@ -41,24 +41,15 @@ public class OLAgent implements Agent
   {
   }
 
+  // This method is only called once per experiment. 
   public void agent_init(final String taskSpec)
   {
-    // only called once per exp. 
     parms = new Parameters();
-
-    //System.out.println("RLG> Received task spec: " + taskSpec);
-
-    /* 
-    int indexOfMPs = taskSpec.indexOf("mps=");
-    String mpstr = taskSpec.substring(indexOfMPs+4); 
-    String taskSpec2 = taskSpec.substring(0, indexOfMPs-1); 
-    */
-
-    //System.out.println("parsing task spec...");
     parms.parseTaskSpec(taskSpec);
-    
   }
 
+  // This method is called upon the start of a new epsiode
+  // The agent must return the first action taken. 
   public Action agent_start(Observation o)
   {
     time = 0;
@@ -67,7 +58,6 @@ public class OLAgent implements Agent
     have_base = false;
     freeze = false; 
 
-    //System.out.println("starting gui ...");
     state = new State(parms);
 
     //gui = new GUI(parms, state);
@@ -77,9 +67,6 @@ public class OLAgent implements Agent
 
     time++;
     
-    //System.out.println("RLG> agent_start. Received observation. ");
-    //System.out.println("integer array is " + Helpers.intArrayToString(o.intArray));
-    
     state.applyObservation(o);
     if (gui != null) gui.repaint();
     
@@ -88,13 +75,13 @@ public class OLAgent implements Agent
     return a;
   }
 
+  // This method is called with the reward and observation action 
+  // the previous action was taken. The action chosen at the current
+  // step is returned. 
   public Action agent_step(double r, Observation o)
   {
     time++;
     
-    //System.out.println("RLG> agent_step. Received observation. ");
-    //System.out.println("integer array is " + Helpers.intArrayToString(o.intArray));
-
     state.reset();
     
     state.applyObservation(o);    
@@ -104,11 +91,14 @@ public class OLAgent implements Agent
 
     return a;
   }
-  
+ 
+  // Called after the last step of episode, indicating the terminal reward
   public void agent_end(double r)
   {
   }
   
+  // Called once per experiment. 
+  // No need to free memory.. oh, the benefits of using Java :) 
   public void agent_cleanup() 
   {
   }
@@ -127,6 +117,8 @@ public class OLAgent implements Agent
   {
     // here is where all the magic happens. 
     // All state information is in the 'state' and 'parms' fields
+    //
+    // The code below should be replaced by clever RL techniques!
     
     ArrayList<Integer> actionList = new ArrayList<Integer>();
 
