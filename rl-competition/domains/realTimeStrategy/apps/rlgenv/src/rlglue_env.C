@@ -37,6 +37,7 @@ static int time_step;
 static bool inited = false; 
 static string task_spec;
 static char * task_spec_cstr = NULL; 
+static char * msg_response = NULL; 
 static Observation obs; 
 static Reward_observation rewobs;
 //static MiniGameState* viewStatePtr; 
@@ -318,6 +319,9 @@ void env_cleanup()
   if (rewobs.o.doubleArray != NULL) 
   { free(rewobs.o.doubleArray); rewobs.o.doubleArray = NULL; } 
     
+  if (msg_response != NULL)
+    free(msg_response);
+  
 }
 
 void env_set_state(State_key sk)
@@ -346,18 +350,21 @@ Random_seed_key env_get_random_seed()
 
 Message env_message(const Message inMessage) {
   DPR << "received message " << inMessage << endl;
+
+  if (msg_response == NULL) 
+    msg_response = (char*)malloc(1000*sizeof(char));  
   
   if (strcmp(inMessage, "TO=3 FROM=0 CMD=4 VALTYPE=3 VALS=NULL") == 0)
-  {
-    char * resp = "TO=0 FROM=3 CMD=0 VALTYPE=0 VALS=1_1"; 
-    DPR << "responding: " << resp << endl; 
-    return resp; 
+  {    
+    strcpy(msg_response, "TO=0 FROM=3 CMD=0 VALTYPE=0 VALS=1_1"); 
+    DPR << "responding: " << msg_response << endl; 
+    return msg_response; 
   }
   else if (strcmp(inMessage, "TO=3 FROM=0 CMD=6 VALTYPE=3 VALS=NULL") == 0)
   {
-    char * resp = "TO=0 FROM=3 CMD=0 VALTYPE=0 VALS=visualizers.RealTimeStrategyVisualizer.RealTimeStrategyVisualizer";
-    DPR << "responding: " << resp << endl;
-    return resp;
+    strcpy(msg_response, "TO=0 FROM=3 CMD=0 VALTYPE=0 VALS=visualizers.RealTimeStrategyVisualizer.RealTimeStrategyVisualizer");
+    DPR << "responding: " << msg_response << endl;
+    return msg_response;
   }
   else if (strcmp(inMessage, "TO=3 FROM=0 CMD=3 VALTYPE=1 VALS=GetRTSSpec") == 0)
   {
@@ -375,7 +382,10 @@ Message env_message(const Message inMessage) {
     
     DPR << "responding: " << resp << endl; 
     
-    return (char*)resp.c_str();
+    msg_response = (char*)realloc(msg_response, (resp.length()+10)*sizeof(char)); 
+    strcpy(msg_response, resp.c_str());
+    
+    return msg_response;
   }
   
   return "message not handled. "; 
