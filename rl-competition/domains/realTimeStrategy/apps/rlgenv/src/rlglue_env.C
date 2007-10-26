@@ -28,7 +28,8 @@ static bool debug = false;
 // GUI vars. To enable SDL GUI, set use_gui to true 
 // *and* ENABLE_GUI=1 in Makefile
 static SDL_GUI<MiniGameState> gui;
-static bool use_gui = false; 
+static bool use_gui = false;
+static int gui_delay = 25;
 static std::map<std::string, SDL_GUI<MiniGameState>::Marker> markers;
 
 // State variables
@@ -36,7 +37,6 @@ static MiniGameState * statePtr;
 static MiniGameParameters * parms;
 static Player * opponent; 
 boost::array<std::string, MiniGameState::PLAYER_NUM> views;
-static int gui_delay = 25;
 static int time_step;
 static bool inited = false; 
 static string task_spec;
