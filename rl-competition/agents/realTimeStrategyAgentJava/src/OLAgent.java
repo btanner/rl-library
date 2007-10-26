@@ -25,7 +25,6 @@ public class OLAgent implements Agent
   boolean freeze = false;
   Parameters parms;
   State state;
-  GUI gui;
   int playerNum = 1; // always 1 for RL player
   
   // Memory variables
@@ -60,15 +59,11 @@ public class OLAgent implements Agent
 
     state = new State(parms);
 
-    //gui = new GUI(parms, state);
-    //gui.setVisible(true);
-    gui = null;        // now done via the visualizer
 
 
     time++;
     
     state.applyObservation(o);
-    if (gui != null) gui.repaint();
     
     Action a = getAction();
 
@@ -85,7 +80,7 @@ public class OLAgent implements Agent
     state.reset();
     
     state.applyObservation(o);    
-    if (gui != null) gui.repaint();
+
     
     Action a = getAction();
 
