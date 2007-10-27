@@ -2,7 +2,7 @@
 
 
 #Variables
-basePath=./
+basePath=.
 systemPath=$basePath/system
 libPath=$systemPath/libraries
 
@@ -18,6 +18,14 @@ demoPath=trainers/guiTrainerJava
 
 RLVIZ_LIB_PATH=$PWD/$libPath
 
+#
+# First do a quick check to see if the RL_glue exe exists.  If it does not, they probably have not done a "make all" yet
+#
+if [ ! -e "$glueExe" ]       # Check if file exists.
+  then
+    echo "RL_glue not found at $glueExe.  Did you remember to \"make all\"?"; echo
+    exit 1                $Quit
+   fi
 #
 #Start the RL_glue program  in the background and get it's process id
 #

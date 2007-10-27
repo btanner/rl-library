@@ -7,6 +7,15 @@ Thank you for downloading the training distribution!
 
 
 --------------------------
+HYPER QUICK START
+--------------------------
+If you just want to see something happen without learning anything about what's in this package, do:
+$> make all
+$> bash runDemo.bash
+
+This will run the graphical trainer for Tetris, Helicopter Hovering, and Mountain Car with a random agent.  Please read the rest of this document to learn what that means and what other things you can do!
+
+--------------------------
 INSTALLATION INSTRUCTIONS
 --------------------------
 To install the core RL-Glue code, as well as all of the sample agents, environments, and trainers, type:
