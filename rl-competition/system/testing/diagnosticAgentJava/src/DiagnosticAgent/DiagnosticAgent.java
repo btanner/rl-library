@@ -1,4 +1,4 @@
-/* Random Agent that works in all domains
+/* Diagnostic Agent that works in all domains and prints out messages for every method call
 * Copyright (C) 2007, Brian Tanner brian@tannerpages.com (http://brian.tannerpages.com/)
 * 
 * This program is free software; you can redistribute it and/or
@@ -14,7 +14,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. */
-package RandomAgent;
+package DiagnosticAgent;
 
 import java.util.Random;
 
@@ -24,7 +24,7 @@ import rlglue.agent.Agent;
 import rlglue.types.Action;
 import rlglue.types.Observation;
 
-public class RandomAgent implements Agent {
+public class DiagnosticAgent implements Agent {
 	private Action action;
 	private int numInts =1;
 	private int numDoubles =0;
@@ -34,36 +34,42 @@ public class RandomAgent implements Agent {
 	
 
         
-        public RandomAgent(){
-        }
+   public DiagnosticAgent(){
+		System.out.println("JAVA::DiagnosticAgent\tDiagnosticAgent()");
+   }
 
 	public void agent_cleanup() {
+		System.out.println("JAVA::DiagnosticAgent\t\tagent_cleanup()");
 	}
 
 	public void agent_end(double arg0) {
-
+		System.out.println("JAVA::DiagnosticAgent\t\t\tagent_end(), reward: "+arg0);
 	}
 
 	public void agent_freeze() {
-
+		System.out.println("JAVA::DiagnosticAgent\t\t\t\tagent_freeze()");
 	}
 
 	public void agent_init(String taskSpec) {
+		System.out.println("JAVA::DiagnosticAgent\t\tagent_init(), taskspec: "+taskSpec);
             TSO = new TaskSpecObject(taskSpec);
 
             action = new Action(TSO.num_discrete_action_dims,TSO.num_continuous_action_dims);	
 	}
 
 	public String agent_message(String arg0) {
-            return null;
+		System.out.println("JAVA::DiagnosticAgent\t\tagent_message(), message: "+arg0);
+        return null;
 	}
 
 	public Action agent_start(Observation o) {
+		System.out.println("JAVA::DiagnosticAgent\t\t\tagent_start()");
             randomify(action);
             return action;
 	}
 
 	public Action agent_step(double arg0, Observation o) {
+		System.out.println("JAVA::DiagnosticAgent\t\t\t\tagent_step(), reward: "+arg0);
             randomify(action);
             return action;
 	}
