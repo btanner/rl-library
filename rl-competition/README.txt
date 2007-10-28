@@ -27,6 +27,9 @@ If you just want to see something happen without learning anything about what's 
 $> make all
 $> bash runDemo.bash
 
+***
+* Note: This is a graphical demo and will only work if you can display a graphical Java window!
+***
 This will run the graphical trainer for Tetris, Helicopter Hovering, and Mountain Car with a random agent.  Please read the rest of this document to learn what that means and what other things you can do!
 
 --------------------------
