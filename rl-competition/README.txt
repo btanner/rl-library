@@ -5,9 +5,23 @@ http://rl-competition.org/
 
 Thank you for downloading the training distribution!
 
+==========
+Contents:
+
+1: Hyper Quick Start
+2: Installation Instructions
+3: Information about what is in this package
+4: Running your first graphical experiment
+5: Agents
+6: Trainers
+7: Running your first console experiment
+8: Where to go for more info
+9: Credits
+==========
+
 
 --------------------------
-HYPER QUICK START
+1 :: HYPER QUICK START
 --------------------------
 If you just want to see something happen without learning anything about what's in this package, do:
 $> make all
@@ -16,7 +30,7 @@ $> bash runDemo.bash
 This will run the graphical trainer for Tetris, Helicopter Hovering, and Mountain Car with a random agent.  Please read the rest of this document to learn what that means and what other things you can do!
 
 --------------------------
-INSTALLATION INSTRUCTIONS
+2 :: INSTALLATION INSTRUCTIONS
 --------------------------
 To install the core RL-Glue code, as well as all of the sample agents, environments, and trainers, type:
 
@@ -25,7 +39,7 @@ $> make all
 Several of the competition domains (Mountain Car, Tetris, Helicopter Control) are implemented in Java and are already packaged and ready to use.  Other domains like real time strategy and keep-away require additional installation.  Please see the /domains/ directory for more information on this domains.
 
 --------------------------
-THIS PACKAGE
+3 :: THIS PACKAGE
 --------------------------
 The purpose of this package is to provide the software foundation for the reinforcement learning competition.  This package contains all of resources required to create agents and experiments and to test them on the testing versions of the competition problems.
 
@@ -39,7 +53,7 @@ We have taken care of RL_glue and the environments, so the important components 
 
 
 ----------------------------------------------------
-RUNNING YOUR FIRST GRAPHICAL EXPERIMENT
+4 :: RUNNING YOUR FIRST GRAPHICAL EXPERIMENT
 ----------------------------------------------------
 Running your first experiment is as simple as choosing a trainer and an agent and running the run.bash script in each of their directories.  Details about trainers and agents are explained later in this file.
 
@@ -59,7 +73,7 @@ Since you are running the random agent, the experiment is probably not going ver
 
 
 --------------------------
-AGENTS
+5 :: AGENTS
 --------------------------
 Agents are located in the /agents directory.
 
@@ -92,7 +106,7 @@ To rebuild an agent, in that agent's directory type:
 $>make clean;make
 
 ----------------------------------------------------
-TRAINERS (Mountain Car, Tetris, and Helcopter Control)
+6 :: TRAINERS (Mountain Car, Tetris, and Helcopter Control)
 ----------------------------------------------------
 Trainers are programs that put an agent into an environment and control the experiment.  Sample trainers are located in the /trainers directory.
 
@@ -127,7 +141,7 @@ The source of this trainer is not provided, it is provided on an AS-IS basis.
 
 
 ----------------------------------------------------
-RUNNING YOUR FIRST CONSOLE EXPERIMENT
+7 :: RUNNING YOUR FIRST CONSOLE EXPERIMENT
 ----------------------------------------------------
 Running a console experiment is very similar to running a graphical experiment, you need to choose a trainer and an agent.  By default, the trainers are set to run 10 episodes of mountain car.  In order to run Tetris or Helicopter, go into the src/ directory and uncomment the appropriate lines, and then type "make" back in the trainer's home directory.
 
@@ -145,13 +159,13 @@ $>bash run.bash
 You should see an experiment unfold as the sample mountain-car agent learns.
 
 ----------------------------------------------------
-Making your first agent
+8 :: Where to go for more info
 ----------------------------------------------------
-TODO: Fill this in
-
+To get more information about how to use this package, how to create custom experiments, new agents, and trouble shooting, please visit:
+http://rl-competition.org 
 
 ----------------------------------------------------
-CREDITS
+9 :: CREDITS
 ----------------------------------------------------
 Brian Tanner
 Adam White
