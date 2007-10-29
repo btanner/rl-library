@@ -1,7 +1,7 @@
 #!/bin/bash
 cd ../..
 echo "Making..."
-make
+make all
 
 echo "Make complete... moving on to testing!"
 
