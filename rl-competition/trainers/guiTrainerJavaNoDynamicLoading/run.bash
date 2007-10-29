@@ -24,7 +24,7 @@ echo "Starting up RL-glue - PID=$gluePID"
 #Start the visualizer program
 #
 macAboutNameCommand=-Dcom.apple.mrj.application.apple.menu.about.name=RLVizApp
-java -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH macAboutNameCommand -Xmx128M -cp $compLib:$guiLib:./bin/rlViz.jar btViz.NoDynamicLoadingGraphicalDriver
+java -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $macAboutNameCommand -Xmx128M -cp $compLib:$guiLib:./bin/rlViz.jar btViz.NoDynamicLoadingGraphicalDriver
 
 echo "-- Visualizer is finished"
 
