@@ -1,6 +1,6 @@
-==========================================
+===========================================
 RL-Competition 2008 Training Distribution
-==========================================
+===========================================
 http://rl-competition.org/
 
 Thank you for downloading the training distribution!
