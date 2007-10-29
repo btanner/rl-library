@@ -44,7 +44,7 @@ Several of the competition domains (Mountain Car, Tetris, Helicopter Control) ar
 --------------------------
 3 :: THIS PACKAGE
 --------------------------
-The purpose of this package is to provide the software foundation for the reinforcement learning competition.  This package contains all of resources required to create agents and experiments and to test them on the testing versions of the competition problems.
+The purpose of this package is to provide the software foundation for the reinforcement learning competition.  This package contains all of the resources required to create agents and experiments and to test them on the testing versions of the competition problems.
 
 Every experiment that is run using this software consists of four components:
 	- An experiment program (a trainer)
@@ -52,7 +52,7 @@ Every experiment that is run using this software consists of four components:
 	- An environment program
 	- The RL_glue communication software
 
-We have taken care of RL_glue and the environments, so the important components for you are agents and trainers.
+We have taken care of RL_glue and the environments, so the important components for you are the agents and the trainers.
 
 
 ----------------------------------------------------
@@ -115,14 +115,14 @@ Trainers are programs that put an agent into an environment and control the expe
 
 There are two types of trainers: console trainers, and graphical trainers.
 
-Console trainers are well suited to running proper experiment, trying parameters, etc.  The graphical trainer gives a visual representation of the problem and can be very handing for debugging and visually evaluating your agent's performance.
+Console trainers are well suited to running a proper experiment, trying parameters, etc.  The graphical trainer gives a visual representation of the problem and can be very handy for debugging and visually evaluating your agent's performance.
 
 We have provided several sample trainers, implemented in C/C++, Python, and Java.  They are all identical in function, and are located in:
 /trainers/consoleTrainerJava
 /trainers/consoleTrainerCPP
 /trainers/consoleTrainerPython
 
-These console trainers will allow run any of the Java domains, Mountain Car, Tetris, or Helicopter.  Check the source code in /trainers/<someTrainer>/src/ for an idea how to select which problem the trainer will select.  Special training programs are required for real time strategy and keep-away.
+These console trainers will run any of the Java domains: Mountain Car, Tetris, or Helicopter.  Check the source code in /trainers/<someTrainer>/src/ for an idea how to select which problem the trainer will select.  Special training programs are required for real time strategy and keep-away.
 
 To run any trainer, go into its directory and type:
 $>bash run.bash
@@ -139,7 +139,7 @@ The graphical trainer that will run for any of the Java domains is in:
 To run this trainer, go into its directory and type:
 $>bash run.bash
 
-The source of this trainer is not provided, it is provided on an AS-IS basis.
+The source code for the GUI trainer is not provided.  This trainer is provided on an AS-IS basis.
 
 
 
