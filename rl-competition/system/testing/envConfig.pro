@@ -4,11 +4,16 @@
 -renamesourcefileattribute SourceFile
 -keepattributes Signature, *Annotation*
 
-
+-dontshrink
 -dontoptimize
 
 -keep public class * {
     public <init>(***);
+    public static *;
+}
+
+-keepclassmembers class *{
+    public static *;
 }
 
 -keepnames class * extends rlVizLib.Environments.EnvironmentBase{
