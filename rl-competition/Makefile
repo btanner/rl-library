@@ -1,4 +1,5 @@
 BIN_PATH = ./system
+BIN2_PATH = ./system/bin
 RL_GLUE_PATH = ./system/RL-Glue/RL-Glue
 BUILD_PATH = ./system/build
 
@@ -21,8 +22,11 @@ all: $(BIN_PATH)/RL_glue
 	cd ./trainers/consoleRealTimeStrategyTrainerJava/ && make
 
 clean:
+	
 	-rm $(BUILD_PATH)/*
 	-rm $(BIN_PATH)/RL_glue
+	-rm $(BIN2_PATH)/rlgenv
+	-rm $(BIN2_PATH)/ol
 	cd ./agents/randomAgentJava/ && make clean
 	cd ./agents/tetrisAgentJava/ && make clean
 	cd ./agents/mountainCarAgentCPP/ && make clean
