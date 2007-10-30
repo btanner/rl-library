@@ -19,36 +19,22 @@ import rlglue.RLGlue as RLGlue
 from consoleTrainerHelper import *
 
 def main():
+	whichTrainingMDP = 0
 	# Basically you want to do: (num is the problem number)
 	# 	loadTetris(num) OR
 	# 	loadMountainCar(num) OR
 	# 	loadHelicopter()
 	#
+	loadMountainCar(whichTrainingMDP)
+
 	# and then,
-	#		runExperiment()
-	# runMountainCarExperiment does this for each of the 9 versions of mountain car
-	runMountainCarExperiment()
-
-
-# A sample trainer to run through the different mountain car training values
-def runMountainCarExperiment():
-	#for paramSet in range(10):
-	loadMountainCar(0)
-	runExperiment()
-
-# Run a certain number of episodes and return the total number of steps
-def runEpisodes(episodeCount, maxEpisodeLength):
-	totalSteps = 0
-	for i in range(episodeCount):
-		RLGlue.RL_episode(maxEpisodeLength)
-		totalSteps += RLGlue.RL_num_steps()
-	return totalSteps
-
-# Runs 10 episodes and reports the average number of steps for each
-def runExperiment():
+	#		just run the experiment:
 	RLGlue.RL_init()
 	episodesToRun = 10
-	totalSteps = runEpisodes(episodesToRun,1000)
+	totalSteps = 0
+	for i in range(episodesToRun):
+		RLGlue.RL_episode(1000)
+		totalSteps += RLGlue.RL_num_steps()
 	averageSteps = float(totalSteps)/float(episodesToRun)
 	print "Average steps per episode: %.2f\n" % (averageSteps)
 	RLGlue.RL_cleanup()

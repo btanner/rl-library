@@ -69,13 +69,17 @@ public class RandomAgent implements Agent {
 	}
 
 	private void randomify(Action action){
-            for(int i=0;i<TSO.num_discrete_action_dims;i++){
-                action.intArray[i]=random.nextInt(((int)TSO.action_maxs[i]+1)-(int)TSO.action_mins[i]) + ((int)TSO.action_mins[i]);
-            }
-            for(int i=0;i<TSO.num_continuous_action_dims;i++){
-                action.doubleArray[i]=random.nextDouble()*(TSO.action_maxs[i] - TSO.action_mins[i]) + TSO.action_mins[i];
-            }
-       	}
+		int i_index = 0;
+		int d_index = 0;
+		for (int i=0; i<TSO.action_dim;i++) {
+			if (TSO.action_types[i] == 'i') {
+				action.intArray[i_index++]=random.nextInt(((int)TSO.action_maxs[i]+1)-(int)TSO.action_mins[i]) + ((int)TSO.action_mins[i]);
+			}
+			else {
+				action.doubleArray[d_index++]=random.nextDouble()*(TSO.action_maxs[i] - TSO.action_mins[i]) + TSO.action_mins[i];
+			}
+		}
+	}
 	
 
 

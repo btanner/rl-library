@@ -42,7 +42,7 @@ void agent_init(const Task_specification task_spec)
   action.numInts     =  tss.num_discrete_action_dims;
   action.intArray    = (int*)malloc(sizeof(int)*action.numInts);
   action.numDoubles  = tss.num_continuous_action_dims;
-  action.doubleArray = 0;
+  action.doubleArray = (double*)malloc(sizeof(double)*action.numDoubles);
 }
 
 Action agent_start(Observation o) {
@@ -77,10 +77,14 @@ double getValueForState(Observation theObservation) {
 
 void randomify(Action action){
 	int i;
-	for(i=0;i<tss.num_discrete_action_dims;i++){
-		action.intArray[i] = rand()%((int)tss.action_maxs[i]+1-(int)tss.action_mins[i]) + (int)tss.action_mins[i];
-	}
-	for(i=0;i<tss.num_continuous_action_dims;i++){
-		action.doubleArray[i] = drand48()*(tss.action_maxs[i]-tss.action_mins[i]) + tss.action_mins[i];
+	int i_index=0;
+	int d_index=0;
+	for (i=0;i<tss.action_dim;i++) {
+		if (tss.action_types[i] == 'i') {
+			action.intArray[i_index++] = rand()%((int)tss.action_maxs[i]+1-(int)tss.action_mins[i]) + (int)tss.action_mins[i];
+		}
+		else {
+			action.doubleArray[d_index++] = drand48()*(tss.action_maxs[i]-tss.action_mins[i]) + tss.action_mins[i];
+		}
 	}
 }
