@@ -10,7 +10,7 @@ RLVIZ_LIB_PATH=$PWD/$libPath
 compLib=$libPath/RLVizLib.jar
 
 glueExe=$systemPath/RL_glue
-rtsEXE=$basePath/domains/realTimeStrategy/bin/rlgenv
+rtsEXE=$systemPath/bin/rlgenv
 
 $glueExe &
 gluePID=$!

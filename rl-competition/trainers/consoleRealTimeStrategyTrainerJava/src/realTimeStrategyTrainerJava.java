@@ -13,7 +13,8 @@
 * 
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. */import rlglue.RLGlue;
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. */
+import rlglue.RLGlue;
 import java.io.IOException;
 
 public class realTimeStrategyTrainerJava
@@ -25,7 +26,7 @@ public class realTimeStrategyTrainerJava
 	protected static void run(int numEpisodes) throws IOException
 	{
 		//run for num_episode number of episodes and store the number of steps and return from each episode
-    
+    	System.out.println("Running: "+kNumEpisodes+" episodes (each one is a .)");
 		for(int x = 0; x < numEpisodes; ++x) {
 			RLGlue.RL_episode(0);
 			System.out.print(".");
@@ -42,25 +43,12 @@ public class realTimeStrategyTrainerJava
 		rlNumSteps = new int[realTimeStrategyTrainerJava.kNumEpisodes];
 		rlReturn = new double[realTimeStrategyTrainerJava.kNumEpisodes];
 
-		System.err.println("+ RL_agent_message: query_agent");
-		String agent_response = RLGlue.RL_agent_message("query_agent");
-		System.err.println("- RL_agent_message: " + agent_response);
-		
-		System.err.println("+ RL_env_message: query_env");
-		String env_response = RLGlue.RL_env_message("query_env");
-		System.err.println("- RL_env_message: " + env_response);
 
 		///basic main loop
 
 		for (int run = 0; run < 2; ++run)
 		{
 			RLGlue.RL_init();
-
-			String agentMessage = RLGlue.RL_agent_message("poke");
-			System.out.println(agentMessage);
-
-			String envMessage = RLGlue.RL_env_message("prod");
-			System.out.println(envMessage);
 
 			run(kNumEpisodes);
 			RLGlue.RL_cleanup();
