@@ -27,8 +27,7 @@
 
 APP_LIST := $(APP_LIST) $(APP)
 
-#Btanner change to build in the /system/bin directory
-APP_EXEC := ../../system/bin/$(APP)
+APP_EXEC := bin/$(APP)
 
 HERE := apps/$(APP_SDIRS)/src/
 
