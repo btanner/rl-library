@@ -16,6 +16,7 @@ all: $(BIN_PATH)/RL_glue
 	cd ./agents/tetrisAgentJava/ && make
 	cd ./agents/mountainCarAgentCPP/ && make
 	cd ./agents/realTimeStrategyAgentJava/ && make
+	cd ./agents/helicopterAgentCPP/ && make
 	cd ./trainers/consoleTrainerJava/ && make
 	cd ./trainers/consoleTrainerPython/ && make
 	cd ./trainers/consoleTrainerCPP/ && make
@@ -31,6 +32,7 @@ clean:
 	cd ./agents/tetrisAgentJava/ && make clean
 	cd ./agents/mountainCarAgentCPP/ && make clean
 	cd ./agents/realTimeStrategyAgentJava/ && make clean
+	cd ./agents/helicopterAgentCPP/ && make clean
 	cd ./trainers/consoleTrainerJava/ && make clean
 	cd ./trainers/consoleTrainerPython/ && make clean
 	cd ./trainers/consoleTrainerCPP/ && make clean
