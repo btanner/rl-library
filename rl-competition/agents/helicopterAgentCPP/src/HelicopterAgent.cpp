@@ -48,7 +48,6 @@ void agent_init(const Task_specification task_spec)
 
 Action agent_start(Observation o)
 {	
-	print_observation(o);
 	agent_policy(o, agent_data.action);
 	return (agent_data.action);
 }
@@ -56,7 +55,6 @@ Action agent_start(Observation o)
 
 Action agent_step(Reward r, Observation o)
 {
-	print_observation(o);
 	agent_policy(o, agent_data.action);
 	return (agent_data.action);	
 }
