@@ -13,16 +13,16 @@ RLVIZ_LIB_PATH=$PWD/$libPath
 compLib=$libPath/RLVizLib.jar
 
 glueExe=$systemPath/RL_glue
-rtsExe=$systemPath/bin/rlgenv
+rtsExe=$basePath/domains/realTimeStrategy/bin/rlgenv
 
 guiLib=$libPath/forms-1.1.0.jar
 
 #
 # First do a quick check to see if the RL_glue exe exists.  If it does not, they probably have not done a "make all" yet
 #
-if [ ! -e "$rtsEXE" ]       # Check if file exists.
+if [ ! -e "$rtsExe" ]       # Check if file exists.
   then
-    echo "rlgenv not found at $rtsEXE.  Did you remember to \"make rlgenv\" in domains/realTimeStrategy ?"; echo
+    echo "rlgenv not found at $rtsExe.  Did you remember to \"make rlgenv\" in domains/realTimeStrategy ?"; echo
     exit 1                $Quit
    fi
 
