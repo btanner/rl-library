@@ -42,11 +42,15 @@ executables are two components of the RL-Glue framework
 To run an experiment, you must do three things: 
  
   - Start the RLViz App
-    in trainers/guiTrainerJavaNoDynamicLoading, run ./run.bash
+    in trainers/guiTrainerRealTimeStrategy:
+$> bash run.bash
   
   - Connect the agent, either: 
-      (Java) in agents/realTimeStrategyAgentJava, run ./run.bash
-      (C++) in domains/realTimeStrategy, run bin/rlagent
+      (Java) in agents/realTimeStrategyAgentJava:
+$> bash run.bash
+      
+      (C++) in domains/realTimeStrategy: 
+$> ./bin/rlagent
 
   - Connect the environment
     in domains/realTimeStrategy, run bin/rlgenv

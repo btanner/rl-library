@@ -1,5 +1,5 @@
 
-AGENT = HelicopterAgent.cpp
+AGENT = weak_baseline_controlle.cpp
 AGENT_OBJECTS = $(basename $(AGENT)).o Glue_utilities.o
 
 AGENT_SRC_PATH = ./src
