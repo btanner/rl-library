@@ -8,7 +8,7 @@
 #include <time.h>
 #include "Glue_utilities.h"
 
-#include "HelicopterAgent.h"
+#include "weak_baseline_controller.h"
 
 struct agent_data_t
 {
