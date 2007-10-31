@@ -37,7 +37,7 @@ $glueExe &
 gluePID=$!
 echo "Starting up RL-glue - PID=$gluePID"
 
-$rtsEXE &
+$rtsExe &
 rtsPID=$!
 echo "Starting up real time strategy game - PID=$rtsPID"
 
