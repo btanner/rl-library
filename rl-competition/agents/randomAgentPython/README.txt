@@ -4,6 +4,7 @@ The random agent works with the following domains:
 - Helicopter
 - Tetris
 - Mountain Car
+- Sample Polyathlon
 
 To recompile just the random python agent:
 >> make clean
@@ -11,7 +12,7 @@ To recompile just the random python agent:
 
 in randomAgentPython directory.
 
-run.bash:
+>>run.bash:
 - Starts the randomAgentPython process
 
 You need to start a trainer separately.
