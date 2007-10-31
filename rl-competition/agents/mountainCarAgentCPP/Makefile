@@ -26,9 +26,6 @@ $(BIN_PATH)/RL_agent: $(addprefix $(BUILD_PATH)/, $(AGENT_OBJECTS))
 $(BUILD_PATH)/$(basename $(AGENT)).o: $(AGENT_SRC_PATH)/$(AGENT)
 	$(CC) -c $(CFLAGS) $^ -o $@
 
-$(BUILD_PATH)/$(basename $(AGENT)).o: $(AGENT_SRC_PATH)/$(AGENT)
-	$(CC) -c $(CFLAGS) $^ -o $@
-
 $(BUILD_PATH)/RLStruct_util.o: $(AGENT_SRC_PATH)/RLStruct_util.cpp
 	$(CC) -c $(CFLAGS) $^ -o $@
 
