@@ -18,7 +18,7 @@ all: $(BIN_PATH)/RL_glue
 	cd ./trainers/consoleTrainerJava/ && make
 	cd ./trainers/consoleTrainerPython/ && make
 	cd ./trainers/consoleTrainerCPP/ && make
-	cd ./trainers/consoleRealTimeStrategyTrainerJava/ && make
+	cd ./trainers/consoleTrainerRealTimeStrategyJava/ && make
 
 clean:
 	
@@ -31,4 +31,4 @@ clean:
 	cd ./trainers/consoleTrainerJava/ && make clean
 	cd ./trainers/consoleTrainerPython/ && make clean
 	cd ./trainers/consoleTrainerCPP/ && make clean
-	cd ./trainers/consoleRealTimeStrategyTrainerJava/ && make clean
+	cd ./trainers/consoleTrainerRealTimeStrategyJava/ && make clean
