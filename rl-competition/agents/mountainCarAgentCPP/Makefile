@@ -1,22 +1,32 @@
+AGENT = MountainCarAgent.cpp
+AGENT_OBJECTS = $(basename $(AGENT)).o Glue_utilities.o tiles.o RLStruct_util.o
 
-AGENT_OBJECTS = MountainCarAgent.o Glue_utilities.o RLStruct_util.o tiles.o
+AGENT_SRC_PATH = ./src
+BUILD_PATH = ./bin
+RL_GLUE_BASE = ../../system/RL-Glue
+RL_GLUE_PATH = $(RL_GLUE_BASE)/RL-Glue
+UTILS_PATH = $(RL_GLUE_BASE)/Utils
+BIN_PATH = ./bin
 
-AGENT_SRC_PATH = src
-BUILD_PATH = bin
-BIN_PATH = bin
-RL_GLUE_PATH = ../../system/RL-Glue/RL-Glue
-UTILS_PATH = ../../system/RL-Glue/Utils
-CC = g++
-CFLAGS = -I$(RL_GLUE_PATH) -I$(UTILS_PATH) -I$(AGENT_SRC_PATH) -Wall -g -O3
+CFLAGS = -I$(RL_GLUE_PATH) -I$(UTILS_PATH) -I$(AGENT_SRC_PATH)
 
-all: RL_agent
+ifeq ($(suffix $(AGENT)),.cpp)
+	CC = $(CXX)
+endif
+
+all: $(BIN_PATH)/RL_agent
 
 include $(RL_GLUE_PATH)/RL_glue.makefile
 
-RL_agent: $(addprefix $(BUILD_PATH)/,$(AGENT_OBJECTS)) $(BUILD_PATH)/RL_client_agent.o $(BUILD_PATH)/RL_network.o
-	$(CC) -o $(BIN_PATH)/RL_agent $^
+AGENT_OBJECTS += RL_client_agent.o RL_network.o
 
-$(BUILD_PATH)/MountainCarAgent.o: $(AGENT_SRC_PATH)/MountainCarAgent.cpp
+$(BIN_PATH)/RL_agent: $(addprefix $(BUILD_PATH)/, $(AGENT_OBJECTS))
+	$(CC) -o $(BIN_PATH)/RL_agent $^ -lm
+
+$(BUILD_PATH)/$(basename $(AGENT)).o: $(AGENT_SRC_PATH)/$(AGENT)
+	$(CC) -c $(CFLAGS) $^ -o $@
+
+$(BUILD_PATH)/$(basename $(AGENT)).o: $(AGENT_SRC_PATH)/$(AGENT)
 	$(CC) -c $(CFLAGS) $^ -o $@
 
 $(BUILD_PATH)/RLStruct_util.o: $(AGENT_SRC_PATH)/RLStruct_util.cpp
@@ -26,7 +36,8 @@ $(BUILD_PATH)/tiles.o: $(AGENT_SRC_PATH)/tiles.cpp
 	$(CC) -c $(CFLAGS) $^ -o $@
 
 clean:
-	rm -f $(BUILD_PATH)/*
+	rm -rf $(BIN_PATH)/RL_agent $(BUILD_PATH)/*
+
 
 
 
