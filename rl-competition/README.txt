@@ -32,7 +32,7 @@ $> bash runDemo.bash
 ***
 * Note: This is a graphical demo and will only work if you can display a graphical Java window!
 ***
-This will run the graphical trainer for Tetris, Helicopter Hovering, and Mountain Car with a random agent.  Please read the rest of this document to learn what that means and what other things you can do!
+This will run the graphical trainer for Tetris, Helicopter Hovering, Polyathlon and Mountain Car with a random agent.  Please read the rest of this document to learn what that means and what other things you can do!
 
 --------------------------
 2 :: INSTALLATION INSTRUCTIONS
@@ -41,7 +41,7 @@ To install the core RL-Glue code, as well as all of the sample agents, environme
 
 $> make all
 
-Several of the competition domains (Mountain Car, Tetris, Helicopter Control) are implemented in Java and are already packaged and ready to use.  Other domains like real time strategy and keep-away require additional installation.  Please see the /domains/ directory for more information on this domains.
+Several of the competition domains (Mountain Car, Tetris, Helicopter Control, Polyathlon) are implemented in Java and are already packaged and ready to use.  Other domains like real time strategy and keep-away require additional installation.  Please see the /domains/ directory for more information on this domains.
 
 --------------------------
 3 :: THIS PACKAGE
@@ -72,7 +72,7 @@ Terminal 2:
 $>cd agents/randomAgentJava
 $>bash run.bash
 
-This will bring up the rlVizApp visualization window.  Choose the problem you want to use (GeneralizedMountainCar, GeneralizedTetris, or AlteredHelicopter), press "Load Experiment", and press "Start".  Voila!  You can select the speed of the experiment using the slider bar, or proceed one time-step at a time by pressing "stop" and then "step" repeatedly.
+This will bring up the rlVizApp visualization window.  Choose the problem you want to use (GeneralizedMountainCar, GeneralizedTetris, GeneralizedHelicopter or Polyathlon), press "Load Experiment", and press "Start".  Voila!  You can select the speed of the experiment using the slider bar, or proceed one time-step at a time by pressing "stop" and then "step" repeatedly.
 
 Since you are running the random agent, the experiment is probably not going very well.  To see better results, try running one of the specialized sample agents and matching the environment appropriately.  Notice that if you mismatch the agents and environments (run the mountain car agent on Tetris), the experiment may crash.
 
@@ -89,10 +89,7 @@ There is at least one sample agent specifically created for each domain, these a
 /agents/tetrisAgentJava
 /agents/realTimeStrategyAgentJava
 /agents/realTimeStrategyAgentCPP
-
-TODO: add /agents/helicopterAgentCPP
-TODO: add a soccer agent
-TODO: add a python agent
+/agents/helicopterAgentCPP
 
 There is also one general purpose agent that can work on any problem except real time strategy:
 /agents/randomAgentJava
@@ -115,7 +112,7 @@ $>make clean;make
 *****
 
 ----------------------------------------------------
-6 :: TRAINERS (Mountain Car, Tetris, and Helcopter Control)
+6 :: TRAINERS (Mountain Car, Tetris, Helicopter Control, and Polyathlon)
 ----------------------------------------------------
 Trainers are programs that put an agent into an environment and control the experiment.  Sample trainers are located in the /trainers directory.
 
@@ -128,7 +125,7 @@ We have provided several sample trainers, implemented in C/C++, Python, and Java
 /trainers/consoleTrainerCPP
 /trainers/consoleTrainerPython
 
-These console trainers will run any of the Java domains: Mountain Car, Tetris, or Helicopter.  Check the source code in /trainers/<someTrainer>/src/ for an idea how to select which problem the trainer will select.  Special training programs are required for real time strategy and keep-away.
+These console trainers will run any of the Java domains: Mountain Car, Tetris, Helicopter, or Polyathlon.  Check the source code in /trainers/<someTrainer>/src/ for an idea how to select which problem the trainer will select.  Special training programs are required for real time strategy and keep-away.
 
 To run any trainer, go into its directory and type:
 $>bash run.bash
@@ -154,7 +151,7 @@ The source code for the GUI trainer is not provided.  This trainer is provided o
 ----------------------------------------------------
 7 :: RUNNING YOUR FIRST CONSOLE EXPERIMENT
 ----------------------------------------------------
-Running a console experiment is very similar to running a graphical experiment, you need to choose a trainer and an agent.  By default, the trainers are set to run 10 episodes of mountain car.  In order to run Tetris or Helicopter, go into the src/ directory and uncomment the appropriate lines, and then type "make" back in the trainer's home directory.
+Running a console experiment is very similar to running a graphical experiment, you need to choose a trainer and an agent.  By default, the trainers are set to run 10 episodes of mountain car.  In order to run Tetris, Helicopter, or Polyathlon go into the src/ directory and uncomment the appropriate lines, and then type "make" back in the trainer's home directory.
 
 To run the default mountain car experiment, open two terminal windows:
 
