@@ -151,7 +151,7 @@ The source code for the GUI trainer is not provided.  This trainer is provided o
 ----------------------------------------------------
 7 :: RUNNING YOUR FIRST CONSOLE EXPERIMENT
 ----------------------------------------------------
-Running a console experiment is very similar to running a graphical experiment, you need to choose a trainer and an agent.  By default, the trainers are set to run 10 episodes of mountain car.  In order to run Tetris, Helicopter, or Polyathlon go into the src/ directory and uncomment the appropriate lines, and then type "make" back in the trainer's home directory.
+Running a console experiment is very similar to running a graphical experiment, you need to choose a trainer and an agent.  By default, the trainers are set to run 10 episodes of mountain car.  In order to run Tetris, or Helicopter (not Polyathlon) go into the src/ directory and uncomment the appropriate lines, and then type "make" back in the trainer's home directory.
 
 To run the default mountain car experiment, open two terminal windows:
 
