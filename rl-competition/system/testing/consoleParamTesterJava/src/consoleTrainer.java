@@ -35,19 +35,35 @@ public class consoleTrainer {
 	private static void runExperiment(){
 		RLGlue.RL_init();
 		
-		int episodesToRun=100;
+		int episodesToRun=500;
+		int trialsToRun=10;
 		
-		int totalSteps=runEpisodes(episodesToRun,100000);
+		int totalSteps=0;
+		int last50EpisodeTotal=0;
 		
-		double averageSteps=(double)totalSteps/(double)episodesToRun;
-		System.out.printf("Average steps per episode: %.2f\n",averageSteps);
+		long startTime=System.currentTimeMillis();
+		for(int i=0;i<trialsToRun;i++){
+			int[] stepCounts=runEpisodes(episodesToRun,100000);
+			totalSteps+=stepCounts[0];
+			last50EpisodeTotal+=stepCounts[1];
+		}
+		long endTime=System.currentTimeMillis();
+		
+		long totalTime=endTime-startTime;
+		
+		long seconds=totalTime/1000;
+		
+		long stepsPerSecond=totalSteps/seconds;
+		double averageSteps=(double)totalSteps/(double)(episodesToRun*trialsToRun);
+		double averageLast50Steps=(double)last50EpisodeTotal/(double)(50*trialsToRun);
+		System.out.printf("Average steps per episode averaged over %d trials = %.2f.\tLast 50 episodes is %.2f.\tTook %d seconds or %d steps per second \n",trialsToRun,averageSteps,averageLast50Steps,seconds,stepsPerSecond);
 
 		RLGlue.RL_cleanup();
 		
 	}
 
-	private static int runEpisodes(int episodeCount, int maxEpisodeLength){
-		int totalSteps=0;
+	private static int[] runEpisodes(int episodeCount, int maxEpisodeLength){
+		int[] stepCounts=new int[2];
 		int maxSteps=0;
 		int minSteps=100000000;
 		
@@ -57,11 +73,11 @@ public class consoleTrainer {
 			int thisSteps=RLGlue.RL_num_steps();
 			if(thisSteps>maxSteps)maxSteps=thisSteps;
 			if(thisSteps<minSteps)minSteps=thisSteps;
-			totalSteps+=thisSteps;		
+			stepCounts[0]+=thisSteps;
+			if(episodeCount-i<=50)
+				stepCounts[1]+=thisSteps;
 		}
-		System.out.println("\tMin Steps:"+minSteps);
-		System.out.println("\tMax Steps:"+maxSteps);
-		return totalSteps;
+		return stepCounts;
 	}
 	
 
