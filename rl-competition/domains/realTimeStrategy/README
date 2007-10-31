@@ -53,7 +53,8 @@ $> bash run.bash
 $> ./bin/rlagent
 
   - Connect the environment
-    in domains/realTimeStrategy, run bin/rlgenv
+    in domains/realTimeStrategy:
+$> ./bin/rlgenv
 
 The most relevant RL-Glue C/C++ agent file is:
 
