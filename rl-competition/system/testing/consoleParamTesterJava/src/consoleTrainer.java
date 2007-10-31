@@ -36,7 +36,7 @@ public class consoleTrainer {
 		RLGlue.RL_init();
 		
 		int episodesToRun=500;
-		int trialsToRun=10;
+		int trialsToRun=30;
 		
 		int totalSteps=0;
 		int last50EpisodeTotal=0;

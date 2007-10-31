@@ -1,5 +1,4 @@
 BIN_PATH = ./system
-BIN2_PATH = ./system/bin
 RL_GLUE_PATH = ./system/RL-Glue/RL-Glue
 BUILD_PATH = ./system/build
 
@@ -7,7 +6,7 @@ AGENT_NETWORKED=1
 ENV_NETWORKED=1
 EXP_NETWORKED=1
 
-CFLAGS = -I$(RL_GLUE_PATH)
+CFLAGS = -I$(RL_GLUE_PATH) -O2
 
 include $(RL_GLUE_PATH)/RL_glue.makefile
 

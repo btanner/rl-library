@@ -7,7 +7,7 @@ BIN_PATH = bin
 RL_GLUE_PATH = ../../system/RL-Glue/RL-Glue
 UTILS_PATH = ../../system/RL-Glue/Utils
 CC = g++
-CFLAGS = -I$(RL_GLUE_PATH) -I$(UTILS_PATH) -I$(AGENT_SRC_PATH) -Wall -g
+CFLAGS = -I$(RL_GLUE_PATH) -I$(UTILS_PATH) -I$(AGENT_SRC_PATH) -Wall -g -O3
 
 all: RL_agent
 
