@@ -15,8 +15,10 @@ Contents:
 5: Agents
 6: Trainers
 7: Running your first console experiment
-8: Where to go for more info
-9: Credits
+8: RTS
+9: Keepaway
+10: Where to go for more info
+11: Credits
 ==========
 
 
@@ -100,13 +102,17 @@ To run any agent, go into its directory and type:
 $>bash run.bash 
 
 *****
-**Note: running an agent is only half of what is necessary to run an experiment, you also need a trainer!  See the next section.
+** Note 1: running an agent is only half of what is necessary to run an experiment, you also need a trainer!  See the next section.
 *****
 
 The source of each agent is in the /agents/<someAgent>/src directory
 
 To rebuild an agent, in that agent's directory type:
 $>make clean;make
+
+*****
+** Note 2: compiling and running an agent for the RTS and Keepaway domains is different from the procedure described above please consult the README files in domains/realTimeStrategy/ and domains/keepAwaySoccer for more information. 
+*****
 
 ----------------------------------------------------
 6 :: TRAINERS (Mountain Car, Tetris, and Helcopter Control)
@@ -128,7 +134,7 @@ To run any trainer, go into its directory and type:
 $>bash run.bash
 
 *****
-**Note: running a trainer is only half of what is necessary to run an experiment, you also need an agent!  See the previous section!
+**Note 2: running a trainer is only half of what is necessary to run an experiment, you also need an agent!  See the previous section!
 *****
 To rebuild a trainer, in that trainer's directory type:
 $>make clean;make
@@ -141,7 +147,9 @@ $>bash run.bash
 
 The source code for the GUI trainer is not provided.  This trainer is provided on an AS-IS basis.
 
-
+*****
+** Note 2: compiling and running a trainer for the RTS and Keepaway domains is different from the procedure described above please consult the README files in domains/realTimeStrategy/ and domains/keepAwaySoccer for more information. 
+*****
 
 ----------------------------------------------------
 7 :: RUNNING YOUR FIRST CONSOLE EXPERIMENT
@@ -161,14 +169,28 @@ $>bash run.bash
 
 You should see an experiment unfold as the sample mountain-car agent learns.
 
+*****
+** Note 1: compiling and running a trainer for the RTS and Keepaway domains is different from the procedure described above please consult the README files in domains/realTimeStrategy/ and domains/keepAwaySoccer for more information. 
+*****
+
 ----------------------------------------------------
-8 :: Where to go for more info
+8: RTS
+----------------------------------------------------
+To run an RTS experiment and, in general, find out more about compiling and running RTS agents please read the INSTALL and README files in domains/realTimeStrategy.
+
+----------------------------------------------------
+9: Keepaway
+----------------------------------------------------
+To run an Keepaway experiment and, in general, find out more about compiling and running Keepaway agents please read the README file in domains/keepAwaySoccer.
+
+----------------------------------------------------
+10 :: Where to go for more info
 ----------------------------------------------------
 To get more information about how to use this package, how to create custom experiments, new agents, and trouble shooting, please visit:
 http://rl-competition.org 
 
 ----------------------------------------------------
-9 :: CREDITS
+11 :: CREDITS
 ----------------------------------------------------
 Brian Tanner
 Adam White
