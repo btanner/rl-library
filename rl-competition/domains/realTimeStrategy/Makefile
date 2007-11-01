@@ -64,7 +64,6 @@
 #
 # todo: adjust mac/cygwin to new libary setting
 
-
 # supported substrings of OSTYPE
 # The following words must be uppercase
 # If they are found in the uppercased OSTYPE variable
@@ -75,7 +74,15 @@ OSTYPE_CYGWIN := CYGWIN
 OSTYPE_MINGW  := MSYS
 
 # convert OSTYPE to uppercase
-OSTYPE := $(shell echo -n "$(OSTYPE)" | tr a-z A-Z )
+
+ifeq ("$(OSTYPE)", "") 
+	OSTYPE := $(shell uname | grep -i -E "(Darwin)|(Linux)|(CYGWIN)")
+	OSTYPE := $(shell echo "$(OSTYPE)" | tr a-z A-Z )
+else
+	OSTYPE := $(shell echo -n "$(OSTYPE)" | tr a-z A-Z )
+endif
+
+
 #$(warning OSTYPE=$(OSTYPE))
 #OSTYPE := LINUX
 
@@ -281,7 +288,7 @@ else
 
 # unknown OSTYPE
 
-$(error "!!!!! unknown OSTYPE=$(OSTYPE) !!!!")
+$(error "!!!!! unknown OSTYPE=$(OSTYPE) !!!!  Please set OSTYPE environment variable to Darwin, Linux, CYGWIN or MSYS")
 
 endif
 endif
