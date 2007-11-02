@@ -95,7 +95,7 @@ endif
 ENABLE_GUI=0
 
 # Buildmode can be "exec" or "shlib"
-BUILDMODE=exec
+BUILDMODE=shlib
 
 # tar file name
 PROJ := ortslite
