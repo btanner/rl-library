@@ -27,7 +27,18 @@
 
 APP_LIST := $(APP_LIST) $(APP)
 
-APP_EXEC := bin/$(APP)
+ifeq ("$(BUILDMODE)","exec")
+  APP_EXEC := bin/$(APP)
+endif
+
+ifeq ("$(BUILDMODE)","shlib")
+  APP_EXEC := bin/$(TARGETNAME)
+endif
+
+ifeq ("$(APP_EXEC)", "")
+   @ echo "error.. APP_NAME is empty!"
+   @ exit
+endif
 
 HERE := apps/$(APP_SDIRS)/src/
 
@@ -74,8 +85,8 @@ LOC_$(APP)_LIBS := $(APP_EXT_LIBS) $(LIB_EXT_LIBS)
 # whose contents is available at command execution time
 
 $(APP_EXEC) : $(APP_LOCAL_OBJS) $(APP_LIB_OBJS)
-	@ echo "### linking $@"
-	$(VERBOSE) $(LD) $(LDOPTS) -o $@ $^ $(SHARED_LIBS) $(LOC_$(subst bin/,,$@)_LIBS)
+	@ echo "### building $(APP_EXEC)"
+	$(VERBOSE) $(LD) $(LDOPTS) $(SHLIB) -o $@ $^ $(SHARED_LIBS) $(LOC_$(subst bin/,,$@)_LIBS)
 
 # include dependency files if make goals are empty or a goal not in EXCL_INC is passed
 

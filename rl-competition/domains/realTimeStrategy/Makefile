@@ -94,6 +94,9 @@ endif
 # Enabled = 1, disabled = 0
 ENABLE_GUI=0
 
+# Buildmode can be "exec" or "shlib"
+BUILDMODE=exec
+
 # tar file name
 PROJ := ortslite
 
@@ -180,6 +183,8 @@ OPT_FRAME := -fomit-frame-pointer
 # default 
 AWK := gawk
 EXE_SUFFIX :=
+SHLIB :=
+TARGETNAME := 
 
 # default include paths
 INC_OPTS=-I$(HOME)/include -I/usr/local/include -I../../system/boost/include
@@ -194,6 +199,11 @@ OS_MAC := 1
 ifeq ("$(ENABLE_GUI)", "1")
 SDL_INC := -I$(USR_FRAME)/SDL.framework/Headers -I$(USR_FRAME)/SDL_net.framework/Headers -I/usr/include/GL
 SDL_LIBS := -framework SDL -framework SDL_net
+endif
+
+ifeq ("$(BUILDMODE)", "shlib")
+SHLIB := "-idynamiclib"
+TARGETNAME := "lib$(APP_DIRS).dylib"
 endif
 
 MACROS    := -DGCC -DOS_MAC -DHAS_TYPEOF=1 -DTRANSFORM_MOUSE_Y=0 -DMAC_OS_X_VERSION_MIN_REQUIRED=1040 -DTARGET_API_MAC_CARBON=1
@@ -253,6 +263,11 @@ OS_LINUX := 1
 
 ifeq ("$(ENABLE_GUI)", "1")
 SDL_LIBS := -lSDLmain -lSDL -lSDL_net 
+endif
+
+ifeq ("$(BUILDMODE)", "shlib")
+SHLIB := "-shared"
+TARGETNAME := "lib$(APP_DIRS).so"
 endif
 
 MACROS += -DOS_LINUX
@@ -355,8 +370,6 @@ else
   SHARED_LIBS := $(SHARED_LIBS0)
 else 
 
-# unknown MODE
-
 $(error "!!!!! unknown MODE=$(MODE) !!!!")
 
 endif
@@ -383,6 +396,8 @@ VERBOSE=@
 else
 VERBOSE=
 endif
+
+# build
 
 # how to generate precompiled header file if GCC_PRECOMP=1
 # otherwise, create dummy file
