@@ -108,7 +108,7 @@ std::string ParameterHolder::stringSerialize() {
                     else
                         outs<<"false_";
                 }
-		if(paramType==stringParam)outs<<getStringParam(allParamNames[i])<<"_";
+		if(paramType==stringParam)outs<<getStringParamEncoded(allParamNames[i])<<"_";
 	}
 	
 	//Now write all of the aliases
@@ -223,6 +223,16 @@ void ParameterHolder::setStringParam(std::string alias, std::string value){
 	if(allParams.count(name)==0){
 		std::cerr<<"Careful, you are setting the value of parameter: "<<name<<" but the parameter hasn't been added...\n"<<std::endl;
 	}
+	std::string::size_type loc = value.find( ":", 0 );
+	while (loc != std::string::npos) {
+		value.replace(loc, 1, "!!COLON!!", 0, 9);
+		loc = value.find( ":", 0 );
+	}
+	loc = value.find( "_", 0 );
+	while (loc != std::string::npos) {
+		value.replace(loc, 1, "!!UNDERSCORE!!", 0, 14);
+		loc = value.find( "_", 0 );
+	}
 	stringParams[name]=value;
 }
 int ParameterHolder::getIntegerParam(std::string alias) {
@@ -255,7 +265,7 @@ bool ParameterHolder::getBoolParam(std::string alias) {
 	return retVal;
 }
 
-std::string ParameterHolder::getStringParam(std::string alias) {
+std::string ParameterHolder::getStringParamEncoded(std::string alias) {
 	//Convert from an alias to the real name
 	std::string name=getAlias(alias);
 
@@ -264,6 +274,21 @@ std::string ParameterHolder::getStringParam(std::string alias) {
 
 	std::string retVal=stringParams[name];
 	return retVal;
+}
+
+std::string ParameterHolder::getStringParam(std::string alias) {
+	std::string encodedString = getStringParamEncoded(alias);
+	std::string::size_type loc = encodedString.find( "!!COLON!!", 0 );
+	while (loc != std::string::npos) {
+		encodedString.replace(loc, 9, 1, ':');
+		loc = encodedString.find( "!!COLON!!", 0 );
+	}
+	loc = encodedString.find( "!!UNDERSCORE!!", 0 );
+	while (loc != std::string::npos) {
+		encodedString.replace(loc, 14, 1, ':');
+		loc = encodedString.find( "!!UNDERSCORE!!", 0 );
+	}
+	return encodedString;
 }
 
 int ParameterHolder::getParamCount(){

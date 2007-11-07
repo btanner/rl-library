@@ -91,7 +91,7 @@ void loadTetris(int whichParamSet){
 
 /*
 	* MountainCar has an integer parameter called pnum that takes values in [0,9]
-	* Setting this parameter changes the exact tetris problem you are solving
+	* Setting this parameter changes the exact mountain car problem you are solving
 	*/
 void loadMountainCar(int whichParamSet){
 	std::string theEnvString="GeneralizedMountainCar - Java";
@@ -103,9 +103,13 @@ void loadMountainCar(int whichParamSet){
 }	
 
 /*
-	* Helicopter has no user controllable parameters
+	* Helicopter has an integer parameter called pnum that takes values in [0,9]
+	* Setting this parameter changes the exact helicopter problem you are solving
 	*/
-void loadHelicopter(){
-	std::string theEnvString="AlteredHelicopter - Java";
-	preloadAndLoad(theEnvString);
+void loadHelicopter(int whichParamSet){
+	std::string theEnvString="GeneralizedHelicopter - Java";
+	ParameterHolder *theParams=preload(theEnvString);
+	theParams->setIntegerParam("pnum",whichParamSet);
+	
+	load(theEnvString, theParams);
 }	

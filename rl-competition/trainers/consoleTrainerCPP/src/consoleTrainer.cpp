@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 	// Uncomment ONE of the following lines to choose your experiment
 	//loadTetris(whichTrainingMDP); //put the desired parameter set in where the 0 is
 	loadMountainCar(whichTrainingMDP); //put the desired parameter set in where the 0 is
-	//loadHelicopter();
+	//loadHelicopter(whichTrainingMDP);
 
 	RL_init();
 

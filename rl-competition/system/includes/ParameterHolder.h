@@ -88,6 +88,7 @@ public:
 	virtual int getIntegerParam(std::string alias);
 	virtual double getDoubleParam(std::string alias);
 	virtual bool getBoolParam(std::string alias);
+	virtual std::string getStringParamEncoded(std::string alias);
 	virtual std::string getStringParam(std::string alias);
 	
 	virtual int getParamCount();

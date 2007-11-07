@@ -21,20 +21,21 @@ BOOL_PARAM=2
 STRING_PARAM=3
 
 class ParameterHolder:
-	intParams = {}
-	doubleParams = {}
-	boolParams = {}
-	stringParams = {}
 	
-	allParams = {}
-	#we'll let everything be an alias to itself, and then we'll always just look up aliases
-	aliases = {}
-
-	allParamNames = []
-	allParamTypes = []
-	allAliases = []
 	
 	def __init__(self,stringRep=None):
+		self.intParams = {}
+		self.doubleParams = {}
+		self.boolParams = {}
+		self.stringParams = {}
+
+		self.allParams = {}
+		#we'll let everything be an alias to itself, and then we'll always just look up aliases
+		self.aliases = {}
+
+		self.allParamNames = []
+		self.allParamTypes = []
+		self.allAliases = []
 		if stringRep == None:
 			return
 		arrayRep = stringRep.split('_')
@@ -85,7 +86,8 @@ class ParameterHolder:
 				else:
 					outString = outString + "false_"
 			else:
-				outString = outString + self.getStringParam(self.allParamNames[i])
+				outString = outString + self.getStringParamEncoded(self.allParamNames[i]) + "_"
+				
 			
 		outString = outString + "%d_" % (len(self.allAliases))
 		for i in range(len(self.allAliases)):
@@ -133,7 +135,9 @@ class ParameterHolder:
 		name = self.getAlias(alias)
 		if not self.allParams.has_key(name):
 			sys.stderr.write("Careful, you are setting the value of parameter: %s but the parameter hasn't been added...\n" % (name))
-		self.boolParams[name] = value
+		value = value.replace(":","!!COLON!!")
+		value = value.replace("_","!!UNDERSCORE!!")
+		self.stringParams[name] = value
 
 	def addIntegerParam(self,alias): #void
 		self.allParams[alias] = INT_PARAM
@@ -206,7 +210,7 @@ class ParameterHolder:
 			sys.exit(1)
 		return self.boolParams[name]
 	
-	def getStringParam(self,alias): #string
+	def getStringParamEncoded(self,alias): #string
 		name = self.getAlias(alias)
 		if not self.allParams.has_key(name):
 			sys.stderr.write("Careful, you are getting the value of parameter: %s but the parameter hasn't been added...\n" % (name))
@@ -215,6 +219,12 @@ class ParameterHolder:
 			sys.stderr.write("Careful, you are getting the value of parameter: %s but the parameter isn't a string parameter...\n" % (name))
 			sys.exit(1)
 		return self.stringParams[name]
+	
+	def getStringParam(self,alias):
+		encodedVersion = self.getStringParamEncoded(alias)
+		fixedVersion = encodedVersion.replace("!!COLON!!",":")
+		fixedVersion = fixedVersion.replace("!!UNDERSCORE!!","_")
+		return fixedVersion
 
 	def getParamCount(self): #int
 		return len(self.allParams)

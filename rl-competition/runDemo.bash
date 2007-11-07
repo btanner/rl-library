@@ -51,7 +51,7 @@ echo "Starting up dynamic environment loader - PID=$envShellPID"
 #Start the demo visualizer program
 #
 macAboutNameCommand=-Dcom.apple.mrj.application.apple.menu.about.name=RLVizApp
-java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $macAboutNameCommand -cp $compLib:$guiLib:$demoPath/bin/rlViz.jar btViz.GraphicalDriver
+java -Xcheck:jni -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $macAboutNameCommand -cp $compLib:$guiLib:$demoPath/bin/rlViz.jar btViz.GraphicalDriver
 
 echo "-- Visualizer is finished"
 

@@ -1,4 +1,6 @@
-
+=====================================================
+Real Time Strategy Domain Installation Instructions
+=====================================================
 ortslite is a simple stripped-down implementation of an RTS 
 (Real-time Strategy) game. 
 
@@ -15,14 +17,25 @@ To compile ortslite:
        for packages named "boost" and/or "boost-dev". Otherwise, follow
        instructions below.
 
-       (Note: run scripts/install-boost.bash to do all this automatically)
+        Note: If you are not comfortable installing boost or are not sure 
+		what to do next, we have included a script to install it for you.  
+		This script will install a local copy of boost, inside the 
+		rl-competition software distribution.  You do not need root access to 
+		install it.  Be warned, if some files are missing on your computer, 
+		you may see a MASSIVE amount of errors when building.  It is probably 
+		still working.  Also note, this can take up to 30 minutes.  
+		
+		To run the script:
 
-         cd misc
-         tar xjvf boost_1_34_1.tar.bz2
-         cd boost_1_34_1
-         ./configure --prefix=$HOME
-         make
-         make install
+$>./scripts/install-boost.bash
+
+		 Or, to manually install boost to your home directory, do the following:
+$>cd misc
+$>tar xjvf boost_1_34_1.tar.bz2
+$>cd boost_1_34_1
+$>./configure --prefix=$HOME
+$>make
+$>make install
 
        If you see a message indicating that not all the libraries were
        built properly, that is OK. It is likely that the optional python
@@ -30,8 +43,8 @@ To compile ortslite:
 
        Lastly, create this symbolic link. 
 
-         cd $HOME/include
-         ln -s boost-1_34_1/boost
+$>cd $HOME/include
+$>ln -s boost-1_34_1/boost
 
        Now, build and run the test program in misc/boost_test to verify
        that it worked. 
@@ -43,26 +56,32 @@ To compile ortslite:
 
        export OSTYPE="LINUX"
 
-  3. Choose whether you want to enable server-side visualization. Enabling this
-     requires SDL. Set the variable ENABLE_GUI in the Makefile to either 0 or 1. 
-
-  4. If it's the first time compiling the software:
+  3. If it's the first time compiling the software:
 
        make init
 
-  5. Try making the ol app:
+  4. Try making the ol app:
 
        make
 
      This will create bin/ol 
 
-For information on how the RL-Glue applications work, please see README.rlglue. 
-It is important to read README.rlglue for the Reinforcement Learning competition. 
+  5.  To make the environment 
 
-In visualization, 
+$>make rlgenv
 
-  GREEN = Player 0 
-  RED = Player 1 
+	This will create bin/rlgenv
+
+  6.  To make a simple agent:
+
+$>make rlgagent
+	
+	This will create bin/rlgagent
+
+
+For information on how the RL-Glue applications work, please see README. 
+It is important to read README for the Reinforcement Learning competition. 
+
 
 There is more documentation on ortslite in docs/
 

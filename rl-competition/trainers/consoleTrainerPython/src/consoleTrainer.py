@@ -20,10 +20,10 @@ from consoleTrainerHelper import *
 
 def main():
 	whichTrainingMDP = 0
-	# Basically you want to do: (num is the problem number)
-	# 	loadTetris(num) OR
-	# 	loadMountainCar(num) OR
-	# 	loadHelicopter()
+	# Basically you want to do: (whichTrainingMDP is the problem number)
+	# 	loadTetris(whichTrainingMDP) OR
+	# 	loadMountainCar(whichTrainingMDP) OR
+	# 	loadHelicopter(whichTrainingMDP)
 	#
 	loadMountainCar(whichTrainingMDP)
 

@@ -25,7 +25,7 @@ public class consoleTrainer {
 
 		// Uncomment ONE of the following lines to choose your experiment
 		//consoleTrainerHelper.loadTetris(whichTrainingMDP);
-		//consoleTrainerHelper.loadHelicopter();		
+		//consoleTrainerHelper.loadHelicopter(whichTrainingMDP);		
 		consoleTrainerHelper.loadMountainCar(whichTrainingMDP);
 	
 		RLGlue.RL_init();
