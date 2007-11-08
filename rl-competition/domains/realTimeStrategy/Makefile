@@ -95,7 +95,7 @@ endif
 ENABLE_GUI=0
 
 # Buildmode can be "exec" or "shlib"
-BUILDMODE=exec
+BUILDMODE=shlib
 
 # tar file name
 PROJ := ortslite
@@ -202,7 +202,7 @@ SDL_LIBS := -framework SDL -framework SDL_net
 endif
 
 ifeq ("$(BUILDMODE)", "shlib")
-SHLIB := "-idynamiclib"
+SHLIB := "-dynamiclib"
 TARGETNAME := "lib$(APP_DIRS).dylib"
 endif
 
