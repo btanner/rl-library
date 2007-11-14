@@ -90,4 +90,12 @@ public class consoleTrainerHelper{
 		
 		load(theEnvString, theParams);
 	}
+	
+	/*
+	* Task spec tester takes no parameters
+	*/
+	public static void loadTaskSpecTester(){
+		String theEnvString="TaskSpecTester - Java";
+		preloadAndLoad(theEnvString);
+	}
 }
