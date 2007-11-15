@@ -23,11 +23,10 @@ from rlglue.types import Observation
 
 class RandomAgent(Agent):
 	
-	action = Action()
-	action_types = []
-	
 	#"2:e:2_[f,f]_[-1.2,0.6]_[-0.07,0.07]:1_[i]_[0,2]";
 	def agent_init(self,taskSpec):
+		self.action = Action()
+		self.action_types = []
 		random.seed(0)
 		(version,episodic,states,actions,reward) = taskSpec.split(':')
 		(stateDim,stateTypes,stateRanges) = states.split('_',2)
@@ -66,7 +65,8 @@ class RandomAgent(Agent):
 		for i in range(len(self.action_types)):
 			(action_type,min_action,max_action) = self.action_types[i]
 			if action_type == 'i':
-				self.action.intArray.append(random.randrange(int(min_action),int(max_action)))
+				act = random.randrange(int(min_action),int(max_action+1))
+				self.action.intArray.append(act)
 			if action_type == 'f':
 				self.action.doubleArray.append(random.uniform(min_action,max_action))
 
