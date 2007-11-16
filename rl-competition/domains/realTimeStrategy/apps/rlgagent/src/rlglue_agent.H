@@ -26,6 +26,8 @@ void get_actions(std::vector<int> & vector,
                  MiniGameState & state, 
                  MiniGameParameters & parms);
 
+void reset_state_vars(); 
+
 void add_move_action(std::vector<int>& actions, int objId, int x, int y, int max_speed);
 void add_build_base_action(std::vector<int>& actions, int objId);
 void add_stop_action(std::vector<int>& actions, int objId);

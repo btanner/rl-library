@@ -64,6 +64,8 @@ Action agent_start(Observation o)
   DPR << "RLG> Calling agent_start" << endl;
   DPR << "Received state: " << intArray2string(o.intArray, o.numInts) << endl;
   
+  reset_state_vars(); 
+  
   if (state != NULL) delete state;
   state = new MiniGameState;
 

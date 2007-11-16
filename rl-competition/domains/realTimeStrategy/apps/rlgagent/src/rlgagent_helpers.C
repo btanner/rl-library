@@ -16,8 +16,14 @@ using namespace std;
 static bool debug = false; 
 
 /* AI state vars */
-static bool have_base = false;
-static int build_time = 0;
+static bool have_base;
+static int build_time;
+
+void reset_state_vars()
+{
+  have_base = false; 
+  build_time = 0;
+}
 
 string build_state_string(Observation & o)
 {
