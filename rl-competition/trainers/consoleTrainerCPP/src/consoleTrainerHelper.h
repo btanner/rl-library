@@ -41,6 +41,6 @@
 	/*
 	* Helicopter has no user controllable parameters
 	*/
-	void loadHelicopter();	
+	void loadHelicopter(int whichParamSet);	
 
 #endif

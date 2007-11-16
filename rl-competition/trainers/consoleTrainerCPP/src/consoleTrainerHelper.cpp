@@ -78,7 +78,7 @@ void preloadAndLoad(std::string envNameString){
 }
 
 /*
-	* Tetris has an integer parameter called pnum that takes values in [0,9]
+	* Tetris has an integer parameter called pnum that takes values in [0,19]
 	* Setting this parameter changes the exact tetris problem you are solving
 	*/
 void loadTetris(int whichParamSet){
@@ -90,7 +90,7 @@ void loadTetris(int whichParamSet){
 }
 
 /*
-	* MountainCar has an integer parameter called pnum that takes values in [0,9]
+	* MountainCar has an integer parameter called pnum that takes values in [0,34]
 	* Setting this parameter changes the exact mountain car problem you are solving
 	*/
 void loadMountainCar(int whichParamSet){

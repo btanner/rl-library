@@ -59,7 +59,7 @@ def preloadAndLoad(envNameString):
 	load(envNameString,p)
 
 #
-# Tetris has an integer parameter called pnum that takes values in [0,9]
+# Tetris has an integer parameter called pnum that takes values in [0,19]
 # Setting this parameter changes the exact tetris problem you are solving
 #
 #(int) -> void
@@ -70,7 +70,7 @@ def loadTetris(whichParamSet):
 	load(theEnvString, theParams)
 
 #
-# MountainCar has an integer parameter called pnum that takes values in [0,9]
+# MountainCar has an integer parameter called pnum that takes values in [0,29]
 # Setting this parameter changes the exact mountain car problem you are solving
 #
 # (int) -> void

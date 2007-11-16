@@ -18,16 +18,16 @@ import rlglue.RLGlue;
 
 public class consoleTrainer {
 
-//A better example of an actual experiment is to call the runMountainCarExperiment() method
+
 	public static void main(String[] args) throws InterruptedException {
 	
 		int whichTrainingMDP = 0; // select the MDP to load
 
 		// Uncomment ONE of the following lines to choose your experiment
-		//consoleTrainerHelper.loadTetris(whichTrainingMDP);
-		//consoleTrainerHelper.loadHelicopter(whichTrainingMDP);		
-		consoleTrainerHelper.loadMountainCar(whichTrainingMDP);
-		//consoleTrainerHelper.loadTaskSpecTester();
+		//consoleTrainerHelper.loadTetris(whichTrainingMDP); //whichTrainingMDP should be in [0,19]
+		//consoleTrainerHelper.loadHelicopter(whichTrainingMDP);	//whichTrainingMDP should be in [0,9]
+		consoleTrainerHelper.loadMountainCar(whichTrainingMDP);//whichTrainingMDP should be in [0,29]
+
 	
 		RLGlue.RL_init();
 

@@ -20,12 +20,11 @@ from consoleTrainerHelper import *
 
 def main():
 	whichTrainingMDP = 0
-	# Basically you want to do: (whichTrainingMDP is the problem number)
-	# 	loadTetris(whichTrainingMDP) OR
-	# 	loadMountainCar(whichTrainingMDP) OR
-	# 	loadHelicopter(whichTrainingMDP)
-	#
-	loadMountainCar(whichTrainingMDP)
+	# Uncomment ONE of the following lines to choose your experiment
+	#loadTetris(whichTrainingMDP); #put the desired parameter set in where MDP is in [0,19]
+ 	loadMountainCar(whichTrainingMDP); #put the desired parameter set in where MDP is in [0,29]
+	#loadHelicopter(whichTrainingMDP); #put the desired parameter set in where MDP is in [0,9]
+
 
 	# and then,
 	#		just run the experiment:
@@ -33,10 +32,12 @@ def main():
 	episodesToRun = 10
 	totalSteps = 0
 	for i in range(episodesToRun):
-		RLGlue.RL_episode(1000)
-		totalSteps += RLGlue.RL_num_steps()
-	averageSteps = float(totalSteps)/float(episodesToRun)
-	print "Average steps per episode: %.2f\n" % (averageSteps)
+		RLGlue.RL_episode(20000)
+		thisSteps = RLGlue.RL_num_steps()
+		print "Total steps in episode %d is %d" %(i, thisSteps)
+		totalSteps += thisSteps
+
+	print "Total steps : %d\n" % (totalSteps)
 	RLGlue.RL_cleanup()
 
 if __name__ == "__main__":
