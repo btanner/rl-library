@@ -32,16 +32,20 @@ int main(int argc, char *argv[]) {
   double avg_return = 0.0;*/
 
 /*basic main loop*/
-  cout << "Initializing" << endl; 
-  RL_init();
   
-  cout << "Running episodes" << endl; 
-  run(1);
+  for (int i = 0; i < 5; i++)
+  {
+    cout << "Initializing run " << i << endl; 
+    RL_init();
+  
+    cout << "Running episodes" << endl; 
+    run(1);
 
-  cout << "Return is " << RL_return() << endl; 
+    cout << "Return is " << RL_return() << endl; 
   
-  cout << "Cleaning up" << endl; 
-  RL_cleanup();
+    cout << "Cleaning up" << endl; 
+    RL_cleanup();
+  }
   
   /*add up all the steps and all the returns*/
   //for (i = 0; i < NUM_EPISODES; i++) {

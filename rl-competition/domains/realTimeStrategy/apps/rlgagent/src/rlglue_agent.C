@@ -17,8 +17,8 @@ using namespace boost;
 static bool debug = false;
 
 /*  Agent's variables  */
-static MiniGameParameters * parms = NULL;
-static MiniGameState * state = NULL;
+static MiniGameParameters * parms;
+static MiniGameState * state;
 static string statestr;
 static string tsstr;
 static string mpstr;
@@ -34,6 +34,9 @@ void agent_init(const Task_specification task_spec)
 {
   srand(time(NULL));
   DPR << "RLG> Calling agent_init" << endl;
+  
+  parms = NULL;
+  state = NULL; 
   
   myAction.numInts = 0; 
   myAction.numDoubles = 0;
@@ -117,8 +120,8 @@ void agent_cleanup()
 {
   DPR << "RLG> Starting agent_step" << endl;  
   
-  delete state;
-  delete parms;
+  delete state; state = NULL;
+  delete parms; parms = NULL; 
   
   if (myAction.intArray != NULL)
     free(myAction.intArray);

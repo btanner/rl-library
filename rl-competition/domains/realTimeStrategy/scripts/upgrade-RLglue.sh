@@ -25,20 +25,23 @@ DIR3=apps/rlglue/src
 
 echo "Part 1"
 
+# removed Glue_utilities.cpp
 for file in \
-  Glue_utilities.c Glue_utilities.cpp Glue_utilities.h \
+  Glue_utilities.c Glue_utilities.h \
   RL_common.h RL_glue.h RL_network.c \
   RL_network_glue.c RL_network_agent.c RL_network_experiment.c RL_network_environment.c 
 do
   fullfile=`find $RLGDIR -name $file`
-  cp -v $fullfile $DIR1 || exit
+  echo "$fullfile -> $DIR1"
+  cp $fullfile $DIR1 || exit
 done
 
 echo ""
 echo "Part 2"
 
 fullfile=`find $RLGDIR -name RL_network.h`
-cp -v $fullfile $DIR2 || exit
+echo "$fullfile -> $DIR2"
+cp $fullfile $DIR2 || exit
 
 echo ""
 echo "Part 3"
@@ -46,7 +49,8 @@ echo "Part 3"
 for file in RL_glue.c RL_server_agent.c RL_server_environment.c
 do
   fullfile=`find $RLGDIR -name $file`
-  cp -v $fullfile $DIR3 || exit
+  echo "$fullfile -> $DIR3"
+  cp $fullfile $DIR3 || exit
 done
 
 echo ""
@@ -55,7 +59,7 @@ echo "Part 4 (Java)"
 cp -v $RLGDIR/RL-Glue/Java/RL-Glue.jar libs/rl-glue/src/Java || exit 
 
 echo ""
-echo "Part 5"
+echo "Part 5 (mains)"
 
 cp -v $RLGDIR/RL-Glue/Network/Agent/RL_client_agent.c apps/rlgagent/src/rlgagent_main.C || exit
 cp -v $RLGDIR/RL-Glue/Network/Environment/RL_client_environment.c apps/rlgenv/src/rlgenv_main.C || exit
