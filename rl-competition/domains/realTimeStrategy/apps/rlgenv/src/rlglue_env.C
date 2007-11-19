@@ -41,7 +41,7 @@ static int time_step;
 static bool inited = false; 
 static string task_spec;
 static char * task_spec_cstr = NULL; 
-static char * msg_response = NULL; 
+static string msg_response; 
 static Observation obs; 
 static Reward_observation rewobs;
 
@@ -101,6 +101,8 @@ static void init()
   task_spec_cstr = (char *)malloc(len*sizeof(char));
   memset(task_spec_cstr, 0, len); 
   strcpy(task_spec_cstr, task_spec.c_str());  
+  
+  msg_response.clear(); 
   
   inited = true;
 }
@@ -266,9 +268,10 @@ void env_cleanup()
   if (rewobs.o.doubleArray != NULL) 
   { free(rewobs.o.doubleArray); rewobs.o.doubleArray = NULL; } 
     
+  /* now msg_response is a C++ string 
   if (msg_response != NULL)
   { free(msg_response); msg_response = NULL; }
-  
+  */
 }
 
 void env_set_state(State_key sk)
@@ -301,20 +304,19 @@ Random_seed_key env_get_random_seed()
 Message env_message(const Message inMessage) {
   DPR << "received message " << inMessage << endl;
 
-  if (msg_response == NULL) 
-    msg_response = (char*)malloc(1000*sizeof(char));  
-  
+  msg_response.clear(); 
+
   if (strcmp(inMessage, "TO=3 FROM=0 CMD=4 VALTYPE=3 VALS=NULL") == 0)
-  {    
-    strcpy(msg_response, "TO=0 FROM=3 CMD=0 VALTYPE=0 VALS=1_1"); 
+  {
+    msg_response.append("TO=0 FROM=3 CMD=0 VALTYPE=0 VALS=1_1"); 
     DPR << "responding: " << msg_response << endl; 
-    return msg_response; 
+    return (Message)msg_response.c_str(); 
   }
   else if (strcmp(inMessage, "TO=3 FROM=0 CMD=6 VALTYPE=3 VALS=NULL") == 0)
   {
-    strcpy(msg_response, "TO=0 FROM=3 CMD=0 VALTYPE=0 VALS=visualizers.RealTimeStrategyVisualizer.RealTimeStrategyVisualizer");
+    msg_response.append("TO=0 FROM=3 CMD=0 VALTYPE=0 VALS=visualizers.RealTimeStrategyVisualizer.RealTimeStrategyVisualizer");
     DPR << "responding: " << msg_response << endl;
-    return msg_response;
+    return (Message)msg_response.c_str();
   }
   else if (strcmp(inMessage, "TO=3 FROM=0 CMD=3 VALTYPE=1 VALS=GetRTSSpec") == 0)
   {
@@ -329,11 +331,30 @@ Message env_message(const Message inMessage) {
     resp.append(tmpts);
     
     DPR << "responding: " << resp << endl; 
+
+    msg_response.append(resp);
     
-    msg_response = (char*)realloc(msg_response, (resp.length()+10)*sizeof(char)); 
-    strcpy(msg_response, resp.c_str());
+    return (Message)msg_response.c_str();
+  }
+  else if (strcmp(inMessage, "TO=3 FROM=0 CMD=3 VALTYPE=1 VALS=GetRTSState") == 0)
+  {
+    if (!inited)
+      init();
+
+    ostringstream oss; 
+    //statePtr->encode_view(0, oss0); 
+    string statestr = oss.str();
+
+    boost::replace_all(statestr, "=", "$");
     
-    return msg_response;
+    string resp = "TO=0 FROM=3 CMD=0 VALTYPE=1 VALS=";
+    resp.append(statestr);
+    
+    DPR << "responding: " << resp << endl;
+    
+    msg_response.append(resp);
+    
+    return (Message)msg_response.c_str();
   }
   
   return "message not handled. "; 
