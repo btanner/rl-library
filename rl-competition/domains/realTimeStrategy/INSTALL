@@ -62,7 +62,7 @@ $>ln -s boost-1_34_1/boost
 
   4. Try making the ol app:
 
-       make
+       make ol
 
      This will create bin/ol 
 

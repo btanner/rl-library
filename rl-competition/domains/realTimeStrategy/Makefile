@@ -95,7 +95,7 @@ endif
 ENABLE_GUI=0
 
 # Buildmode can be "exec" or "shlib"
-BUILDMODE=shlib
+BUILDMODE=exec
 
 # tar file name
 PROJ := ortslite
@@ -115,7 +115,7 @@ LIB_DIRS := $(wildcard libs/*/src) $(wildcard libs/*/*/src)
 
 # sub-projects
 ifeq ("$(MAKECMDGOALS)","")
-APP_DIRS := ol#  built by default (do not edit)
+APP_DIRS := rlgenv#  built by default (do not edit)
 else
 APP_DIRS := $(MAKECMDGOALS)# build the passed on application
 endif
