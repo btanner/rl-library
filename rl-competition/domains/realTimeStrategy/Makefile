@@ -95,7 +95,10 @@ endif
 ENABLE_GUI=0
 
 # Buildmode can be "exec" or "shlib"
-BUILDMODE=exec
+BUILDMODE := $(shell echo "$(BUILDMODE)")
+ifeq ("$(BUILDMODE)", "")
+	BUILDMODE := exec
+endif
 
 # tar file name
 PROJ := ortslite
@@ -105,7 +108,7 @@ PROJ := ortslite
 # no longer needed SNAPSHOT_EXCLUDE := libs/mapabstr apps/mapabs apps/polypath apps/hpastar
 
 # special targets
-EXCL_INC := clean init cleanobj tar dep rmdeps list tar snapshot rpm
+EXCL_INC := clean init cleanobj tar dep rmdeps list tar snapshot rpm rlgenv_shlib
 
 # libraries
 #LIB_DIRS := kernel network serverclient gfxclient pathfind osl mapabstr path ortsnet ai/low dcdt/se dcdt/sr newpath
@@ -201,11 +204,6 @@ SDL_INC := -I$(USR_FRAME)/SDL.framework/Headers -I$(USR_FRAME)/SDL_net.framework
 SDL_LIBS := -framework SDL -framework SDL_net
 endif
 
-ifeq ("$(BUILDMODE)", "shlib")
-SHLIB := "-dynamiclib"
-TARGETNAME := "lib$(APP_DIRS).dylib"
-endif
-
 MACROS    := -DGCC -DOS_MAC -DHAS_TYPEOF=1 -DTRANSFORM_MOUSE_Y=0 -DMAC_OS_X_VERSION_MIN_REQUIRED=1040 -DTARGET_API_MAC_CARBON=1
 USR_FRAME := /Library/Frameworks
 SYS_FRAME := /System/Library/Frameworks
@@ -223,6 +221,13 @@ WARN += -Wno-long-double
 ifeq ("$(CPU)", "G5")
 OPT += -mcpu=970 -mpowerpc64
 endif
+
+ifeq ("$(BUILDMODE)", "shlib")
+SHLIB := "-dynamiclib"
+TARGETNAME := "lib$(APP_DIRS).dylib"
+MACROS += -DBUILDSHLIB
+endif
+
 
 else
 
@@ -265,15 +270,17 @@ ifeq ("$(ENABLE_GUI)", "1")
 SDL_LIBS := -lSDLmain -lSDL -lSDL_net 
 endif
 
-ifeq ("$(BUILDMODE)", "shlib")
-SHLIB := "-shared"
-TARGETNAME := "lib$(APP_DIRS).so"
-endif
-
 MACROS += -DOS_LINUX
 #SHARED_LIBS0  += -L/usr/lib -L/usr/local/lib -L/usr/X11R6/lib -lm -lz -lSDLmain -lSDL -lSDL_net -lpthread -lGL -lGLU -lXi -lXmu -lglut -lGLEW $(MODEL_LIBS) -lstdc++
 SHARED_LIBS0  += -L$(HOME)/lib -lm $(SDL_LIBS) -lpthread -lstdc++
 # -lefence
+
+ifeq ("$(BUILDMODE)", "shlib")
+SHLIB := "-shared"
+TARGETNAME := "lib$(APP_DIRS).so"
+MACROS += -DBUILDSHLIB
+endif
+
 
 else 
 
@@ -591,3 +598,8 @@ init:
 	@ config/create_dir $(OBJ_PROF)
 	@ config/create_dir $(OBJ_BP)
 #	@ (cd libs/dcdt; ./makelinks; exit 0) > /dev/null 2>&1
+#
+
+rlgenv_shlib:
+	BUILDMODE=shlib make
+
