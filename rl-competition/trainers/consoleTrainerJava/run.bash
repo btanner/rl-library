@@ -2,7 +2,6 @@
 
 
 #Variables
-#Variables
 basePath=../..
 systemPath=$basePath/system
 libPath=$systemPath/libraries
