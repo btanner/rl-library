@@ -10,6 +10,11 @@ public:
 
   int minerals_left;
 
+  virtual bool deserialize_member(const std::string & key, const std::string & val);
+
+  virtual void serialize_members(bool allied_view, std::ostream &os) const;
+  
+  
   MineralPatch(MiniGameState *s) : GameObj<MiniGameState>(s)
   {
     MiniGameState::GP &gp = state->gp;

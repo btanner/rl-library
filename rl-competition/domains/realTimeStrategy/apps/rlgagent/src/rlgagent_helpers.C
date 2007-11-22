@@ -4,6 +4,7 @@
 #include "Worker.H"
 #include "Marine.H"
 #include "Base.H"
+#include "MineralPatch.H"
 #include "rlglue_agent.H"
 
 #include <stdlib.h>
@@ -198,6 +199,11 @@ void get_actions(vector<int> & vector,
           add_train_marine_action(vector, objId);
         }
       }
+    }
+    else if (objPtr->get_type() == "mineral_patch")
+    {
+      //MineralPatch* mpPtr  = (MineralPatch*)objPtr;
+      //cout << "mp minerals_left = " << mpPtr->minerals_left << endl; 
     }
   }
 }

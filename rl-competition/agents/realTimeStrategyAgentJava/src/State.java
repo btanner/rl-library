@@ -126,6 +126,13 @@ public class State
         marine.is_moving = array[index++];
         index++;
       }
+      else if (type == 3) // mineral patch
+      {
+        MineralPatch mp = (MineralPatch)obj;
+        index++;
+        index++;
+        mp.capacity = array[index++];
+      }
       else
       {
         index++;

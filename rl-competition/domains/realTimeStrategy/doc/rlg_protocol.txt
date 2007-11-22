@@ -32,8 +32,8 @@ described by a constant number of integers, described below:
        0 = false
        1 = true
        if non-mobile unit, this value is meaningless
-  11. amount of minerals carrying
-       if non-worker unit, this value is meaningless
+  11. amount of minerals carrying       
+       if not a worker nor a mineral patch, this value is meaningless
 
 This data must be parsed into a world state object upon arrival. 
 

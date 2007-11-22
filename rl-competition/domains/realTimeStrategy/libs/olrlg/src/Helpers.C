@@ -4,6 +4,7 @@
 #include "Helpers.H"
 #include "Marine.H"
 #include "Worker.H"
+#include "MineralPatch.H"
 
 #include <stdlib.h>
 #include <math.h>
@@ -135,6 +136,14 @@ static void serializeGameState(int* array, const MiniGameState& state)
       array[index++] = marinePtr->is_moving;
       array[index++] = -1;     
     }
+    else if (objPtr->get_type() == "mineral_patch")
+    {
+      MineralPatch* mpPtr = (MineralPatch*)objPtr;
+      
+      array[index++] = -1;
+      array[index++] = -1;
+      array[index++] = mpPtr->minerals_left;      
+    }
     else
     {
       array[index++] = -1;
@@ -197,6 +206,14 @@ static void deserializeGameState(MiniGameState& state, int* array, int length)
       marinePtr->max_speed = array[index++];
       marinePtr->is_moving = array[index++];
       index++;            
+    }
+    else if (objPtr->get_type() == "mineral_patch")
+    {
+      MineralPatch* mpPtr = (MineralPatch*)objPtr;
+      
+      index++;
+      index++;
+      mpPtr->minerals_left = array[index++];
     }
     else
     {
@@ -316,6 +333,17 @@ void rlg_view2obs(Observation& obs, const std::string view, int playernum)
       }
       
       array[index++] = -1;     
+    }
+    else if (attrs[1] == "mineral_patch")
+    {
+      array[index++] = -1;
+      array[index++] = -1;      
+      
+      // last one is minerals left
+      
+      vector<string> aparts; 
+      boost::split(aparts, attrs[10], boost::is_any_of("="));
+      array[index++] = to_int(aparts[1]);      
     }
     else
     {

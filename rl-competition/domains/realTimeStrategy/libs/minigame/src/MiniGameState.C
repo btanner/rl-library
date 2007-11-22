@@ -239,6 +239,14 @@ int MiniGameState::encode_view_rlg(int player, int* & array, int attrs_per_unit)
       array[index++] = marinePtr->is_moving;
       array[index++] = -1;     
     }
+    else if (objPtr->get_type() == "mineral_patch")
+    {
+      MineralPatch* mpPtr = (MineralPatch*)objPtr;
+      
+      array[index++] = -1;     
+      array[index++] = -1;     
+      array[index++] = mpPtr->minerals_left;
+    }
     else
     {
       array[index++] = -1;

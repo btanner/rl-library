@@ -155,6 +155,7 @@ public class OLAgent implements Agent
       {
         mp_x = obj.x;
         mp_y = obj.y;
+        //System.out.println("mp capacity = " + ((MineralPatch)obj).capacity); 
       }
     }
 
