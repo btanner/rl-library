@@ -3,9 +3,9 @@
     <property name="src.dir"     value="src"/>
 
     <property name="build.dir"   value="build"/>
-    <property name="dist.dir"   value="../../dist/agentJars"/>
+    <property name="dist.dir"   value="../../system/dist/agentJars"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
-	<property name="RLVizLib.jar" value="../../libs/RLVizLib.jar" />
+	<property name="RLVizLib.jar" value="../../system/libs/RLVizLib.jar" />
 	<property name="jar.result" value="${dist.dir}/${ant.project.name}.jar" />
 	
 	<path id="application" location="${jar.result}"/>
