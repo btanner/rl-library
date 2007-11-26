@@ -1,0 +1,29 @@
+<project name="RL-Library" basedir="." >
+
+<target name="mountainCar" description="Build Java MountainCar Jar" >
+   <ant antfile="build.xml" dir="environments/mountainCar" inheritAll="false" target="clean-build"/>
+</target>
+
+<target name="randomAgent" description="Build Java Random Agent Jar" >
+   <ant antfile="build.xml" dir="agents/randomAgentJava" inheritAll="false" target="clean-build"/>
+</target>
+
+<target name="all" description="Build all environments and rl-glue" depends="mountainCar,randomAgent,rl-glue">
+</target>	
+
+<target name="rl-glue" description="Build RL-Glue executable">
+	  <exec executable="make" dir="rl-glue">
+		<arg value="rl-glue"/>
+	</exec>
+</target>
+
+<target name="clean" description="Clean everything">
+   <ant antfile="build.xml" dir="environments/mountainCar" inheritAll="false" target="clean"/>
+   <ant antfile="build.xml" dir="agents/randomAgentJava" inheritAll="false" target="clean"/>
+
+	  <exec executable="make" dir="rl-glue">
+		<arg value="clean"/>
+	</exec>
+</target>
+
+</project>
