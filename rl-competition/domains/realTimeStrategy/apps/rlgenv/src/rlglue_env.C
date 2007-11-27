@@ -7,6 +7,7 @@
 #include "SDL_GUI.H"
 #include "SDL_init.H"
 #include "Profiler.H"
+#include "Logger.H"
 
 #include <stdlib.h>
 #include <time.h>
@@ -45,8 +46,10 @@ static string msg_response;
 static Observation obs; 
 static Reward_observation rewobs;
 
-// Only sometimes used for testing timing
+// Extra info
 static Profiler profiler;  
+static Logger * episode_log = NULL;
+static time_t seed;
 
 void timing_start()
 {
@@ -72,9 +75,11 @@ void init_gui(MiniGameState & state)
   }
 }
 
+// Called at the start of every new episode
 static void init() 
 {
-  srand(time(NULL)); 
+  seed = time(NULL);
+  srand(seed); 
   
   time_step = 1;
   
@@ -89,6 +94,10 @@ static void init()
   opponent = new RLComp08Bot1(0); 
   parms = new MiniGameParameters;
   
+  if (episode_log != NULL)
+  { delete episode_log; episode_log = NULL; }
+  episode_log = new Logger; 
+  
   statePtr->init(*parms);
   init_gui(*statePtr);
   
@@ -101,6 +110,10 @@ static void init()
   task_spec_cstr = (char *)malloc(len*sizeof(char));
   memset(task_spec_cstr, 0, len); 
   strcpy(task_spec_cstr, task_spec.c_str());  
+  
+  episode_log->append(to_string((long)seed)); 
+  episode_log->append("@"); 
+  episode_log->append(task_spec); 
   
   msg_response.clear(); 
   
@@ -126,6 +139,8 @@ void uninit()
 
   if (obs.doubleArray != NULL) 
   { free(obs.doubleArray); obs.doubleArray = NULL; } 
+  
+  seed = -1; 
   
   inited = false;   
 }
@@ -157,13 +172,16 @@ Observation env_start()
   
   if (!inited)
     init();   
+
+  episode_log->append("@"); 
+  episode_log->append(statePtr->to_string());   
   
   FORS (i, MiniGameState::PLAYER_NUM) {
     ostringstream os;
     statePtr->encode_view(i, os);
     views[i] = os.str();
-  }
-
+  }  
+  
   // The RL agent will always be player 1. The opponent is player 0.
   
   DPR << "Encoded view (P0) = " << views[0] << endl; 
@@ -198,7 +216,10 @@ Reward_observation env_step(Action a)
 
   // convert the actions to RL-Glue format
   actions[1] = rlg_action2str(a); 
-
+  
+  episode_log->append("@"); episode_log->append(actions[0]);   
+  episode_log->append("@"); episode_log->append(actions[1]);   
+  
   DPR << "opp actions = " << actions[0] << endl; 
   DPR << "rlagent actions = " << actions[1] << endl; 
 
@@ -258,7 +279,7 @@ Reward_observation env_step(Action a)
 
 void env_cleanup()
 {
-  DPR << "RLG> Starting env_cleanup" << endl; 
+  DPR << "RLG> Starting env_cleanup" << endl;
   
   uninit();
   
@@ -267,6 +288,9 @@ void env_cleanup()
 
   if (rewobs.o.doubleArray != NULL) 
   { free(rewobs.o.doubleArray); rewobs.o.doubleArray = NULL; } 
+    
+  if (episode_log != NULL)
+  { delete episode_log; episode_log = NULL; }
     
   /* now msg_response is a C++ string 
   if (msg_response != NULL)
@@ -336,19 +360,18 @@ Message env_message(const Message inMessage) {
     
     return (Message)msg_response.c_str();
   }
-  else if (strcmp(inMessage, "TO=3 FROM=0 CMD=3 VALTYPE=1 VALS=GetRTSState") == 0)
+  else if (strcmp(inMessage, "TO=3 FROM=0 CMD=7 VALTYPE=3 VALS=NULL") == 0)
   {
+    // get a log of the episode so far
+    
     if (!inited)
       init();
 
-    ostringstream oss; 
-    //statePtr->encode_view(0, oss0); 
-    string statestr = oss.str();
-
-    boost::replace_all(statestr, "=", "$");
+    string logstr = episode_log->str(); 
+    boost::replace_all(logstr, "=", "$");
     
-    string resp = "TO=0 FROM=3 CMD=0 VALTYPE=1 VALS=";
-    resp.append(statestr);
+    string resp = "TO=0 FROM=3 CMD=0 VALTYPE=3 VALS=";
+    resp.append(logstr);
     
     DPR << "responding: " << resp << endl;
     

@@ -304,6 +304,8 @@ public:
   
   int check_win();
   
+  std::string to_string(); 
+  
   friend class Base;
   friend class MineralPatch;
   friend class Worker;

@@ -179,7 +179,9 @@ template<class T> T sign(T &x) {
 
 int to_int(const std::string & str);
 bool to_bool(const std::string & str);
+long to_long(const std::string & str);
 std::string to_string(int x); 
+std::string to_string(long x); 
 std::string to_string(double x); 
 
 std::string trim(const std::string & str);

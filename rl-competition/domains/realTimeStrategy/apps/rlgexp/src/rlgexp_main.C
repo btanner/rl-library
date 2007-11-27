@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
 
 /*basic main loop*/
   
-  for (int i = 0; i < 5; i++)
+  for (int i = 0; i < 10; i++)
   {
     cout << "Initializing run " << i << endl; 
     RL_init();

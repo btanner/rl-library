@@ -296,3 +296,18 @@ void MiniGameState::update_score(GameObjBase* obj)
     destruct_cost[target_player] += gp.base_cost;
 }
 
+string MiniGameState::to_string() 
+{
+  string str = "";
+  
+  FORALL (all_objs, i) 
+  {
+    str = str + (*i)->to_string(); 
+    str = str + " "; 
+  }
+  
+  str = str.substr(0, str.length()-1);
+  
+  return str; 
+}
+

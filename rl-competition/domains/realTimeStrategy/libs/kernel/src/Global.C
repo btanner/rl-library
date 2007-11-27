@@ -24,7 +24,22 @@ bool to_bool(const std::string & str)
   return x;  
 }
 
+long to_long(const std::string & str)
+{
+  std::istringstream is(str);
+  long x; 
+  is >> x;
+  return x;  
+}
+
 string to_string(int x)
+{
+  ostringstream oss; 
+  oss << x; 
+  return oss.str();
+}
+
+string to_string(long x)
 {
   ostringstream oss; 
   oss << x; 
