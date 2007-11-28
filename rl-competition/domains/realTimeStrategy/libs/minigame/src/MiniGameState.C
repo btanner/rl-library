@@ -311,3 +311,40 @@ string MiniGameState::to_string()
   return str; 
 }
 
+// Right now this assumes certain types of objects for each owner
+// only to be used at startup!!
+void MiniGameState::from_string(const std::string & statestr)
+{
+  vector<string> objs; 
+  boost::split(objs, statestr, boost::is_any_of(" "));
+  
+  vector<string>::iterator iter;
+  
+  for (iter = objs.begin(); iter != objs.end(); iter++)
+  {
+    string str = *iter;
+
+    string prefix = str.substr(0, 3);
+    
+    if (prefix == "o=0")
+    {
+      Worker *w = new Worker(this);
+      w->deserialize(str); 
+      new_obj(w, 0);
+    }
+    else if (prefix == "o=1")
+    {
+      Worker *w = new Worker(this);
+      w->deserialize(str); 
+      new_obj(w, 1);
+    }
+    else if (prefix == "o=2")
+    {
+      MineralPatch* mp = new MineralPatch(this);
+      mp->deserialize(str);
+      new_obj(mp, 2);
+    }
+  }
+   
+  apply_new_objs(); 
+}

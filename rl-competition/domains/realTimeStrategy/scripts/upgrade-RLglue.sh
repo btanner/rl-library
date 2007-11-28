@@ -67,6 +67,12 @@ cp -v $RLGDIR/RL-Glue/Network/Glue/RL_server_experiment.c apps/rlglue/src/rlglue
 cp -v $RLGDIR/RL-Glue/Network/Experiment/RL_client_experiment.c apps/rlgexp/src/rlglue_exp.C || exit
 
 echo ""
+echo "Part 6 (ParameterHolder)"
+
+cp -v ../../system/includes/ParameterHolder.h $DIR1 || exit
+cp -v ../../system/includes/ParameterHolder.cpp $DIR1 || exit
+
+echo ""
 echo "Success!"
 
 

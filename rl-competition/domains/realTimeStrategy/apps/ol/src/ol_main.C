@@ -3,6 +3,11 @@
 // (c) Michael Buro
 // licensed under GPLv3
 
+#include <string>
+#include <vector>
+#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/split.hpp>
+
 #include "MiniGameState.H"
 #include "SDL_GUI.H"
 #include "SDL_init.H"
@@ -11,38 +16,76 @@
 using namespace std;
 
 void tests(); 
-
 typedef MobileObj<MiniGameState> MobObj;
 
-int main()
+vector<string> * trace = NULL; 
+
+void open_trace(char * filename)
 {
-#if 0
-
-  vector<int> v;
-  const int N = 1000;
-  int count = 0;
+  cout << "Reading in trace file ... " << endl;
   
-  for (int i=0; i < N; i++) v.push_back(i);
+  ifstream inputStream;
+  inputStream.open(filename);
+  if( !inputStream ) {
+    cerr << "Error opening trace file" << endl;
+    exit(-1);
+  }          
+  
+  string str; 
+  getline(inputStream, str); 
+  boost::replace_all(str, "$", "=");
+  
+  trace = new vector<string>;
+  
+  boost::split(*trace, str, boost::is_any_of("@"));
+  
+  long seed = to_long((*trace)[0]);
+  srand(seed); 
+}
 
-  FORALL (v, i) {
-    FORALL (v, j) {
-      count++;
+void usage()
+{
+  cout << "Usage: bin/ol [options]" << endl;
+  cout << endl;
+  cout << "Available options are: " << endl;
+  cout << "   --replay <filename>" << endl; 
+  
+  exit(-1);
+}
+
+void handle_clargs(int argc, char ** argv)
+{
+  //cout << "argc=" << argc << endl;
+  //exit(-1);
+  
+  for (int i = 1; i < argc; i++)
+  {
+    if (strcmp(argv[i], "--replay") == 0)
+    {
+      i++; if (i >= argc) usage();
+      open_trace(argv[i]);
     }
+    else
+      usage();
   }
+}
 
-  cout << count << endl;
-  exit(0);
-
-#endif
-
-
-  
+int main(int argc, char ** argv)
+{
   srandom(time(0));
+
+  handle_clargs(argc, argv);
   
   //tests(); 
   
   MiniGameState s;
   MiniGameParameters gp;
+  
+  if (trace != NULL)
+  {
+    // trace->[1] contains the parms
+    gp.deserialize((*trace)[1]);
+  }
   
   TestPlayer p0(0); 
   p0.set_parms(&gp);
@@ -50,8 +93,20 @@ int main()
   TestPlayer p1(1);
   p1.set_parms(&gp);
 
-  s.init(gp);
-
+  if (trace != NULL)
+  {
+    s.init(gp, true);   // delay object setup
+    
+    // trace->[2] contains the initial state
+    s.from_string((*trace)[2]); 
+  }  
+  else
+  {
+    s.init(gp, false);
+  }
+    
+  unsigned int trace_index = 3; 
+  
   SDL_init::video_init();
   SDL_GUI<MiniGameState> gui;
 
@@ -60,7 +115,6 @@ int main()
   
   gui.init(1024, 768, s, markers);
   gui.display();
-
   
   // compute initial views
   
@@ -92,8 +146,20 @@ int main()
 
     // send views + receive actions ...
 
-    acts[0] = p0.receive_actions(views[0]);
-    acts[1] = p1.receive_actions(views[1]);        
+    if (trace == NULL)
+    {
+      acts[0] = p0.receive_actions(views[0]);
+      acts[1] = p1.receive_actions(views[1]);
+    }
+    else 
+    {
+      if (trace_index >= trace->size())
+        break; 
+      
+      acts[0] = (*trace)[trace_index++];
+      acts[1] = (*trace)[trace_index++];
+    }
+      
     
     // create random move actions (now handled in Player objects)
     // these will be used for separate opponent policies.
@@ -117,7 +183,7 @@ int main()
     }
     */
 
-    gui.delay(125);
+    gui.delay(25);
     
   } while (!gui.quit && !s.finished());
   
@@ -127,6 +193,24 @@ int main()
 // Used for testing functions. Please ignore. 
 void tests()
 {
+  {
+    // vector test
+    vector<int> v;
+    const int N = 1000;
+    int count = 0;
+    
+    for (int i=0; i < N; i++) v.push_back(i);
+  
+    FORALL (v, i) {
+      FORALL (v, j) {
+        count++;
+      }
+    }
+  
+    cout << count << endl;
+    exit(0);
+  }
+  
   { 
     // splitup test
     string str = "hello,my,name,is";
@@ -166,7 +250,7 @@ void tests()
   }
   
   {
-    // trim test
+    // trim test (NOTE: There is one in boost!)
     string str = "   \t \r qklsd dfj  \t asl;k   \n   ";
     string newstr = trim(str);
     cout << "##" << newstr << "##" << endl; 

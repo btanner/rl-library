@@ -70,7 +70,7 @@ public:
   // ------ server functions
 
   // initializes the state
-  void init(const GameParameters &gp);
+  void init(const GameParameters &gp, bool delay_obj_setup = false);
 
   // populates world with objects
   virtual void object_setup() = 0;

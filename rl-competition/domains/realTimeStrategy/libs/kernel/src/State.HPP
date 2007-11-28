@@ -63,7 +63,7 @@ void StateImpl<GameParameters,PlayerData,State>::clear_obj()
 
 // initializes the state
 template <class GameParameters, class PlayerData, class State>
-void StateImpl<GameParameters,PlayerData,State>::init(const GameParameters &gp)
+void StateImpl<GameParameters,PlayerData,State>::init(const GameParameters &gp, bool delay_obj_setup)
 {
   // clean up from last run
   
@@ -84,9 +84,11 @@ void StateImpl<GameParameters,PlayerData,State>::init(const GameParameters &gp)
 
   tick = 0;
   
-  object_setup();
-  
-  apply_new_objs();  
+  if (!delay_obj_setup)
+  {
+    object_setup();
+    apply_new_objs();
+  }
 }
 
 template <class GameParameters, class PlayerData, class State>

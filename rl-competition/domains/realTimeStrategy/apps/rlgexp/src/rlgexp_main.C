@@ -5,7 +5,8 @@
 
 using namespace std; 
 
-//#define NUM_EPISODES 1000
+#define NUM_EPISODES 10
+
 //int rl_num_steps[NUM_EPISODES];
 //double rl_return[NUM_EPISODES];
 
@@ -33,7 +34,7 @@ int main(int argc, char *argv[]) {
 
 /*basic main loop*/
   
-  for (int i = 0; i < 10; i++)
+  for (int i = 0; i < NUM_EPISODES; i++)
   {
     cout << "Initializing run " << i << endl; 
     RL_init();

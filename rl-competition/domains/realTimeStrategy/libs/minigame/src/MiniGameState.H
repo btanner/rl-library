@@ -304,7 +304,8 @@ public:
   
   int check_win();
   
-  std::string to_string(); 
+  std::string to_string();
+  void from_string(const std::string & statestr); 
   
   friend class Base;
   friend class MineralPatch;
