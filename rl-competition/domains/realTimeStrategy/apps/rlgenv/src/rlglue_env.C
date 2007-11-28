@@ -8,6 +8,8 @@
 #include "SDL_init.H"
 #include "Profiler.H"
 #include "Logger.H"
+#include "ParameterHolder.h"
+#include "rlgenv_helpers.H"
 
 #include <stdlib.h>
 #include <time.h>
@@ -51,18 +53,6 @@ static Profiler profiler;
 static Logger * episode_log = NULL;
 static time_t seed;
 
-void timing_start()
-{
-  system("rm /tmp/rlgenv.log");
-  system("echo \"Started at\" >> /tmp/rlgenv.log");
-  system("date >> /tmp/rlgenv.log"); 
-}
-
-void timing_end()
-{
-  system("echo \"Ended at\" >> /tmp/rlgenv.log");
-  system("date >> /tmp/rlgenv.log"); 
-}
 
 void init_gui(MiniGameState & state) 
 {
@@ -76,7 +66,7 @@ void init_gui(MiniGameState & state)
 }
 
 // Called at the start of every new episode
-static void init() 
+static void init(ParameterHolder * phPtr = NULL) 
 {
   seed = time(NULL);
   srand(seed); 
@@ -93,6 +83,7 @@ static void init()
   statePtr = new MiniGameState; 
   opponent = new RLComp08Bot1(0); 
   parms = new MiniGameParameters;
+  if (phPtr != NULL) copyParms(phPtr, parms); 
   
   if (episode_log != NULL)
   { delete episode_log; episode_log = NULL; }
@@ -378,6 +369,19 @@ Message env_message(const Message inMessage) {
     msg_response.append(resp);
     
     return (Message)msg_response.c_str();
+  }
+  else if (strcmp(inMessage, "setParms") == 0)
+  {
+    if (inited)
+      uninit(); 
+    
+    // parse the parms string from the message
+    string theParmsString; 
+    
+    // init using these parms
+    ParameterHolder ph(theParmsString);
+    
+    init(&ph);
   }
   
   return "message not handled. "; 
