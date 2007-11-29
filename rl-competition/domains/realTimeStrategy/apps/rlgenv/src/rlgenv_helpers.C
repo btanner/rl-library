@@ -1,9 +1,14 @@
 
+#include <vector>
+#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/split.hpp>
+
 #include <stdlib.h>
 
 #include "rlgenv_helpers.H"
-
 #include "RLComp08Bot1.H"
+
+using namespace std;
 
 void timing_start()
 {
@@ -74,5 +79,43 @@ Player* get_opponent(MiniGameParameters * mgpPtr)
   
   // Default to training bot
   return new RLComp08Bot1(0);
+}
+
+void printout_phstr(char * parmsfile)
+{
+  ifstream file(parmsfile, ios::in);
+  
+  if (!file) {
+    cerr << "Error opening file" << endl;
+    exit(-1);
+  }
+  
+  ParameterHolder ph; 
+  string line; 
+  
+  while (getline(file, line)) {
+    //cout << line << endl;
+    
+    vector<string> parts;
+    boost::split(parts, line, boost::is_any_of(","));
+    
+    if (parts[0] == "int")
+    {
+      int val = to_int(parts[2]); 
+      ph.addIntegerParam(parts[1], val);
+      cout << "Adding integer parm " << parts[1] << " " << val << endl; 
+    }
+    else if (parts[0] == "str")
+    {
+      cout << "Adding string parm " << parts[1] << " " << parts[2] << endl; 
+      ph.addStringParam(parts[1], parts[2]);
+    }    
+  }
+  
+  cout << ph.stringSerialize() << endl;
+  
+  file.close();
+  
+  exit(0);
 }
 

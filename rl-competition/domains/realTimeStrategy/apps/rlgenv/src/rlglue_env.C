@@ -146,7 +146,9 @@ void uninit()
  * Returns a description of the environment at the start of the episode. 
  */
 Task_specification env_init()
-{    
+{
+  //printout_phstr("/usr/erskine7/cshome/lanctot/rlgparms1.txt");
+  
   DPR << "RLG> Starting env_init ..." << endl;
   
   if (!inited)

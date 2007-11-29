@@ -12,4 +12,6 @@ void timing_end();
 void copy_parms(ParameterHolder * phPtr, MiniGameParameters * mgpPtr);
 Player* get_opponent(MiniGameParameters * mgpPtr);
 
+void printout_phstr(char * parmsfile);
+
 #endif
