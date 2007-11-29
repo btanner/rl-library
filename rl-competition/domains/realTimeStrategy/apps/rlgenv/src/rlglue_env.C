@@ -31,7 +31,7 @@ static bool debug = false;
 // GUI vars. To enable SDL GUI, set use_gui to true 
 // *and* ENABLE_GUI=1 in Makefile
 static SDL_GUI<MiniGameState> gui;
-static bool use_gui = false;
+static bool use_gui = true;
 static int gui_delay = 25;
 static std::map<std::string, SDL_GUI<MiniGameState>::Marker> markers;
 
@@ -84,6 +84,7 @@ static void init(ParameterHolder * phPtr = NULL)
   
   parms = new MiniGameParameters;
   if (phPtr != NULL) copy_parms(phPtr, parms);
+  //else load_parms("/home/lanctot/rlgparms2.txt", parms);
   
   //opponent = new RLComp08Bot1(0);
   opponent = get_opponent(parms);
