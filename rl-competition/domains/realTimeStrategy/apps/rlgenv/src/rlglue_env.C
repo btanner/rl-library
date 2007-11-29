@@ -374,13 +374,15 @@ Message env_message(const Message inMessage) {
     
     return (Message)msg_response.c_str();
   }
-  else if (strcmp(inMessage, "setParms") == 0)
+  else if (strncmp(inMessage, "TO=3 FROM=0 CMD=5 VALTYPE=3 VALS=", 34) == 0)
   {
     if (inited)
       uninit(); 
     
+    string whole_message(inMessage);
+    
     // parse the parms string from the message
-    string theParmsString; 
+    string theParmsString = whole_message.substr(34); 
     
     // init using these parms
     ParameterHolder ph(theParmsString);
