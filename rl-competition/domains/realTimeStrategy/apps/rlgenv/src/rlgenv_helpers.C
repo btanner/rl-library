@@ -28,44 +28,44 @@ void copy_parms(ParameterHolder * phPtr, MiniGameParameters * mgpPtr)
 {
   mgpPtr->width                        = phPtr->getIntegerParam("width");
   mgpPtr->height                       = phPtr->getIntegerParam("height");
-  mgpPtr->mineral_patches              = phPtr->getIntegerParam("mineral_patches");
+  mgpPtr->mineral_patches              = phPtr->getIntegerParam("mineralpatches");
   
-  mgpPtr->base_radius                  = phPtr->getIntegerParam("base_radius");
-  mgpPtr->base_sight_range             = phPtr->getIntegerParam("base_sight_range");
-  mgpPtr->base_atk_range               = phPtr->getIntegerParam("base_atk_range");
-  mgpPtr->base_hp                      = phPtr->getIntegerParam("base_hp");
-  mgpPtr->base_armor                   = phPtr->getIntegerParam("base_armor");  
-  mgpPtr->base_cost                    = phPtr->getIntegerParam("base_cost");
-  mgpPtr->base_build_time              = phPtr->getIntegerParam("base_build_time");
-  mgpPtr->base_atk_value               = phPtr->getIntegerParam("base_atk_value");
+  mgpPtr->base_radius                  = phPtr->getIntegerParam("baseradius");
+  mgpPtr->base_sight_range             = phPtr->getIntegerParam("basesightrange");
+  mgpPtr->base_atk_range               = phPtr->getIntegerParam("baseatkrange");
+  mgpPtr->base_hp                      = phPtr->getIntegerParam("basehp");
+  mgpPtr->base_armor                   = phPtr->getIntegerParam("basearmor");  
+  mgpPtr->base_cost                    = phPtr->getIntegerParam("basecost");
+  mgpPtr->base_build_time              = phPtr->getIntegerParam("basebuildtime");
+  mgpPtr->base_atk_value               = phPtr->getIntegerParam("baseatkvalue");
   
-  mgpPtr->marine_radius                = phPtr->getIntegerParam("marine_radius");
-  mgpPtr->marine_sight_range           = phPtr->getIntegerParam("marine_sight_range");
-  mgpPtr->marine_atk_range             = phPtr->getIntegerParam("marine_atk_range");
-  mgpPtr->marine_hp                    = phPtr->getIntegerParam("marine_hp");
-  mgpPtr->marine_armor                 = phPtr->getIntegerParam("marine_armor"); 
-  mgpPtr->marine_max_speed             = phPtr->getIntegerParam("marine_max_speed");   
-  mgpPtr->marine_cost                  = phPtr->getIntegerParam("marine_cost");
-  mgpPtr->marine_training_time         = phPtr->getIntegerParam("marine_training_time");
-  mgpPtr->marine_atk_value             = phPtr->getIntegerParam("marine_atk_value");
+  mgpPtr->marine_radius                = phPtr->getIntegerParam("marineradius");
+  mgpPtr->marine_sight_range           = phPtr->getIntegerParam("marinesightrange");
+  mgpPtr->marine_atk_range             = phPtr->getIntegerParam("marineatkrange");
+  mgpPtr->marine_hp                    = phPtr->getIntegerParam("marinehp");
+  mgpPtr->marine_armor                 = phPtr->getIntegerParam("marinearmor"); 
+  mgpPtr->marine_max_speed             = phPtr->getIntegerParam("marinemaxspeed");   
+  mgpPtr->marine_cost                  = phPtr->getIntegerParam("marinecost");
+  mgpPtr->marine_training_time         = phPtr->getIntegerParam("marinetrainingtime");
+  mgpPtr->marine_atk_value             = phPtr->getIntegerParam("marineatkvalue");
   
-  mgpPtr->worker_radius                = phPtr->getIntegerParam("worker_radius");
-  mgpPtr->worker_sight_range           = phPtr->getIntegerParam("worker_sight_range");
-  mgpPtr->worker_atk_range             = phPtr->getIntegerParam("worker_atk_range");
-  mgpPtr->worker_hp                    = phPtr->getIntegerParam("worker_hp");
-  mgpPtr->worker_armor                 = phPtr->getIntegerParam("worker_armor"); 
-  mgpPtr->worker_max_speed             = phPtr->getIntegerParam("worker_max_speed");   
-  mgpPtr->worker_cost                  = phPtr->getIntegerParam("worker_cost");
-  mgpPtr->worker_training_time         = phPtr->getIntegerParam("worker_training_time");
-  mgpPtr->worker_atk_value             = phPtr->getIntegerParam("worker_atk_value");
-  mgpPtr->worker_mining_time           = phPtr->getIntegerParam("worker_mining_time");  
-  mgpPtr->worker_mineral_capacity      = phPtr->getIntegerParam("worker_mineral_capacity");
+  mgpPtr->worker_radius                = phPtr->getIntegerParam("workerradius");
+  mgpPtr->worker_sight_range           = phPtr->getIntegerParam("workersightrange");
+  mgpPtr->worker_atk_range             = phPtr->getIntegerParam("workeratkrange");
+  mgpPtr->worker_hp                    = phPtr->getIntegerParam("workerhp");
+  mgpPtr->worker_armor                 = phPtr->getIntegerParam("workerarmor"); 
+  mgpPtr->worker_max_speed             = phPtr->getIntegerParam("workermaxspeed");   
+  mgpPtr->worker_cost                  = phPtr->getIntegerParam("workercost");
+  mgpPtr->worker_training_time         = phPtr->getIntegerParam("workertrainingtime");
+  mgpPtr->worker_atk_value             = phPtr->getIntegerParam("workeratkvalue");
+  mgpPtr->worker_mining_time           = phPtr->getIntegerParam("workerminingtime");  
+  mgpPtr->worker_mineral_capacity      = phPtr->getIntegerParam("workermineralcapacity");
   
-  mgpPtr->mineral_patch_radius         = phPtr->getIntegerParam("mineral_patch_radius");
-  mgpPtr->mineral_patch_sight_range    = phPtr->getIntegerParam("mineral_patch_sight_range");
-  mgpPtr->mineral_patch_hp             = phPtr->getIntegerParam("mineral_patch_hp");
-  mgpPtr->mineral_patch_armor          = phPtr->getIntegerParam("mineral_patch_armor");
-  mgpPtr->mineral_patch_capacity       = phPtr->getIntegerParam("mineral_patch_capacity");
+  mgpPtr->mineral_patch_radius         = phPtr->getIntegerParam("mineralpatchradius");
+  mgpPtr->mineral_patch_sight_range    = phPtr->getIntegerParam("mineralpatchsight_range");
+  mgpPtr->mineral_patch_hp             = phPtr->getIntegerParam("mineralpatchhp");
+  mgpPtr->mineral_patch_armor          = phPtr->getIntegerParam("mineralpatcharmor");
+  mgpPtr->mineral_patch_capacity       = phPtr->getIntegerParam("mineralpatchcapacity");
   
   mgpPtr->bot0                         = phPtr->getStringParam("bot0");
 }

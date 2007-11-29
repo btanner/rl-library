@@ -367,6 +367,7 @@ Message env_message(const Message inMessage) {
     boost::replace_all(logstr, "=", "$");
     
     string resp = "TO=0 FROM=3 CMD=0 VALTYPE=3 VALS=";
+    resp.append("1:"); // Brian asked for this to be prepended
     resp.append(logstr);
     
     DPR << "responding: " << resp << endl;
