@@ -80,10 +80,13 @@ static void init(ParameterHolder * phPtr = NULL)
   rewobs.terminal = 0;
   rewobs.r = 0;
 
-  statePtr = new MiniGameState; 
-  opponent = new RLComp08Bot1(0); 
+  statePtr = new MiniGameState;
+  
   parms = new MiniGameParameters;
-  if (phPtr != NULL) copyParms(phPtr, parms); 
+  if (phPtr != NULL) copy_parms(phPtr, parms);
+  
+  //opponent = new RLComp08Bot1(0);
+  opponent = get_opponent(parms);
   
   if (episode_log != NULL)
   { delete episode_log; episode_log = NULL; }

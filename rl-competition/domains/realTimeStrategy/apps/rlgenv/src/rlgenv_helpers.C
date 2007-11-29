@@ -3,6 +3,8 @@
 
 #include "rlgenv_helpers.H"
 
+#include "RLComp08Bot1.H"
+
 void timing_start()
 {
   system("rm /tmp/rlgenv.log");
@@ -17,7 +19,7 @@ void timing_end()
 }
 
 
-void copyParms(ParameterHolder * phPtr, MiniGameParameters * mgpPtr)
+void copy_parms(ParameterHolder * phPtr, MiniGameParameters * mgpPtr)
 {
   mgpPtr->width                        = phPtr->getIntegerParam("width");
   mgpPtr->height                       = phPtr->getIntegerParam("height");
@@ -59,4 +61,18 @@ void copyParms(ParameterHolder * phPtr, MiniGameParameters * mgpPtr)
   mgpPtr->mineral_patch_hp             = phPtr->getIntegerParam("mineral_patch_hp");
   mgpPtr->mineral_patch_armor          = phPtr->getIntegerParam("mineral_patch_armor");
   mgpPtr->mineral_patch_capacity       = phPtr->getIntegerParam("mineral_patch_capacity");
+  
+  mgpPtr->bot0                         = phPtr->getStringParam("bot0");
 }
+
+Player* get_opponent(MiniGameParameters * mgpPtr)
+{
+  if (mgpPtr->bot0 == "RLComp08Bot1")
+    return new RLComp08Bot1(0);
+  if (mgpPtr->bot0 == "RLComp08Bot2")
+    return NULL;
+  
+  // Default to training bot
+  return new RLComp08Bot1(0);
+}
+

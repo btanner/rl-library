@@ -4,10 +4,12 @@
 
 #include "ParameterHolder.h"
 #include "MiniGameState.H"
+#include "Player.H"
 
 void timing_start();
 void timing_end();
 
-void copyParms(ParameterHolder * phPtr, MiniGameParameters * mgpPtr);
+void copy_parms(ParameterHolder * phPtr, MiniGameParameters * mgpPtr);
+Player* get_opponent(MiniGameParameters * mgpPtr);
 
 #endif

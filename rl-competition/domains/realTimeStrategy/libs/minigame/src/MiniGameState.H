@@ -3,6 +3,7 @@
 
 #include "State.H"
 
+#include <string>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <iostream>
@@ -69,6 +70,11 @@ struct MiniGameParameters
   int worker_mining_time; 
   int worker_mineral_capacity;
 
+  // --------------
+  
+  std::string bot0;
+  
+  
   void serialize(std::ostream &os)
   {    
     os << "width="                    << width
@@ -110,6 +116,8 @@ struct MiniGameParameters
        << ",worker_atk_value="        << worker_atk_value
        << ",worker_mining_time="      << worker_mining_time
        << ",worker_mineral_capacity=" << worker_mineral_capacity
+       
+       << ",bot0="                    << bot0         
       ;
   }
     
@@ -167,6 +175,8 @@ struct MiniGameParameters
       else if (key == "worker_atk_value")         worker_atk_value = to_int(val); 
       else if (key == "worker_mining_time")       worker_mining_time = to_int(val); 
       else if (key == "worker_mineral_capacity")  worker_mineral_capacity = to_int(val); 
+
+      else if (key == "bot0")                     bot0 = val; 
     
     }
     
@@ -232,6 +242,10 @@ struct MiniGameParameters
     worker_mining_time        = 3;
     worker_mineral_capacity   = 10;
     worker_atk_value            = 1;
+    
+    // ----------------
+    
+    bot0 = "RLComp08Bot1";    
   }
   
 };
