@@ -50,7 +50,7 @@ echo "Starting up real time strategy - PID=$rtsPID"
 #Start the visualizer program
 #
 macAboutNameCommand=-Dcom.apple.mrj.application.apple.menu.about.name=RLVizApp
-java -Xcheck:jni -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $macAboutNameCommand -Xmx128M -cp $compLib:$guiLib:./bin/rlViz.jar btViz.NoDynamicLoadingGraphicalDriver
+java -Xcheck:jni -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $macAboutNameCommand -Xmx128M -cp $compLib:$guiLib:./bin/RLVizApp.jar btViz.NoDynamicLoadingGraphicalDriver
 
 echo "-- Visualizer is finished"
 
