@@ -148,6 +148,7 @@ void uninit()
 Task_specification env_init()
 {
   //printout_phstr("/usr/erskine7/cshome/lanctot/rlgparms1.txt");
+  //printout_phstr("/home/lanctot/rlgparms1.txt");
   
   DPR << "RLG> Starting env_init ..." << endl;
   
@@ -360,9 +361,6 @@ Message env_message(const Message inMessage) {
   {
     // get a log of the episode so far
     
-    if (!inited)
-      init();
-
     string logstr = episode_log->str(); 
     boost::replace_all(logstr, "=", "$");
     
