@@ -107,6 +107,7 @@ double RLComp08Bot1::dist(int x1, int y1, int x2, int y2)
   return sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1));
 }
 
+
 void RLComp08Bot1::computeVisible()
 {
   my_vobjs.clear();

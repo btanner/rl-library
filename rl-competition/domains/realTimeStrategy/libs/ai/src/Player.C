@@ -167,3 +167,5 @@ string RandomPlayer::receive_actions(string view)
   
   return actionstr;
 }
+
+

@@ -8,6 +8,7 @@
 
 void timing_start();
 void timing_end();
+void logstr(const std::string & str); 
 
 void copy_parms(ParameterHolder * phPtr, MiniGameParameters * mgpPtr);
 Player* get_opponent(MiniGameParameters * mgpPtr);

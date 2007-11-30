@@ -24,6 +24,15 @@ void timing_end()
   system("date >> /tmp/rlgenv.log"); 
 }
 
+void logstr(const std::string & str)
+{
+  string cmd = "echo \"";
+  cmd += str;
+  cmd += "\">>/tmp/rlgenv.log"; 
+  system(cmd.c_str()); 
+}
+
+
 
 void copy_parms(ParameterHolder * phPtr, MiniGameParameters * mgpPtr)
 {
