@@ -10,6 +10,6 @@ provingPath=$systemPath/proving
 compLib=$libPath/RLVizLib.jar
 
 echo "Starting up proving software..."
-java -Xmx128M -jar ./bin/Proving.jar
-#java -Xmx128M -cp $compLib -jar ./bin/Proving.jar
+macAboutNameCommand=-Dcom.apple.mrj.application.apple.menu.about.name=RLVizApp
+java -Xmx128M  $macAboutNameCommand -jar ./bin/Proving.jar
 echo "-- Proving software finished"

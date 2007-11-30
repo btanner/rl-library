@@ -22,8 +22,8 @@ def main():
 	whichTrainingMDP = 0
 	# Uncomment ONE of the following lines to choose your experiment
 	#loadTetris(whichTrainingMDP); #put the desired parameter set in where MDP is in [0,19]
- 	loadMountainCar(whichTrainingMDP); #put the desired parameter set in where MDP is in [0,29]
 	#loadHelicopter(whichTrainingMDP); #put the desired parameter set in where MDP is in [0,9]
+ 	loadMountainCar(whichTrainingMDP); #put the desired parameter set in where MDP is in [0,29]
 
 
 	# and then,

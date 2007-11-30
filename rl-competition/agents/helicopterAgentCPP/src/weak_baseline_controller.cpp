@@ -47,7 +47,7 @@ void agent_init(const Task_specification task_spec)
 
 
 Action agent_start(Observation o)
-{	
+{
 	agent_policy(o, agent_data.action);
 	return (agent_data.action);
 }
