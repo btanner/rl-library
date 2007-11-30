@@ -15,6 +15,6 @@ Player* get_opponent(MiniGameParameters * mgpPtr);
 
 void printout_phstr(char * parmsfile);
 
-void load_parms(char * parmsfile, MiniGameParameters * mgpPtr);
+
 
 #endif

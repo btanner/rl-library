@@ -1,5 +1,6 @@
 
 #include <vector>
+#include <fstream>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/split.hpp>
 
@@ -26,10 +27,9 @@ void timing_end()
 
 void logstr(const std::string & str)
 {
-  string cmd = "echo \"";
-  cmd += str;
-  cmd += "\">>/tmp/rlgenv.log"; 
-  system(cmd.c_str()); 
+  ofstream out("/tmp/rlgenv.log", ios::app);
+  out << str << endl;
+  out.close();
 }
 
 
@@ -129,80 +129,3 @@ void printout_phstr(char * parmsfile)
   exit(0);
 }
 
-void set_parm(MiniGameParameters * mgpPtr, string parm, int val)
-{
-  if      (parm == "width")                 mgpPtr->width = val;
-  else if (parm == "height")                mgpPtr->height = val;
-  else if (parm == "mineralpatches")        mgpPtr->mineral_patches = val;
-  
-  else if (parm == "baseradius")            mgpPtr->base_radius = val;
-  else if (parm == "basesightrange")        mgpPtr->base_sight_range = val;
-  else if (parm == "baseatkrange")          mgpPtr->base_atk_range = val;
-  else if (parm == "basehp")                mgpPtr->base_hp = val;
-  else if (parm == "basearmor")             mgpPtr->base_armor = val;
-  else if (parm == "basecost")              mgpPtr->base_cost = val;
-  else if (parm == "basebuildtime")         mgpPtr->base_build_time = val;
-  else if (parm == "baseatkvalue")          mgpPtr->base_atk_value = val;
-  
-  else if (parm == "marineradius")            mgpPtr->marine_radius = val;
-  else if (parm == "marinesightrange")        mgpPtr->marine_sight_range = val;
-  else if (parm == "marineatkrange")          mgpPtr->marine_atk_range = val;
-  else if (parm == "marinehp")                mgpPtr->marine_hp = val;
-  else if (parm == "marinearmor")             mgpPtr->marine_armor = val;
-  else if (parm == "marinemaxspeed")          mgpPtr->marine_max_speed = val;
-  else if (parm == "marinecost")              mgpPtr->marine_cost = val;
-  else if (parm == "marinetrainingtime")      mgpPtr->marine_training_time = val;
-  else if (parm == "marineatkvalue")          mgpPtr->marine_atk_value = val;
-
-  else if (parm == "workerradius")            mgpPtr->worker_radius = val;
-  else if (parm == "workersightrange")        mgpPtr->worker_sight_range = val;
-  else if (parm == "workeratkrange")          mgpPtr->worker_atk_range = val;
-  else if (parm == "workerhp")                mgpPtr->worker_hp = val;
-  else if (parm == "workerarmor")             mgpPtr->worker_armor = val;
-  else if (parm == "workermaxspeed")          mgpPtr->worker_max_speed = val;
-  else if (parm == "workercost")              mgpPtr->worker_cost = val;
-  else if (parm == "workertrainingtime")      mgpPtr->worker_training_time = val;
-  else if (parm == "workeratkvalue")          mgpPtr->worker_atk_value = val;
-  else if (parm == "workerminingtime")        mgpPtr->worker_mining_time = val;
-  else if (parm == "workermineralcapacity")   mgpPtr->worker_mineral_capacity = val;
-
-  else if (parm == "mineralpatchradius")      mgpPtr->mineral_patch_radius = val;
-  else if (parm == "mineralpatchsightrange")  mgpPtr->mineral_patch_sight_range = val;
-  else if (parm == "mineralpatchhp")          mgpPtr->mineral_patch_hp = val;
-  else if (parm == "mineralpatcharmor")       mgpPtr->mineral_patch_armor = val;  
-  else if (parm == "mineralpatchcapacity")    mgpPtr->mineral_patch_capacity = val;    
-}
-
-void load_parms(char * parmsfile, MiniGameParameters * mgpPtr)
-{
-  ifstream file(parmsfile, ios::in);
-  
-  if (!file) {
-    cerr << "Error opening file" << endl;
-    exit(-1);
-  }
-  
-  ParameterHolder ph; 
-  string line; 
-  
-  while (getline(file, line)) {
-    //cout << line << endl;
-    
-    vector<string> parts;
-    boost::split(parts, line, boost::is_any_of(","));
-    
-    if (parts[0] == "int")
-    {
-      int val = to_int(parts[2]); 
-      string key = parts[1];
-      set_parm(mgpPtr, key, val);
-    }
-    else if (parts[0] == "str")
-    {
-      if (parts[1] == "bot0")
-        mgpPtr->bot0 = parts[2];
-    }    
-  }
-  
-  file.close();
-}

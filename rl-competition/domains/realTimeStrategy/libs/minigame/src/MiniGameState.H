@@ -327,4 +327,7 @@ public:
   friend class Marine;
 };
 
+void load_parms(char * parmsfile, MiniGameParameters * mgpPtr);
+
+
 #endif

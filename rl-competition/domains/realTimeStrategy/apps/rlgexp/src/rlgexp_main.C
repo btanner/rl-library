@@ -5,7 +5,9 @@
 
 using namespace std; 
 
-#define NUM_EPISODES 1
+#define NUM_EPISODES 100
+
+static bool initclean_once = true;
 
 //int rl_num_steps[NUM_EPISODES];
 //double rl_return[NUM_EPISODES];
@@ -32,28 +34,44 @@ int main(int argc, char *argv[]) {
   double avg_steps = 0.0;
   double avg_return = 0.0;*/
 
+  if (initclean_once)
+    RL_init();
+  
 /*basic main loop*/
+  double total = 0;
   
   for (int i = 0; i < NUM_EPISODES; i++)
   {
-    cout << "Initializing run " << i << endl; 
-    RL_init();
+    cout << "E" << i << " ";
+    
+    if (!initclean_once)
+      RL_init();    
   
-    cout << "Running episodes" << endl; 
+    //cout << "Running episodes" << endl; 
     run(1);
 
-    cout << "Return is " << RL_return() << endl; 
-  
-    cout << "Cleaning up" << endl; 
-    RL_cleanup();
+    double ret =  RL_return();
+    cout << " R = " << ret << endl; 
+    total += ret;
+    fflush(stdout); 
+    
+    //cout << "Cleaning up" << endl; 
+    
+    if (!initclean_once)
+      RL_cleanup();
   }
+  
+  cout << "Average return is: " << (total/NUM_EPISODES) << endl;
   
   /*add up all the steps and all the returns*/
   //for (i = 0; i < NUM_EPISODES; i++) {
   //  avg_steps += rl_num_steps[i];
   //  avg_return += rl_return[i];
   //}
-
+  
+  if (initclean_once)
+    RL_cleanup();
+  
 /*average steps and returns*/
   //avg_steps /= NUM_EPISODES;
   //avg_return /= NUM_EPISODES;

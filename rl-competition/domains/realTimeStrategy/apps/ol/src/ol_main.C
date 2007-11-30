@@ -12,6 +12,8 @@
 #include "SDL_GUI.H"
 #include "SDL_init.H"
 #include "Player.H"
+#include "RLComp08Bot1.H"
+#include "RLComp08Bot2.H"
 
 using namespace std;
 
@@ -19,6 +21,7 @@ void tests();
 typedef MobileObj<MiniGameState> MobObj;
 
 vector<string> * trace = NULL; 
+static char * parmsfile = NULL; 
 
 void open_trace(char * filename)
 {
@@ -48,6 +51,7 @@ void usage()
   cout << "Usage: bin/ol [options]" << endl;
   cout << endl;
   cout << "Available options are: " << endl;
+  cout << "   --parms <filename>" << endl; 
   cout << "   --replay <filename>" << endl; 
   
   exit(-1);
@@ -65,6 +69,11 @@ void handle_clargs(int argc, char ** argv)
       i++; if (i >= argc) usage();
       open_trace(argv[i]);
     }
+    else if (strcmp(argv[i], "--parms") == 0)
+    {
+      i++; if (i >= argc) usage();
+      parmsfile = argv[i];
+    }
     else
       usage();
   }
@@ -76,16 +85,21 @@ int main(int argc, char ** argv)
 
   handle_clargs(argc, argv);
   
-  //tests(); 
+  //tests();   
   
   MiniGameState s;
   MiniGameParameters gp;
+  if (parmsfile != NULL);
+    load_parms(parmsfile, &gp);
   
   if (trace != NULL)
   {
     // trace->[1] contains the parms
     gp.deserialize((*trace)[1]);
   }
+  
+  //RLComp08Bot1 p0(0); <-- can't do this yet because of all the
+  // assumptions about being player 1 in the RL framework
   
   TestPlayer p0(0); 
   p0.set_parms(&gp);

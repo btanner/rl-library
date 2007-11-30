@@ -74,6 +74,8 @@ string Player::compose_action(int id, const std::string& act)
 std::string Player::compose_move_action(int id, int x, int y, int speed)
 {
   ostringstream oss; 
+  if (x < 0 || y < 0)
+    ERR("bad values for move parms!");
   oss << id << " move " << x << " " << y << " " << speed; 
   return oss.str(); 
 }

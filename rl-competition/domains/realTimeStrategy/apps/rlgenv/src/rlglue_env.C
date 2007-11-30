@@ -68,9 +68,7 @@ void init_gui(MiniGameState & state)
 
 // Called at the start of every new episode
 static void init() 
-{
-  //printout_phstr("/usr/erskine7/cshome/lanctot/rlgparms2.txt"); 
-  
+{  
   seed = time(NULL);
   srand(seed); 
   
@@ -87,9 +85,7 @@ static void init()
   
   parms = new MiniGameParameters;
   if (parm_holder != NULL) copy_parms(parm_holder, parms);
-  //else load_parms("/home/lanctot/rlgparms2.txt", parms);
-  //else load_parms("/usr/erskine7/cshome/lanctot/rlgparms2.txt", parms);
-  
+  //else load_parms("/path/to/parmsfile.txt", parms);
   
   //opponent = new RLComp08Bot1(0);
   opponent = get_opponent(parms);
@@ -336,10 +332,6 @@ Random_seed_key env_get_random_seed()
 Message env_message(const Message inMessage) {
   DPR << "received message " << inMessage << endl;
   
-  //string str(inMessage); 
-  //str = "Received Message: " + str; 
-  //logstr(str); 
-  
   msg_response.clear(); 
 
   if (strcmp(inMessage, "TO=3 FROM=0 CMD=4 VALTYPE=3 VALS=NULL") == 0)
@@ -376,12 +368,12 @@ Message env_message(const Message inMessage) {
   {
     // get a log of the episode so far
     
-    string logstr = episode_log->str(); 
-    boost::replace_all(logstr, "=", "$");
+    string eplog = episode_log->str(); 
+    boost::replace_all(eplog, "=", "$");
     
     string resp = "TO=0 FROM=3 CMD=0 VALTYPE=3 VALS=";
     resp.append("1:"); // Brian asked for this to be prepended
-    resp.append(logstr);
+    resp.append(eplog);
     
     DPR << "responding: " << resp << endl;
     
@@ -391,8 +383,6 @@ Message env_message(const Message inMessage) {
   }
   else if (strncmp(inMessage, "TO=3 FROM=0 CMD=5 VALTYPE=3 VALS=", 33) == 0)
   {                           
-    //logstr ("Running param holder handler!");
-    
     if (inited)
       uninit(); 
     

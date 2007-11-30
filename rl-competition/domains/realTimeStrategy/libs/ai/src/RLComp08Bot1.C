@@ -201,36 +201,6 @@ bool RLComp08Bot1::a_sees_loc(GameObj<MiniGameState>* obj, int x, int y, int rad
   return d <= square(radius + obj->sight_range);  
 }
 
-void RLComp08Bot1::check_mp_gone()
-{
-  if (mpinfo.size() == 0)
-    return;
-  
-  // if a unit can see the spot and the mp is not there, remove it from our list of tracked ones
-  FORALL(my_vobjs, iter) 
-  {
-    if (a_sees_loc(*iter, cmp_x, cmp_y, parmsPtr->mineral_patch_radius))
-    {
-      FORALL(vmps, iter2)
-      {
-        MineralPatch* mp = (MineralPatch*)(*iter2); 
-        if (cmp_x == mp->x && cmp_y == mp->y)
-        {
-          // we see it, not gone!
-          return;
-        }
-      }
-      
-      // we can't see it anymore, it's gone :( remove it
-      
-      pair<int, int> coord; 
-      coord.first = cmp_x;
-      coord.second = cmp_y; 
-      mpinfo.erase(coord); 
-      return;
-    }
-  }
-}
 
 void RLComp08Bot1::bounds_fix(int * x, int * y)
 {
@@ -355,6 +325,38 @@ void RLComp08Bot1::set_onguard(std::ostringstream & actstream, MiniGameState& st
     }
   }
 }
+
+void RLComp08Bot1::check_mp_gone()
+{
+  if (mpinfo.size() == 0)
+    return;
+  
+  // if a unit can see the spot and the mp is not there, remove it from our list of tracked ones
+  FORALL(my_vobjs, iter) 
+  {
+    if (a_sees_loc(*iter, cmp_x, cmp_y, parmsPtr->mineral_patch_radius))
+    {
+      FORALL(vmps, iter2)
+      {
+        MineralPatch* mp = (MineralPatch*)(*iter2); 
+        if (cmp_x == mp->x && cmp_y == mp->y)
+        {
+          // we see it, not gone!
+          return;
+        }
+      }
+      
+      // we can't see it anymore, it's gone :( remove it
+      
+      pair<int, int> coord; 
+      coord.first = cmp_x;
+      coord.second = cmp_y; 
+      mpinfo.erase(coord); 
+      return;
+    }
+  }
+}
+
 
 void RLComp08Bot1::phase1(ostringstream & actstream, MiniGameState& state)
 {
