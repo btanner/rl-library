@@ -31,7 +31,7 @@ static bool debug = false;
 // GUI vars. To enable SDL GUI, set use_gui to true 
 // *and* ENABLE_GUI=1 in Makefile
 static SDL_GUI<MiniGameState> gui;
-static bool use_gui = true;
+static bool use_gui = false;
 static int gui_delay = 25;
 static std::map<std::string, SDL_GUI<MiniGameState>::Marker> markers;
 
@@ -52,6 +52,7 @@ static Reward_observation rewobs;
 static Profiler profiler;  
 static Logger * episode_log = NULL;
 static time_t seed;
+static ParameterHolder * parm_holder = NULL; 
 
 
 void init_gui(MiniGameState & state) 
@@ -66,7 +67,7 @@ void init_gui(MiniGameState & state)
 }
 
 // Called at the start of every new episode
-static void init(ParameterHolder * phPtr = NULL) 
+static void init() 
 {
   //printout_phstr("/usr/erskine7/cshome/lanctot/rlgparms2.txt"); 
   
@@ -85,7 +86,7 @@ static void init(ParameterHolder * phPtr = NULL)
   statePtr = new MiniGameState;
   
   parms = new MiniGameParameters;
-  if (phPtr != NULL) copy_parms(phPtr, parms);
+  if (parm_holder != NULL) copy_parms(parm_holder, parms);
   //else load_parms("/home/lanctot/rlgparms2.txt", parms);
   //else load_parms("/usr/erskine7/cshome/lanctot/rlgparms2.txt", parms);
   
@@ -156,6 +157,8 @@ Task_specification env_init()
   //printout_phstr("/home/lanctot/rlgparms1.txt");
   
   DPR << "RLG> Starting env_init ..." << endl;
+  
+  //parm_holder = NULL; want to keep this the same
   
   if (!inited)
     init(); 
@@ -293,6 +296,9 @@ void env_cleanup()
     
   if (episode_log != NULL)
   { delete episode_log; episode_log = NULL; }
+  
+  if (parm_holder != NULL)
+  { delete parm_holder; parm_holder = NULL; }
     
   /* now msg_response is a C++ string 
   if (msg_response != NULL)
@@ -330,9 +336,9 @@ Random_seed_key env_get_random_seed()
 Message env_message(const Message inMessage) {
   DPR << "received message " << inMessage << endl;
   
-  string str(inMessage); 
-  str = "Received Message: " + str; 
-  logstr(str); 
+  //string str(inMessage); 
+  //str = "Received Message: " + str; 
+  //logstr(str); 
   
   msg_response.clear(); 
 
@@ -385,7 +391,7 @@ Message env_message(const Message inMessage) {
   }
   else if (strncmp(inMessage, "TO=3 FROM=0 CMD=5 VALTYPE=3 VALS=", 33) == 0)
   {                           
-    logstr ("Running param holder handler!");
+    //logstr ("Running param holder handler!");
     
     if (inited)
       uninit(); 
@@ -393,12 +399,13 @@ Message env_message(const Message inMessage) {
     string whole_message(inMessage);
     
     // parse the parms string from the message
-    string theParmsString = whole_message.substr(34); 
+    string theParmsString = whole_message.substr(33); 
     
     // init using these parms
-    ParameterHolder ph(theParmsString);
+    if (parm_holder != NULL) delete parm_holder;
+    parm_holder = new ParameterHolder(theParmsString);
     
-    init(&ph);
+    init();
   }
   
   return "message not handled. "; 

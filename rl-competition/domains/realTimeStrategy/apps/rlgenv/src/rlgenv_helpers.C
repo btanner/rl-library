@@ -72,7 +72,7 @@ void copy_parms(ParameterHolder * phPtr, MiniGameParameters * mgpPtr)
   mgpPtr->worker_mineral_capacity      = phPtr->getIntegerParam("workermineralcapacity");
   
   mgpPtr->mineral_patch_radius         = phPtr->getIntegerParam("mineralpatchradius");
-  mgpPtr->mineral_patch_sight_range    = phPtr->getIntegerParam("mineralpatchsight_range");
+  mgpPtr->mineral_patch_sight_range    = phPtr->getIntegerParam("mineralpatchsightrange");
   mgpPtr->mineral_patch_hp             = phPtr->getIntegerParam("mineralpatchhp");
   mgpPtr->mineral_patch_armor          = phPtr->getIntegerParam("mineralpatcharmor");
   mgpPtr->mineral_patch_capacity       = phPtr->getIntegerParam("mineralpatchcapacity");

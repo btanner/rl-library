@@ -92,7 +92,7 @@ endif
 
 # Enable GUI (eg. compile+link with SDL) or not? 
 # Enabled = 1, disabled = 0
-ENABLE_GUI=1
+ENABLE_GUI=0
 
 # Buildmode can be "exec" or "shlib"
 BUILDMODE := $(shell echo "$(BUILDMODE)")
