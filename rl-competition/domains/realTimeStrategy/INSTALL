@@ -11,7 +11,7 @@ To compile ortslite:
      - boost >= 1.33
 
        If running on a Linux system, this is probably already done
-       for you. Try building the boost test in misc/boost_test. If it
+       for you. Try building the boost test in ../support/misc/boost_test. If it
        compiles and runs, then boost is already installed. If not, then 
        it's likely easily obtained by using your package manager; search
        for packages named "boost" and/or "boost-dev". Otherwise, follow
@@ -27,10 +27,11 @@ To compile ortslite:
 		
 		To run the script:
 
-$>./scripts/install-boost.bash
+$>cd ../support  (to rl-competition/domains/support)
+$>bash install-boost.bash
 
 		 Or, to manually install boost to your home directory, do the following:
-$>cd misc
+$>cd ../support/misc
 $>tar xjvf boost_1_34_1.tar.bz2
 $>cd boost_1_34_1
 $>./configure --prefix=$HOME
@@ -52,7 +53,8 @@ $>ln -s boost-1_34_1/boost
      - gawk (only if installing on Linux). 
 
   2. Set the OSTYPE variable. Supported values are LINUX and DARWIN. It is recommended
-     to set this environment variable in your shell's startup script. 
+     to set this environment variable in your shell's startup script.  We do a good job
+ 	 of actually handling this automatically now, but if you have a problem: 
 
        export OSTYPE="LINUX"
 
