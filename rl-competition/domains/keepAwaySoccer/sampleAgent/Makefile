@@ -1,5 +1,5 @@
-RL-GLUE = ../../RL-Glue
-UTILS   = ../../Utils
+RL-GLUE = ../../../system/RL-Glue/RL-Glue
+UTILS   = ../../../system/RL-Glue/Utils
 
 BUILD_PATH = Build
 BIN_PATH = bin
