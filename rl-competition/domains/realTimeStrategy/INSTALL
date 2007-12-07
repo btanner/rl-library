@@ -1,6 +1,15 @@
 =====================================================
 Real Time Strategy Domain Installation Instructions
 =====================================================
+
+The first thing you must do is build RL-Glue and the RL 
+competition software. This is done by running the following
+command in the main competition directory (rl-competition/):
+
+  make all
+
+What follows is specific to the RTS domain. 
+
 ortslite is a simple stripped-down implementation of an RTS 
 (Real-time Strategy) game. 
 
