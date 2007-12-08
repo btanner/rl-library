@@ -6,11 +6,12 @@ basedir=`basename $realTimeStrategyDirectory`
 
 # When building boost, this will point to rl-competition/system
 # note: path has no spaces, as written. It might work as a trick.. 
+#I think this is wrong
 DEST_DIR="../../../../system/boost"
 
 if [ "$basedir" != "realTimeStrategy" ]
 then
-  echo "Sorry, you must run this script from the main ortlite directory (domains/realTimeStrategy)"
+  echo "Sorry, you must run this script from the main realTimeStrategy directory (domains/realTimeStrategy)"
   echo "eg.   scripts/install-boost.bash"
   exit -1; 
 fi
