@@ -20,7 +20,7 @@ envShellPID=$!
 
 echo "Starting up dynamic environment loader - PID=$envShellPID"
 
-#java -Xmx128M -cp $compLib:./bin/ consoleTrainer
+java -Xmx128M -cp $compLib:./bin/ consoleTrainer
 
 echo "-- Console Trainer finished"
 
