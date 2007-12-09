@@ -33,10 +33,6 @@ that is optional.  Maybe I'll do that.
 	<property name="viz.vendor.name" value="Brian Tanner"/>
 
 	<import file="${rl.library.system.directory}/build-targets.xml"/>
-	
-
-	<path id="application" location="${env.result.jar}"/>
- 	
 
 <!-- you can think of these as convenient aliases for the actual targets in build-targets.xml -->
 	<target name="clean" depends="rl-clean"/>

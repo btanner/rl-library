@@ -27,17 +27,35 @@ We'll try and rely on minimal variables from above.
 		 <then>
 			<property name="main.dist.dir" value="${env.dist.dir}" />
 			<property name="viz.dist.dir" value="${env.viz.dist.dir}" />
-		   <echo message="It is an environment" />
+			<property name="valid.project.type.found" value="true"/>
 		 </then>
 		</if>
 		<if>
 		 <equals arg1="${project.type}" arg2="agent" />
 		 <then>
-		   <echo message="It is an agent" />
 			<property name="main.dist.dir" value="${agent.dist.dir}" />
 			<property name="viz.dist.dir" value="${agent.viz.dist.dir}" />
+			<property name="valid.project.type.found" value="true"/>
 		 </then>
 		</if>
+		
+		<fail message="property project.type should be one of agent or environment">
+		     <condition>
+		       <not>
+		         <isset property="valid.project.type.found"/>
+		       </not>
+		     </condition>
+		   </fail>
+
+		<if>
+			<equals arg1="${project.has.viz}" arg2="true" />
+				<then>
+					<property name="should.compile.viz" value="true" />
+				</then>
+			<else>
+		</else>
+			</if>
+			
 		
 		<property name="main.result.jar" value="${main.dist.dir}/${main.project.name}.jar" />
 		<property name="viz.result.jar" value="${viz.dist.dir}/${viz.project.name}.jar" />
@@ -46,12 +64,12 @@ We'll try and rely on minimal variables from above.
 
 
 
-<target name="rl-clean-main">
+<target name="rl-clean-main" depends="rl-set-properties">
 	<delete dir="${build.dir}"/>
 	<delete file="${main.result.jar}"/>
 </target>
 
-<target name="rl-clean-viz">
+<target name="rl-clean-viz" if="should.compile.viz" depends="rl-set-properties">
 	<delete file="${viz.result.jar}" />
 </target>
 
@@ -79,7 +97,7 @@ We'll try and rely on minimal variables from above.
     </jar>
 </target>
 
-<target name="rl-jar-viz" depends="rl-compile,get.svn.version,get.rlvizlib.version" >
+<target name="rl-jar-viz" depends="rl-compile,get.svn.version,get.rlvizlib.version" if="should.compile.viz" >
     <mkdir dir="${viz.dist.dir}" />
     <jar destfile="${viz.result.jar}" basedir="${classes.dir}" >
         <manifest>

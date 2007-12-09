@@ -6,49 +6,19 @@
 	<import file="${rl.library.system.directory}/build-common.xml"/>
 
 	<!-- Things required for build-targets.xml -->
+	<property name="project.type" value="agent"/>
 	<property name="main.project.name" value="${ant.project.name}"/>
 	<property name="main.package.name" value="RandomAgent/"/>
 	<property name="main.package.spec.version" value="1.0"/>
 	<property name="main.vendor.name" value="Brian Tanner"/>
 
-	<!-- Random agent has no visualizer, so we need to write a conditional in the build-targets to not do stuff in that case -->
 	<import file="${rl.library.system.directory}/build-targets.xml"/>
-	
-	<path id="application" location="${jar.result}"/>
-	
 
-    <target name="clean">
- 		<delete dir="${build.dir}"/>
-		<delete file="${jar.result}"/>
-    </target>
-
-    <target name="compile">
-       <mkdir dir="${classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" /> 
-    </target>
-
-    <target name="jar" depends="compile" >
-        <mkdir dir="${dist.dir}" />
-        <jar destfile="${jar.result}" basedir="${classes.dir}" >
-            <manifest>
-            </manifest>
-        </jar>
-    </target>
-
-   <target name="clean-build" depends="clean,jar"/>
-
-<target name="junit" depends="jar">
-     <junit printsummary="yes"  >
-         <classpath>
-              <path refid="application"/>
-          </classpath>
-
-         <batchtest fork="yes">
-             <fileset dir="${src.dir}" includes="**/*Test.java"/>
-         </batchtest>
-     </junit>
- </target>
-
+	<!-- you can think of these as convenient aliases for the actual targets in build-targets.xml -->
+	<target name="clean" depends="rl-clean"/>
+	<target name="compile" depends="rl-compile"/>
+   	<target name="clean-build" depends="clean,jar"/>
+	<target name="jar" depends="rl-jar"/>
 
 </project>
 
