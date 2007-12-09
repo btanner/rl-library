@@ -1,19 +1,30 @@
 <project name="MountainCar" basedir="." >
+<!-- Some properties of interest and targets will be made available from importing the build-common.xml file
+Targets
+	- get.svn.version : puts current svn version into svn.revision.version property
+	- get-rlvizlib-version : puts current rlvizlib interface version into rlvizlib.spec.version
+	
+Other properties
+	- rlvizlib.jar : points to the RLVizLib jar
+	- env.dist.dir : path to where final environment jar should be put
+	- viz.dist.dir : path to where final vizualizer jar should be put
+-->	
+	
+
+	<property name="baseLibraryDir" value="../.."/>
+	<!-- rl.library.system.directory is required to be set by build-common.xml -->
+	<property name="rl.library.system.directory" value="${baseLibraryDir}/system"/>
+	<import file="${rl.library.system.directory}/build-common.xml"/>
 
     <property name="src.dir"     value="src"/>
-
     <property name="build.dir"   value="build"/>
-    <property name="env.dist.dir"   value="../../system/dist/envJars"/>
-    <property name="viz.dist.dir"   value="../../system/dist/envVizJars"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
-	<property name="RLVizLib.jar" value="../../system/libs/RLVizLib.jar" />
 	<property name="env.result.jar" value="${env.dist.dir}/${ant.project.name}.jar" />
 	<property name="env.viz.result.jar" value="${viz.dist.dir}/MountainCarVisualizer.jar" />
 
 	<path id="application" location="${env.result.jar}"/>
 	<path id="classpath" location="${RLVizLib.jar}"/>
  	
-
     <target name="clean">
  		<delete dir="${build.dir}"/>
 		<delete file="${env.result.jar}"/>
@@ -25,14 +36,32 @@
         <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" /> 
     </target>
 
-    <target name="jar" depends="compile" >
+    <target name="jar" depends="compile,get.svn.version,get.rlvizlib.version" >
         <mkdir dir="${env.dist.dir}" />
         <jar destfile="${env.result.jar}" basedir="${classes.dir}" >
             <manifest>
+			   <attribute name="RLVizLib-Link-Version" value="${rlvizlib.spec.version}"/>
+			    <section name="MountainCar/">
+			      <attribute name="Specification-Title" value="MountainCar"/>
+			      <attribute name="Specification-Version" value="1.0"/>
+			      <attribute name="Specification-Vendor" value="RLAI"/>
+			      <attribute name="Implementation-Title" value="MountainCar"/>
+			      <attribute name="Implementation-Version" value="Build:${svn.revision.version}"/> 
+			      <attribute name="Implementation-Vendor" value="Brian Tanner"/>
+			    </section>
             </manifest>
         </jar>
         <jar destfile="${env.viz.result.jar}" basedir="${classes.dir}" >
             <manifest>
+			   <attribute name="RLVizLib-Link-Version" value="${rlvizlib.spec.version}"/>
+			    <section name="visualizers/mountainCar">
+			      <attribute name="Specification-Title" value="MountainCar Visualizer"/>
+			      <attribute name="Specification-Version" value="1.0"/>
+			      <attribute name="Specification-Vendor" value="RLAI"/>
+			      <attribute name="Implementation-Title" value="MountainCar Visualizer"/>
+			      <attribute name="Implementation-Version" value="Build:${svn.revision.version}"/> 
+			      <attribute name="Implementation-Vendor" value="Brian Tanner"/>
+			    </section>
             </manifest>
         </jar>
     </target>
