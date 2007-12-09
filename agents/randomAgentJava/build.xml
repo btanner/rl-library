@@ -1,16 +1,21 @@
 <project name="RandomAgent" basedir="." >
 
-    <property name="src.dir"     value="src"/>
+	<property name="baseLibraryDir" value="../.."/>
+	<!-- Things required for build-common.xml -->
+	<property name="rl.library.system.directory" value="${baseLibraryDir}/system"/>
+	<import file="${rl.library.system.directory}/build-common.xml"/>
 
-    <property name="build.dir"   value="build"/>
-    <property name="dist.dir"   value="../../system/dist/agentJars"/>
-    <property name="classes.dir" value="${build.dir}/classes"/>
-	<property name="RLVizLib.jar" value="../../system/libs/RLVizLib.jar" />
-	<property name="jar.result" value="${dist.dir}/${ant.project.name}.jar" />
+	<!-- Things required for build-targets.xml -->
+	<property name="main.project.name" value="${ant.project.name}"/>
+	<property name="main.package.name" value="RandomAgent/"/>
+	<property name="main.package.spec.version" value="1.0"/>
+	<property name="main.vendor.name" value="Brian Tanner"/>
+
+	<!-- Random agent has no visualizer, so we need to write a conditional in the build-targets to not do stuff in that case -->
+	<import file="${rl.library.system.directory}/build-targets.xml"/>
 	
 	<path id="application" location="${jar.result}"/>
-	<path id="classpath" location="${RLVizLib.jar}"/>
- 	
+	
 
     <target name="clean">
  		<delete dir="${build.dir}"/>

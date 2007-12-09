@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is a build target file intended to make all of the RLAI environments and agents easier to build.  Of course, you can use this also, but are not obligated to.
+
+This script will believe it is wherever you imported it from.  So, if you import it from environments/mountainCar then to access system you need to tack on ../../system
+We'll try and rely on minimal variables from above.
+
+- rl.library.system.directory : relative path from the importing project to here, WITHOUT the trailing slash, so like ../../system
+
+-->
+
+<project basedir=".."  default="print-imports" name="rl-library-targets">
+<dirname property="imported.basedir" file="${ant.file.imported}"/>
+
+<property name="src.dir"     value="src"/>
+<property name="build.dir"   value="build"/>
+<property name="classes.dir" value="${build.dir}/classes"/>
+<property name="test.reports"   value="reports"/>
+<property name="test.raw"   value="reports/raw"/>
+
+<property name="junit.jar" value="${rl.library.system.directory}/libs/junit.jar" />
+<path id="junit.classpath" location="${junit.jar}"/>
+
+
+<target name="rl-set-properties" description="sets up a few things according to whether we're build an agent or an environment">
+		<if>
+		 <equals arg1="${project.type}" arg2="environment" />
+		 <then>
+			<property name="main.dist.dir" value="${env.dist.dir}" />
+			<property name="viz.dist.dir" value="${env.viz.dist.dir}" />
+		   <echo message="It is an environment" />
+		 </then>
+		</if>
+		<if>
+		 <equals arg1="${project.type}" arg2="agent" />
+		 <then>
+		   <echo message="It is an agent" />
+			<property name="main.dist.dir" value="${agent.dist.dir}" />
+			<property name="viz.dist.dir" value="${agent.viz.dist.dir}" />
+		 </then>
+		</if>
+		
+		<property name="main.result.jar" value="${main.dist.dir}/${main.project.name}.jar" />
+		<property name="viz.result.jar" value="${viz.dist.dir}/${viz.project.name}.jar" />
+		
+</target>
+
+
+
+<target name="rl-clean-main">
+	<delete dir="${build.dir}"/>
+	<delete file="${main.result.jar}"/>
+</target>
+
+<target name="rl-clean-viz">
+	<delete file="${viz.result.jar}" />
+</target>
+
+<target name="rl-clean" depends="rl-clean-main,rl-clean-viz" />
+
+<target name="rl-compile" depends="rl-set-properties">
+   <mkdir dir="${classes.dir}"/>
+    <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="rlvizlib.classpath" /> 
+</target>
+
+<target name="rl-jar-main" depends="rl-compile,get.svn.version,get.rlvizlib.version" >
+    <mkdir dir="${main.dist.dir}" />
+    <jar destfile="${main.result.jar}" basedir="${classes.dir}" >
+        <manifest>
+		   <attribute name="RLVizLib-Link-Version" value="${rlvizlib.spec.version}"/>
+		    <section name="${main.package.name}">
+		      <attribute name="Specification-Title" value="${main.project.name}"/>
+		      <attribute name="Specification-Version" value="${main.package.spec.version}"/>
+		      <attribute name="Specification-Vendor" value="RLAI"/>
+		      <attribute name="Implementation-Title" value="${main.project.name}"/>
+		      <attribute name="Implementation-Version" value="Build:${svn.revision.version}"/> 
+		      <attribute name="Implementation-Vendor" value="${main.vendor.name}"/>
+		    </section>
+        </manifest>
+    </jar>
+</target>
+
+<target name="rl-jar-viz" depends="rl-compile,get.svn.version,get.rlvizlib.version" >
+    <mkdir dir="${viz.dist.dir}" />
+    <jar destfile="${viz.result.jar}" basedir="${classes.dir}" >
+        <manifest>
+		   <attribute name="RLVizLib-Link-Version" value="${rlvizlib.spec.version}"/>
+		    <section name="${viz.package.name}">
+		      <attribute name="Specification-Title" value="${viz.project.name}"/>
+		      <attribute name="Specification-Version" value="${viz.package.spec.version}"/>
+		      <attribute name="Specification-Vendor" value="RLAI"/>
+		      <attribute name="Implementation-Title" value="${viz.project.name}"/>
+		      <attribute name="Implementation-Version" value="Build:${svn.revision.version}"/> 
+		      <attribute name="Implementation-Vendor" value="${viz.vendor.name}"/>
+		    </section>
+        </manifest>
+    </jar>
+</target>
+
+<target name="rl-jar" depends="rl-jar-main,rl-jar-viz" />
+
+<!-- keep this out till later 
+<target name="rl-compile-tests" depends="rl-compile">
+    <mkdir dir="${classes.dir}"/>
+    <mkdir dir="${test.dir}"/>
+    <javac srcdir="${test.dir}" destdir="${classes.dir}">
+        <classpath>
+            <path refid="application"/>
+            <path refid="junit" />
+        </classpath>
+    </javac>
+</target>
+
+<target name="rl-junit" depends="jar">
+     <junit printsummary="yes"  >
+         <classpath>
+              <path refid="application"/>
+          </classpath>
+
+         <batchtest fork="yes">
+             <fileset dir="${src.dir}" includes="**/*Test.java"/>
+         </batchtest>
+     </junit>
+ </target>
+
+-->
+
+
+	
+</project>

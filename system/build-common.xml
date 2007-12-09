@@ -12,7 +12,18 @@ We'll try and rely on minimal variables from above.
 <dirname property="imported.basedir" file="${ant.file.imported}"/>
 <property name="rlvizlib.jar" value="${rl.library.system.directory}/libs/rl-viz/RLVizLib.jar" />
 <property name="env.dist.dir"   value="${rl.library.system.directory}/dist/envJars"/>
-<property name="viz.dist.dir"   value="${rl.library.system.directory}/dist/envVizJars"/>
+<property name="env.viz.dist.dir"   value="${rl.library.system.directory}/dist/envVizJars"/>
+<property name="agent.dist.dir"   value="${rl.library.system.directory}/dist/agentJars"/>
+<property name="agent.viz.dist.dir"   value="${rl.library.system.directory}/dist/agentVizJars"/>
+<path id="rlvizlib.classpath" location="${rlvizlib.jar}"/>
+
+
+<taskdef resource="net/sf/antcontrib/antlib.xml">
+  <classpath>
+    <pathelement location="${rl.library.system.directory}/libs/ant-contrib-1.0b3.jar"/>
+  </classpath>
+</taskdef>
+
 
 <target name="get.svn.version" description="Get the current subversion revision number of the project">
     <exec executable="svnversion"
