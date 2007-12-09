@@ -1,6 +1,0 @@
-All.H      collects often used standard header files to be used for precompilation
-app.rules  make include file (adds an application with all source files)
-app2.rules make include file (adds an application with source files as parameter)
-
-see apps/minigame/src/app.mk for an example
-see also ./makefile
