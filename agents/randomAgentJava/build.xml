@@ -11,7 +11,7 @@
 	<property name="main.package.name" value="RandomAgent/"/>
 	<property name="main.package.spec.version" value="1.0"/>
 	<property name="main.vendor.name" value="Brian Tanner"/>
-
+	<path id="project.extra.classpath" />
 	<import file="${rl.library.system.directory}/build-targets.xml"/>
 
 	<!-- you can think of these as convenient aliases for the actual targets in build-targets.xml -->

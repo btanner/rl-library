@@ -77,7 +77,12 @@ We'll try and rely on minimal variables from above.
 
 <target name="rl-compile" depends="rl-set-properties">
    <mkdir dir="${classes.dir}"/>
-    <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="rlvizlib.classpath" /> 
+    <javac srcdir="${src.dir}" destdir="${classes.dir}"> 
+		<classpath>
+            <path refid="rlvizlib.classpath" />
+		    <path refid="project.extra.classpath" />
+		</classpath>
+	</javac>
 </target>
 
 <target name="rl-jar-main" depends="rl-compile,get.svn.version,get.rlvizlib.version" >
