@@ -1,25 +1,9 @@
 <project name="MountainCar" basedir="." >
-<!-- Some properties of interest and targets will be made available from importing the build-common.xml file
-Targets
-	- get.svn.version : puts current svn version into svn.revision.version property
-	- get-rlvizlib-version : puts current rlvizlib interface version into rlvizlib.spec.version
-	
-Other properties
-	- rlvizlib.jar : points to the RLVizLib jar
-	- env.dist.dir : path to where final environment jar should be put
-	- viz.dist.dir : path to where final vizualizer jar should be put
-
-We could automate this substantially if we just agreed to put files in specific places. I guess we could do that using a second script
-that is optional.  Maybe I'll do that.
--->	
-	
 
 	<property name="baseLibraryDir" value="../.."/>
-	<!-- Things required for build-common.xml -->
 	<property name="rl.library.system.directory" value="${baseLibraryDir}/system"/>
 	<import file="${rl.library.system.directory}/build-common.xml"/>
 
-	<!-- Things required for build-targets.xml -->
 	<property name="project.type" value="environment" />
 	<property name="main.project.name" value="${ant.project.name}"/>
 	<property name="main.package.name" value="MountainCar/"/>
@@ -39,8 +23,5 @@ that is optional.  Maybe I'll do that.
 	<target name="compile" depends="rl-compile"/>
    	<target name="clean-build" depends="clean,jar"/>
 	<target name="jar" depends="rl-jar"/>
-
-
-
 </project>
 
