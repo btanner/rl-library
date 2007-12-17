@@ -1,0 +1,14 @@
+<project name="Grid World" basedir="." >
+	<target name="compile" description="Compile both continuous and discrete grid worlds" >
+	   <ant antfile="continuousGridWorld.xml" target="compile"/>
+	   <ant antfile="discreteGridWorld.xml" target="compile"/>
+	</target>
+	<target name="clean" description="clean both continuous and discrete grid worlds" >
+	   <ant antfile="continuousGridWorld.xml" target="clean"/>
+	   <ant antfile="discreteGridWorld.xml"  target="clean"/>
+	</target>
+
+
+
+</project>
+
