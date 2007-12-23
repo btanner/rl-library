@@ -1,6 +1,6 @@
 <project name="DiscreteGridWorld" basedir="." >
 
-	<property name="baseLibraryDir" value="../.."/>
+	<property name="baseLibraryDir" value="../../.."/>
 	<property name="rl.library.system.directory" value="${baseLibraryDir}/system"/>
 	<import file="${rl.library.system.directory}/build-common.xml"/>
 
