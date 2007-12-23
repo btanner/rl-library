@@ -43,16 +43,19 @@ public class ContinuousGridWorld extends EnvironmentBase implements
 	protected Vector<Rectangle2D> resetRegions=new Vector<Rectangle2D>();
 	protected Vector<Rectangle2D> barrierRegions=new Vector<Rectangle2D>();
 	protected Vector<Double> thePenalties=new Vector<Double>();
+        protected double walkSpeed=25.0d;
+        
 
 	protected Vector<Rectangle2D> rewardRegions=new Vector<Rectangle2D>();
 	protected Vector<Double> theRewards=new Vector<Double>();
 	
 	public static ParameterHolder getDefaultParameters(){
 		ParameterHolder p = new ParameterHolder();
-                p.addDoubleParam("minX",0.0d);
-                p.addDoubleParam("minY",0.0d);
-                p.addDoubleParam("width",200.0d);
-                p.addDoubleParam("height",200.0d);
+                p.addDoubleParam("cont-grid-world-minX",0.0d);
+                p.addDoubleParam("cont-grid-world-minY",0.0d);
+                p.addDoubleParam("cont-grid-world-width",200.0d);
+                p.addDoubleParam("cont-grid-world-height",200.0d);
+                p.addDoubleParam("cont-grid-world-walk-speed",10.0d);
 		return p;
 	}
 	
@@ -62,11 +65,13 @@ public class ContinuousGridWorld extends EnvironmentBase implements
         
                 
 	public ContinuousGridWorld(ParameterHolder theParams){
-            double minX=theParams.getDoubleParam("minX");
-            double minY=theParams.getDoubleParam("minY");
-            double width=theParams.getDoubleParam("width");
-            double height=theParams.getDoubleParam("height");
-                worldRect=new Rectangle2D.Double(minX,minY,width,height);
+            double minX=theParams.getDoubleParam("cont-grid-world-minX");
+            double minY=theParams.getDoubleParam("cont-grid-world-minY");
+            double width=theParams.getDoubleParam("cont-grid-world-width");
+            double height=theParams.getDoubleParam("cont-grid-world-height");
+            walkSpeed=theParams.getDoubleParam("cont-grid-world-walk-speed");
+
+            worldRect=new Rectangle2D.Double(minX,minY,width,height);
 		agentSize=new Point2D.Double(1.0d,1.0d);
 		
 		addResetRegion(new Rectangle2D.Double(75.0d,75.0d,25.0d,25.0d));
@@ -165,7 +170,6 @@ public class ContinuousGridWorld extends EnvironmentBase implements
 	}
 
 	public Reward_observation env_step(Action action) {
-		double speed=5.0d;
 		int theAction=action.intArray[0];
 		
 		double dx=0;
@@ -173,10 +177,10 @@ public class ContinuousGridWorld extends EnvironmentBase implements
 		
 		//Should find a good way to abstract actions and add them in like the old wya, that was good
 		
-		if(theAction==0)dx=speed;
-		if(theAction==1)dx=-speed;
-		if(theAction==2)dy=speed;
-		if(theAction==3)dy=-speed;
+		if(theAction==0)dx=walkSpeed;
+		if(theAction==1)dx=-walkSpeed;
+		if(theAction==2)dy=walkSpeed;
+		if(theAction==3)dy=-walkSpeed;
 
                 //Add a small bit of random noise
                 double noiseX=.125d*(Math.random()-0.5d);

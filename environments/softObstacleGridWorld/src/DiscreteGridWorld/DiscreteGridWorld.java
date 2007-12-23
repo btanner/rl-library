@@ -17,6 +17,7 @@ package DiscreteGridWorld;
 
 import ContinuousGridWorld.ContinuousGridWorld;
 import java.awt.geom.Point2D;
+import rlVizLib.general.ParameterHolder;
 import rlglue.types.Action;
 import rlglue.types.Observation;
 import rlglue.types.Reward_observation;
@@ -38,6 +39,25 @@ public class DiscreteGridWorld extends ContinuousGridWorld {
     int xDiscFactor = 25;
     int yDiscFactor = 25;
 
+   /**
+    * Not going to pass on params from above, we'll go with defaults
+
+    * @return
+    */ 	
+    
+    public DiscreteGridWorld(ParameterHolder theParams){
+        super();
+        this.xDiscFactor=theParams.getIntegerParam("discrete-gridworld-xgridsize");
+        this.yDiscFactor=theParams.getIntegerParam("discrete-gridworld-ysgridsize");
+    }
+
+    public static ParameterHolder getDefaultParameters(){
+		ParameterHolder p = new ParameterHolder();
+                p.addIntegerParam("discrete-gridworld-xgridsize",25);
+                p.addIntegerParam("discrete-gridworld-ygridsize",25);
+                return p;
+                
+    }
     private int getMaxState() {
         int maxState=getState(getWorldRect().getWidth(), getWorldRect().getHeight());
         return maxState;
@@ -98,33 +118,6 @@ public class DiscreteGridWorld extends ContinuousGridWorld {
         return theTaskSpec;
     }
 
-//	public String env_message(String theMessage) {
-//		EnvironmentMessages theMessageObject;
-//		try {
-//			theMessageObject = EnvironmentMessageParser.parseMessage(theMessage);
-//		} catch (NotAnRLVizMessageException e) {
-//			System.err.println("Someone sent mountain Car a message that wasn't RL-Viz compatible");
-//			return "I only respond to RL-Viz messages!";
-//		}
-//
-//		if(theMessageObject.canHandleAutomatically(this))return theMessageObject.handleAutomatically(this);
-//
-//
-////		If it wasn't handled automatically, maybe its a custom Mountain Car Message
-//		if(theMessageObject.getTheMessageType()==rlVizLib.messaging.environment.EnvMessageType.kEnvCustom.id()){
-//
-//			String theCustomType=theMessageObject.getPayLoad();
-//
-//			if(theCustomType.equals("GETCGWMAP")){
-//				//It is a request for the state
-//				CGWMapResponse theResponseObject=new CGWMapResponse(getWorldRect(),resetRegions,rewardRegions,theRewards,barrierRegions,thePenalties);
-//				return theResponseObject.makeStringResponse();
-//			}
-//		}
-//		System.err.println("We need some code written in Env Message for ContinuousGridWorld.. unknown request received: "+theMessage);
-//		Thread.dumpStack();
-//		return null;	
-//		}
     private void discretizeAgentPos() {
         double x = agentPos.getX();
         double y = agentPos.getY();
@@ -152,7 +145,6 @@ public class DiscreteGridWorld extends ContinuousGridWorld {
     }
 
     public Reward_observation env_step(Action action) {
-        double speed = 5.0d;
         int theAction = action.intArray[0];
 
         double dx = 0;
