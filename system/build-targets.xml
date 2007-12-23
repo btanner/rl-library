@@ -11,12 +11,12 @@ We'll try and rely on minimal variables from above.
 <project basedir=".."  default="print-imports" name="rl-library-targets">
 <dirname property="imported.basedir" file="${ant.file.imported}"/>
 
-<property name="src.dir"     value="src"/>
-<property name="build.dir"   value="build"/>
+<property name="src.dir"     value="${basedir}/src"/>
+<property name="build.dir"   value="${basedir}/build"/>
 <property name="classes.dir" value="${build.dir}/classes"/>
-<property name="test.reports"   value="reports"/>
-<property name="test.raw"   value="reports/raw"/>
-<property name="docs.dir"   value="javadocs"/>
+<property name="test.reports"   value="${basedir}/reports"/>
+<property name="test.raw"   value="${basedir}/reports/raw"/>
+<property name="docs.dir"   value="${basedir}/javadocs"/>
 
 <property name="junit.jar" value="${rl.library.system.directory}/libs/junit.jar" />
 <path id="junit.classpath" location="${junit.jar}"/>

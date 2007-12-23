@@ -48,7 +48,7 @@ public class DiscreteGridWorld extends ContinuousGridWorld {
     public DiscreteGridWorld(ParameterHolder theParams){
         super();
         this.xDiscFactor=theParams.getIntegerParam("discrete-gridworld-xgridsize");
-        this.yDiscFactor=theParams.getIntegerParam("discrete-gridworld-ysgridsize");
+        this.yDiscFactor=theParams.getIntegerParam("discrete-gridworld-ygridsize");
     }
 
     public static ParameterHolder getDefaultParameters(){
