@@ -36,8 +36,8 @@ import rlglue.types.Reward_observation;
  */
 public class DiscreteGridWorld extends ContinuousGridWorld {
 
-    int xDiscFactor = 25;
-    int yDiscFactor = 25;
+    protected int xDiscFactor = 25;
+    protected int yDiscFactor = 25;
 
    /**
     * Not going to pass on params from above, we'll go with defaults
@@ -58,7 +58,7 @@ public class DiscreteGridWorld extends ContinuousGridWorld {
                 return p;
                 
     }
-    private int getMaxState() {
+    protected  int getMaxState() {
         int maxState=getState(getWorldRect().getWidth(), getWorldRect().getHeight());
         return maxState;
     }
@@ -69,7 +69,7 @@ public class DiscreteGridWorld extends ContinuousGridWorld {
      * @param y
      * @return
      */
-    private int getState(double x, double y) {
+    protected  int getState(double x, double y) {
         int discX = (int) (x / xDiscFactor);
         int discY = (int) (y / yDiscFactor);
 
@@ -95,7 +95,7 @@ public class DiscreteGridWorld extends ContinuousGridWorld {
      * @param y
      * @return
      */
-    private Observation makeObservation(double x, double y) {
+    protected  Observation makeObservation(double x, double y) {
         Observation currentObs = new Observation(1, 2);
         currentObs.intArray[0] = getState(x, y);
         currentObs.doubleArray[0] = x;
@@ -118,7 +118,7 @@ public class DiscreteGridWorld extends ContinuousGridWorld {
         return theTaskSpec;
     }
 
-    private void discretizeAgentPos() {
+    protected  void discretizeAgentPos() {
         double x = agentPos.getX();
         double y = agentPos.getY();
         x = xDiscFactor*(x/xDiscFactor);
@@ -130,6 +130,7 @@ public class DiscreteGridWorld extends ContinuousGridWorld {
      * This should mostly work out ok, even if things are discretized.  I guess we can 
      * do the work to move him to a discrete spot
      */
+    @Override
     public Observation env_start() {
         randomizeAgentPosition();
         discretizeAgentPos();
@@ -144,6 +145,7 @@ public class DiscreteGridWorld extends ContinuousGridWorld {
 
     }
 
+    @Override
     public Reward_observation env_step(Action action) {
         int theAction = action.intArray[0];
 
@@ -182,6 +184,7 @@ public class DiscreteGridWorld extends ContinuousGridWorld {
         return makeRewardObservation(getReward(), inResetRegion);
     }
 
+    @Override
     public Observation getObservationForState(Observation theState) {
         double x = theState.doubleArray[0];
         double y = theState.doubleArray[1];
