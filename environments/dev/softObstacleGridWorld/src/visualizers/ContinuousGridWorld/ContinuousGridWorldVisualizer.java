@@ -98,9 +98,18 @@ public class ContinuousGridWorldVisualizer extends AbstractVisualizer implements
     boolean printedQueryError = false;
 
     public Vector<Double> queryAgentValues(Vector<Observation> theQueryObs) {
-        int currentTimeStep = theGlueState.getTotalSteps();
+      int currentTimeStep = theGlueState.getTotalSteps();
 
-        if (currentTimeStep != lastAgentValueUpdateTimeStep || theValueResponse == null) {
+        boolean needsUpdate = false;
+        if (currentTimeStep != lastAgentValueUpdateTimeStep) {
+            needsUpdate = true;
+        }
+        if (theValueResponse == null) {
+            needsUpdate = true;
+        } else if (theValueResponse.getTheValues().size() != theQueryObs.size()) {
+            needsUpdate = true;
+        }
+        if (needsUpdate) {
             theValueResponse = AgentValueForObsRequest.Execute(theQueryObs);
             lastAgentValueUpdateTimeStep = currentTimeStep;
         }
