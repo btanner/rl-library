@@ -9,8 +9,5 @@
 	   <ant antfile="discreteGridWorld.xml"  target="clean"/>
 	   <ant antfile="stochasticDiscreteGridWorld.xml"  target="clean"/>
 	</target>
-
-
-
 </project>
 
