@@ -1,19 +1,19 @@
 /* Mountain Car Domain
-* Copyright (C) 2007, Brian Tanner brian@tannerpages.com (http://brian.tannerpages.com/)
-* 
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 2
-* of the License, or (at your option) any later version.
-* 
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-* 
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. */
+ * Copyright (C) 2007, Brian Tanner brian@tannerpages.com (http://brian.tannerpages.com/)
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. */
 package MountainCar;
 
 import java.util.StringTokenizer;
@@ -48,271 +48,255 @@ import rlVizLib.utilities.UtilityShop;
  * I found it here: http://rlai.cs.ualberta.ca/RLR/environment.html
  * 
  * The methods in here are sorted by importance in terms of what's important to know about for playing with the dynamics of the system.
+ * 
+ * This is quite an advanced environment in that it has some fancy visualization
+ * capabilities which have polluted the code a little.  What I'm saying is that 
+ * this is not the easiest environment to get started with.
  */
-
-
-public class MountainCar extends EnvironmentBase implements 
-							getEnvMaxMinsInterface, 
-							getEnvObsForStateInterface, 
-							RLVizVersionResponseInterface, 
-							HasAVisualizerInterface{
+public class MountainCar extends EnvironmentBase implements
+        getEnvMaxMinsInterface,
+        getEnvObsForStateInterface,
+        RLVizVersionResponseInterface,
+        HasAVisualizerInterface {
 
     static final int numActions = 3;
-        
-
-        protected MountainCarState theState=null;
-        protected Vector<MountainCarState> savedStates=null;
-        
-        //Problem parameters have been moved to MountainCar State
-
-        private Random randomGenerator=new Random();
+    protected MountainCarState theState = null;
+    protected Vector<MountainCarState> savedStates = null;
+    //Problem parameters have been moved to MountainCar State
+    private Random randomGenerator = new Random();
 
     private Random getRandom() {
-          return randomGenerator;
+        return randomGenerator;
+    }
+    double reportedMinPosition;
+    double reportedMaxPosition;
+    double reportedMinVelocity;
+    double reportedMaxVelocity;
+
+    public String env_init() {
+        savedStates = new Vector<MountainCarState>();
+        //This should be like a final static member or something, or maybe it should be configurable... dunno
+        int taskSpecVersion = 2;
+
+        return taskSpecVersion + ":e:2_[f,f]_[" + reportedMinPosition + "," + reportedMaxPosition + "]_[" + reportedMinVelocity + "," + reportedMaxVelocity + "]:1_[i]_[0,2]:[-1,0]";
+    }
+
+    public Observation env_start() {
+
+        if (theState.randomStarts) {
+            double fullRandPosition = (randomGenerator.nextDouble() * (theState.maxPosition + Math.abs((theState.minPosition))) - Math.abs(theState.minPosition));
+            //Want to actually start in a smaller bowl
+            theState.position = theState.defaultInitPosition + fullRandPosition / 3.0d;
+            //Want inital velocity = 0.0d;
+            theState.velocity = theState.defaultInitVelocity;
+        } else {
+            theState.position = theState.defaultInitPosition;
+            theState.velocity = theState.defaultInitVelocity;
+        }
+
+        return makeObservation();
+    }
+
+//	The constants of this height function could easily be parameterized
+    public Reward_observation env_step(Action theAction) {
+
+        int a = theAction.intArray[0];
+
+        if (a > 2 || a < 0) {
+            System.err.println("Invalid action selected in mountainCar: " + a);
+            a = randomGenerator.nextInt(3);
+        }
+
+        theState.update(a);
+
+        return makeRewardObservation(theState.getReward(), theState.inGoalRegion());
     }
 
 
-            double reportedMinPosition;
-            double reportedMaxPosition;
-            double reportedMinVelocity;
-            double reportedMaxVelocity;
+    //This method creates the object that can be used to easily set different problem parameters
+    public static ParameterHolder getDefaultParameters() {
+        ParameterHolder p = new ParameterHolder();
+        rlVizLib.utilities.UtilityShop.setVersionDetails(p, new DetailsProvider());
 
-	public String env_init() {
-                savedStates=new Vector<MountainCarState>();
-                //This should be like a final static member or something, or maybe it should be configurable... dunno
-                int taskSpecVersion=2;
-               
-            return taskSpecVersion+":e:2_[f,f]_["+reportedMinPosition+","+reportedMaxPosition+"]_["+reportedMinVelocity+","+reportedMaxVelocity+"]:1_[i]_[0,2]:[-1,0]";
-	}
+        p.addBooleanParam("randomStartStates", true);
+        return p;
+    }
 
-	public Observation env_start() {
-
-                if(theState.randomStarts){
-			double fullRandPosition = (randomGenerator.nextDouble()*(theState.maxPosition + Math.abs((theState.minPosition))) - Math.abs(theState.minPosition));
-                        //Want to actually start in a smaller bowl
-                        theState.position=theState.defaultInitPosition+fullRandPosition/3.0d;
-			//Want inital velocity = 0.0d;
-                        theState.velocity = theState.defaultInitVelocity;
-		}else{
-			theState.position = theState.defaultInitPosition;
-			theState.velocity = theState.defaultInitVelocity;
-		}
-                
-		return makeObservation();
-	}
-
-//	The constants of this height function could easily be parameterized
-	public Reward_observation env_step(Action theAction) {
-
-                int a=theAction.intArray[0];
-
-		if(a>2||a<0){
-			System.err.println("Invalid action selected in mountainCar: "+a);
-			a = randomGenerator.nextInt(3);
-		}
-
-                theState.update(a);
-
-		return makeRewardObservation(theState.getReward(),theState.inGoalRegion());
-	}
-
-
-	//This method creates the object that can be used to easily set different problem parameters
-	public static ParameterHolder getDefaultParameters(){
-
-		ParameterHolder p = new ParameterHolder();
-
-                rlVizLib.utilities.UtilityShop.setVersionDetails(p, new DetailsProvider());
-                p.addBooleanParam("randomStartStates",true);
-
-		return p;
-	}
-        
-
-	public MountainCar(ParameterHolder p){
-            this(p,false);
+    public MountainCar(ParameterHolder p) {
+        super();
+        theState = new MountainCarState(randomGenerator);
+        if (p != null) {
+            if (!p.isNull()) {
+                theState.randomStarts = p.getBooleanParam("randomStartStates");
+            }
         }
-            public MountainCar(ParameterHolder p, boolean useCompetitionMode){
-		super();
-                theState=new MountainCarState(randomGenerator);
-		if(p!=null){
-			if(!p.isNull()){
-				theState.randomStarts=p.getBooleanParam("randomStartStates");
-			}
-		}
-                setupRangesAndStuff();
-	}
+        setupRangesAndStuff();
+    }
 
-        
-        private void setupRangesAndStuff(){
-                reportedMinPosition=theState.minPosition;
-                reportedMaxPosition=theState.maxPosition;
+    private void setupRangesAndStuff() {
+        reportedMinPosition = theState.minPosition;
+        reportedMaxPosition = theState.maxPosition;
 
-                reportedMinVelocity=theState.minVelocity;
-                reportedMaxVelocity=theState.maxVelocity;
+        reportedMinVelocity = theState.minVelocity;
+        reportedMaxVelocity = theState.maxVelocity;
+    }
+
+    public String env_message(String theMessage) {
+        EnvironmentMessages theMessageObject;
+        try {
+            theMessageObject = EnvironmentMessageParser.parseMessage(theMessage);
+        } catch (NotAnRLVizMessageException e) {
+            System.err.println("Someone sent mountain Car a message that wasn't RL-Viz compatible");
+            return "I only respond to RL-Viz messages!";
         }
 
-
-
-	public String env_message(String theMessage) {
-		EnvironmentMessages theMessageObject;
-		try {
-			theMessageObject = EnvironmentMessageParser.parseMessage(theMessage);
-		} catch (NotAnRLVizMessageException e) {
-			System.err.println("Someone sent mountain Car a message that wasn't RL-Viz compatible");
-			return "I only respond to RL-Viz messages!";
-		}
-
-		if(theMessageObject.canHandleAutomatically(this)){
-                    String theResponseString=theMessageObject.handleAutomatically(this);
-                    return theResponseString;
-		}
+        if (theMessageObject.canHandleAutomatically(this)) {
+            String theResponseString = theMessageObject.handleAutomatically(this);
+            return theResponseString;
+        }
 
 //		If it wasn't handled automatically, maybe its a custom Mountain Car Message
-		if(theMessageObject.getTheMessageType()==rlVizLib.messaging.environment.EnvMessageType.kEnvCustom.id()){
+        if (theMessageObject.getTheMessageType() == rlVizLib.messaging.environment.EnvMessageType.kEnvCustom.id()) {
 
-			String theCustomType=theMessageObject.getPayLoad();
+            String theCustomType = theMessageObject.getPayLoad();
 
-			if(theCustomType.equals("GETMCSTATE")){
-				//It is a request for the state
-				double position=theState.position;
-                                double velocity=theState.velocity;
-				double height= this.getHeight();
-				double deltaheight=theState.getHeightAtPosition(position+.05);
-				MCStateResponse theResponseObject=new MCStateResponse(position,velocity,height,deltaheight);
-				return theResponseObject.makeStringResponse();
-			}
+            if (theCustomType.equals("GETMCSTATE")) {
+                //It is a request for the state
+                double position = theState.position;
+                double velocity = theState.velocity;
+                double height = this.getHeight();
+                double deltaheight = theState.getHeightAtPosition(position + .05);
+                MCStateResponse theResponseObject = new MCStateResponse(position, velocity, height, deltaheight);
+                return theResponseObject.makeStringResponse();
+            }
 
-			if(theCustomType.startsWith("GETHEIGHTS")){
-				Vector<Double> theHeights=new Vector<Double>();
+            if (theCustomType.startsWith("GETHEIGHTS")) {
+                Vector<Double> theHeights = new Vector<Double>();
 
-				StringTokenizer theTokenizer = new StringTokenizer(theCustomType,":");
-				//throw away the first token
-				theTokenizer.nextToken();
+                StringTokenizer theTokenizer = new StringTokenizer(theCustomType, ":");
+                //throw away the first token
+                theTokenizer.nextToken();
 
-				int numQueries=Integer.parseInt(theTokenizer.nextToken());
-				for(int i=0;i<numQueries;i++){
-					double thisPoint=Double.parseDouble(theTokenizer.nextToken());
-					theHeights.add(theState.getHeightAtPosition(thisPoint));
-				}
+                int numQueries = Integer.parseInt(theTokenizer.nextToken());
+                for (int i = 0; i < numQueries; i++) {
+                    double thisPoint = Double.parseDouble(theTokenizer.nextToken());
+                    theHeights.add(theState.getHeightAtPosition(thisPoint));
+                }
 
-				MCHeightResponse theResponseObject=new MCHeightResponse(theHeights);
-				return theResponseObject.makeStringResponse();
-			}
+                MCHeightResponse theResponseObject = new MCHeightResponse(theHeights);
+                return theResponseObject.makeStringResponse();
+            }
 
-			if(theCustomType.startsWith("GETMCGOAL")){
-				MCGoalResponse theResponseObject = new MCGoalResponse(theState.goalPosition);
-				return theResponseObject.makeStringResponse();
-			}
+            if (theCustomType.startsWith("GETMCGOAL")) {
+                MCGoalResponse theResponseObject = new MCGoalResponse(theState.goalPosition);
+                return theResponseObject.makeStringResponse();
+            }
 
-		}
-		System.err.println("We need some code written in Env Message for MountainCar.. unknown request received: "+theMessage);
-		Thread.dumpStack();
-		return null;
-	}
+        }
+        System.err.println("We need some code written in Env Message for MountainCar.. unknown request received: " + theMessage);
+        Thread.dumpStack();
+        return null;
+    }
 
-	@Override
-	protected Observation makeObservation(){
-		Observation currentObs= new Observation(0,2);
+    @Override
+    protected Observation makeObservation() {
+        Observation currentObs = new Observation(0, 2);
 
-        currentObs.doubleArray[0]=theState.position;
-		currentObs.doubleArray[1]=theState.velocity;
+        currentObs.doubleArray[0] = theState.position;
+        currentObs.doubleArray[1] = theState.velocity;
 
-		return currentObs;
-	}
+        return currentObs;
+    }
 
+    public MountainCar() {
+        this(getDefaultParameters());
+    }
 
-	public MountainCar() {
-            this(getDefaultParameters());
-	}
+    public void env_cleanup() {
+        if (savedStates != null) {
+            savedStates.clear();
+        }
+    }
 
-
-	public void env_cleanup() {
-            if(savedStates!=null)
-                savedStates.clear();
-	}
-
-	//
+    //
 //This has a side effect, it changes the random order.
 //
     public Random_seed_key env_get_random_seed() {
-        Random_seed_key k=new Random_seed_key(2,0);
-        long newSeed=getRandom().nextLong();
+        Random_seed_key k = new Random_seed_key(2, 0);
+        long newSeed = getRandom().nextLong();
         getRandom().setSeed(newSeed);
-        k.intArray[0]=UtilityShop.LongHighBitsToInt(newSeed);
-        k.intArray[1]=UtilityShop.LongLowBitsToInt(newSeed);
+        k.intArray[0] = UtilityShop.LongHighBitsToInt(newSeed);
+        k.intArray[1] = UtilityShop.LongLowBitsToInt(newSeed);
         return k;
     }
 
     public void env_set_random_seed(Random_seed_key k) {
-        long storedSeed=UtilityShop.intsToLong(k.intArray[0], k.intArray[1]);
+        long storedSeed = UtilityShop.intsToLong(k.intArray[0], k.intArray[1]);
         getRandom().setSeed(storedSeed);
     }
 
-
     public State_key env_get_state() {
         savedStates.add(new MountainCarState(theState));
-        State_key k=new State_key(1,0);
-        k.intArray[0]=savedStates.size()-1;
+        State_key k = new State_key(1, 0);
+        k.intArray[0] = savedStates.size() - 1;
         return k;
     }
 
     public void env_set_state(State_key k) {
-        int theIndex=k.intArray[0];
-        
-        if(savedStates==null||theIndex>=savedStates.size()){
-            System.err.println("Could not set state to index:"+theIndex+", that's higher than saved size");
+        int theIndex = k.intArray[0];
+
+        if (savedStates == null || theIndex >= savedStates.size()) {
+            System.err.println("Could not set state to index:" + theIndex + ", that's higher than saved size");
             return;
         }
-        MountainCarState oldState=savedStates.get(k.intArray[0]);
-        this.theState=new MountainCarState(oldState);
+        MountainCarState oldState = savedStates.get(k.intArray[0]);
+        this.theState = new MountainCarState(oldState);
     }
-    
+
+    public double getMaxValueForQuerableVariable(int dimension) {
+        if (dimension == 0) {
+            return reportedMaxPosition;
+        } else {
+            return reportedMaxVelocity;
+        }
+    }
+
+    public double getMinValueForQuerableVariable(int dimension) {
+        if (dimension == 0) {
+            return reportedMinPosition;
+        } else {
+            return reportedMinVelocity;
+        }
+    }
 
 
+    //This is really easy in mountainCar because you observe exactly the state
+    //Oops, that's not true anymore, we have noise and offsets...
+    public Observation getObservationForState(Observation theState) {
+        return theState;
+    }
 
-	public double getMaxValueForQuerableVariable(int dimension) {
-		if(dimension==0)
-			return reportedMaxPosition;
-		else
-			return reportedMaxVelocity;
-	}
+    public int getNumVars() {
+        return 2;
+    }
 
-	public double getMinValueForQuerableVariable(int dimension) {
-		if(dimension==0)
-			return reportedMinPosition;
-		else
-			return reportedMinVelocity;
-	}
+    private double getHeight() {
+        return theState.getHeightAtPosition(theState.position);
+    }
 
-
-	//This is really easy in mountainCar because you observe exactly the state
-        //Oops, that's not true anymore, we have noise and offsets...
-	public Observation getObservationForState(Observation theState) {
-		return theState;
-	}
-
-	public int getNumVars(){
-		return 2;
-	}
-
-
-	private double getHeight(){
-		return theState.getHeightAtPosition(theState.position);
-	}
-
-	public RLVizVersion getTheVersionISupport() {
-		return new RLVizVersion(1,1);
-	}
+    public RLVizVersion getTheVersionISupport() {
+        return new RLVizVersion(1, 1);
+    }
 
     public String getVisualizerClassName() {
-		return "visualizers.mountainCar.MountainCarVisualizer";
-	}
-
+        return "visualizers.mountainCar.MountainCarVisualizer";
+    }
 }
-class DetailsProvider implements hasVersionDetails{
+
+class DetailsProvider implements hasVersionDetails {
+
     public String getName() {
-        return "Mountain Car 1.01";
+        return "Mountain Car 1.10";
     }
 
     public String getShortName() {
@@ -330,7 +314,5 @@ class DetailsProvider implements hasVersionDetails{
     public String getDescription() {
         return "RL-Library Java Version of the classic Mountain Car RL-Problem.";
     }
-
-
 }
 
