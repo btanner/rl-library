@@ -1,18 +1,18 @@
-<project name="MountainCar" basedir="." >
+<project name="ChainMDP" basedir="." >
 
-	<property name="baseLibraryDir" value="../.."/>
+	<property name="baseLibraryDir" value="../../.."/>
 	<property name="rl.library.system.directory" value="${baseLibraryDir}/system"/>
 	<import file="${rl.library.system.directory}/build-common.xml"/>
 
 	<property name="project.type" value="environment" />
 	<property name="main.project.name" value="${ant.project.name}"/>
-	<property name="main.package.name" value="MountainCar/"/>
+	<property name="main.package.name" value="chainMDP/"/>
 	<property name="main.package.spec.version" value="1.0"/>
 	<property name="main.vendor.name" value="Brian Tanner"/>
 
-	<property name="project.has.viz" value="true" />
+	<property name="project.has.viz" value="false" />
 	<property name="viz.project.name" value="${ant.project.name}Visualizer"/>
-	<property name="viz.package.name" value="visualizers/mountainCar/"/>
+	<property name="viz.package.name" value="visualizers/ChainMDP/"/>
 	<property name="viz.package.spec.version" value="1.0"/>
 	<property name="viz.vendor.name" value="Brian Tanner"/>
 	<path id="project.extra.classpath" />
