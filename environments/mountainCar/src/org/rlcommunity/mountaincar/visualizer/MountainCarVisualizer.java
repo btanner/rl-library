@@ -14,7 +14,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. */
-package visualizers.mountainCar;
+package org.rlcommunity.mountaincar.visualizer;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -22,11 +22,11 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import mcMessages.MCGoalRequest;
-import mcMessages.MCGoalResponse;
-import mcMessages.MCHeightRequest;
-import mcMessages.MCHeightResponse;
-import mcMessages.MCStateRequest;
+import org.rlcommunity.mountaincar.messages.MCGoalRequest;
+import org.rlcommunity.mountaincar.messages.MCGoalResponse;
+import org.rlcommunity.mountaincar.messages.MCHeightRequest;
+import org.rlcommunity.mountaincar.messages.MCHeightResponse;
+import org.rlcommunity.mountaincar.messages.MCStateRequest;
 import rlVizLib.general.TinyGlue;
 import rlVizLib.glueProxy.RLGlueProxy;
 import rlVizLib.visualization.interfaces.AgentOnValueFunctionDataProvider;
@@ -51,7 +51,7 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
 
     Vector<Double> mins = null;
     Vector<Double> maxs = null;
-    mcMessages.MCStateResponse theCurrentState = null;
+    org.rlcommunity.mountaincar.messages.MCStateResponse theCurrentState = null;
     Vector<Double> theQueryPositions = null;
     Vector<Double> theHeights = null;
     double minHeight = Double.MIN_VALUE;

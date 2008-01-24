@@ -14,7 +14,8 @@
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. */
-package mcMessages;
+package org.rlcommunity.mountaincar.messages;
+
 
 import rlVizLib.glueProxy.RLGlueProxy;
 import rlVizLib.messaging.AbstractMessage;
@@ -25,32 +26,31 @@ import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvMessageType;
 import rlVizLib.messaging.environment.EnvironmentMessages;
 
-public class MCGoalRequest extends EnvironmentMessages{
+public class MCStateRequest extends EnvironmentMessages{
 
-	public MCGoalRequest(GenericMessage theMessageObject) {
+	public MCStateRequest(GenericMessage theMessageObject){
 		super(theMessageObject);
 	}
 
-	public static MCGoalResponse Execute(){
+	public static MCStateResponse Execute(){
 		String theRequest=AbstractMessage.makeMessage(
 				MessageUser.kEnv.id(),
 				MessageUser.kBenchmark.id(),
 				EnvMessageType.kEnvCustom.id(),
 				MessageValueType.kString.id(),
-				"GETMCGOAL");
+				"GETMCSTATE");
 
 		String responseMessage=RLGlueProxy.RL_env_message(theRequest);
 
-		MCGoalResponse theResponse;
+		MCStateResponse theResponse;
 		try {
-			theResponse = new MCGoalResponse(responseMessage);
+			theResponse = new MCStateResponse(responseMessage);
 		} catch (NotAnRLVizMessageException e) {
-			System.err.println("In MCGoalRequest, the response was not RL-Viz compatible");
+			System.err.println("In MCStateRequest, the response was not RL-Viz compatible");
 			theResponse=null;
 		}
 
 		return theResponse;
 
 	}
-
 }

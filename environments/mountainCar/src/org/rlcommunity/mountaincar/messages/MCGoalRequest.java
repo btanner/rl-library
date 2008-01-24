@@ -14,54 +14,43 @@
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. */
-package mcMessages;
+package org.rlcommunity.mountaincar.messages;
 
-import java.util.StringTokenizer;
-
+import rlVizLib.glueProxy.RLGlueProxy;
 import rlVizLib.messaging.AbstractMessage;
-import rlVizLib.messaging.AbstractResponse;
 import rlVizLib.messaging.GenericMessage;
 import rlVizLib.messaging.MessageUser;
 import rlVizLib.messaging.MessageValueType;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvMessageType;
+import rlVizLib.messaging.environment.EnvironmentMessages;
 
-public class MCGoalResponse extends AbstractResponse {
-	double goalPosition;
-	
-	public MCGoalResponse(double goal){
-		this.goalPosition = goal;
+public class MCGoalRequest extends EnvironmentMessages{
+
+	public MCGoalRequest(GenericMessage theMessageObject) {
+		super(theMessageObject);
 	}
 
-	public MCGoalResponse(String responseMessage) throws NotAnRLVizMessageException {
-		GenericMessage theGenericResponse = new GenericMessage(responseMessage);
-		String thePayLoadString=theGenericResponse.getPayLoad();
-		StringTokenizer stateTokenizer = new StringTokenizer(thePayLoadString, ":");
-		goalPosition=Double.parseDouble(stateTokenizer.nextToken());
-	}
-	
-	public double getGoalPosition() {
-		return this.goalPosition;
-	}
+	public static MCGoalResponse Execute(){
+		String theRequest=AbstractMessage.makeMessage(
+				MessageUser.kEnv.id(),
+				MessageUser.kBenchmark.id(),
+				EnvMessageType.kEnvCustom.id(),
+				MessageValueType.kString.id(),
+				"GETMCGOAL");
 
-	@Override
-	public String makeStringResponse() {
-		StringBuffer goalBuffer=new StringBuffer();
+		String responseMessage=RLGlueProxy.RL_env_message(theRequest);
 
-		goalBuffer.append(goalPosition);
-		goalBuffer.append(":");
-
-
-			String theResponse=AbstractMessage.makeMessage(
-					MessageUser.kBenchmark.id(),
-					MessageUser.kEnv.id(),
-					EnvMessageType.kEnvResponse.id(),
-					MessageValueType.kStringList.id(),
-			goalBuffer.toString());
-
+		MCGoalResponse theResponse;
+		try {
+			theResponse = new MCGoalResponse(responseMessage);
+		} catch (NotAnRLVizMessageException e) {
+			System.err.println("In MCGoalRequest, the response was not RL-Viz compatible");
+			theResponse=null;
+		}
 
 		return theResponse;
+
 	}
-	
 
 }
