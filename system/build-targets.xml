@@ -22,62 +22,17 @@ We'll try and rely on minimal variables from above.
 <path id="junit.classpath" location="${junit.jar}"/>
 
 
-<target name="rl-set-properties" description="sets up a few things according to whether we're build an agent or an environment">
-		<if>
-		 <equals arg1="${project.type}" arg2="environment" />
-		 <then>
-			<property name="main.dist.dir" value="${env.dist.dir}" />
-			<property name="viz.dist.dir" value="${env.viz.dist.dir}" />
-			<property name="valid.project.type.found" value="true"/>
-		 </then>
-		</if>
-		<if>
-		 <equals arg1="${project.type}" arg2="agent" />
-		 <then>
-			<property name="main.dist.dir" value="${agent.dist.dir}" />
-			<property name="viz.dist.dir" value="${agent.viz.dist.dir}" />
-			<property name="valid.project.type.found" value="true"/>
-		 </then>
-		</if>
-		
-		<fail message="property project.type should be one of agent or environment">
-		     <condition>
-		       <not>
-		         <isset property="valid.project.type.found"/>
-		       </not>
-		     </condition>
-		   </fail>
-
-		<if>
-			<equals arg1="${project.has.viz}" arg2="true" />
-				<then>
-					<property name="should.compile.viz" value="true" />
-				</then>
-			<else>
-		</else>
-			</if>
-			
-		
-		<property name="main.result.jar" value="${main.dist.dir}/${main.project.name}.jar" />
-		<property name="viz.result.jar" value="${viz.dist.dir}/${viz.project.name}.jar" />
-		
-</target>
 
 
 
-<target name="rl-clean-main" depends="rl-set-properties">
+<target name="rl-clean">
 	<delete dir="${build.dir}"/>
 	<delete dir="${docs.dir}"/>
-	<delete file="${main.result.jar}"/>
+	<delete file="${result.jar}"/>
 </target>
 
-<target name="rl-clean-viz" if="should.compile.viz" depends="rl-set-properties">
-	<delete file="${viz.result.jar}" />
-</target>
 
-<target name="rl-clean" depends="rl-clean-main,rl-clean-viz" />
-
-<target name="rl-compile" depends="rl-set-properties">
+<target name="rl-compile">
    <mkdir dir="${classes.dir}"/>
     <javac srcdir="${src.dir}" destdir="${classes.dir}"> 
 		<classpath>
@@ -87,9 +42,9 @@ We'll try and rely on minimal variables from above.
 	</javac>
 </target>
 
-<target name="rl-jar-main" depends="rl-compile,get.svn.version,get.rlvizlib.version" >
-    <mkdir dir="${main.dist.dir}" />
-    <jar destfile="${main.result.jar}" basedir="${classes.dir}" >
+<target name="rl-jar" depends="rl-compile,get.svn.version,get.rlvizlib.version" >
+    <mkdir dir="${dist.dir}" />
+    <jar destfile="${result.jar}" basedir="${classes.dir}" >
         <manifest>
 		   <attribute name="RLVizLib-Link-Version" value="${rlvizlib.spec.version}"/>
 		    <section name="${main.package.name}">
@@ -104,54 +59,12 @@ We'll try and rely on minimal variables from above.
     </jar>
 </target>
 
-<target name="rl-jar-viz" depends="rl-compile,get.svn.version,get.rlvizlib.version" if="should.compile.viz" >
-    <mkdir dir="${viz.dist.dir}" />
-    <jar destfile="${viz.result.jar}" basedir="${classes.dir}" >
-        <manifest>
-		   <attribute name="RLVizLib-Link-Version" value="${rlvizlib.spec.version}"/>
-		    <section name="${viz.package.name}">
-		      <attribute name="Specification-Title" value="${viz.project.name}"/>
-		      <attribute name="Specification-Version" value="${viz.package.spec.version}"/>
-		      <attribute name="Specification-Vendor" value="RLAI"/>
-		      <attribute name="Implementation-Title" value="${viz.project.name}"/>
-		      <attribute name="Implementation-Version" value="Build:${svn.revision.version}"/> 
-		      <attribute name="Implementation-Vendor" value="${viz.vendor.name}"/>
-		    </section>
-        </manifest>
-    </jar>
-</target>
-
-<target name="rl-jar" depends="rl-jar-main,rl-jar-viz" />
 
 <target name="rl-javadoc">
     <mkdir dir="${docs.dir}"/>
     <javadoc sourcepath="${src.dir}" destdir="${docs.dir}" classpathref="rlvizlib.classpath"/>
 </target>
-<!-- keep this out till later 
-<target name="rl-compile-tests" depends="rl-compile">
-    <mkdir dir="${classes.dir}"/>
-    <mkdir dir="${test.dir}"/>
-    <javac srcdir="${test.dir}" destdir="${classes.dir}">
-        <classpath>
-            <path refid="application"/>
-            <path refid="junit" />
-        </classpath>
-    </javac>
-</target>
 
-<target name="rl-junit" depends="jar">
-     <junit printsummary="yes"  >
-         <classpath>
-              <path refid="application"/>
-          </classpath>
-
-         <batchtest fork="yes">
-             <fileset dir="${src.dir}" includes="**/*Test.java"/>
-         </batchtest>
-     </junit>
- </target>
-
--->
 
 
 	
