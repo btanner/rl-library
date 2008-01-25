@@ -1,16 +1,18 @@
 <project name="RL-Library" basedir="." >
 
 <target name="mountainCar" description="Build Java MountainCar Jar" >
-   <ant antfile="build.xml" dir="environments/mountainCar" inheritAll="false" target="clean-build"/>
+   <ant antfile="build.xml" dir="environments/mountainCar" inheritAll="false" target="all"/>
 </target>
 
 <target name="tetris" description="Build Java tetris Jar" >
-   <ant antfile="build.xml" dir="environments/tetris" inheritAll="false" target="clean-build"/>
+   <ant antfile="build.xml" dir="environments/tetris" inheritAll="false" target="all"/>
 </target>
 
 <target name="randomAgent" description="Build Java Random Agent Jar" >
-   <ant antfile="build.xml" dir="agents/randomAgentJava" inheritAll="false" target="clean-build"/>
+   <ant antfile="build.xml" dir="agents/randomAgentJava" inheritAll="false" target="all"/>
 </target>
+
+
 
 <target name="all" description="Build all environments and rl-glue" depends="mountainCar,randomAgent,tetris,rl-glue">
 </target>	

@@ -62,8 +62,6 @@ public class Tetris extends EnvironmentBase implements HasAVisualizerInterface {
     public static ParameterHolder getDefaultParameters() {
         ParameterHolder p = new ParameterHolder();
         rlVizLib.utilities.UtilityShop.setVersionDetails(p, new DetailsProvider());
-
-
         return p;
     }
 

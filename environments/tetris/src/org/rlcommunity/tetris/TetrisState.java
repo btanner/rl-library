@@ -63,6 +63,7 @@ public class TetrisState {
         possibleBlocks.add(TetrisPiece.makeLShape());
         possibleBlocks.add(TetrisPiece.makeJShape());
 
+        worldState=new int[worldHeight*worldWidth];
         reset();
     }
 

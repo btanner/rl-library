@@ -18,6 +18,7 @@ package RandomAgent;
 
 import java.util.Random;
 
+import rlVizLib.general.ParameterHolder;
 import rlVizLib.general.hasVersionDetails;
 import rlVizLib.utilities.TaskSpecObject;
 
@@ -38,9 +39,24 @@ public class RandomAgent implements Agent {
     private Random random = new Random();
     TaskSpecObject TSO = null;
 
-    public RandomAgent() {
+   public RandomAgent() {
+        this(getDefaultParameters());
     }
 
+    public RandomAgent(ParameterHolder p) {
+        super();
+    }
+
+    /**
+     * Tetris doesn't really have any parameters
+     * @return
+     */
+    public static ParameterHolder getDefaultParameters() {
+        ParameterHolder p = new ParameterHolder();
+        rlVizLib.utilities.UtilityShop.setVersionDetails(p, new DetailsProvider());
+        return p;
+    }
+    
     public void agent_init(String taskSpec) {
         TSO = new TaskSpecObject(taskSpec);
         action = new Action(TSO.num_discrete_action_dims, TSO.num_continuous_action_dims);
