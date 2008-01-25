@@ -15,6 +15,7 @@ We'll try and rely on minimal variables from above.
 <property name="result.jar" value="${dist.dir}/${project.name}.jar" />
 
 <path id="rlvizlib.classpath" location="${rlvizlib.jar}"/>
+<path id="result.jar.classpath" location="${result.jar}"/>
 
 
 <taskdef resource="net/sf/antcontrib/antlib.xml">

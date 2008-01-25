@@ -354,7 +354,7 @@ class DetailsProvider implements hasVersionDetails {
     }
 
     public String getInfoUrl() {
-        return "http://rl-library.googlecode.com";
+        return "http://code.google.com/p/rl-library/wiki/MountainCar";
     }
 
     public String getDescription() {

@@ -12,14 +12,17 @@ We'll try and rely on minimal variables from above.
 <dirname property="imported.basedir" file="${ant.file.imported}"/>
 
 <property name="src.dir"     value="${basedir}/src"/>
+<property name="test.dir"     value="${basedir}/test"/>
 <property name="build.dir"   value="${basedir}/build"/>
 <property name="classes.dir" value="${build.dir}/classes"/>
+<property name="test.classes.dir" value="${build.dir}/testclasses"/>
 <property name="test.reports"   value="${basedir}/reports"/>
 <property name="test.raw"   value="${basedir}/reports/raw"/>
 <property name="docs.dir"   value="${basedir}/javadocs"/>
 
 <property name="junit.jar" value="${rl.library.system.directory}/libs/junit.jar" />
 <path id="junit.classpath" location="${junit.jar}"/>
+<path id="test.build.classpath" location="${test.classes.dir}"/>
 
 
 
@@ -58,6 +61,47 @@ We'll try and rely on minimal variables from above.
         </manifest>
     </jar>
 </target>
+
+
+<target name="rl-compile-tests" depends="rl-jar">
+    <mkdir dir="${test.classes.dir}"/>
+    <javac srcdir="${test.dir}" destdir="${test.classes.dir}">
+        <classpath>
+            <path refid="rlvizlib.classpath" />
+            <path refid="junit.classpath" />
+			<path refid="result.jar.classpath" />
+        </classpath>
+    </javac>
+</target>
+
+<target name="rl-run-test" depends="rl-compile-tests,rl-jar">
+	<mkdir dir="${test.raw}" />
+   <junit printsummary="withOutAndErr" showoutput="yes" >
+        <classpath>
+            <path refid="junit.classpath" /> 
+			<path refid="result.jar.classpath" />
+			<path refid="test.build.classpath" />
+            <path refid="rlvizlib.classpath" />
+
+        </classpath>
+        
+        <batchtest fork="yes" todir="${test.raw}">
+            <formatter type="xml"/> 
+            <fileset dir="${test.dir}" includes="**/*Test.java"/>
+        </batchtest>
+    </junit>
+</target> 
+
+<target name="rl-test" depends="rl-run-test">
+	<mkdir dir="${test.reports}" />
+    <junitreport todir="${test.reports}">
+        <fileset dir="${test.raw}">
+            <include name="TEST-*.xml" />
+        </fileset>
+        <report todir="${test.reports}" />
+    </junitreport>
+</target>
+
 
 
 <target name="rl-javadoc">
