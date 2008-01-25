@@ -12,10 +12,7 @@
 	<path id="project.extra.classpath" />
 	<import file="${rl.library.system.directory}/build-targets.xml"/>
 
-<!-- you can think of these as convenient aliases for the actual targets in build-targets.xml -->
-	<target name="clean" depends="rl-clean"/>
-	<target name="compile" depends="rl-compile"/>
-   	<target name="clean-build" depends="clean,jar"/>
-	<target name="jar" depends="rl-jar"/>
+	<!-- this import gives you targets: clean, build, test, javadoc, all -->
+	<import file="${rl.library.system.directory}/predefined-target-aliases.xml"/>
 </project>
 

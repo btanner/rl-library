@@ -24,12 +24,10 @@ import org.rlcommunity.mountaincar.messages.MCHeightResponse;
 import org.rlcommunity.mountaincar.messages.MCStateResponse;
 import rlVizLib.Environments.EnvironmentBase;
 import rlVizLib.general.ParameterHolder;
-import rlVizLib.general.RLVizVersion;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvironmentMessageParser;
 import rlVizLib.messaging.environment.EnvironmentMessages;
 import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
-import rlVizLib.messaging.interfaces.RLVizVersionResponseInterface;
 import rlVizLib.messaging.interfaces.getEnvMaxMinsInterface;
 import rlVizLib.messaging.interfaces.getEnvObsForStateInterface;
 import rlglue.types.Action;
@@ -56,7 +54,6 @@ import rlVizLib.utilities.UtilityShop;
 public class MountainCar extends EnvironmentBase implements
         getEnvMaxMinsInterface,
         getEnvObsForStateInterface,
-        RLVizVersionResponseInterface,
         HasAVisualizerInterface {
 
     static final int numActions = 3;
@@ -318,10 +315,6 @@ public class MountainCar extends EnvironmentBase implements
      */
     private double getHeight() {
         return theState.getHeightAtPosition(theState.position);
-    }
-
-    public RLVizVersion getTheVersionISupport() {
-        return new RLVizVersion(1, 1);
     }
 
     public String getVisualizerClassName() {

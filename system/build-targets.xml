@@ -8,7 +8,8 @@ We'll try and rely on minimal variables from above.
 
 -->
 
-<project basedir=".."  default="print-imports" name="rl-library-targets">
+
+<project basedir=".." name="rl-library-targets">
 <dirname property="imported.basedir" file="${ant.file.imported}"/>
 
 <property name="src.dir"     value="${basedir}/src"/>
