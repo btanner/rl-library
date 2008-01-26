@@ -1,6 +1,6 @@
 <project name="Tetris" basedir="." default="all" >
 
-	<property name="baseLibraryDir" value="../.."/>
+	<property name="baseLibraryDir" value="../../.."/>
 	<property name="rl.library.system.directory" value="${baseLibraryDir}/system"/>
 	<property name="project.name" value="${ant.project.name}"/>
 	<import file="${rl.library.system.directory}/build-common.xml"/>

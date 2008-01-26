@@ -1,6 +1,6 @@
 <project name="RandomAgent" basedir="." >
 
-	<property name="baseLibraryDir" value="../.."/>
+	<property name="baseLibraryDir" value="../../.."/>
 	<!-- Things required for build-common.xml -->
 	<property name="rl.library.system.directory" value="${baseLibraryDir}/system"/>
 	<property name="project.name" value="${ant.project.name}"/>

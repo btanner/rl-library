@@ -1,15 +1,15 @@
 <project name="RL-Library" basedir="." >
 
 <target name="mountainCar" description="Build Java MountainCar Jar" >
-   <ant antfile="build.xml" dir="environments/mountainCar" inheritAll="false" target="all"/>
+   <ant antfile="build.xml" dir="projects/environments/mountainCar" inheritAll="false" target="all"/>
 </target>
 
 <target name="tetris" description="Build Java tetris Jar" >
-   <ant antfile="build.xml" dir="environments/tetris" inheritAll="false" target="all"/>
+   <ant antfile="build.xml" dir="projects/environments/tetris" inheritAll="false" target="all"/>
 </target>
 
 <target name="randomAgent" description="Build Java Random Agent Jar" >
-   <ant antfile="build.xml" dir="agents/randomAgentJava" inheritAll="false" target="all"/>
+   <ant antfile="build.xml" dir="projects/agents/randomAgentJava" inheritAll="false" target="all"/>
 </target>
 
 
@@ -24,9 +24,9 @@
 </target>
 
 <target name="clean" description="Clean everything">
-   <ant antfile="build.xml" dir="environments/mountainCar" inheritAll="false" target="clean"/>
-   <ant antfile="build.xml" dir="environments/tetris" inheritAll="false" target="clean"/>
-   <ant antfile="build.xml" dir="agents/randomAgentJava" inheritAll="false" target="clean"/>
+   <ant antfile="build.xml" dir="projects/environments/mountainCar" inheritAll="false" target="clean"/>
+   <ant antfile="build.xml" dir="projects/environments/tetris" inheritAll="false" target="clean"/>
+   <ant antfile="build.xml" dir="projects/agents/randomAgentJava" inheritAll="false" target="clean"/>
 
 	  <exec executable="make" dir="system/rl-glue">
 		<arg value="clean"/>
