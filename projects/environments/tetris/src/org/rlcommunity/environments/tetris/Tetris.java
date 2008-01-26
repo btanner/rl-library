@@ -19,11 +19,10 @@ http://brian.tannerpages.com
 
 package org.rlcommunity.environments.tetris;
 
-import org.rlcommunity.tetris.*;
 import java.util.Vector;
 
-import org.rlcommunity.tetris.messages.TetrisStateResponse;
-import org.rlcommunity.tetris.visualizer.TetrisVisualizer;
+import org.rlcommunity.environments.tetris.messages.TetrisStateResponse;
+import org.rlcommunity.environments.tetris.visualizer.TetrisVisualizer;
 import rlVizLib.Environments.EnvironmentBase;
 import rlVizLib.general.ParameterHolder;
 import rlVizLib.messaging.environment.EnvironmentMessageParser;

@@ -18,13 +18,12 @@ http://brian.tannerpages.com
 */
 package org.rlcommunity.environments.mountaincar;
 
-import org.rlcommunity.mountaincar.*;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import org.rlcommunity.mountaincar.messages.MCGoalResponse;
-import org.rlcommunity.mountaincar.messages.MCHeightResponse;
-import org.rlcommunity.mountaincar.messages.MCStateResponse;
+import org.rlcommunity.environments.mountaincar.messages.MCGoalResponse;
+import org.rlcommunity.environments.mountaincar.messages.MCHeightResponse;
+import org.rlcommunity.environments.mountaincar.messages.MCStateResponse;
 import rlVizLib.Environments.EnvironmentBase;
 import rlVizLib.general.ParameterHolder;
 import rlVizLib.messaging.NotAnRLVizMessageException;
@@ -39,7 +38,7 @@ import rlglue.types.Random_seed_key;
 import rlglue.types.Reward_observation;
 import rlglue.types.State_key;
 import java.util.Random;
-import org.rlcommunity.mountaincar.visualizer.MountainCarVisualizer;
+import org.rlcommunity.environments.mountaincar.visualizer.MountainCarVisualizer;
 import rlVizLib.general.hasVersionDetails;
 import rlVizLib.utilities.UtilityShop;
 
