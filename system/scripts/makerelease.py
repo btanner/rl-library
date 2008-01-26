@@ -151,8 +151,8 @@ def releaseFile(projectName, baseRepoURL,releaseName,releaseType):
 	
 
 def main():
-	projectName="bt-glue";
-	baseRepoURL="https://bt-glue.googlecode.com/svn/";
+	projectName="rl-library";
+	baseRepoURL="https://rl-library.googlecode.com/svn/";
 	
 	parser = optparse.OptionParser(usage='makeRelease.py -n NAME -t TYPE');
 	parser.add_option('-n', '--name', dest='releaseNumber', help='Number of release, something like .1 or 5 for 1.0');

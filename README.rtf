@@ -1,0 +1,238 @@
+{\rtf1\ansi\ansicpg1252\cocoartf949
+{\fonttbl\f0\fswiss\fcharset0 ArialMT;\f1\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue153;\red0\green0\blue205;\red102\green103\blue0;
+}
+\margl1440\margr1440\vieww19880\viewh18160\viewkind0
+\deftab720
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\ql\qnatural\pardirnatural
+
+\f0\b\fs32 \cf0 \expnd0\expndtw0\kerning0
+Documentation
+\b0\fs26 \expnd0\expndtw0\kerning0
+ \'a0
+\i \expnd0\expndtw0\kerning0
+\
+RL-Library Documentation\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa260\ql\qnatural\pardirnatural
+
+\i0 \cf0 \expnd0\expndtw0\kerning0
+Thank you for downloading/using RL-Library.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa120\ql\qnatural\pardirnatural
+\cf0 \expnd0\expndtw0\kerning0
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa320\ql\qnatural\pardirnatural
+
+\b\fs48 \cf0 \expnd0\expndtw0\kerning0
+What's an RL-Library?\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa260\ql\qnatural\pardirnatural
+
+\b0\fs26 \cf0 \expnd0\expndtw0\kerning0
+RL-Library is a collection of open-source agents, environments, and experiments that are compatible with the {\field{\*\fldinst{HYPERLINK "http://code.google.com/p/rl-glue/"}}{\fldrslt \cf2 \expnd0\expndtw0\kerning0
+\ul \ulc3 RL-Glue}} reinforcement learning interface implementation.\
+The idea is that by providing these agent, environments, and experiments to the community, we can largely eliminate the pain in the neck of re-implementing each other's hard work all the time, and facilitate more accurate and effective comparisons between methods by using a shared code library.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa120\ql\qnatural\pardirnatural
+\cf0 \expnd0\expndtw0\kerning0
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa320\ql\qnatural\pardirnatural
+
+\b\fs48 \cf0 \expnd0\expndtw0\kerning0
+Hyper Quick Start\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa260\ql\qnatural\pardirnatural
+
+\b0\fs26 \cf0 \expnd0\expndtw0\kerning0
+If you just want to see something happen without learning anything about what's in this package, do:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\ql\qnatural\pardirnatural
+
+\f1\fs24 \cf0 \expnd0\expndtw0\kerning0
+$\cf4 \expnd0\expndtw0\kerning0
+>\cf0 \expnd0\expndtw0\kerning0
+ cd scripts\
+$\cf4 \expnd0\expndtw0\kerning0
+>\cf0 \expnd0\expndtw0\kerning0
+ bash runNet\cf4 \expnd0\expndtw0\kerning0
+.\cf0 \expnd0\expndtw0\kerning0
+bash\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa260\ql\qnatural\pardirnatural
+
+\f0\b\fs26 \cf0 \expnd0\expndtw0\kerning0
+Note:
+\b0 \expnd0\expndtw0\kerning0
+ This is a graphical demo and will only work if you can display a graphical Java window!\
+This will run the graphical experiment program with all of the Java agents and environments currently in rl-library.\
+There are also sample experiments that you can run in projects/experiments\
+Please read the rest of this document to learn what that means and what other things you can do!\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa120\ql\qnatural\pardirnatural
+\cf0 \expnd0\expndtw0\kerning0
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa260\ql\qnatural\pardirnatural
+\cf0 \expnd0\expndtw0\kerning0
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa320\ql\qnatural\pardirnatural
+
+\b\fs48 \cf0 \expnd0\expndtw0\kerning0
+Installation\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa260\ql\qnatural\pardirnatural
+
+\b0\fs26 \cf0 \expnd0\expndtw0\kerning0
+In theory, RL-Library is an effort that has been created by a variety of authors on a variety of platforms. We're trying as much as possible to enforce standards and set things up in as flexible a way as possible, but it won't always work.\
+We use two build systems (so far) on this project, {\field{\*\fldinst{HYPERLINK "http://ant.apache.org/"}}{\fldrslt \cf2 \expnd0\expndtw0\kerning0
+\ul \ulc3 Apache Ant}} and {\field{\*\fldinst{HYPERLINK "http://www.gnu.org/software/make/"}}{\fldrslt \cf2 \expnd0\expndtw0\kerning0
+\ul \ulc3 Make}}. The core C/C++ stuff uses Make and the Java stuff all uses Ant. We consider Ant our primary build system because we have it setup so that Ant can call Make, but not vice versa.\
+Anyway, to rebuild the Java stuff you need Ant, but you shouldn't need to rebuild the Java stuff if you don't want to.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa280\ql\qnatural\pardirnatural
+
+\b\fs36 \cf0 \expnd0\expndtw0\kerning0
+RL-Glue\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa260\ql\qnatural\pardirnatural
+
+\b0\fs26 \cf0 \expnd0\expndtw0\kerning0
+Can be built from Ant or Make:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\ql\qnatural\pardirnatural
+
+\f1\fs24 \cf0 \expnd0\expndtw0\kerning0
+$\cf4 \expnd0\expndtw0\kerning0
+>\cf0 \expnd0\expndtw0\kerning0
+ make rl\cf4 \expnd0\expndtw0\kerning0
+-\cf0 \expnd0\expndtw0\kerning0
+glue\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa260\ql\qnatural\pardirnatural
+
+\f0\fs26 \cf0 \expnd0\expndtw0\kerning0
+or\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\ql\qnatural\pardirnatural
+
+\f1\fs24 \cf0 \expnd0\expndtw0\kerning0
+$\cf4 \expnd0\expndtw0\kerning0
+>\cf0 \expnd0\expndtw0\kerning0
+ ant rl\cf4 \expnd0\expndtw0\kerning0
+-\cf0 \expnd0\expndtw0\kerning0
+glue\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa280\ql\qnatural\pardirnatural
+
+\f0\b\fs36 \cf0 \expnd0\expndtw0\kerning0
+Java Environments and Agents\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa260\ql\qnatural\pardirnatural
+
+\b0\fs26 \cf0 \expnd0\expndtw0\kerning0
+All of the Java agents and environments should already be compiled into jar files that live in 
+\f1\fs22 \expnd0\expndtw0\kerning0
+rl-library/system/dist
+\f0\fs26 \expnd0\expndtw0\kerning0
+. Java class files and .jar package files really are cross-platform compatible, so when you download rl-library you get them out of the box for free.\
+To rebuild all of the Java projects, test them, generate their {\field{\*\fldinst{HYPERLINK "http://en.wikipedia.org/wiki/Javadoc"}}{\fldrslt \cf2 \expnd0\expndtw0\kerning0
+\ul \ulc3 JavaDocs}}, and build rl-glue:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\ql\qnatural\pardirnatural
+
+\f1\fs24 \cf0 \expnd0\expndtw0\kerning0
+$\cf4 \expnd0\expndtw0\kerning0
+>\cf0 \expnd0\expndtw0\kerning0
+ ant all\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa280\ql\qnatural\pardirnatural
+
+\f0\b\fs36 \cf0 \expnd0\expndtw0\kerning0
+C++ Agent and Environment Loaders for RL-Viz\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa260\ql\qnatural\pardirnatural
+
+\b0\fs26 \cf0 \expnd0\expndtw0\kerning0
+Not quite implemented yet. Soon. For now, you can't use C++ agents or environments in RL-Viz experiments, only with RL-Glue experiments. Real the RL-Viz vs. RL-Glue section below if you don't know what we're talking about.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa280\ql\qnatural\pardirnatural
+
+\b\fs36 \cf0 \expnd0\expndtw0\kerning0
+Specific Projects\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa260\ql\qnatural\pardirnatural
+
+\b0\fs26 \cf0 \expnd0\expndtw0\kerning0
+For projects that are not automatically built by the main build system, please refer to the project specific documentation here on the Wiki, or in the INSTALL instructions in that directory, or wherever those docs are. Hopefully it won't be much harder than typing 
+\f1\fs22 \expnd0\expndtw0\kerning0
+make
+\f0\fs26 \expnd0\expndtw0\kerning0
+.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa320\ql\qnatural\pardirnatural
+
+\b\fs48 \cf0 \expnd0\expndtw0\kerning0
+What the Heck are RL-Glue and RL-Viz\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa260\ql\qnatural\pardirnatural
+{\field{\*\fldinst{HYPERLINK "http://code.google.com/p/rl-glue/"}}{\fldrslt 
+\b0\fs26 \cf2 \expnd0\expndtw0\kerning0
+\ul \ulc3 RL-Glue}}
+\b0\fs26 \expnd0\expndtw0\kerning0
+ is both an idea and an implementation. The idea is a standard interface, a set of function calls, that reinforcement learning agents, environments, and experiments should use so that they can be easily understood and reused by the reinforcement learning community.\
+The implementation is a cross-language, cross-platform software library for creating reinforcement-learning 
+\i \expnd0\expndtw0\kerning0
+components
+\i0 \expnd0\expndtw0\kerning0
+ (agents, environments, and experiments). It runs on Linux/Unix/Mac OS X/Cygwin and currently supports Python, C, C++, and Java. Lisp and Matlab support are in the works. Basically, you write your component following the spec and link it to RL-Glue. Then, you can use that component with any complimentary components that support the same actions and observations. So I could write an RL-Glue environment that has discrete actions and observations, compile it with RL-Glue, and then it could be easily used with any RL-Glue agent that works with discrete action, discrete observations. The programs could be compiled together into a single executable, or run in difference languages on a single computer, or run on different everything running across the Internet. It's pretty cool.\
+Every agent, environment, and experiment in here should 
+\b \expnd0\expndtw0\kerning0
+hopefully
+\b0 \expnd0\expndtw0\kerning0
+ be compatible with RL-Glue on it's own.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\ql\qnatural\pardirnatural
+
+\b\fs32 \cf0 \expnd0\expndtw0\kerning0
+RL-Viz\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa260\ql\qnatural\pardirnatural
+{\field{\*\fldinst{HYPERLINK "http://rl-viz.googlecode.com/"}}{\fldrslt 
+\b0\fs26 \cf2 \expnd0\expndtw0\kerning0
+\ul \ulc3 RL-Viz}}
+\b0\fs26 \expnd0\expndtw0\kerning0
+ is a protocol + implementation that builds on 
+\i \expnd0\expndtw0\kerning0
+top
+\i0 \expnd0\expndtw0\kerning0
+ of RL-Glue. RL-Viz adds a specification on top of some of the more open-ended parts of RL-Glue in order to add some really neat functionality.\
+Some main features:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720\ql\qnatural\pardirnatural
+\cf0 \expnd0\expndtw0\kerning0
+	\'95	Supports visualization of agents and environments\
+	\'95	Allows run-time selection of agents and environments\
+	\'95	Allows run-time configuration (setting parameters) of agents and environments\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa260\ql\qnatural\pardirnatural
+\cf0 \expnd0\expndtw0\kerning0
+RL-Viz is currently used for the {\field{\*\fldinst{HYPERLINK "http://rl-competition.org/"}}{\fldrslt \cf2 \expnd0\expndtw0\kerning0
+\ul \ulc3 Reinforcement Learning Competition 2008}}.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\ql\qnatural\pardirnatural
+
+\b\fs32 \cf0 \expnd0\expndtw0\kerning0
+How they Fit Together\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa260\ql\qnatural\pardirnatural
+
+\b0\fs26 \cf0 \expnd0\expndtw0\kerning0
+Many of the components in the RL-Library have been created offer additional features if used through RL-Viz. To the end user, RL-Viz can be easier to use than RL-Glue because it tries to automate some aspects of running RL-Glue experiments. In any case, RL-Viz is a strict addition to RL-Glue, so anything built for RL-Viz can be used without it.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa120\ql\qnatural\pardirnatural
+\cf0 \expnd0\expndtw0\kerning0
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa320\ql\qnatural\pardirnatural
+
+\b\fs48 \cf0 \expnd0\expndtw0\kerning0
+Licensing\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa260\ql\qnatural\pardirnatural
+
+\b0\fs26 \cf0 \expnd0\expndtw0\kerning0
+Each project in here is licensed independently. I know the Google Code project says Apache License 2.0. That's not project wide.\
+This is a complex topic. We (Brian Tanner, Adam White, Rich Sutton, etc. at the University of Alberta) have created this Google Code project called 'rl-library'. We are putting all of the infrastructure code out under Apache License 2.0. I'm not going to explain Apache License 2.0 in detail, because I don't always get it myself, but the point is that it means that you can redistribute that code or any derivative of it without must restriction. I think you have to give us credit.\
+Google Code technically says that all parts of a project should be under the same license. That's not really going to work for us, and I hope they're not upset about it.\
+Instead, it goes like this: each sub-project (agent/environment/experiment) within the rl-library can be released under whatever open-source license the authors would like. If someone wants to make their code completely free (no terms, just use and enjoy), while someone else would like to use the GPL, I'm saying that's fine. It just means that if you want to use some code, you should look at the license and notices that are explained at the top level of that project.\
+If you would like to use some of the work here under a different license than is offered, you can work that out with the original author, provided that you can get in contact with them.\
+Sorry that this has to be complicated.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa120\ql\qnatural\pardirnatural
+\cf0 \expnd0\expndtw0\kerning0
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sa320\ql\qnatural\pardirnatural
+
+\b\fs48 \cf0 \expnd0\expndtw0\kerning0
+Credits\
+\pard\tx220\tx720\pardeftab720\li720\fi-720\ql\qnatural\pardirnatural
+
+\b0\fs26 \cf3 \expnd0\expndtw0\kerning0
+	\'95	{\field{\*\fldinst{HYPERLINK "http://brian.tannerpages.com/"}}{\fldrslt \cf2 \expnd0\expndtw0\kerning0
+\ul \ulc2 Brian Tanner}}\cf0 \expnd0\expndtw0\kerning0
+\
+\cf3 \expnd0\expndtw0\kerning0
+	\'95	{\field{\*\fldinst{HYPERLINK "http://http://www.adamwhite.ca/"}}{\fldrslt \cf2 \expnd0\expndtw0\kerning0
+\ul \ulc2 Adam White}}\cf0 \expnd0\expndtw0\kerning0
+\
+	\'95	Mark Lee\
+	\'95	Andrew Butcher\
+	\'95	Matthew Radkie\
+	\'95	Leah Hackman}

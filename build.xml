@@ -28,7 +28,7 @@
    <ant antfile="build.xml" dir="projects/environments/tetris" inheritAll="false" target="clean"/>
    <ant antfile="build.xml" dir="projects/agents/randomAgentJava" inheritAll="false" target="clean"/>
 
-	  <exec executable="make" dir="system/rl-glue">
+ 	<exec executable="make" dir="system/rl-glue">
 		<arg value="clean"/>
 	</exec>
 </target>
