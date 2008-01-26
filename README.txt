@@ -13,6 +13,7 @@ Thank you for downloading RL-Library
 ==========
 Contents:
 
+0: Licensing
 1: Hyper Quick Start
 2: Installation Instructions
 3: Information about what is in this package
@@ -37,9 +38,9 @@ are putting all of the infrastructure code out under Apache License 2.0.  I'm no
 Google Code technically says that all parts of a project should be under the same license.  That's not really going to work for us, and I hope they're not upset about it.
 
 Instead, it goes like this: each sub-project (agent/environment/experiment) within the rl-library can be released under whatever open-source license the authors would like.  If someone wants to make their code completely free (no terms, just use and enjoy), while someone else would like to use the GPL, I'm saying that's fine.  It just
-means that if you want to use some code, you should look at the terms that are explained at the top level of that project.
+means that if you want to use some code, you should look at the license and notices that are explained at the top level of that project.
 
-So for example, I'm releasing Mountain Car and Tetris (please don't sue us over Tetris) as GPLV2.  However, I'll let the Random agent go under a totally free license.  If you would like to use some of the work here under a different license than is offered, you can work that out with the original author, provided that you can get in contact with them.
+If you would like to use some of the work here under a different license than is offered, you can work that out with the original author, provided that you can get in contact with them.
 
 Sorry that this has to be complicated.
 
