@@ -7,7 +7,7 @@
 	<import file="${rl.library.system.directory}/build-common.xml"/>
 
 	<!-- Things required for build-targets.xml -->
-	<property name="main.package.name" value="RandomAgent/"/>
+	<property name="main.package.name" value="org.rlcommunity.agents.random/"/>
 	<property name="main.package.spec.version" value="1.0"/>
 	<property name="main.vendor.name" value="Brian Tanner"/>
 	<path id="project.extra.classpath" />
