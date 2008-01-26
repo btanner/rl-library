@@ -59,6 +59,9 @@ This will run the graphical experiment program with all of the Java agents and e
 Please read the rest of this document to learn what that means and what other things you can do!
 
 
+***
+* There are sample experiments that you can run in projects/experiments
+***
 
 #
 # 
