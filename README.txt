@@ -29,10 +29,10 @@ Contents:
 --------------------------
 0 :: LICENSING
 --------------------------
-Each project in here is licensed independently.  I know the Google Code project says GNU General Public License v2.  That's not project wide.
+Each project in here is licensed independently.  I know the Google Code project says Apache License 2.0.  That's not project wide.
 
 This is a complex topic.  We (Brian Tanner, Adam White, Rich Sutton, etc. at the University of Alberta) have created this Google Code project called 'rl-library'.  We
-are putting all of the infrastructure code out under GPL V2.  I'm not going to explain GPLV2 in detail, because I don't always get it myself, but the point is that it means that to use + redistribute that code or any derivative of it, you *must* release the source, among other things.
+are putting all of the infrastructure code out under Apache License 2.0.  I'm not going to explain Apache License 2.0 in detail, because I don't always get it myself, but the point is that it means that you can redistribute that code or any derivative of it without must restriction.  I think you have to give us credit.
 
 Google Code technically says that all parts of a project should be under the same license.  That's not really going to work for us, and I hope they're not upset about it.
 
