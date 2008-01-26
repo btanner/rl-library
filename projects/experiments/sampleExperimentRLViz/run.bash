@@ -1,14 +1,14 @@
 #!/bin/bash
 
 #
-#	Runs an RL-Glue experiment without any RL-Viz fancies.
+#	Runs an RL-Viz experiment. Minimal fancies.  It's networked (4 executables)
 #
 
 
 #Don't let this be too scary for you, it's not as bad as it looks.  Running an experiment consists of starting 4 different programs:
 #	- RL_glue executable
-#	- Environment
-#	- Agent
+#	- EnvironmentShell
+#	- AgentShell
 #	- Experiment
 
 # The fact that we're starting all 4 parts in a regular way is what makes this look complicated.  This files sources (includes)
@@ -23,29 +23,16 @@ systemPath=$basePath/system
 source $systemPath/scripts/rl-library-includes.sh
 
 #Compile SampleExperiment
-javac -d classes -classpath $systemPath/rl-glue/RL-Glue/Java/RL-Glue.jar src/SampleExperiment.java
+javac -d classes -classpath $rlVizLibPath src/SampleExperiment.java
 
-##Agent Stuff
-#Item for the class path so your agent can be found
-AgentExtraPath=$systemPath/dist/RandomAgent.jar		 	#Path to agent's class files
-AgentPackageName=org.rlcommunity.agents.random  		#Name of the package the Agent is in
-AgentClassName=RandomAgent    							#Name of the agent class
-AgentMaxMemory=128M			 							#Max amount of memory to give the agent (Java default is often too low)
-
-##Env Stuff
-#Item for the class path so your env can be found
-EnvExtraPath=$systemPath/dist/MountainCar.jar		 
-EnvPackageName=org.rlcommunity.environments.mountaincar  	#Name of the package the environment is in.
-EnvClassName=MountainCar    								#Name of the environment class
-EnvMaxMemory=128M											#Max amount of memory to give the agent (Java default is often too low)
 
 
 startRLGlueInBackGround
-startJavaEnvironmentInBackGround $EnvExtraPath $EnvPackageName $EnvClassName $EnvMaxMemory
-startJavaAgentInBackGround $AgentExtraPath $AgentPackageName $AgentClassName $AgentMaxMemory
+startEnvShellInBackGround
+startAgentShellInBackGround
 
-java -classpath $systemPath/rl-glue/RL-Glue/Java/RL-Glue.jar:./classes SampleExperiment
+java -classpath $rlVizLibPath:./classes SampleExperiment
 
-waitForAgentToDie
-waitForEnvironmentToDie
+waitForAgentShellToDie
+waitForEnvShellToDie
 waitForRLGlueToDie

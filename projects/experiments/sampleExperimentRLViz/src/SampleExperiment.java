@@ -18,6 +18,9 @@ http://brian.tannerpages.com
 import rlglue.RLGlue;
 import rlglue.types.*;
 import java.io.IOException;
+import rlVizLib.messaging.environmentShell.*;
+import rlVizLib.messaging.agentShell.*;
+import rlVizLib.general.ParameterHolder;
 
 public class SampleExperiment
 {
@@ -41,6 +44,21 @@ public class SampleExperiment
 	}
 
 	public static void main(String [] args) throws IOException {
+		//Uncomment only 1 environment
+		String theEnvName="Tetris - Java";
+//		String theEnvName="MountainCar - Java";
+		
+		String theAgentName="RandomAgent - Java";
+		
+		ParameterHolder pEnv=getEnvParams(theEnvName);
+		//Set a parameter on the environment (only uncomment if using mountain car)
+		//pEnv.setBooleanParam("randomStartStates",false);
+
+		ParameterHolder pAgent=getAgentParams(theAgentName);
+		
+		EnvShellLoadRequest.Execute(theEnvName,pEnv);
+		AgentShellLoadRequest.Execute(theAgentName,pAgent);
+		
 		double avgSteps = 0.0;
 		double avgReturn = 0.0;
 
@@ -69,4 +87,19 @@ public class SampleExperiment
 		System.out.println("Average return per episode: " + avgReturn);
 		System.out.println("-----------------------------------------------\n");
 	}   
+	
+	
+	
+	private static ParameterHolder getEnvParams(String theEnvString){
+		EnvShellListResponse ListResponse = EnvShellListRequest.Execute();
+		int thisEnvIndex=ListResponse.getTheEnvList().indexOf(theEnvString);
+		ParameterHolder p = ListResponse.getTheParamList().get(thisEnvIndex);
+		return p;
+	}
+	private static ParameterHolder getAgentParams(String theAgentString){
+		AgentShellListResponse ListResponse = AgentShellListRequest.Execute();
+		int thisAgentIndex=ListResponse.getTheAgentList().indexOf(theAgentString);
+		ParameterHolder p = ListResponse.getTheParamList().get(thisAgentIndex);
+		return p;
+	}
 }

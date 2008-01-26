@@ -48,14 +48,23 @@ Sorry that this has to be complicated.
 1 :: HYPER QUICK START
 --------------------------
 If you just want to see something happen without learning anything about what's in this package, do:
-$> make
-$> bash runDemo.bash
+$> cd scripts
+$> bash runNet.bash
 
 ***
 * Note: This is a graphical demo and will only work if you can display a graphical Java window!
 ***
-This will run the graphical trainer for Tetris, Helicopter Hovering, Polyathlon and Mountain Car with a random agent.  Please read the rest of this document to learn what that means and what other things you can do!
+This will run the graphical experiment program with all of the Java agents and environments currently in rl-library.
 
+Please read the rest of this document to learn what that means and what other things you can do!
+
+
+
+#
+# 
+#	This is as far as I got updating docs so far.  What's below is not supposed to be here.
+#	
+#
 --------------------------
 2 :: INSTALLATION INSTRUCTIONS
 --------------------------
