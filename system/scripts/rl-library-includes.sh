@@ -17,7 +17,7 @@ pKillScript=$systemPath/bin/pkill
 RLVIZ_LIB_PATH=$PWD/$jarsPath
 ENV_CLASSPATH=$rlVizLibPath:$envShellLib
 AGENT_CLASSPATH=$rlVizLibPath:$agentShellLib
-VIZ_CLASSPATH=$rlVizLibPath:$guiLib:$vizAppLib
+VIZ_CLASSPATH=$rlVizLibPath:$guiLib:$vizAppLib:$envShellLib:$agentShellLib
 
 setMacAboutName ()
 { # This is about as simple as functions get.
@@ -79,9 +79,14 @@ wait $agentShellPID
 echo "++ Dynamic agent loader terminated"
 }
 
-startGuiTrainer(){
+startLocalGuiTrainer(){
 echo "-- Starting up Gui Trainer"
-java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.GraphicalDriver
+java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.LocalGraphicalDriver
+echo "++ Gui Trainer is finished"
+}
+startNetGuiTrainer(){
+echo "-- Starting up Networked Gui Trainer"
+java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.NetGraphicalDriverBothDynamic
 echo "++ Gui Trainer is finished"
 }
 

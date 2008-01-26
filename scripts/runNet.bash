@@ -1,15 +1,18 @@
-#/bin/bash
-glueRoot=../system/rl-glue
-glueExe=$glueRoot/RL-Glue/bin/RL_glue
+#!/bin/bash
 
-RLVizDir=../system/libs/rl-viz
-RLVizJar=$RLVizDir/RLVizApp.jar
-RLVizLibJar=$RLVizDir/RLVizLib.jar
-EnvShellJar=$RLVizDir/EnvironmentShell.jar
-AgentShellJar=$RLVizDir/AgentShell.jar
+basePath=../
+systemPath=$basePath/system
 
+#Source a script that sets all important functions and variables
+source $systemPath/scripts/rl-library-includes.sh
 
-$glueExe &
-java -Xmx128M -DRLVIZ_LIB_PATH=../system/dist -classpath $RLVizJar:$RLVizLibJar btViz.NetGraphicalDriverBothDynamic &
-java -Xmx128M -DRLVIZ_LIB_PATH=../system/dist -classpath $RLVizLibJar:$AgentShellJar rlglue.agent.AgentLoader agentShell.AgentShell &
-java -Xmx128M -DRLVIZ_LIB_PATH=../system/dist -classpath $RLVizLibJar:$EnvShellJar rlglue.environment.EnvironmentLoader environmentShell.EnvironmentShell 
+startRLGlueInBackGround
+startEnvShellInBackGround
+startAgentShellInBackGround
+startNetGuiTrainer
+java -classpath $rlVizLibPath:./classes SampleExperiment
+
+waitForAgentShellToDie
+waitForEnvShellToDie
+waitForRLGlueToDie
+

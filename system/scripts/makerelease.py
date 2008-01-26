@@ -30,8 +30,9 @@ def upload(file, project_name, user_name, password, summary, labels=None):
   """
   # The login is the user part of user@gmail.com. If the login provided
   # is in the full user@domain form, strip it down.
-  if '@' in user_name:
-    user_name = user_name[:user_name.index('@')]
+#Btanner: commenting this out because they now allow me@mydomain.com 
+#  if '@' in user_name:
+ #   user_name = user_name[:user_name.index('@')]
 
   form_fields = [('summary', summary)]
   if labels is not None:
@@ -106,27 +107,30 @@ def encode_upload_request(fields, file_path):
 
   return 'multipart/form-data; boundary=%s' % BOUNDARY, CRLF.join(body)
 
-def releaseFile(projectName, baseRepoURL,releaseName,releaseType):
+def releaseFile(projectName, baseRepoURL,releaseNumber,releaseType):
 	trunkDir="trunk/";
-	tagsDir="tags/";
+	tagsDir="tags/versions/";
 	branchDir="branches/";
 
-	releaseDescription=releaseType+"-"+releaseName;
+	releaseDescription=releaseNumber+"-"+releaseType+"-"+projectName;
 	
-	tagURL=baseRepoURL+tagsDir+"r"+releaseDescription;
-	branchURL=baseRepoURL+branchDir+"b"+releaseDescription;
+	tagURL=baseRepoURL+tagsDir+releaseDescription;
+	branchURL=baseRepoURL+branchDir+releaseDescription;
 	trunkURL=baseRepoURL+trunkDir;
 
 	randFileSuffix=random.randint(0,5000);
 	tmpDirName="tmpExportDir_"+str(randFileSuffix);
 
 
+#adding code to delete if it's there in case we try and release because of a problem uploading
+	rmExistingBranchCommand="svn rm "+branchURL+" -m 'removing dupe branch if exists'";
+	rmExistingTagCommand="svn rm "+tagURL+" -m 'removing dupe tag if exists'";
 	branchCommand="svn cp "+trunkURL+" "+branchURL+" -m 'Creating a release branch "+projectName+" "+releaseDescription+"'";
 	tagCommand="svn cp "+branchURL+" "+tagURL+" -m 'Creating a tag for "+projectName+" "+releaseDescription+"'";
 	mkDirCommand="mkdir "+tmpDirName;
 	exportCommand="svn export "+tagURL+" "+tmpDirName+"/"+projectName;
 
-	tarFileName=projectName+"_"+releaseType+"-"+releaseName+".tar";
+	tarFileName=projectName+"_"+releaseType+"-"+releaseNumber+".tar";
 	gzipFileName=tarFileName+".gz";
 
 	archiveTarCommand="cd "+tmpDirName+";tar -cf "+tarFileName+" "+projectName+";cd ..";
@@ -135,7 +139,7 @@ def releaseFile(projectName, baseRepoURL,releaseName,releaseType):
 
 	cleanUpCommand="rm -Rf "+tmpDirName;
 
-	Commands=[branchCommand, tagCommand,mkDirCommand,exportCommand,archiveTarCommand,archiveGZIPCommand];
+	Commands=[rmExistingBranchCommand, rmExistingTagCommand, branchCommand, tagCommand,mkDirCommand,exportCommand,archiveTarCommand,archiveGZIPCommand];
 	
 	
 
@@ -143,7 +147,8 @@ def releaseFile(projectName, baseRepoURL,releaseName,releaseType):
 	for c in Commands:
 		status=os.system(c);
 		print "Status: "+str(status)+" : "+c;
-		if(status):
+		#256 is what subversion gives if we try to delete something not there, not worth dying over
+		if(status and status !=256):
 			print("Something bad happened, aborting!");
 			sys.exit();
 		
@@ -157,6 +162,8 @@ def main():
 	parser = optparse.OptionParser(usage='makeRelease.py -n NAME -t TYPE');
 	parser.add_option('-n', '--name', dest='releaseNumber', help='Number of release, something like .1 or 5 for 1.0');
 	parser.add_option('-t', '--type', dest='releaseType', help='Type of release, either something like ALPHA, BETA, or Official');
+	parser.add_option('-u', '--username', dest='username', help='Your GoogleCode username that is allowed to upload files');
+	parser.add_option('-p', '--password', dest='password', help='Your GoogleCode password');
 
 	options, args = parser.parse_args()
 
@@ -164,16 +171,18 @@ def main():
 		parser.error('No release number provided. Use the -n option.')
 	else:
 		options.releaseNumber=str(options.releaseNumber);
-	if not options.releaseType:
-		parser.error('No release type provided. Use the -t option.')
+	if not options.username:
+		parser.error('No Username provided. Use the -u option.')
+	if not options.password:
+		parser.error('No Password provided. Use the -p option.')
 	
-	labels=["Type-Archive"];
+	labels=["Type-Archive", "Featured", "OpSys-All"];
 	 
 	gzipFile, cleanUpCommand=releaseFile(projectName,baseRepoURL,options.releaseNumber,options.releaseType);
 	
 	summary="This is the archived version of "+projectName+" release "+options.releaseType+" "+options.releaseNumber;
 
-	status, reason, url = upload(gzipFile, projectName,userName, userPass,summary, labels);
+	status, reason, url = upload(gzipFile, projectName,options.username, options.password,summary, labels);
 	
 	if url:
 		print 'The file was uploaded successfully.'
