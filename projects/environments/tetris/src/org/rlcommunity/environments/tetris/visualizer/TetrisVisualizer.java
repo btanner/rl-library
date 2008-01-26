@@ -17,7 +17,7 @@ http://brian.tannerpages.com
  limitations under the License.
 */
 
-package org.rlcommunity.tetris.visualizer;
+package org.rlcommunity.environments.tetris.visualizer;
 
 import java.awt.event.ActionEvent;
 import rlVizLib.general.TinyGlue;
@@ -30,8 +30,8 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import org.rlcommunity.tetris.messages.TetrisStateRequest;
-import org.rlcommunity.tetris.messages.TetrisStateResponse;
+import org.rlcommunity.environments.tetris.messages.TetrisStateRequest;
+import org.rlcommunity.environments.tetris.messages.TetrisStateResponse;
 import rlVizLib.glueProxy.RLGlueProxy;
 import rlVizLib.visualization.interfaces.DynamicControlTarget;
 import rlglue.types.Observation;

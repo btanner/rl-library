@@ -17,7 +17,8 @@ http://brian.tannerpages.com
  limitations under the License.
 */
 
-package org.rlcommunity.tetris.messages;
+package org.rlcommunity.environments.mountaincar.messages;
+
 
 import rlVizLib.glueProxy.RLGlueProxy;
 import rlVizLib.messaging.AbstractMessage;
@@ -28,31 +29,31 @@ import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvMessageType;
 import rlVizLib.messaging.environment.EnvironmentMessages;
 
-public class TetrisStateRequest extends EnvironmentMessages{
+public class MCStateRequest extends EnvironmentMessages{
 
-	public TetrisStateRequest(GenericMessage theMessageObject) {
+	public MCStateRequest(GenericMessage theMessageObject){
 		super(theMessageObject);
 	}
 
-	public synchronized static TetrisStateResponse Execute(){
+	public static MCStateResponse Execute(){
 		String theRequest=AbstractMessage.makeMessage(
 				MessageUser.kEnv.id(),
 				MessageUser.kBenchmark.id(),
 				EnvMessageType.kEnvCustom.id(),
 				MessageValueType.kString.id(),
-				"GETTETRLAISSTATE");
+				"GETMCSTATE");
 
 		String responseMessage=RLGlueProxy.RL_env_message(theRequest);
 
-		TetrisStateResponse theResponse;
-		try{
-		theResponse = new TetrisStateResponse(responseMessage);
-		}catch(NotAnRLVizMessageException ex){
-			System.out.println("Not a valid RL Viz Message in Tetrlais State Response" + ex);
-			return null;
+		MCStateResponse theResponse;
+		try {
+			theResponse = new MCStateResponse(responseMessage);
+		} catch (NotAnRLVizMessageException e) {
+			System.err.println("In MCStateRequest, the response was not RL-Viz compatible");
+			theResponse=null;
 		}
 
 		return theResponse;
-	}
 
+	}
 }

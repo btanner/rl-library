@@ -16,7 +16,7 @@ http://brian.tannerpages.com
  See the License for the specific language governing permissions and
  limitations under the License.
 */
-package org.rlcommunity.mountaincar;
+package org.rlcommunity.environments.mountaincar;
 
 import java.util.Random;
 

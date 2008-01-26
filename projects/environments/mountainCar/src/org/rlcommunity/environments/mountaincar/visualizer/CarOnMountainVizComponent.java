@@ -17,7 +17,7 @@ http://brian.tannerpages.com
  limitations under the License.
 */
 
-package org.rlcommunity.mountaincar.visualizer;
+package org.rlcommunity.environments.mountaincar.visualizer;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

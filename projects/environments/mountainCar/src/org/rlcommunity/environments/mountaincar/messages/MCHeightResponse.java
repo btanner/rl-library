@@ -17,9 +17,11 @@ http://brian.tannerpages.com
  limitations under the License.
 */
 
-package org.rlcommunity.mountaincar.messages;
+package org.rlcommunity.environments.mountaincar.messages;
+
 
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 import rlVizLib.messaging.AbstractMessage;
 import rlVizLib.messaging.AbstractResponse;
@@ -29,30 +31,40 @@ import rlVizLib.messaging.MessageValueType;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvMessageType;
 
-public class MCGoalResponse extends AbstractResponse {
-	double goalPosition;
-	
-	public MCGoalResponse(double goal){
-		this.goalPosition = goal;
+
+public class MCHeightResponse extends AbstractResponse{
+	Vector<Double> theHeights=null;
+
+
+	public MCHeightResponse(Vector<Double> theHeights) {
+		this.theHeights=theHeights;
 	}
 
-	public MCGoalResponse(String responseMessage) throws NotAnRLVizMessageException {
+	public MCHeightResponse(String responseMessage) throws NotAnRLVizMessageException {
+		theHeights=new Vector<Double>();
 		GenericMessage theGenericResponse = new GenericMessage(responseMessage);
+
 		String thePayLoadString=theGenericResponse.getPayLoad();
+
 		StringTokenizer stateTokenizer = new StringTokenizer(thePayLoadString, ":");
-		goalPosition=Double.parseDouble(stateTokenizer.nextToken());
-	}
-	
-	public double getGoalPosition() {
-		return this.goalPosition;
+
+		int numHeights=Integer.parseInt(stateTokenizer.nextToken());
+		
+		for(int i=0;i<numHeights;i++)
+			theHeights.add(new Double(Double.parseDouble(stateTokenizer.nextToken())));
 	}
 
 	@Override
 	public String makeStringResponse() {
-		StringBuffer goalBuffer=new StringBuffer();
+		StringBuffer heightsBuffer=new StringBuffer();
 
-		goalBuffer.append(goalPosition);
-		goalBuffer.append(":");
+		heightsBuffer.append(theHeights.size());
+		heightsBuffer.append(":");
+
+		for(int i=0;i<theHeights.size();i++){
+			heightsBuffer.append(theHeights.get(i));
+			heightsBuffer.append(":");
+		}
 
 
 			String theResponse=AbstractMessage.makeMessage(
@@ -60,11 +72,13 @@ public class MCGoalResponse extends AbstractResponse {
 					MessageUser.kEnv.id(),
 					EnvMessageType.kEnvResponse.id(),
 					MessageValueType.kStringList.id(),
-			goalBuffer.toString());
+			heightsBuffer.toString());
 
 
 		return theResponse;
 	}
 	
-
-}
+	public Vector<Double> getHeights(){
+		return theHeights;
+	}
+};

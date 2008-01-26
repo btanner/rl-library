@@ -17,8 +17,7 @@ http://brian.tannerpages.com
  limitations under the License.
 */
 
-package org.rlcommunity.mountaincar.messages;
-
+package org.rlcommunity.environments.tetris.messages;
 
 import java.util.StringTokenizer;
 
@@ -29,44 +28,31 @@ import rlVizLib.messaging.MessageValueType;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvMessageType;
 
-
-public class MCStateResponse extends AbstractResponse{
-	double position;
-	double velocity;
-	double height;
-	double deltaheight;
-
-	public MCStateResponse(double position, double velocity, double height,double deltaheight) {
-		this.position=position;
-		this.velocity=velocity;
-		this.height=height;
-		this.deltaheight=deltaheight;
-		
+public class TetrisWorldResponse extends AbstractResponse {
+	private int world_width =0;
+	private int world_height =0;
+	
+	public TetrisWorldResponse(int width, int height){
+		this.world_width = width;
+		this.world_height = height;
 	}
+	
+	public TetrisWorldResponse(String responseMessage)throws NotAnRLVizMessageException{
+		
+		GenericMessage theGenericResponse;
+			theGenericResponse = new GenericMessage(responseMessage);
 
-	public MCStateResponse(String responseMessage) throws NotAnRLVizMessageException {
-
-		GenericMessage theGenericResponse = new GenericMessage(responseMessage);
 
 		String thePayLoadString=theGenericResponse.getPayLoad();
 
 		StringTokenizer stateTokenizer = new StringTokenizer(thePayLoadString, ":");
-
-		position=Double.parseDouble(stateTokenizer.nextToken());
-		velocity=Double.parseDouble(stateTokenizer.nextToken());
-		height=Double.parseDouble(stateTokenizer.nextToken());
-		deltaheight=Double.parseDouble(stateTokenizer.nextToken());
+		this.world_width=Integer.parseInt(stateTokenizer.nextToken());
+		this.world_height=Integer.parseInt(stateTokenizer.nextToken());
 	}
-
-	@Override
-	public String toString() {
-		String theResponse="MCStateResponse: not implemented ";
-		return theResponse;
-	}
-
-
+	
 	@Override
 	public String makeStringResponse() {
+		
 		StringBuffer theResponseBuffer= new StringBuffer();
 		theResponseBuffer.append("TO=");
 		theResponseBuffer.append(MessageUser.kBenchmark.id());
@@ -78,32 +64,17 @@ public class MCStateResponse extends AbstractResponse{
 		theResponseBuffer.append(MessageValueType.kStringList.id());
 		theResponseBuffer.append(" VALS=");
 
-		theResponseBuffer.append(position);
+		theResponseBuffer.append(this.world_width);
 		theResponseBuffer.append(":");
-		theResponseBuffer.append(velocity);
-		theResponseBuffer.append(":");
-		theResponseBuffer.append(height);
-		theResponseBuffer.append(":");
-		theResponseBuffer.append(deltaheight);
+		theResponseBuffer.append(this.world_height);
+
 
 		return theResponseBuffer.toString();
 	}
-
-	public double getPosition() {
-		return position;
+	public int getWidth(){
+		return this.world_width;
 	}
-
-	public double getVelocity() {
-		return velocity;
+	public int getHeight(){
+		return this.world_height;
 	}
-
-	public double getHeight() {
-		return height;
-	}
-
-	public double getDeltaheight() {
-		return deltaheight;
-	}
-
-
-};
+}

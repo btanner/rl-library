@@ -17,8 +17,9 @@ http://brian.tannerpages.com
  limitations under the License.
 */
 
-package org.rlcommunity.tetris;
+package org.rlcommunity.environments.tetris;
 
+import org.rlcommunity.tetris.*;
 import java.util.Vector;
 
 import org.rlcommunity.tetris.messages.TetrisStateResponse;

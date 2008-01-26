@@ -17,7 +17,7 @@ http://brian.tannerpages.com
  limitations under the License.
 */
 
-package org.rlcommunity.tetris.messages;
+package org.rlcommunity.environments.tetris.messages;
 
 import java.util.StringTokenizer;
 
@@ -28,16 +28,22 @@ import rlVizLib.messaging.MessageValueType;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvMessageType;
 
-public class TetrisWorldResponse extends AbstractResponse {
+public class TetrisStateResponse extends AbstractResponse {
+	private int tet_global_score= 0;
 	private int world_width =0;
 	private int world_height =0;
+	private int [] world = null;
+	private int currentPiece =0;
 	
-	public TetrisWorldResponse(int width, int height){
+	public TetrisStateResponse(int score,int width, int height, int [] gs, int piece){
+		this.tet_global_score =score;
 		this.world_width = width;
 		this.world_height = height;
+		this.world = gs;	
+		this.currentPiece = piece;
 	}
 	
-	public TetrisWorldResponse(String responseMessage)throws NotAnRLVizMessageException{
+	public TetrisStateResponse(String responseMessage)throws NotAnRLVizMessageException{
 		
 		GenericMessage theGenericResponse;
 			theGenericResponse = new GenericMessage(responseMessage);
@@ -46,8 +52,18 @@ public class TetrisWorldResponse extends AbstractResponse {
 		String thePayLoadString=theGenericResponse.getPayLoad();
 
 		StringTokenizer stateTokenizer = new StringTokenizer(thePayLoadString, ":");
+
 		this.world_width=Integer.parseInt(stateTokenizer.nextToken());
 		this.world_height=Integer.parseInt(stateTokenizer.nextToken());
+		this.tet_global_score=Integer.parseInt(stateTokenizer.nextToken());
+		int i =0;
+		int worldSize = this.world_width*this.world_height;
+		world = new int[worldSize];
+		while((stateTokenizer.hasMoreTokens())&&(i<worldSize)){
+			this.world[i] = Integer.parseInt(stateTokenizer.nextToken());
+			++i;
+		}
+		this.currentPiece = Integer.parseInt(stateTokenizer.nextToken());
 	}
 	
 	@Override
@@ -67,9 +83,21 @@ public class TetrisWorldResponse extends AbstractResponse {
 		theResponseBuffer.append(this.world_width);
 		theResponseBuffer.append(":");
 		theResponseBuffer.append(this.world_height);
-
+		theResponseBuffer.append(":");
+		theResponseBuffer.append(this.tet_global_score);
+		theResponseBuffer.append(":");
+		for(int i = 0; i < this.world.length; i++){
+		theResponseBuffer.append(":");
+		theResponseBuffer.append(world[i]);
+		}
+		theResponseBuffer.append(":");
+		theResponseBuffer.append(this.currentPiece);
 
 		return theResponseBuffer.toString();
+	}
+	
+	public int getScore(){
+		return this.tet_global_score;
 	}
 	public int getWidth(){
 		return this.world_width;
@@ -77,4 +105,13 @@ public class TetrisWorldResponse extends AbstractResponse {
 	public int getHeight(){
 		return this.world_height;
 	}
+	public int [] getWorld(){
+		return this.world;
+	}
+	
+	public int getCurrentPiece(){
+		return currentPiece;
+	}
+
+
 }

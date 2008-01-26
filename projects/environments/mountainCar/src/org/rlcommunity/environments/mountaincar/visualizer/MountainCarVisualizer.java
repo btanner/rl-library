@@ -17,7 +17,7 @@ http://brian.tannerpages.com
  limitations under the License.
 */
 
-package org.rlcommunity.mountaincar.visualizer;
+package org.rlcommunity.environments.mountaincar.visualizer;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -25,11 +25,11 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import org.rlcommunity.mountaincar.messages.MCGoalRequest;
-import org.rlcommunity.mountaincar.messages.MCGoalResponse;
-import org.rlcommunity.mountaincar.messages.MCHeightRequest;
-import org.rlcommunity.mountaincar.messages.MCHeightResponse;
-import org.rlcommunity.mountaincar.messages.MCStateRequest;
+import org.rlcommunity.environments.mountaincar.messages.MCGoalRequest;
+import org.rlcommunity.environments.mountaincar.messages.MCGoalResponse;
+import org.rlcommunity.environments.mountaincar.messages.MCHeightRequest;
+import org.rlcommunity.environments.mountaincar.messages.MCHeightResponse;
+import org.rlcommunity.environments.mountaincar.messages.MCStateRequest;
 import rlVizLib.general.TinyGlue;
 import rlVizLib.glueProxy.RLGlueProxy;
 import rlVizLib.visualization.interfaces.AgentOnValueFunctionDataProvider;
@@ -54,7 +54,7 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
 
     Vector<Double> mins = null;
     Vector<Double> maxs = null;
-    org.rlcommunity.mountaincar.messages.MCStateResponse theCurrentState = null;
+    org.rlcommunity.environments.mountaincar.messages.MCStateResponse theCurrentState = null;
     Vector<Double> theQueryPositions = null;
     Vector<Double> theHeights = null;
     double minHeight = Double.MIN_VALUE;

@@ -17,11 +17,7 @@ http://brian.tannerpages.com
  limitations under the License.
 */
 
-package org.rlcommunity.mountaincar.messages;
-
-
-
-import java.util.Vector;
+package org.rlcommunity.environments.tetris.messages;
 
 import rlVizLib.glueProxy.RLGlueProxy;
 import rlVizLib.messaging.AbstractMessage;
@@ -32,47 +28,31 @@ import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvMessageType;
 import rlVizLib.messaging.environment.EnvironmentMessages;
 
-public class MCHeightRequest extends EnvironmentMessages{
-	Vector<Double> queryPositions=null;
+public class TetrisStateRequest extends EnvironmentMessages{
 
-	public MCHeightRequest(GenericMessage theMessageObject){
+	public TetrisStateRequest(GenericMessage theMessageObject) {
 		super(theMessageObject);
 	}
 
-	public static MCHeightResponse Execute(Vector<Double> queryPositions){
-		StringBuffer queryPosBuffer=new StringBuffer();
-
-		queryPosBuffer.append(queryPositions.size());
-		queryPosBuffer.append(":");
-
-		for(int i=0;i<queryPositions.size();i++){
-			queryPosBuffer.append(queryPositions.get(i));
-			queryPosBuffer.append(":");
-		}
-
-
-			String theRequest=AbstractMessage.makeMessage(
-					MessageUser.kEnv.id(),
-					MessageUser.kBenchmark.id(),
-					EnvMessageType.kEnvCustom.id(),
-					MessageValueType.kStringList.id(),
-			"GETHEIGHTS:"+queryPosBuffer.toString());
+	public synchronized static TetrisStateResponse Execute(){
+		String theRequest=AbstractMessage.makeMessage(
+				MessageUser.kEnv.id(),
+				MessageUser.kBenchmark.id(),
+				EnvMessageType.kEnvCustom.id(),
+				MessageValueType.kString.id(),
+				"GETTETRLAISSTATE");
 
 		String responseMessage=RLGlueProxy.RL_env_message(theRequest);
 
-		MCHeightResponse theResponse;
-		try {
-			theResponse = new MCHeightResponse(responseMessage);
-		} catch (NotAnRLVizMessageException e) {
-			System.err.println("In MCStateRequest, the response was not RL-Viz compatible");
-			theResponse=null;
+		TetrisStateResponse theResponse;
+		try{
+		theResponse = new TetrisStateResponse(responseMessage);
+		}catch(NotAnRLVizMessageException ex){
+			System.out.println("Not a valid RL Viz Message in Tetrlais State Response" + ex);
+			return null;
 		}
 
 		return theResponse;
-
 	}
 
-	public Vector<Double> getQueryPositions() {
-		return queryPositions;
-	}
 }

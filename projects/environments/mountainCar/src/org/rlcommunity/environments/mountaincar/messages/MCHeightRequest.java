@@ -17,7 +17,11 @@ http://brian.tannerpages.com
  limitations under the License.
 */
 
-package org.rlcommunity.mountaincar.messages;
+package org.rlcommunity.environments.mountaincar.messages;
+
+
+
+import java.util.Vector;
 
 import rlVizLib.glueProxy.RLGlueProxy;
 import rlVizLib.messaging.AbstractMessage;
@@ -28,27 +32,39 @@ import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvMessageType;
 import rlVizLib.messaging.environment.EnvironmentMessages;
 
-public class MCGoalRequest extends EnvironmentMessages{
+public class MCHeightRequest extends EnvironmentMessages{
+	Vector<Double> queryPositions=null;
 
-	public MCGoalRequest(GenericMessage theMessageObject) {
+	public MCHeightRequest(GenericMessage theMessageObject){
 		super(theMessageObject);
 	}
 
-	public static MCGoalResponse Execute(){
-		String theRequest=AbstractMessage.makeMessage(
-				MessageUser.kEnv.id(),
-				MessageUser.kBenchmark.id(),
-				EnvMessageType.kEnvCustom.id(),
-				MessageValueType.kString.id(),
-				"GETMCGOAL");
+	public static MCHeightResponse Execute(Vector<Double> queryPositions){
+		StringBuffer queryPosBuffer=new StringBuffer();
+
+		queryPosBuffer.append(queryPositions.size());
+		queryPosBuffer.append(":");
+
+		for(int i=0;i<queryPositions.size();i++){
+			queryPosBuffer.append(queryPositions.get(i));
+			queryPosBuffer.append(":");
+		}
+
+
+			String theRequest=AbstractMessage.makeMessage(
+					MessageUser.kEnv.id(),
+					MessageUser.kBenchmark.id(),
+					EnvMessageType.kEnvCustom.id(),
+					MessageValueType.kStringList.id(),
+			"GETHEIGHTS:"+queryPosBuffer.toString());
 
 		String responseMessage=RLGlueProxy.RL_env_message(theRequest);
 
-		MCGoalResponse theResponse;
+		MCHeightResponse theResponse;
 		try {
-			theResponse = new MCGoalResponse(responseMessage);
+			theResponse = new MCHeightResponse(responseMessage);
 		} catch (NotAnRLVizMessageException e) {
-			System.err.println("In MCGoalRequest, the response was not RL-Viz compatible");
+			System.err.println("In MCStateRequest, the response was not RL-Viz compatible");
 			theResponse=null;
 		}
 
@@ -56,4 +72,7 @@ public class MCGoalRequest extends EnvironmentMessages{
 
 	}
 
+	public Vector<Double> getQueryPositions() {
+		return queryPositions;
+	}
 }
