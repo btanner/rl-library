@@ -18,6 +18,7 @@ http://brian.tannerpages.com
 import rlglue.RLGlue;
 import rlglue.types.*;
 import java.io.IOException;
+import java.util.Vector;
 import rlVizLib.messaging.environmentShell.*;
 import rlVizLib.messaging.agentShell.*;
 import rlVizLib.general.ParameterHolder;
@@ -44,6 +45,9 @@ public class SampleExperiment
 	}
 
 	public static void main(String [] args) throws IOException {
+		System.out.println("Available Environments: "+ getEnvNames());
+		System.out.println("Available Agents: "+ getAgentNames());
+		
 		//Uncomment only 1 environment
 		String theEnvName="Tetris - Java";
 //		String theEnvName="MountainCar - Java";
@@ -88,7 +92,14 @@ public class SampleExperiment
 		System.out.println("-----------------------------------------------\n");
 	}   
 	
-	
+	private static Vector<String> getEnvNames(){
+		EnvShellListResponse ListResponse = EnvShellListRequest.Execute();
+		return ListResponse.getTheEnvList();
+	}
+	private static Vector<String> getAgentNames(){
+		AgentShellListResponse ListResponse = AgentShellListRequest.Execute();
+		return ListResponse.getTheAgentList();
+	}
 	
 	private static ParameterHolder getEnvParams(String theEnvString){
 		EnvShellListResponse ListResponse = EnvShellListRequest.Execute();
