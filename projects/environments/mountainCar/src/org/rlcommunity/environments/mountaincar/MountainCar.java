@@ -120,7 +120,7 @@ public class MountainCar extends EnvironmentBase implements
         ParameterHolder p = new ParameterHolder();
         rlVizLib.utilities.UtilityShop.setVersionDetails(p, new DetailsProvider());
 
-        p.addBooleanParam("randomStartStates", true);
+        p.addBooleanParam("randomStartStates", false);
         return p;
     }
 
