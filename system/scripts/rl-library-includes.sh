@@ -84,9 +84,16 @@ echo "-- Starting up Gui Trainer"
 java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.LocalGraphicalDriver
 echo "++ Gui Trainer is finished"
 }
+
 startNetGuiTrainer(){
 echo "-- Starting up Networked Gui Trainer"
 java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.NetGraphicalDriverBothDynamic
+echo "++ Gui Trainer is finished"
+}
+
+startNetGuiTrainerDynamicEnvironmentStandardAgent(){
+echo "-- Starting up Networked Gui Trainer"
+java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.NetGraphicalDriverDynamicEnvStandardAgent
 echo "++ Gui Trainer is finished"
 }
 
