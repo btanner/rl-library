@@ -44,24 +44,39 @@ public class SampleExperiment
 		}
 	}
 
-	public static void main(String [] args) throws IOException {
-		System.out.println("Available Environments: "+ getEnvNames());
-		System.out.println("Available Agents: "+ getAgentNames());
-		
-		//Uncomment only 1 environment
-		String theEnvName="Tetris - Java";
-//		String theEnvName="MountainCar - Java";
-		
-		String theAgentName="RandomAgent - Java";
-		
-		ParameterHolder pEnv=getEnvParams(theEnvName);
-		//Set a parameter on the environment (only uncomment if using mountain car)
-		//pEnv.setBooleanParam("randomStartStates",false);
+	private static void loadAgent(){
+				System.out.println("Available Agents: "+ getAgentNames());
+				String theAgentName="RandomAgent - Java";
 
-		ParameterHolder pAgent=getAgentParams(theAgentName);
-		
-		EnvShellLoadRequest.Execute(theEnvName,pEnv);
-		AgentShellLoadRequest.Execute(theAgentName,pAgent);
+				ParameterHolder pAgent=getAgentParams(theAgentName);
+
+				AgentShellLoadRequest.Execute(theAgentName,pAgent);
+	}
+	private static void loadEnvironment(){
+				System.out.println("Available Environments: "+ getEnvNames());
+
+				//Uncomment only 1 environment
+				String theEnvName="Tetris - Java";
+		//		String theEnvName="MountainCar - Java";
+
+				ParameterHolder pEnv=getEnvParams(theEnvName);
+				//Set a parameter on the environment (only uncomment if using mountain car)
+				//pEnv.setBooleanParam("randomStartStates",false);
+
+				EnvShellLoadRequest.Execute(theEnvName,pEnv);
+	}
+	
+	private static boolean arrayContains(String[] args, String theTest){
+		for(String thisArg:args){
+			if(thisArg.compareTo(theTest)==0)return true;
+		}
+		return false;
+	}
+	public static void main(String [] args) throws IOException {
+		if(arrayContains(args,"dynamicEnvironments"))loadEnvironment();
+
+		if(arrayContains(args,"dynamicAgents"))loadAgent();
+
 		
 		double avgSteps = 0.0;
 		double avgReturn = 0.0;

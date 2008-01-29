@@ -31,7 +31,7 @@ startRLGlueInBackGround
 startEnvShellInBackGround
 startAgentShellInBackGround
 
-java -classpath $rlVizLibPath:./classes SampleExperiment
+java -classpath $rlVizLibPath:./classes SampleExperiment dynamicEnvironments dynamicAgents
 
 waitForAgentShellToDie
 waitForEnvShellToDie
