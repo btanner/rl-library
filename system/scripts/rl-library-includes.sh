@@ -48,7 +48,7 @@ if [ ! -e "$glueExe" ]       # Check if file exists.
   then
 	makeLine
     echo "RL_glue not found at $glueExe.  "
-	echo "Did you remember to \"make \" from the main competition directory?"
+	echo "Did you remember to \"make rl-glue\" or \"ant rl-glue\" from the root rl-library directory?"
   	makeLine
     exit
    fi
