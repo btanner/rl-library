@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package visualizers.Generic;
+package org.rlcommunity.visualizers.generic;
 
 import rlVizLib.general.TinyGlue;
 import rlVizLib.visualization.AbstractVisualizer;
