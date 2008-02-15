@@ -1,6 +1,6 @@
-package CartPole;
+package org.rlcommunity.environments.cartpole; 
 
-import CartPole.messages.*;
+import org.rlcommunity.environments.cartpole.messages.*;
 import rlVizLib.Environments.EnvironmentBase;
 import rlVizLib.general.ParameterHolder;
 import rlVizLib.general.RLVizVersion;
@@ -8,8 +8,6 @@ import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvironmentMessageParser;
 import rlVizLib.messaging.environment.EnvironmentMessages;
 import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
-import rlVizLib.messaging.interfaces.RLVizEnvInterface;
-import rlVizLib.messaging.interfaces.ReceivesRunTimeParameterHolderInterface;
 import rlVizLib.messaging.interfaces.getEnvMaxMinsInterface;
 import rlVizLib.messaging.interfaces.getEnvObsForStateInterface;
 import rlglue.types.Action;
@@ -18,7 +16,7 @@ import rlglue.types.Random_seed_key;
 import rlglue.types.Reward_observation;
 import rlglue.types.State_key;
 
-public class CartPole extends EnvironmentBase implements getEnvMaxMinsInterface, getEnvObsForStateInterface, RLVizEnvInterface, HasAVisualizerInterface{
+public class CartPole extends EnvironmentBase implements getEnvMaxMinsInterface, getEnvObsForStateInterface, HasAVisualizerInterface{
 	/*used for vis*/
 	int numEpisodes=0;
 	int numSteps=0;

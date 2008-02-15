@@ -1,4 +1,4 @@
-package CartPole.messages;
+package org.rlcommunity.environments.cartpole.messages;
 
 import java.util.StringTokenizer;
 
