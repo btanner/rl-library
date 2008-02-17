@@ -3,7 +3,6 @@ package org.rlcommunity.environments.cartpole;
 import org.rlcommunity.environments.cartpole.messages.*;
 import rlVizLib.Environments.EnvironmentBase;
 import rlVizLib.general.ParameterHolder;
-import rlVizLib.general.RLVizVersion;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvironmentMessageParser;
 import rlVizLib.messaging.environment.EnvironmentMessages;
@@ -95,7 +94,23 @@ public class CartPole extends EnvironmentBase implements getEnvMaxMinsInterface,
 	/*RL GLUE METHODS*/
 
 	public String env_init() {
-		String taskSpec = "2:e:4_[f,f,f,f]_[]_[]_[]_[]:1_[i]_[0,1]:[-1,0]";
+                double xMin=leftCartBound;
+                double xMax=rightCartBound;
+                
+                //Dots are guesses
+                double xDotMin=-4.0d;
+                double xDotMax=4.0d;
+                double thetaMin=leftAngleBound;
+                double thetaMax=rightAngleBound;
+                double thetaDotMin=-6.0d;
+                double thetaDotMax=6.0d;
+            
+		String taskSpec = "2:e:4_[f,f,f,f]_";
+                taskSpec+="["+xMin+","+xMax+"]_";
+                taskSpec+="["+xDotMin+","+xDotMax+"]_";
+                taskSpec+="["+thetaMin+","+thetaMax+"]_";
+                taskSpec+="["+thetaDotMin+","+thetaDotMax+"]";
+                taskSpec+=":1_[i]_[0,1]:[-1,0]";
 		x = 0.0f;
 		x_dot = 0.0f;
 		theta = 0.0f;
@@ -162,7 +177,7 @@ public class CartPole extends EnvironmentBase implements getEnvMaxMinsInterface,
 	    	//failure occured
 	    	return new Reward_observation(-1.0d, makeObservation(),1);
 	    else 
-	    	return new Reward_observation(0.0d, makeObservation(),0);
+	    	return new Reward_observation(1.0d, makeObservation(),0);
 	}
 	
 	public void env_cleanup() {
@@ -230,9 +245,6 @@ public class CartPole extends EnvironmentBase implements getEnvMaxMinsInterface,
 		return returnObs;
 	}
 
-	public RLVizVersion getTheVersionISupport() {
-		return new RLVizVersion(1,0);
-	}
 	/*END OF RL-VIZ REQUIREMENTS*/
 	
 	/*CART POLE SPECIFIC FUNCTIONS*/
@@ -312,12 +324,8 @@ public class CartPole extends EnvironmentBase implements getEnvMaxMinsInterface,
 		return 2;
 	}
 
-	public boolean receiveRunTimeParameters(ParameterHolder theParams) {
-		// TODO Auto-generated method stub
-		return true;
-	}
 
     public String getVisualizerClassName() {
-        return "visualizers.CartPoleVisualizer.CartPoleVisualizer";
+        return "org.rlcommunity.environments.cartpole.visualizer.CartPoleVisualizer";
     }
 }
