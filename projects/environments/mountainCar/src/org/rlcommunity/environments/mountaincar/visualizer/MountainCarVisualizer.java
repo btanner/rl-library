@@ -302,8 +302,9 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
         return glueState;
     }
 
+    @Override
     public String getName() {
-        return "Mountain Car 1.01 (DEV)";
+        return "Mountain Car 1.2";
     }
     int lastSaveIndex = -1;
     boolean forceDrawRefresh = false;
