@@ -73,6 +73,7 @@ public class SkeletonEnvironment extends EnvironmentBase implements HasAVisualiz
         int theAction=action.intArray[0];
         assert(theAction>=0);
         assert(theAction<2);
+        
         if(theAction==0)currentState--;
         if(theAction==1)currentState++;
         
