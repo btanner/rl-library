@@ -1,14 +1,13 @@
-package org.rlcommunity.environments.NonMarkovTest.visualizer;
+package org.rlcommunity.environments.NonMarkovSplit.visualizer;
 
 
 import rlVizLib.general.TinyGlue;
 import rlVizLib.visualization.AbstractVisualizer;
 import rlVizLib.visualization.VizComponent;
-import rlglue.types.Observation;
 import rlVizLib.visualization.GenericScoreComponent;
 import rlVizLib.visualization.interfaces.GlueStateProvider;
 
-public class SkeletonVisualizer extends AbstractVisualizer implements GlueStateProvider {
+public class NonMarkovSplitVisualizer extends AbstractVisualizer implements GlueStateProvider {
 
     private TinyGlue theGlueState = null;
 
@@ -16,7 +15,7 @@ public class SkeletonVisualizer extends AbstractVisualizer implements GlueStateP
      * Creates a new Cart Pile Visualizer
      * @param theGlueState Global glue state object
      */
-    public SkeletonVisualizer(TinyGlue theGlueState) {
+    public NonMarkovSplitVisualizer(TinyGlue theGlueState) {
         super();
         this.theGlueState = theGlueState;
 
@@ -31,6 +30,6 @@ public class SkeletonVisualizer extends AbstractVisualizer implements GlueStateP
 
     @Override
     public String getName() {
-        return "Skeleton 1.0";
+        return "v 1.0";
     }
 }
