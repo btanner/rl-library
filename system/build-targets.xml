@@ -38,13 +38,17 @@ We'll try and rely on minimal variables from above.
 
 <target name="rl-compile">
    <mkdir dir="${classes.dir}"/>
-    <javac srcdir="${src.dir}" destdir="${classes.dir}"> 
+    <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="${build.debug}"> 
 		<classpath>
             <path refid="rlvizlib.classpath" />
 		    <path refid="project.extra.classpath" />
 		</classpath>
 	</javac>
 </target>
+<target name="rl-set-debug">
+	<property name="build.debug" value="on"/>
+</target>
+
 
 <target name="rl-jar" depends="rl-compile,get.svn.version,get.rlvizlib.version" >
     <mkdir dir="${dist.dir}" />
