@@ -1,3 +1,7 @@
+                                                                     
+                                                                     
+                                                                     
+                                             
 /*
 Copyright 2007 Brian Tanner
 http://rl-library.googlecode.com/
@@ -34,11 +38,15 @@ public class CarOnMountainVizComponent implements VizComponent {
 
 	int lastUpdateTimeStep=-1;
 
-
+    private boolean showAction = true;
+    
 
 	public CarOnMountainVizComponent(MountainCarVisualizer mc){
 		this.mcv = mc;
-
+	}
+	
+	public void setShowAction(boolean shouldShow){
+		this.showAction=shouldShow;
 	}
 
 
@@ -49,6 +57,8 @@ public class CarOnMountainVizComponent implements VizComponent {
 		//to bring things back into the window
 		double minPosition=mcv.getMinValueForDim(0);	
 		double maxPosition=mcv.getMaxValueForDim(0);	
+
+		int lastAction = mcv.getLastAction();
 
 		double transX = UtilityShop.normalizeValue( this.mcv.getCurrentStateInDimension(0),minPosition,maxPosition);
 
@@ -64,7 +74,23 @@ public class CarOnMountainVizComponent implements VizComponent {
 		double rectHeight=.05;
 		Rectangle2D fillRect=new Rectangle2D.Double(transX-rectWidth/2.0d,transY-rectHeight/2.0d,rectWidth,rectHeight);
 		g.fill(fillRect);
-                
+		if (showAction) {
+		    double actionRectWdthOffset = 0;
+		    if (lastAction == 0) {
+			actionRectWdthOffset = 0;
+		    }
+		    else if (lastAction == 1) {
+			actionRectWdthOffset = 7 * (rectWidth / 16);
+		    }
+		    else if (lastAction == 2) {
+			actionRectWdthOffset = 14 * (rectWidth / 16);
+		    }
+		    g.setColor(Color.CYAN);
+		    Rectangle2D fillActionRect = new Rectangle2D.Double((transX-rectWidth/2.0d) + actionRectWdthOffset,
+									 transY-rectHeight/2.0d,
+									 rectWidth/8.0,rectHeight);
+		    g.fill(fillActionRect);
+		}
 	}
 
 	public boolean update() {

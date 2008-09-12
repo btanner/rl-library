@@ -49,6 +49,7 @@ import rlVizLib.visualization.VizComponent;
 import rlVizLib.visualization.interfaces.DynamicControlTarget;
 import rlglue.types.Observation;
 import rlglue.types.State_key;
+import rlglue.types.Action;
 
 public class MountainCarVisualizer extends AbstractVisualizer implements ValueFunctionDataProvider, AgentOnValueFunctionDataProvider, GlueStateProvider, ActionListener {
 
@@ -90,7 +91,7 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
         VizComponent carOnMountain = new CarOnMountainVizComponent(this);
         VizComponent scoreComponent = new GenericScoreComponent(this);
 
-                super.addVizComponentAtPositionWithSize(theValueFunction, 0, .5, 1.0, .5);
+        super.addVizComponentAtPositionWithSize(theValueFunction, 0, .5, 1.0, .5);
         super.addVizComponentAtPositionWithSize(agentOnVF, 0, .5, 1.0, .5);
 
         super.addVizComponentAtPositionWithSize(mountain, 0, 0, 1.0, .5);
@@ -212,6 +213,16 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
         }
     }
 
+    public int getLastAction() {
+	Action lastActionObject = getTheGlueState().getLastAction();
+	int lastAction = -1;
+        //This might be null at the first step of an episode
+	if(lastActionObject != null){
+	    lastAction=lastActionObject.intArray[0];
+	}
+	return lastAction;
+    }
+
     public double getHeight() {
         return theCurrentState.getHeight();
     }
@@ -302,9 +313,8 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
         return glueState;
     }
 
-    @Override
     public String getName() {
-        return "Mountain Car 1.2";
+        return "Mountain Car 1.01 (DEV)";
     }
     int lastSaveIndex = -1;
     boolean forceDrawRefresh = false;
