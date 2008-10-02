@@ -24,16 +24,16 @@ import rlVizLib.general.ParameterHolder;
 import rlVizLib.general.hasVersionDetails;
 import rlVizLib.utilities.TaskSpecObject;
 
-import rlglue.agent.Agent;
-import rlglue.types.Action;
-import rlglue.types.Observation;
+import org.rlcommunity.rlglue.codec.AgentInterface;
+import org.rlcommunity.rlglue.codec.types.Action;
+import org.rlcommunity.rlglue.codec.types.Observation;
 
 /**
  * Simple random agent that can do multidimensional continuous or discrete
  * actions.
  * @author btanner
  */
-public class RandomAgent implements Agent {
+public class RandomAgent implements AgentInterface {
 
     private Action action;
     private int numInts = 1;

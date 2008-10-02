@@ -47,9 +47,9 @@ import rlVizLib.visualization.GenericScoreComponent;
 import rlVizLib.visualization.ValueFunctionVizComponent;
 import rlVizLib.visualization.VizComponent;
 import rlVizLib.visualization.interfaces.DynamicControlTarget;
-import rlglue.types.Observation;
-import rlglue.types.State_key;
-import rlglue.types.Action;
+import org.rlcommunity.rlglue.codec.types.Observation;
+import org.rlcommunity.rlglue.codec.types.State_key;
+import org.rlcommunity.rlglue.codec.types.Action;
 
 public class MountainCarVisualizer extends AbstractVisualizer implements ValueFunctionDataProvider, AgentOnValueFunctionDataProvider, GlueStateProvider, ActionListener {
 

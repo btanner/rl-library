@@ -18,23 +18,15 @@
 
 
 
-<target name="all" description="Build all environments and rl-glue" depends="mountainCar,randomAgent,tetris,rl-glue,genericEnvVisualizer">
+<target name="all" description="Build all environments and agents" depends="mountainCar,randomAgent,tetris,genericEnvVisualizer">
 </target>	
 
-<target name="rl-glue" description="Build RL-Glue executable">
-	  <exec executable="make" dir="system/rl-glue">
-		<arg value="rl-glue"/>
-	</exec>
-</target>
 
 <target name="clean" description="Clean everything">
    <ant antfile="build.xml" dir="projects/environments/mountainCar" inheritAll="false" target="clean"/>
    <ant antfile="build.xml" dir="projects/environments/tetris" inheritAll="false" target="clean"/>
    <ant antfile="build.xml" dir="projects/agents/randomAgentJava" inheritAll="false" target="clean"/>
 	<ant antfile="build.xml" dir="projects/environments/genericEnvVisualizer" inheritAll="false" target="clean"/>
- 	<exec executable="make" dir="system/rl-glue">
-		<arg value="clean"/>
-	</exec>
 </target>
 
 </project>

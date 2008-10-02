@@ -7,7 +7,7 @@ import java.awt.geom.AffineTransform;
 
 import rlVizLib.general.TinyGlue;
 import rlVizLib.visualization.VizComponent;
-import rlglue.types.Observation;
+import org.rlcommunity.rlglue.codec.types.Observation;
 
 public class GenericVariableValueComponent implements VizComponent{
 	TinyGlue theGlueState=null;

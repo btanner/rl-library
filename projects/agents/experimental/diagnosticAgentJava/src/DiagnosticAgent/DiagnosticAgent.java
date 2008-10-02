@@ -20,11 +20,11 @@ import java.util.Random;
 
 import rlVizLib.utilities.TaskSpecObject;
 
-import rlglue.agent.Agent;
-import rlglue.types.Action;
-import rlglue.types.Observation;
+import org.rlcommunity.rlglue.codec.AgentInterface;
+import org.rlcommunity.rlglue.codec.types.Action;
+import org.rlcommunity.rlglue.codec.types.Observation;
 
-public class DiagnosticAgent implements Agent {
+public class DiagnosticAgent implements AgentInterface {
 	private Action action;
 	private int numInts =1;
 	private int numDoubles =0;

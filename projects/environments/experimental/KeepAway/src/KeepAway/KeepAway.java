@@ -5,11 +5,11 @@ import rlVizLib.general.RLVizVersion;
 import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
 
 import rlglue.environment.Environment;
-import rlglue.types.Action;
-import rlglue.types.Observation;
-import rlglue.types.Random_seed_key;
-import rlglue.types.Reward_observation;
-import rlglue.types.State_key;
+import org.rlcommunity.rlglue.codec.types.Action;
+import org.rlcommunity.rlglue.codec.types.Observation;
+import org.rlcommunity.rlglue.codec.types.Random_seed_key;
+import org.rlcommunity.rlglue.codec.types.Reward_observation;
+import org.rlcommunity.rlglue.codec.types.State_key;
 
 
 

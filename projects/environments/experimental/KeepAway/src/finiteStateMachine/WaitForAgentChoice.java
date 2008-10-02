@@ -6,7 +6,7 @@ import players.PlayerInterface;
 import KeepAway.Prm;
 import generalGameCode.Utilities;
 import generalGameCode.Vector2D;
-import rlglue.types.Action;
+import org.rlcommunity.rlglue.codec.types.Action;
 
 public class WaitForAgentChoice extends State<PlayerInterface> {
 

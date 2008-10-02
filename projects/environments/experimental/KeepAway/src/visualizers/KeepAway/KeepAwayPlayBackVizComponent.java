@@ -21,7 +21,7 @@ import kaMessages.PlayerFacadeInterface;
 import kaMessages.SoccerTeamFacadeInterface;
 
 import rlVizLib.visualization.VizComponent;
-import rlglue.types.Observation;
+import org.rlcommunity.rlglue.codec.types.Observation;
 
 public class KeepAwayPlayBackVizComponent implements VizComponent{
 	KeepAwayVisualizer myVisualizer=null;

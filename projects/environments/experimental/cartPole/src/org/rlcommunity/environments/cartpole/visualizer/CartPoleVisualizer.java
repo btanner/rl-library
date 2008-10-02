@@ -7,7 +7,7 @@ import org.rlcommunity.environments.cartpole.messages.CartpoleTrackResponse;
 import rlVizLib.general.TinyGlue;
 import rlVizLib.visualization.AbstractVisualizer;
 import rlVizLib.visualization.VizComponent;
-import rlglue.types.Observation;
+import org.rlcommunity.rlglue.codec.types.Observation;
 import rlVizLib.visualization.GenericScoreComponent;
 import rlVizLib.visualization.interfaces.GlueStateProvider;
 

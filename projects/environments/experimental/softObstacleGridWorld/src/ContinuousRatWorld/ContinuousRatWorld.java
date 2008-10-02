@@ -31,9 +31,9 @@ import rlVizLib.general.ParameterHolder;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvironmentMessageParser;
 import rlVizLib.messaging.environment.EnvironmentMessages;
-import rlglue.types.Action;
-import rlglue.types.Observation;
-import rlglue.types.Reward_observation;
+import org.rlcommunity.rlglue.codec.types.Action;
+import org.rlcommunity.rlglue.codec.types.Observation;
+import org.rlcommunity.rlglue.codec.types.Reward_observation;
 import java.io.IOException;
 
 

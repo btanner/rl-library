@@ -19,9 +19,9 @@ import ContinuousGridWorld.ContinuousGridWorld;
 import java.awt.geom.Point2D;
 import java.util.Random;
 import rlVizLib.general.ParameterHolder;
-import rlglue.types.Action;
-import rlglue.types.Observation;
-import rlglue.types.Reward_observation;
+import org.rlcommunity.rlglue.codec.types.Action;
+import org.rlcommunity.rlglue.codec.types.Observation;
+import org.rlcommunity.rlglue.codec.types.Reward_observation;
 
 /**
  * This is very much like the Continuous Grid World, but we have a discretized, 

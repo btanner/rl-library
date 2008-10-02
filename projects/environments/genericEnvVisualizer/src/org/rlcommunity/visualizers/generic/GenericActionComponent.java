@@ -14,7 +14,7 @@ import java.awt.geom.AffineTransform;
 
 import rlVizLib.general.TinyGlue;
 import rlVizLib.visualization.VizComponent;
-import rlglue.types.Action;
+import org.rlcommunity.rlglue.codec.types.Action;
 
 /**
  *

@@ -23,7 +23,7 @@ systemPath=$basePath/system
 source $systemPath/scripts/rl-library-includes.sh
 
 #Compile SampleExperiment
-javac -d classes -classpath $systemPath/rl-glue/RL-Glue/Java/RL-Glue.jar src/SampleExperiment.java
+javac -d classes -classpath $systemPath/libs/RLGlueCodec/JavaRLGlueCodec.jar src/SampleExperiment.java
 
 ##Agent Stuff
 #Item for the class path so your agent can be found
@@ -44,7 +44,7 @@ startRLGlueInBackGround
 startJavaEnvironmentInBackGround $EnvExtraPath $EnvPackageName $EnvClassName $EnvMaxMemory
 startJavaAgentInBackGround $AgentExtraPath $AgentPackageName $AgentClassName $AgentMaxMemory
 
-java -classpath $systemPath/rl-glue/RL-Glue/Java/RL-Glue.jar:./classes SampleExperiment
+java -classpath $systemPath/libs/RLGlueCodec/JavaRLGlueCodec.jar:./classes SampleExperiment
 
 waitForAgentToDie
 waitForEnvironmentToDie

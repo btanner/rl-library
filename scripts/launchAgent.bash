@@ -7,4 +7,4 @@ RLVizLibJar=$RLVizDir/RLVizLib.jar
 EnvShellJar=$RLVizDir/EnvironmentShell.jar
 AgentJar=$AgentDir/btannerAgentLib.jar
 
-java -Xmx128M -DRLVIZ_LIB_PATH=../system/dist -classpath $RLVizLibJar:$AgentJar rlglue.agent.AgentLoader org.rlcommunity.btanner.agents.EpsilonGreedyCMACSarsaLambda &
+java -Xmx128M -DRLVIZ_LIB_PATH=../system/dist -classpath $RLVizLibJar:$AgentJar org.rlcommunity.rlglue.codec.util.AgentLoader org.rlcommunity.btanner.agents.EpsilonGreedyCMACSarsaLambda &

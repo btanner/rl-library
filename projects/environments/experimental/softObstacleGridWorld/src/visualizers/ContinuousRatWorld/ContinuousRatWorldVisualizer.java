@@ -20,7 +20,7 @@ import rlVizLib.visualization.ValueFunctionVizComponent;
 import rlVizLib.visualization.VizComponent;
 import rlVizLib.visualization.interfaces.AgentOnValueFunctionDataProvider;
 import rlVizLib.visualization.interfaces.ValueFunctionDataProvider;
-import rlglue.types.Observation;
+import org.rlcommunity.rlglue.codec.types.Observation;
 
 import rlVizLib.visualization.interfaces.DynamicControlTarget;
 import rlVizLib.visualization.interfaces.GlueStateProvider;

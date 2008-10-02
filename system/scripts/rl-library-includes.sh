@@ -8,7 +8,7 @@ vizAppLib=$libPath/RLVizApp.jar
 envShellLib=$libPath/EnvironmentShell.jar
 agentShellLib=$libPath/AgentShell.jar
 
-glueExe=$systemPath/rl-glue/RL-Glue/bin/RL_glue
+glueExe=/usr/local/bin/rl_glue
 
 guiLib=$libPath/forms-1.1.0.jar
 
@@ -44,11 +44,11 @@ echo "--------------------------------------------------------------------"
 }
 
 checkIfRLGlueExists(){
-if [ ! -e "$glueExe" ]       # Check if file exists.
+if [ ! -x "$glueExe" ]       # Check if file exists.
   then
 	makeLine
-    echo "RL_glue not found at $glueExe.  "
-	echo "Did you remember to \"make rl-glue\" or \"ant rl-glue\" from the root rl-library directory?"
+    echo "rl_glue not found at $glueExe.  "
+	echo "Did you remember to install RL-Glue first?  Check out http://glue.rl-community.org"
   	makeLine
     exit
    fi
@@ -56,7 +56,7 @@ if [ ! -e "$glueExe" ]       # Check if file exists.
 
 
 startEnvShellInBackGround(){
-java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH -classpath $ENV_CLASSPATH rlglue.environment.EnvironmentLoader environmentShell.EnvironmentShell &
+java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH -classpath $ENV_CLASSPATH org.rlcommunity.rlglue.codec.util.EnvironmentLoader environmentShell.EnvironmentShell &
 envShellPID=$!
 echo "-- Starting up dynamic environment loader - PID=$envShellPID"
 }
@@ -68,7 +68,7 @@ echo "++ Dynamic environment loader terminated"
 }
 
 startAgentShellInBackGround(){
-java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH -classpath $AGENT_CLASSPATH rlglue.agent.AgentLoader agentShell.AgentShell &
+java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH -classpath $AGENT_CLASSPATH org.rlcommunity.rlglue.codec.util.AgentLoader agentShell.AgentShell &
 agentShellPID=$!
 echo "-- Starting up dynamic agent loader - PID=$agentShellPID"
 }
@@ -105,7 +105,7 @@ echo "++ Gui Trainer is finished"
 
 
 killRLGlue(){
-$pKillScript RL_glue
+$pKillScript rl_glue
 }
 startRLGlueInBackGround(){
 checkIfRLGlueExists
@@ -134,7 +134,7 @@ if [[ `uname` == CYGWIN* ]]
 then 
 	agentPath=`cygpath -wp $agentPath`
 fi
-java -Xmx$privateMaxMemory -cp $agentPath rlglue.agent.AgentLoader $privatePackageName.$privateClassName
+java -Xmx$privateMaxMemory -cp $agentPath org.rlcommunity.rlglue.codec.util.AgentLoader $privatePackageName.$privateClassName
 }
 
 startJavaAgentInBackGround(){
@@ -150,7 +150,7 @@ then
 	agentPath=`cygpath -wp $agentPath`
 fi
 
-java -Xmx$privateMaxMemory -cp $agentPath rlglue.agent.AgentLoader $privatePackageName.$privateClassName &
+java -Xmx$privateMaxMemory -cp $agentPath org.rlcommunity.rlglue.codec.util.AgentLoader $privatePackageName.$privateClassName &
 agentPID=$!
 }
 waitForAgentToDie(){
@@ -172,7 +172,7 @@ then
 	envPath=`cygpath -wp $envPath`
 fi
 
-java -Xmx$privateMaxMemory -cp $envPath rlglue.environment.EnvironmentLoader $privatePackageName.$privateClassName &
+java -Xmx$privateMaxMemory -cp $envPath org.rlcommunity.rlglue.codec.util.EnvironmentLoader $privatePackageName.$privateClassName &
 envPID=$!
 }
 waitForEnvironmentToDie(){

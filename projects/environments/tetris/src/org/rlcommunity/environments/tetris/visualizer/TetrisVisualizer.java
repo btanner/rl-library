@@ -34,8 +34,8 @@ import org.rlcommunity.environments.tetris.messages.TetrisStateRequest;
 import org.rlcommunity.environments.tetris.messages.TetrisStateResponse;
 import rlVizLib.glueProxy.RLGlueProxy;
 import rlVizLib.visualization.interfaces.DynamicControlTarget;
-import rlglue.types.Observation;
-import rlglue.types.State_key;
+import org.rlcommunity.rlglue.codec.types.Observation;
+import org.rlcommunity.rlglue.codec.types.State_key;
 
 public class TetrisVisualizer  extends AbstractVisualizer implements ActionListener{
 
