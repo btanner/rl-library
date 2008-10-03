@@ -1,6 +1,6 @@
 package org.rlcommunity.awhite.visualizers.tools.humanAgentInterface.messages;
 
-import rlVizLib.glueProxy.RLGlueProxy;
+import org.rlcommunity.rlglue.codec.RLGlue;
 import rlVizLib.messaging.AbstractMessage;
 import rlVizLib.messaging.GenericMessage;
 import rlVizLib.messaging.MessageUser;
@@ -28,7 +28,7 @@ public class agentRewardRequest extends AgentMessages{
 				"SENDAGENTREWARD:"+theRewardToSend);
                 
 
-		String responseMessage=RLGlueProxy.RL_agent_message(theRequest);
+		String responseMessage=RLGlue.RL_agent_message(theRequest);
 
 		agentRewardResponse theResponse;
 		try {

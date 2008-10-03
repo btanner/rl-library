@@ -32,7 +32,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.rlcommunity.environments.tetris.messages.TetrisStateRequest;
 import org.rlcommunity.environments.tetris.messages.TetrisStateResponse;
-import rlVizLib.glueProxy.RLGlueProxy;
+import org.rlcommunity.rlglue.codec.RLGlue;
 import rlVizLib.visualization.interfaces.DynamicControlTarget;
 import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.State_key;
@@ -188,12 +188,12 @@ protected void addPreferenceComponents(){
             State_key k=new State_key(1,0);
             k.intArray[0]=lastSaveIndex;
 
-            RLGlueProxy.RL_set_state(k);
+            RLGlue.RL_set_state(k);
             setForceBlocksRefresh(true);
         }
         if(event.getSource()==saveButton){
             loadButton.setEnabled(true);
-            State_key k =RLGlueProxy.RL_get_state();
+            State_key k =RLGlue.RL_get_state();
             lastSaveIndex=k.intArray[0];
         }
     }

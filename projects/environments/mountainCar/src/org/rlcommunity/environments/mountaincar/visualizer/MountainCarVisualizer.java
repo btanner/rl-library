@@ -31,7 +31,7 @@ import org.rlcommunity.environments.mountaincar.messages.MCHeightRequest;
 import org.rlcommunity.environments.mountaincar.messages.MCHeightResponse;
 import org.rlcommunity.environments.mountaincar.messages.MCStateRequest;
 import rlVizLib.general.TinyGlue;
-import rlVizLib.glueProxy.RLGlueProxy;
+import org.rlcommunity.rlglue.codec.RLGlue;
 import rlVizLib.visualization.interfaces.AgentOnValueFunctionDataProvider;
 import rlVizLib.visualization.interfaces.ValueFunctionDataProvider;
 import rlVizLib.visualization.interfaces.GlueStateProvider;
@@ -332,12 +332,12 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
             State_key k = new State_key(1, 0);
             k.intArray[0] = lastSaveIndex;
 
-            RLGlueProxy.RL_set_state(k);
+            RLGlue.RL_set_state(k);
             setForceDrawRefresh(true);
         }
         if (event.getSource() == saveButton) {
             loadButton.setEnabled(true);
-            State_key k = RLGlueProxy.RL_get_state();
+            State_key k = RLGlue.RL_get_state();
             lastSaveIndex = k.intArray[0];
         }
     }

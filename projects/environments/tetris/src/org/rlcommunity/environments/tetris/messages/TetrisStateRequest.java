@@ -19,7 +19,7 @@ http://brian.tannerpages.com
 
 package org.rlcommunity.environments.tetris.messages;
 
-import rlVizLib.glueProxy.RLGlueProxy;
+import org.rlcommunity.rlglue.codec.RLGlue;
 import rlVizLib.messaging.AbstractMessage;
 import rlVizLib.messaging.GenericMessage;
 import rlVizLib.messaging.MessageUser;
@@ -42,7 +42,7 @@ public class TetrisStateRequest extends EnvironmentMessages{
 				MessageValueType.kString.id(),
 				"GETTETRLAISSTATE");
 
-		String responseMessage=RLGlueProxy.RL_env_message(theRequest);
+		String responseMessage=RLGlue.RL_env_message(theRequest);
 
 		TetrisStateResponse theResponse;
 		try{

@@ -19,7 +19,7 @@ http://brian.tannerpages.com
 
 package org.rlcommunity.environments.mountaincar.messages;
 
-import rlVizLib.glueProxy.RLGlueProxy;
+import org.rlcommunity.rlglue.codec.RLGlue;
 import rlVizLib.messaging.AbstractMessage;
 import rlVizLib.messaging.GenericMessage;
 import rlVizLib.messaging.MessageUser;
@@ -42,7 +42,7 @@ public class MCGoalRequest extends EnvironmentMessages{
 				MessageValueType.kString.id(),
 				"GETMCGOAL");
 
-		String responseMessage=RLGlueProxy.RL_env_message(theRequest);
+		String responseMessage=RLGlue.RL_env_message(theRequest);
 
 		MCGoalResponse theResponse;
 		try {

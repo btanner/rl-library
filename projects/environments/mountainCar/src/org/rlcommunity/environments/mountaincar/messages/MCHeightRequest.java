@@ -23,7 +23,7 @@ package org.rlcommunity.environments.mountaincar.messages;
 
 import java.util.Vector;
 
-import rlVizLib.glueProxy.RLGlueProxy;
+import org.rlcommunity.rlglue.codec.RLGlue;
 import rlVizLib.messaging.AbstractMessage;
 import rlVizLib.messaging.GenericMessage;
 import rlVizLib.messaging.MessageUser;
@@ -58,7 +58,7 @@ public class MCHeightRequest extends EnvironmentMessages{
 					MessageValueType.kStringList.id(),
 			"GETHEIGHTS:"+queryPosBuffer.toString());
 
-		String responseMessage=RLGlueProxy.RL_env_message(theRequest);
+		String responseMessage=RLGlue.RL_env_message(theRequest);
 
 		MCHeightResponse theResponse;
 		try {
