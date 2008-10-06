@@ -7,7 +7,7 @@ RLVizLibPath=$systemPath/libs/rl-viz/RLVizLib.jar
 
 javac -classpath $RLVizLibPath sarsaAgent/*.java
 cd sarsaAgent
-jar cf ../JARS/sarsaAgent.jar sarsaAgent.class
+jar cmf MANIFEST.MF ../JARS/sarsaAgent.jar sarsaAgent.class
 cd ..
 #Source a script that sets all important functions and variables
 source $systemPath/scripts/rl-library-includes.sh
