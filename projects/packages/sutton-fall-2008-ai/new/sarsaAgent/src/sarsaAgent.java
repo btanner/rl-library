@@ -44,10 +44,12 @@ public class sarsaAgent implements AgentInterface, QueryableAgent {
     private int numActions = 0;
     private int numStates = 0;
     private double[][] QTable = null;
-    private double learningRate = .1;
-    private double exploreRate = .05;
     private int lastState = 0;
     private int lastAction = 0;
+
+	/* Don't set these here, set them in getDefaultParamers*/
+    private double learningRate = .1;
+    private double exploreRate = .05;
 
     public sarsaAgent() {
         this(getDefaultParameters());
@@ -115,6 +117,7 @@ public class sarsaAgent implements AgentInterface, QueryableAgent {
         double thisValue = reward;
 
         QTable[lastState][lastAction] += learningRate * (thisValue - lastValue);
+
     }
     
     public void agent_cleanup() {
@@ -151,7 +154,6 @@ public class sarsaAgent implements AgentInterface, QueryableAgent {
         Vector<Integer> ties = new Vector<Integer>();
         double theMax = values[0];
         ties.add(0);
-
         for (int i = 1; i < values.length; i++) {
             if (values[i] == theMax) {
                 ties.add(i);

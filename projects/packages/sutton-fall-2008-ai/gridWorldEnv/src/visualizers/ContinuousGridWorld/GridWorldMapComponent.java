@@ -7,11 +7,11 @@ import java.awt.geom.Rectangle2D;
 import java.util.Vector;
 
 import rlVizLib.visualization.VizComponent;
-import visualizers.ContinuousGridWorld.ContinuousGridWorldVisualizer;
+import visualizers.ContinuousGridWorld.DiscreteGridWorldVisualizer;
 
 public class GridWorldMapComponent implements VizComponent {
-	ContinuousGridWorldVisualizer CGWViz;
-	public GridWorldMapComponent(ContinuousGridWorldVisualizer CGWViz){
+	DiscreteGridWorldVisualizer CGWViz;
+	public GridWorldMapComponent(DiscreteGridWorldVisualizer CGWViz){
 		this.CGWViz=CGWViz;
 	}
 	public void render(Graphics2D g) {

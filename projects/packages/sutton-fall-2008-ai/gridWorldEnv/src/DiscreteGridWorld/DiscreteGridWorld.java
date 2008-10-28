@@ -15,11 +15,17 @@ limitations under the License.
 package DiscreteGridWorld;
 
 import ContinuousGridWorld.ContinuousGridWorld;
+import ContinuousGridWorld.messages.MapResponse;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import rlVizLib.general.ParameterHolder;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Reward_observation;
+import rlVizLib.messaging.NotAnRLVizMessageException;
+import rlVizLib.messaging.environment.EnvironmentMessageParser;
+import rlVizLib.messaging.environment.EnvironmentMessages;
+import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
 
 /**
  * This is very much like the Continuous Grid World, but we have a discretized, 
@@ -33,33 +39,68 @@ import org.rlcommunity.rlglue.codec.types.Reward_observation;
  * 
  * @author Brian Tanner
  */
-public class DiscreteGridWorld extends ContinuousGridWorld {
+public class DiscreteGridWorld extends ContinuousGridWorld implements HasAVisualizerInterface {
 
-    protected int xDiscFactor = 25;
-    protected int yDiscFactor = 25;
+    protected int xDiscFactor = 10;
+    protected int yDiscFactor = 10;
+    private int numRows = 0;
+    private int numCols = 0;
 
-   /**
-    * Not going to pass on params from above, we'll go with defaults
-
-    * @return
-    */ 	
+    /**
+     * Not going to pass on params from above, we'll go with defaults
     
-    public DiscreteGridWorld(ParameterHolder theParams){
+     * @return
+     */
+    public DiscreteGridWorld(ParameterHolder theParams) {
         super();
-        this.xDiscFactor=theParams.getIntegerParam("discrete-gridworld-xgridsize");
-        this.yDiscFactor=theParams.getIntegerParam("discrete-gridworld-ygridsize");
+        int maxDiscY = (int) (getWorldRect().getHeight() / yDiscFactor);
+        int maxDiscX = (int) (getWorldRect().getWidth() / xDiscFactor);
+        numCols = maxDiscY;
+        numRows = maxDiscX;
+
+        setupObstaclesAndStuff();
     }
 
-    public static ParameterHolder getDefaultParameters(){
-		ParameterHolder p = new ParameterHolder();
-                p.addIntegerParam("discrete-gridworld-xgridsize",25);
-                p.addIntegerParam("discrete-gridworld-ygridsize",25);
-                return p;
-                
+    private void setupObstaclesAndStuff() {
+        /*Goal*/
+        addResetRegion(new Rectangle2D.Double(70.0d, 70.0d, 20.0d, 20.0d));
+        addRewardRegion(new Rectangle2D.Double(70.0d, 70.0d, 20.0d, 20.0d), 1.0d);
+
+
+        /*-1 per step everywhere*/
+        addRewardRegion(new Rectangle2D.Double(0.0d, 0.0d, 200.0d, 200.0d), -1.0d);
+
+        addBarrierRegion(new Rectangle2D.Double(30.0d, 30.0d, 150.0d, 10.0d), 1.0d);
+        addBarrierRegion(new Rectangle2D.Double(30.0d, 30.0d, 10.0d, 150.0d), 1.0d);
+
+
+        addBarrierRegion(new Rectangle2D.Double(30.0d, 170.0d, 130.0d, 10.0d), 1.0d);
+        addBarrierRegion(new Rectangle2D.Double(170.0d, 30.0d, 10.0d, 130.0d), 1.0d);
+
+
+        addBarrierRegion(new Rectangle2D.Double(50.0d, 50.0d, 10.0d, 100.0d), 1.0d);
+        addBarrierRegion(new Rectangle2D.Double(50.0d, 50.0d, 100.0d, 10.0d), 1.0d);
+        addBarrierRegion(new Rectangle2D.Double(150.0d, 50.0d, 10.0d, 120.0d), 1.0d);
+
     }
-    protected  int getMaxState() {
-        int maxState=getState(getWorldRect().getWidth(), getWorldRect().getHeight());
+
+    public static ParameterHolder getDefaultParameters() {
+        ParameterHolder p = new ParameterHolder();
+        return p;
+
+    }
+
+    protected int getMaxState() {
+        int maxState = getState(getWorldRect().getWidth(), getWorldRect().getHeight());
         return maxState;
+    }
+
+    private int getRow(double x) {
+        return (int) (x / xDiscFactor);
+    }
+
+    private int getCol(double y) {
+        return (int) (y / yDiscFactor);
     }
 
     /**
@@ -68,21 +109,8 @@ public class DiscreteGridWorld extends ContinuousGridWorld {
      * @param y
      * @return
      */
-    protected  int getState(double x, double y) {
-        int discX = (int) (x / xDiscFactor);
-        int discY = (int) (y / yDiscFactor);
-
-        int maxDiscY = (int) (getWorldRect().getHeight() / yDiscFactor);
-
-        int theState = discY * maxDiscY + discX;
-        
-//        if(theState>200){
-//            System.out.println(discX+" = (int)"+x+"/"+xDiscFactor);
-//            System.out.println(discY+" = (int)"+y+"/"+yDiscFactor);
-//            System.out.println("maxDiscY = "+maxDiscY);
-//            
-//            System.out.println("theState = "+theState);
-//        }
+    protected int getState(double x, double y) {
+        int theState = getCol(y) * numCols + getRow(x);
         return theState;
     }
 
@@ -94,11 +122,9 @@ public class DiscreteGridWorld extends ContinuousGridWorld {
      * @param y
      * @return
      */
-    protected  Observation makeObservation(double x, double y) {
-        Observation currentObs = new Observation(1, 2);
+    protected Observation makeObservation(double x, double y) {
+        Observation currentObs = new Observation(1, 0, 0);
         currentObs.intArray[0] = getState(x, y);
-        currentObs.doubleArray[0] = x;
-        currentObs.doubleArray[1] = y;
 
         return currentObs;
     }
@@ -111,17 +137,16 @@ public class DiscreteGridWorld extends ContinuousGridWorld {
     @Override
     public String env_init() {
         int taskSpecVersion = 2;
-        String theTaskSpec=taskSpecVersion + ":e:3_[f,f,i]_[";
-        theTaskSpec+=getWorldRect().getMinX()+","+getWorldRect().getMaxX()+"]_["+getWorldRect().getMinY()+","+getWorldRect().getMaxY()+"]_";
-        theTaskSpec+="_["+0 + "," + getMaxState() + "]:1_[i]_[0,3]:[-1,1]";
+        String theTaskSpec = taskSpecVersion + ":e:1_[i]_[";
+        theTaskSpec += 0 + "," + getMaxState() + "]:1_[i]_[0,3]:[-1,1]";
         return theTaskSpec;
     }
 
-    protected  void discretizeAgentPos() {
+    protected void discretizeAgentPos() {
         double x = agentPos.getX();
         double y = agentPos.getY();
-        x = xDiscFactor*(x/xDiscFactor);
-        y = yDiscFactor*(y/yDiscFactor);
+        x = xDiscFactor * (x / xDiscFactor);
+        y = yDiscFactor * (y / yDiscFactor);
         setAgentPosition(new Point2D.Double(x, y));
     }
 
@@ -131,10 +156,9 @@ public class DiscreteGridWorld extends ContinuousGridWorld {
      */
     @Override
     public Observation env_start() {
-        randomizeAgentPosition();
+        setAgentPosition(new Point2D.Double(5, 5));
         discretizeAgentPos();
 
-//		setAgentPosition(new Point2D.Double(startX,startY));
 
         while (calculateMaxBarrierAtPosition(currentAgentRect) >= 1.0f || !getWorldRect().contains(currentAgentRect)) {
             randomizeAgentPosition();
@@ -188,5 +212,36 @@ public class DiscreteGridWorld extends ContinuousGridWorld {
         double x = theState.doubleArray[0];
         double y = theState.doubleArray[1];
         return makeObservation(x, y);
+    }
+
+    public String env_message(String theMessage) {
+        EnvironmentMessages theMessageObject;
+        try {
+            theMessageObject = EnvironmentMessageParser.parseMessage(theMessage);
+        } catch (NotAnRLVizMessageException e) {
+            System.err.println("Someone sent mountain Car a message that wasn't RL-Viz compatible");
+            return "I only respond to RL-Viz messages!";
+        }
+
+        if (theMessageObject.canHandleAutomatically(this)) {
+            return theMessageObject.handleAutomatically(this);//		If it wasn't handled automatically, maybe its a custom Mountain Car Message
+        }
+        if (theMessageObject.getTheMessageType() == rlVizLib.messaging.environment.EnvMessageType.kEnvCustom.id()) {
+
+            String theCustomType = theMessageObject.getPayLoad();
+
+            if (theCustomType.equals("GETCGWMAP")) {
+                //It is a request for the state
+                MapResponse theResponseObject = new MapResponse(getWorldRect(), resetRegions, rewardRegions, theRewards, barrierRegions, thePenalties, numRows, numCols);
+                return theResponseObject.makeStringResponse();
+            }
+        }
+        System.err.println("We need some code written in Env Message for ContinuousGridWorld.. unknown request received: " + theMessage);
+        Thread.dumpStack();
+        return null;
+    }
+
+    public String getVisualizerClassName() {
+        return "visualizers.ContinuousGridWorld.DiscreteGridWorldVisualizer";
     }
 }

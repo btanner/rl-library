@@ -2,8 +2,8 @@ package visualizers.ContinuousGridWorld;
 
 import java.awt.geom.Rectangle2D;
 import java.util.Vector;
-import ContinuousGridWorld.messages.CGWMapRequest;
-import ContinuousGridWorld.messages.CGWMapResponse;
+import ContinuousGridWorld.messages.MapRequest;
+import ContinuousGridWorld.messages.MapResponse;
 import rlVizLib.general.TinyGlue;
 import rlVizLib.messaging.agent.AgentValueForObsRequest;
 import rlVizLib.messaging.agent.AgentValueForObsResponse;
@@ -23,20 +23,23 @@ import org.rlcommunity.rlglue.codec.types.Observation;
 import rlVizLib.visualization.interfaces.DynamicControlTarget;
 import rlVizLib.visualization.interfaces.GlueStateProvider;
 
-public class ContinuousGridWorldVisualizer extends AbstractVisualizer implements ValueFunctionDataProvider, AgentOnValueFunctionDataProvider, GlueStateProvider {
+public class DiscreteGridWorldVisualizer extends AbstractVisualizer implements ValueFunctionDataProvider, AgentOnValueFunctionDataProvider, GlueStateProvider {
 
     Vector<Double> mins = null;
     Vector<Double> maxs = null;
 
     //Keep these responses around so we don't have to ask twice
-    CGWMapResponse theMapResponse = null;
+    MapResponse theMapResponse = null;
     AgentValueForObsResponse theValueResponse = null;
     Vector<Double> theQueryPositions = null;
     TinyGlue theGlueState = null;
     private int lastAgentValueUpdateTimeStep = -1;
     DynamicControlTarget theControlTarget=null;
+    
+    int numCols=0;
+    int numRows=0;
 
-    public ContinuousGridWorldVisualizer(TinyGlue glueState, DynamicControlTarget theControlTarget) {
+    public DiscreteGridWorldVisualizer(TinyGlue glueState, DynamicControlTarget theControlTarget) {
         super();
         this.theControlTarget=theControlTarget;
 
@@ -135,7 +138,15 @@ public class ContinuousGridWorldVisualizer extends AbstractVisualizer implements
         if (theGlueState.getLastObservation() == null) {
             return 0;
         }
-        return theGlueState.getLastObservation().doubleArray[whichDimension];
+        checkMapResponse();
+        int stateLabel=theGlueState.getLastObservation().intArray[0];
+        //The forward calc is: theState = getCol(y) * numCols + getRow(x);
+        int theCol=(int)(stateLabel/numCols);
+        int theRow=stateLabel-(theCol*numCols);
+        
+        if(whichDimension==0)return theRow*10;
+        
+        return theCol*10;
     }
 
     public void updateAgentState() {
@@ -174,7 +185,9 @@ public class ContinuousGridWorldVisualizer extends AbstractVisualizer implements
 
     private void checkMapResponse() {
         if (theMapResponse == null) {
-            theMapResponse = CGWMapRequest.Execute();
+            theMapResponse = MapRequest.Execute();
+            numCols=theMapResponse.getCols();
+            numRows=theMapResponse.getRows();
         }
     }
 

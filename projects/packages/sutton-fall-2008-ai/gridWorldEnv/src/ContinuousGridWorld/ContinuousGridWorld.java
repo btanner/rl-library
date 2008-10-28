@@ -4,16 +4,11 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Vector;
 
-import ContinuousGridWorld.messages.CGWMapResponse;
 
 import rlVizLib.Environments.EnvironmentBase;
 import rlVizLib.general.ParameterHolder;
 import rlVizLib.general.RLVizVersion;
-import rlVizLib.messaging.NotAnRLVizMessageException;
-import rlVizLib.messaging.environment.EnvironmentMessageParser;
-import rlVizLib.messaging.environment.EnvironmentMessages;
 import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
-import rlVizLib.messaging.interfaces.RLVizVersionResponseInterface;
 import rlVizLib.messaging.interfaces.getEnvMaxMinsInterface;
 import rlVizLib.messaging.interfaces.getEnvObsForStateInterface;
 import org.rlcommunity.rlglue.codec.types.Action;
@@ -32,9 +27,7 @@ import org.rlcommunity.rlglue.codec.types.State_key;
 
 public abstract class ContinuousGridWorld extends EnvironmentBase implements 
 									getEnvMaxMinsInterface, 
-									getEnvObsForStateInterface, 
-									RLVizVersionResponseInterface,
-									HasAVisualizerInterface{
+									getEnvObsForStateInterface{
 
 	protected  Point2D agentPos;
 	protected  Point2D agentSize;
@@ -72,16 +65,7 @@ public abstract class ContinuousGridWorld extends EnvironmentBase implements
             walkSpeed=theParams.getDoubleParam("cont-grid-world-walk-speed");
 
             worldRect=new Rectangle2D.Double(minX,minY,width,height);
-		agentSize=new Point2D.Double(1.0d,1.0d);
-		
-		addResetRegion(new Rectangle2D.Double(75.0d,75.0d,25.0d,25.0d));
-		addRewardRegion(new Rectangle2D.Double(75.0d,75.0d,25.0d,25.0d),1.0d);
-
-		addRewardRegion(new Rectangle2D.Double(0.0d,0.0d,200.0d,200.0d),-1.0d);
-		
-		addBarrierRegion(new Rectangle2D.Double(50.0d,50.0d,10.0d,100.0d),1.0d);
-		addBarrierRegion(new Rectangle2D.Double(50.0d,50.0d,100.0d,10.0d),1.0d);
-		addBarrierRegion(new Rectangle2D.Double(150.0d,50.0d,10.0d,100.0d),1.0d);
+            agentSize=new Point2D.Double(1.0d,1.0d);
 	}
 
 	protected  Rectangle2D makeAgentSizedRectFromPosition(Point2D thePos){
@@ -111,42 +95,14 @@ public abstract class ContinuousGridWorld extends EnvironmentBase implements
 		// TODO Auto-generated method stub
 		return null;
 	}
+        /*This used to be the main class, I'm iteratively making it abstract and moving
+         * functionality into the DiscreteGridWorld subclass*/
 
-	public String env_init() {
-		int taskSpecVersion=2;
-		
-		return taskSpecVersion+":e:2_[f,f]_["+getWorldRect().getMinX()+","+getWorldRect().getMaxX()+"]_["+getWorldRect().getMinY()+","+getWorldRect().getMaxY()+"]:1_[i]_[0,3]:[-1,1]";
-	}
+        
+	public abstract String env_init();
+	public abstract String env_message(String theMessage);
 
-	public String env_message(String theMessage) {
-		EnvironmentMessages theMessageObject;
-		try {
-			theMessageObject = EnvironmentMessageParser.parseMessage(theMessage);
-		} catch (NotAnRLVizMessageException e) {
-			System.err.println("Someone sent mountain Car a message that wasn't RL-Viz compatible");
-			return "I only respond to RL-Viz messages!";
-		}
-
-		if(theMessageObject.canHandleAutomatically(this))return theMessageObject.handleAutomatically(this);
-
-
-//		If it wasn't handled automatically, maybe its a custom Mountain Car Message
-		if(theMessageObject.getTheMessageType()==rlVizLib.messaging.environment.EnvMessageType.kEnvCustom.id()){
-
-			String theCustomType=theMessageObject.getPayLoad();
-
-			if(theCustomType.equals("GETCGWMAP")){
-				//It is a request for the state
-				CGWMapResponse theResponseObject=new CGWMapResponse(getWorldRect(),resetRegions,rewardRegions,theRewards,barrierRegions,thePenalties);
-				return theResponseObject.makeStringResponse();
-			}
-		}
-		System.err.println("We need some code written in Env Message for ContinuousGridWorld.. unknown request received: "+theMessage);
-		Thread.dumpStack();
-		return null;	
-		}
-
-	public void env_set_random_seed(Random_seed_key key) {
+        public void env_set_random_seed(Random_seed_key key) {
 		// TODO Auto-generated method stub
 
 	}
@@ -353,13 +309,6 @@ public abstract class ContinuousGridWorld extends EnvironmentBase implements
 	}
 
 
-	public RLVizVersion getTheVersionISupport() {
-		return new RLVizVersion(1,1);
-	}
-
-	public String getVisualizerClassName() {
-		return "visualizers.ContinuousGridWorld.ContinuousGridWorldVisualizer";
-	}
 
 
 }

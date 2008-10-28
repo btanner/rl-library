@@ -13,16 +13,19 @@ import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvMessageType;
 
 
-public class CGWMapResponse extends AbstractResponse{
+public class MapResponse extends AbstractResponse{
 	Vector<Rectangle2D> resetRegions;
 	Vector<Rectangle2D> rewardRegions;
 	Vector<Double> theRewards;
 	Vector<Rectangle2D> barrierRegions;
 	Vector<Double> thePenalties;
 	Rectangle2D theWorldRect;
+        
+        int numRows;
+        int numCols;
 	
-	public CGWMapResponse(Rectangle2D theWorldRect, Vector<Rectangle2D> resetRegions,	Vector<Rectangle2D> rewardRegions,	Vector<Double> theRewards,	Vector<Rectangle2D> barrierRegions,
-	Vector<Double> thePenalties) {
+	public MapResponse(Rectangle2D theWorldRect, Vector<Rectangle2D> resetRegions,	Vector<Rectangle2D> rewardRegions,	Vector<Double> theRewards,	Vector<Rectangle2D> barrierRegions,
+	Vector<Double> thePenalties, int numRows, int numCols) {
 		
 		this.resetRegions=resetRegions;
 		this.rewardRegions=rewardRegions;
@@ -30,10 +33,12 @@ public class CGWMapResponse extends AbstractResponse{
 		this.barrierRegions=barrierRegions;
 		this.thePenalties=thePenalties;
 		this.theWorldRect=theWorldRect;
+                this.numRows=numRows;
+                this.numCols=numCols;
 		
 	}
 
-	public CGWMapResponse(String responseMessage) throws NotAnRLVizMessageException {
+	public MapResponse(String responseMessage) throws NotAnRLVizMessageException {
 
 		GenericMessage theGenericResponse = new GenericMessage(responseMessage);
 
@@ -56,6 +61,8 @@ public class CGWMapResponse extends AbstractResponse{
 
 		theRewards=makeDoubleVectorFromString(rewardString);
 		thePenalties=makeDoubleVectorFromString(thePenaltyString);
+                numRows=Integer.parseInt(stateTokenizer.nextToken());
+                numCols=Integer.parseInt(stateTokenizer.nextToken());
 
 	}
 
@@ -135,6 +142,10 @@ public class CGWMapResponse extends AbstractResponse{
 		theResponseBuffer.append(":");
 		appendStringOfDoubleVector(theResponseBuffer,thePenalties);
 		theResponseBuffer.append(":");
+                theResponseBuffer.append(numRows);
+		theResponseBuffer.append(":");
+                theResponseBuffer.append(numCols);
+		theResponseBuffer.append(":");
 	
 
 		return theResponseBuffer.toString();
@@ -188,6 +199,14 @@ public class CGWMapResponse extends AbstractResponse{
 	public Rectangle2D getTheWorldRect() {
 		return theWorldRect;
 	}
+        
+        public int getRows(){
+            return numRows;
+        }
+        
+        public int getCols(){
+            return numCols;
+        }
 
 
 };
