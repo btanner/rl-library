@@ -31,7 +31,7 @@ import rlVizLib.messaging.interfaces.getEnvObsForStateInterface;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Random_seed_key;
-import org.rlcommunity.rlglue.codec.types.Reward_observation;
+import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 import org.rlcommunity.rlglue.codec.types.State_key;
 import java.util.Random;
 import rlVizLib.general.hasVersionDetails;
@@ -125,7 +125,7 @@ public class ChainMDP extends EnvironmentBase implements
     }
 
 //	The constants of this height function could easily be parameterized
-    public Reward_observation env_step(Action theAction) {
+    public Reward_observation_terminal env_step(Action theAction) {
 
         int a = theAction.intArray[0];
 
@@ -237,7 +237,7 @@ public class ChainMDP extends EnvironmentBase implements
     //
 //This has a side effect, it changes the random order.
 //
-    public Random_seed_key env_get_random_seed() {
+    public Random_seed_key env_save_random_seed() {
         Random_seed_key k = new Random_seed_key(2, 0);
         long newSeed = getRandom().nextLong();
         getRandom().setSeed(newSeed);
@@ -246,19 +246,19 @@ public class ChainMDP extends EnvironmentBase implements
         return k;
     }
 
-    public void env_set_random_seed(Random_seed_key k) {
+    public void env_load_random_seed(Random_seed_key k) {
         long storedSeed = UtilityShop.intsToLong(k.intArray[0], k.intArray[1]);
         getRandom().setSeed(storedSeed);
     }
 
-    public State_key env_get_state() {
+    public State_key env_save_state() {
         savedStates.add(new ChainMDPState(theState));
         State_key k = new State_key(1, 0);
         k.intArray[0] = savedStates.size() - 1;
         return k;
     }
 
-    public void env_set_state(State_key k) {
+    public void env_load_state(State_key k) {
         int theIndex = k.intArray[0];
 
         if (savedStates == null || theIndex >= savedStates.size()) {

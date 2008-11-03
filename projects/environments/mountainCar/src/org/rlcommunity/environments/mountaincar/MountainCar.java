@@ -35,7 +35,7 @@ import rlVizLib.messaging.interfaces.getEnvObsForStateInterface;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Random_seed_key;
-import org.rlcommunity.rlglue.codec.types.Reward_observation;
+import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 import org.rlcommunity.rlglue.codec.types.State_key;
 import java.util.Random;
 import org.rlcommunity.environments.mountaincar.visualizer.MountainCarVisualizer;
@@ -61,7 +61,7 @@ public class MountainCar extends EnvironmentBase implements
     static final int numActions = 3;
     protected MountainCarState theState = null;
 
-    //Used for env_get_state and env_save_state
+    //Used for env_save_state and env_save_state
     protected Vector<MountainCarState> savedStates = null;
     //Problem parameters have been moved to MountainCar State
     private Random randomGenerator = new Random();
@@ -96,7 +96,7 @@ public class MountainCar extends EnvironmentBase implements
      * Takes a step.  If an invalid action is selected, choose a random action.
      * @param theAction
      * @return
-     */public Reward_observation env_step(Action theAction) {
+     */public Reward_observation_terminal env_step(Action theAction) {
 
         int a = theAction.intArray[0];
 
@@ -226,14 +226,14 @@ public class MountainCar extends EnvironmentBase implements
     }
 
 /**
- * Provides a random seed that can be used with env_set_random_seed to sample
+ * Provides a random seed that can be used with env_load_random_seed to sample
  * multiple transitions from a single state.
  * <p>
  * Note that calling this method has a side effect, it creates a new seed and 
  * sets it.
  * @return
  */
-    public Random_seed_key env_get_random_seed() {
+    public Random_seed_key env_save_random_seed() {
         Random_seed_key k = new Random_seed_key(2, 0);
         long newSeed = getRandomGenerator().nextLong();
         getRandomGenerator().setSeed(newSeed);
@@ -242,19 +242,19 @@ public class MountainCar extends EnvironmentBase implements
         return k;
     }
 
-    public void env_set_random_seed(Random_seed_key k) {
+    public void env_load_random_seed(Random_seed_key k) {
         long storedSeed = UtilityShop.intsToLong(k.intArray[0], k.intArray[1]);
         getRandomGenerator().setSeed(storedSeed);
     }
 
-    public State_key env_get_state() {
+    public State_key env_save_state() {
         savedStates.add(new MountainCarState(theState));
         State_key k = new State_key(1, 0);
         k.intArray[0] = savedStates.size() - 1;
         return k;
     }
 
-    public void env_set_state(State_key k) {
+    public void env_load_state(State_key k) {
         int theIndex = k.intArray[0];
 
         if (savedStates == null || theIndex >= savedStates.size()) {

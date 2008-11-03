@@ -21,7 +21,7 @@ import java.util.Random;
 import rlVizLib.general.ParameterHolder;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
-import org.rlcommunity.rlglue.codec.types.Reward_observation;
+import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 
 /**
  * This is very much like the Continuous Grid World, but we have a discretized, 
@@ -54,7 +54,7 @@ public class StochasticDiscreteGridWorld extends DiscreteGridWorld {
     }
 
     @Override
-    public Reward_observation env_step(Action action) {
+    public Reward_observation_terminal env_step(Action action) {
         int theAction = action.intArray[0];
         
         boolean chooseRandom=theRandom.nextDouble()<=randomProb;

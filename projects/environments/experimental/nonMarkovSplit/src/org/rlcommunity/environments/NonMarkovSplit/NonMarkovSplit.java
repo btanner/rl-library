@@ -10,7 +10,7 @@ import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Random_seed_key;
-import org.rlcommunity.rlglue.codec.types.Reward_observation;
+import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 import org.rlcommunity.rlglue.codec.types.State_key;
 
 /* MDP Structure
@@ -66,7 +66,7 @@ public class NonMarkovSplit extends EnvironmentBase implements HasAVisualizerInt
         return returnObs;
     }
 
-    public Reward_observation env_step(Action action) {
+    public Reward_observation_terminal env_step(Action action) {
         int theAction = action.intArray[0];
         assert (theAction >= 0);
         assert (theAction < 2);
@@ -106,7 +106,7 @@ public class NonMarkovSplit extends EnvironmentBase implements HasAVisualizerInt
                 break;
         }
 
-        return new Reward_observation(reward, makeObservation(), terminalState);
+        return new Reward_observation_terminal(reward, makeObservation(), terminalState);
     }
 
     public NonMarkovSplit() {
@@ -149,11 +149,11 @@ public class NonMarkovSplit extends EnvironmentBase implements HasAVisualizerInt
     public void env_cleanup() {
     }
 
-    public Random_seed_key env_get_random_seed() {
+    public Random_seed_key env_save_random_seed() {
         return null;
     }
 
-    public State_key env_get_state() {
+    public State_key env_save_state() {
         return null;
     }
 
@@ -175,10 +175,10 @@ public class NonMarkovSplit extends EnvironmentBase implements HasAVisualizerInt
         return null;
     }
 
-    public void env_set_random_seed(Random_seed_key key) {
+    public void env_load_random_seed(Random_seed_key key) {
     }
 
-    public void env_set_state(State_key key) {
+    public void env_load_state(State_key key) {
     }
 
     /*END OF RL_GLUE FUNCTIONS*/

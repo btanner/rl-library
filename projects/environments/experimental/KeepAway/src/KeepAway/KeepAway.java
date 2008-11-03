@@ -8,7 +8,7 @@ import rlglue.environment.Environment;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Random_seed_key;
-import org.rlcommunity.rlglue.codec.types.Reward_observation;
+import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 import org.rlcommunity.rlglue.codec.types.State_key;
 
 
@@ -17,8 +17,8 @@ import org.rlcommunity.rlglue.codec.types.State_key;
 
 public class KeepAway implements HasAVisualizerInterface, Environment{
 	
-    protected Reward_observation makeRewardObservation(double reward, boolean isTerminal){
-		Reward_observation RO=new Reward_observation();
+    protected Reward_observation_terminal makeRewardObservation(double reward, boolean isTerminal){
+		Reward_observation_terminal RO=new Reward_observation_terminal();
 		RO.r=reward;
 		
 		RO.terminal=1;
@@ -60,12 +60,12 @@ public class KeepAway implements HasAVisualizerInterface, Environment{
 		return m_kGlueSupport.env_message(theMessage);
 	}
 
-	public void env_set_random_seed(Random_seed_key key) {
+	public void env_load_random_seed(Random_seed_key key) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void env_set_state(State_key key) {
+	public void env_load_state(State_key key) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -90,7 +90,7 @@ public class KeepAway implements HasAVisualizerInterface, Environment{
 
 	//Need to find a place to build the message vector and update it...
 
-	public Reward_observation env_step(Action action) {
+	public Reward_observation_terminal env_step(Action action) {
             System.out.println("\tenv_step starting");
 		//Do something with the agent's action
                 KeepAwayGlueSupport.getInstance().setAction(action);
@@ -140,12 +140,12 @@ public class KeepAway implements HasAVisualizerInterface, Environment{
 		
 	}
 
-	public Random_seed_key env_get_random_seed() {
+	public Random_seed_key env_save_random_seed() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public State_key env_get_state() {
+	public State_key env_save_state() {
 		// TODO Auto-generated method stub
 		return null;
 	}

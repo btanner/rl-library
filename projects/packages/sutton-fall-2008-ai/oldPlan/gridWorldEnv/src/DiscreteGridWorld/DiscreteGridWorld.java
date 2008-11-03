@@ -21,7 +21,7 @@ import java.awt.geom.Rectangle2D;
 import rlVizLib.general.ParameterHolder;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
-import org.rlcommunity.rlglue.codec.types.Reward_observation;
+import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvironmentMessageParser;
 import rlVizLib.messaging.environment.EnvironmentMessages;
@@ -169,7 +169,7 @@ public class DiscreteGridWorld extends ContinuousGridWorld implements HasAVisual
     }
 
     @Override
-    public Reward_observation env_step(Action action) {
+    public Reward_observation_terminal env_step(Action action) {
         int theAction = action.intArray[0];
 
         double dx = 0;

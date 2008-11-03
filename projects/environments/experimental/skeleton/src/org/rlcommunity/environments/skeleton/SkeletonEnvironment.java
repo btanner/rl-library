@@ -10,7 +10,7 @@ import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Random_seed_key;
-import org.rlcommunity.rlglue.codec.types.Reward_observation;
+import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 import org.rlcommunity.rlglue.codec.types.State_key;
 
 
@@ -69,7 +69,7 @@ public class SkeletonEnvironment extends EnvironmentBase implements HasAVisualiz
         return makeObservation();
     }
 
-    public Reward_observation env_step(Action action) {
+    public Reward_observation_terminal env_step(Action action) {
         int theAction=action.intArray[0];
         assert(theAction>=0);
         assert(theAction<2);
@@ -83,17 +83,17 @@ public class SkeletonEnvironment extends EnvironmentBase implements HasAVisualiz
         int terminalState=0;
         if(currentState==numStates-1)terminalState=1;
 
-        return new Reward_observation(-1.0d,makeObservation(),terminalState);
+        return new Reward_observation_terminal(-1.0d,makeObservation(),terminalState);
     }
 
     public void env_cleanup() {
     }
 
-    public Random_seed_key env_get_random_seed() {
+    public Random_seed_key env_save_random_seed() {
         return null;
     }
 
-    public State_key env_get_state() {
+    public State_key env_save_state() {
         return null;
     }
 
@@ -115,10 +115,10 @@ public class SkeletonEnvironment extends EnvironmentBase implements HasAVisualiz
         return null;
     }
 
-    public void env_set_random_seed(Random_seed_key key) {
+    public void env_load_random_seed(Random_seed_key key) {
     }
 
-    public void env_set_state(State_key key) {
+    public void env_load_state(State_key key) {
     }
 
     /*END OF RL_GLUE FUNCTIONS*/

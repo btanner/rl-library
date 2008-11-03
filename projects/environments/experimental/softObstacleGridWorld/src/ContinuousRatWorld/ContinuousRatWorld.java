@@ -33,7 +33,7 @@ import rlVizLib.messaging.environment.EnvironmentMessageParser;
 import rlVizLib.messaging.environment.EnvironmentMessages;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
-import org.rlcommunity.rlglue.codec.types.Reward_observation;
+import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 import java.io.IOException;
 
 
@@ -236,7 +236,7 @@ public class ContinuousRatWorld extends ContinuousGridWorld{
     }
 
     @Override
-    public Reward_observation env_step(Action action)   {
+    public Reward_observation_terminal env_step(Action action)   {
         int theAction = action.intArray[0];
 
         double dx = 0;

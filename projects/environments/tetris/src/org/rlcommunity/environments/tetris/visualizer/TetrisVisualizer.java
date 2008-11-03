@@ -188,12 +188,12 @@ protected void addPreferenceComponents(){
             State_key k=new State_key(1,0);
             k.intArray[0]=lastSaveIndex;
 
-            RLGlue.RL_set_state(k);
+            RLGlue.RL_load_state(k);
             setForceBlocksRefresh(true);
         }
         if(event.getSource()==saveButton){
             loadButton.setEnabled(true);
-            State_key k =RLGlue.RL_get_state();
+            State_key k =RLGlue.RL_save_state();
             lastSaveIndex=k.intArray[0];
         }
     }

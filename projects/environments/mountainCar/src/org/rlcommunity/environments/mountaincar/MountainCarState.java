@@ -132,7 +132,7 @@ public class MountainCarState {
     
     /**
      * This is basically a copy constructor and we use it when were doing 
-     * env_save_state and env_get_state
+     * env_save_state and env_save_state
      * @param stateToCopy
      */
     public MountainCarState(MountainCarState stateToCopy) {

@@ -11,7 +11,7 @@ import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Random_seed_key;
-import org.rlcommunity.rlglue.codec.types.Reward_observation;
+import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 import org.rlcommunity.rlglue.codec.types.State_key;
 
 /**
@@ -121,7 +121,7 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
         return makeObservation();
     }
 
-    public Reward_observation env_step(Action action) {
+    public Reward_observation_terminal env_step(Action action) {
         double xacc;
         double thetaacc;
         double force;
@@ -161,20 +161,20 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
 
         if (inFailure())
         {
-            return new Reward_observation(-1.0d, makeObservation(), 1);
+            return new Reward_observation_terminal(-1.0d, makeObservation(), 1);
         } else {
-            return new Reward_observation(1.0d, makeObservation(), 0);
+            return new Reward_observation_terminal(1.0d, makeObservation(), 0);
         }
     }
 
     public void env_cleanup() {
     }
 
-    public Random_seed_key env_get_random_seed() {
+    public Random_seed_key env_save_random_seed() {
         return null;
     }
 
-    public State_key env_get_state() {
+    public State_key env_save_state() {
         return null;
     }
 
@@ -208,10 +208,10 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
         return null;
     }
 
-    public void env_set_random_seed(Random_seed_key key) {
+    public void env_load_random_seed(Random_seed_key key) {
     }
 
-    public void env_set_state(State_key key) {
+    public void env_load_state(State_key key) {
     }
 
     /*END OF RL_GLUE FUNCTIONS*/

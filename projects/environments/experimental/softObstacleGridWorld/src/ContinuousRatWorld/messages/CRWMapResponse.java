@@ -41,7 +41,6 @@ public class CRWMapResponse extends AbstractResponse{
 
 		StringTokenizer stateTokenizer = new StringTokenizer(thePayLoadString, ":");
 		
-		System.out.println("The Payload string:"+thePayLoadString);
 		String worldRectString=stateTokenizer.nextToken();
 		String resetString=stateTokenizer.nextToken();
 		String rewardRegionString=stateTokenizer.nextToken();

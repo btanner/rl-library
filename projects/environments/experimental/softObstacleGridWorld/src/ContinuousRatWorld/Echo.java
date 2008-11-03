@@ -14,14 +14,24 @@
 package ContinuousRatWorld;
 
 
-
+/*
 import edu.mplab.rubios.node.*;
+*/
 
-
-import java.io.*;
-import java.net.*;
 import java.util.*;
 
+class RUBIOSNode{
+    protected int nMessagesReceived=0;
+    protected String[] messagesReceived=null;
+    
+    public RUBIOSNode(String[] args, double mydt){
+               System.err.println("Brians fake RUBIOSNODE stub is being compiled, not real RUBIOSNODE... talk to brian");
+               System.exit(1);
+    }
+    public void run(){
+        
+    }
+}
 public class Echo extends RUBIOSNode{
 
 	double [] features = new double[getNumFeatures()];
@@ -29,7 +39,6 @@ public class Echo extends RUBIOSNode{
     public  Echo(String[] args, double mydt){
 	super(args, mydt);
     }
-
     /** parseMessage ignores all incoming messages 
      */
     public boolean parseMessage(String msg){
