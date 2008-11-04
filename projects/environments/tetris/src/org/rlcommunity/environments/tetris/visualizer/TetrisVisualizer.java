@@ -35,7 +35,7 @@ import org.rlcommunity.environments.tetris.messages.TetrisStateResponse;
 import org.rlcommunity.rlglue.codec.RLGlue;
 import rlVizLib.visualization.interfaces.DynamicControlTarget;
 import org.rlcommunity.rlglue.codec.types.Observation;
-import org.rlcommunity.rlglue.codec.types.State_key;
+
 
 public class TetrisVisualizer  extends AbstractVisualizer implements ActionListener{
 
@@ -185,16 +185,18 @@ protected void addPreferenceComponents(){
    
     public void actionPerformed(ActionEvent event) {
         if(event.getSource()==loadButton){
-            State_key k=new State_key(1,0);
-            k.intArray[0]=lastSaveIndex;
+//            State_key k=new State_key(1,0);
+  //          k.intArray[0]=lastSaveIndex;
+			System.err.println("This button doesn't work anymore.");
 
-            RLGlue.RL_load_state(k);
+//            RLGlue.RL_load_state(k);
             setForceBlocksRefresh(true);
         }
         if(event.getSource()==saveButton){
             loadButton.setEnabled(true);
-            State_key k =RLGlue.RL_save_state();
-            lastSaveIndex=k.intArray[0];
+  			System.err.println("This button doesn't work anymore.");
+//          State_key k =RLGlue.RL_save_state();
+ //           lastSaveIndex=k.intArray[0];
         }
     }
 

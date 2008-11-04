@@ -13,9 +13,9 @@ import rlVizLib.messaging.interfaces.getEnvMaxMinsInterface;
 import rlVizLib.messaging.interfaces.getEnvObsForStateInterface;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
-import org.rlcommunity.rlglue.codec.types.Random_seed_key;
+
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
-import org.rlcommunity.rlglue.codec.types.State_key;
+
 
 /*
  *  ContinuousGridWorld
@@ -86,31 +86,12 @@ public abstract class ContinuousGridWorld extends EnvironmentBase implements
 
 	}
 
-	public Random_seed_key env_save_random_seed() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public State_key env_save_state() {
-		// TODO Auto-generated method stub
-		return null;
-	}
         /*This used to be the main class, I'm iteratively making it abstract and moving
          * functionality into the DiscreteGridWorld subclass*/
 
         
 	public abstract String env_init();
 	public abstract String env_message(String theMessage);
-
-        public void env_load_random_seed(Random_seed_key key) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void env_load_state(State_key key) {
-		// TODO Auto-generated method stub
-
-	}
 
 	public Observation env_start() {
 		randomizeAgentPosition();

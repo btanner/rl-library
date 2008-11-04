@@ -7,9 +7,9 @@ import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
 import rlglue.environment.Environment;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
-import org.rlcommunity.rlglue.codec.types.Random_seed_key;
+
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
-import org.rlcommunity.rlglue.codec.types.State_key;
+
 
 
 
@@ -59,17 +59,6 @@ public class KeepAway implements HasAVisualizerInterface, Environment{
 	public String env_message(String theMessage) {
 		return m_kGlueSupport.env_message(theMessage);
 	}
-
-	public void env_load_random_seed(Random_seed_key key) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void env_load_state(State_key key) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	public Observation env_start() {
                 KeepAwayGlueSupport.getInstance().popAction();
                 KeepAwayGlueSupport.getInstance().popPlayerToAct();
@@ -139,15 +128,4 @@ public class KeepAway implements HasAVisualizerInterface, Environment{
 		// TODO Auto-generated method stub
 		
 	}
-
-	public Random_seed_key env_save_random_seed() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public State_key env_save_state() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

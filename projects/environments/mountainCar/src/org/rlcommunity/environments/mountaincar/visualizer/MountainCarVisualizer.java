@@ -48,7 +48,7 @@ import rlVizLib.visualization.ValueFunctionVizComponent;
 import rlVizLib.visualization.VizComponent;
 import rlVizLib.visualization.interfaces.DynamicControlTarget;
 import org.rlcommunity.rlglue.codec.types.Observation;
-import org.rlcommunity.rlglue.codec.types.State_key;
+
 import org.rlcommunity.rlglue.codec.types.Action;
 
 public class MountainCarVisualizer extends AbstractVisualizer implements ValueFunctionDataProvider, AgentOnValueFunctionDataProvider, GlueStateProvider, ActionListener {
@@ -329,16 +329,18 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
 
     public void actionPerformed(ActionEvent event) {
         if (event.getSource() == loadButton) {
-            State_key k = new State_key(1, 0);
-            k.intArray[0] = lastSaveIndex;
+//            State_key k = new State_key(1, 0);
+//            k.intArray[0] = lastSaveIndex;
 
-            RLGlue.RL_load_state(k);
+			System.err.println("This button doesn't work anymore.");
+//            RLGlue.RL_load_state(k);
             setForceDrawRefresh(true);
         }
         if (event.getSource() == saveButton) {
             loadButton.setEnabled(true);
-            State_key k = RLGlue.RL_save_state();
-            lastSaveIndex = k.intArray[0];
+			System.err.println("This button doesn't work anymore.");
+//            State_key k = RLGlue.RL_save_state();
+//            lastSaveIndex = k.intArray[0];
         }
     }
 

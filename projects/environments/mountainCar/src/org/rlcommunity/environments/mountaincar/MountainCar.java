@@ -34,9 +34,9 @@ import rlVizLib.messaging.interfaces.getEnvMaxMinsInterface;
 import rlVizLib.messaging.interfaces.getEnvObsForStateInterface;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
-import org.rlcommunity.rlglue.codec.types.Random_seed_key;
+
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
-import org.rlcommunity.rlglue.codec.types.State_key;
+
 import java.util.Random;
 import org.rlcommunity.environments.mountaincar.visualizer.MountainCarVisualizer;
 import rlVizLib.general.hasVersionDetails;
@@ -233,6 +233,7 @@ public class MountainCar extends EnvironmentBase implements
  * sets it.
  * @return
  */
+/*
     public Random_seed_key env_save_random_seed() {
         Random_seed_key k = new Random_seed_key(2, 0);
         long newSeed = getRandomGenerator().nextLong();
@@ -264,7 +265,7 @@ public class MountainCar extends EnvironmentBase implements
         MountainCarState oldState = savedStates.get(k.intArray[0]);
         this.theState = new MountainCarState(oldState);
     }
-
+*/
     /**
      * The value function will be drawn over the position and velocity.  This 
      * method provides the max values for those variables.

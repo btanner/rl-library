@@ -18,9 +18,9 @@ import rlVizLib.messaging.interfaces.getEnvMaxMinsInterface;
 import rlVizLib.messaging.interfaces.getEnvObsForStateInterface;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
-import org.rlcommunity.rlglue.codec.types.Random_seed_key;
+
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
-import org.rlcommunity.rlglue.codec.types.State_key;
+
 
 /*
  *  ContinuousGridWorld
@@ -102,16 +102,6 @@ public class ContinuousGridWorld extends EnvironmentBase implements
 
 	}
 
-	public Random_seed_key env_save_random_seed() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public State_key env_save_state() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public String env_init() {
 		int taskSpecVersion=2;
 		
@@ -145,16 +135,6 @@ public class ContinuousGridWorld extends EnvironmentBase implements
 		Thread.dumpStack();
 		return null;	
 		}
-
-	public void env_load_random_seed(Random_seed_key key) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void env_load_state(State_key key) {
-		// TODO Auto-generated method stub
-
-	}
 
 	public Observation env_start() {
 		randomizeAgentPosition();

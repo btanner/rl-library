@@ -30,9 +30,9 @@ import rlVizLib.messaging.environment.EnvironmentMessages;
 import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
-import org.rlcommunity.rlglue.codec.types.Random_seed_key;
+
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
-import org.rlcommunity.rlglue.codec.types.State_key;
+
 import rlVizLib.general.hasVersionDetails;
 import rlVizLib.utilities.UtilityShop;
 
@@ -181,7 +181,7 @@ public class Tetris extends EnvironmentBase implements HasAVisualizerInterface {
         return null;
     }
 
-    public State_key env_save_state() {
+/*    public State_key env_save_state() {
             savedStates.add(new TetrisState(gameState));
             State_key k = new State_key(1, 0);
             k.intArray[0] = savedStates.size() - 1;
@@ -198,7 +198,7 @@ public class Tetris extends EnvironmentBase implements HasAVisualizerInterface {
             TetrisState oldState = savedStates.get(theIndex);
             this.gameState = new TetrisState(oldState);
     }
-
+*/
  /**
  * Provides a random seed that can be used with env_load_random_seed to sample
  * multiple transitions from a single state.
@@ -206,7 +206,8 @@ public class Tetris extends EnvironmentBase implements HasAVisualizerInterface {
  * Note that calling this method has a side effect, it creates a new seed and 
  * sets it.
  * @return
- */public Random_seed_key env_save_random_seed() {
+ */
+/*public Random_seed_key env_save_random_seed() {
             Random_seed_key k = new Random_seed_key(2, 0);
             long newSeed = gameState.getRandom().nextLong();
             gameState.getRandom().setSeed(newSeed);
@@ -219,7 +220,7 @@ public class Tetris extends EnvironmentBase implements HasAVisualizerInterface {
             long storedSeed = UtilityShop.intsToLong(k.intArray[0], k.intArray[1]);
             gameState.getRandom().setSeed(storedSeed);
     }
-
+*/
     /*End of Base RL-Glue Functions */
     /*RL-Viz Methods*/
     @Override

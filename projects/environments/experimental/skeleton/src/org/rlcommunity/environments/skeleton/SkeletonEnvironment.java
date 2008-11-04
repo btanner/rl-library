@@ -9,9 +9,9 @@ import rlVizLib.messaging.environment.EnvironmentMessages;
 import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
-import org.rlcommunity.rlglue.codec.types.Random_seed_key;
+
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
-import org.rlcommunity.rlglue.codec.types.State_key;
+
 
 
 
@@ -89,14 +89,6 @@ public class SkeletonEnvironment extends EnvironmentBase implements HasAVisualiz
     public void env_cleanup() {
     }
 
-    public Random_seed_key env_save_random_seed() {
-        return null;
-    }
-
-    public State_key env_save_state() {
-        return null;
-    }
-
     public String env_message(String theMessage) {
         EnvironmentMessages theMessageObject;
         try {
@@ -114,13 +106,6 @@ public class SkeletonEnvironment extends EnvironmentBase implements HasAVisualiz
         Thread.dumpStack();
         return null;
     }
-
-    public void env_load_random_seed(Random_seed_key key) {
-    }
-
-    public void env_load_state(State_key key) {
-    }
-
     /*END OF RL_GLUE FUNCTIONS*/
 
     /*RL-VIZ Requirements*/

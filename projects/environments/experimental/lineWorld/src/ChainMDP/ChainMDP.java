@@ -30,9 +30,9 @@ import rlVizLib.messaging.interfaces.getEnvMaxMinsInterface;
 import rlVizLib.messaging.interfaces.getEnvObsForStateInterface;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
-import org.rlcommunity.rlglue.codec.types.Random_seed_key;
+
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
-import org.rlcommunity.rlglue.codec.types.State_key;
+
 import java.util.Random;
 import rlVizLib.general.hasVersionDetails;
 import rlVizLib.utilities.UtilityShop;
@@ -237,7 +237,7 @@ public class ChainMDP extends EnvironmentBase implements
     //
 //This has a side effect, it changes the random order.
 //
-    public Random_seed_key env_save_random_seed() {
+/*    public Random_seed_key env_save_random_seed() {
         Random_seed_key k = new Random_seed_key(2, 0);
         long newSeed = getRandom().nextLong();
         getRandom().setSeed(newSeed);
@@ -268,7 +268,7 @@ public class ChainMDP extends EnvironmentBase implements
         ChainMDPState oldState = savedStates.get(k.intArray[0]);
         this.theState = new ChainMDPState(oldState);
     }
-
+*/
     public double getMaxValueForQuerableVariable(int dimension) {
         return length - 1;
     }
