@@ -101,6 +101,11 @@ echo "-- Starting up Networked Gui Trainer"
 java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.NetGraphicalDriverDynamicEnvStandardAgent
 echo "++ Gui Trainer is finished"
 }
+startNetGuiTrainerDynamicAgentStandardEnvironment(){
+echo "-- Starting up Networked Gui Trainer"
+java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.NetGraphicalDriverDynamicAgentStandardEnv
+echo "++ Gui Trainer is finished"
+}
 
 
 
