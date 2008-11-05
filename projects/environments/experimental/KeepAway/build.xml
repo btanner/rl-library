@@ -2,6 +2,7 @@
 
 	<property name="baseLibraryDir" value="../../../.."/>
 	<property name="this.project.system.directory" value="${baseLibraryDir}/system"/>
+	<property name="this.project.product.directory" value="${baseLibraryDir}/products"/>
 	<property name="project.name" value="${ant.project.name}"/>
 	<import file="${this.project.system.directory}/common/ant/build-common.xml"/>
 
