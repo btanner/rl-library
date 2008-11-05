@@ -21,7 +21,7 @@ We'll try and rely on minimal variables from above.
 <property name="test.raw"   value="${basedir}/reports/raw"/>
 <property name="docs.dir"   value="${basedir}/javadocs"/>
 
-<property name="junit.jar" value="${this.project.system.directory}/libs/junit.jar" />
+<property name="junit.jar" value="${this.project.system.directory}/common/libs/junit.jar" />
 <path id="junit.classpath" location="${junit.jar}"/>
 <path id="test.build.classpath" location="${test.classes.dir}"/>
 

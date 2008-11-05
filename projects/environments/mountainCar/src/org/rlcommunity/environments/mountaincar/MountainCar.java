@@ -71,7 +71,6 @@ public class MountainCar extends EnvironmentBase implements
         savedStates = new Vector<MountainCarState>();
         //This should be like a final static member or something, or maybe it should be configurable... dunno
         int taskSpecVersion = 2;
-
         return taskSpecVersion + ":e:2_[f,f]_[" + theState.minPosition + "," + theState.maxPosition + "]_[" + theState.minVelocity + "," + theState.maxVelocity + "]:1_[i]_[0,2]:[-1,0]";
     }
 
