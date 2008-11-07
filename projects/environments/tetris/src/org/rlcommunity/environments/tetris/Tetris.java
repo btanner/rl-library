@@ -22,6 +22,7 @@ import java.util.Vector;
 
 import org.rlcommunity.environments.tetris.messages.TetrisStateResponse;
 import org.rlcommunity.environments.tetris.visualizer.TetrisVisualizer;
+import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.IntRange;
@@ -91,27 +92,10 @@ public class Tetris extends EnvironmentBase implements HasAVisualizerInterface {
         //This is a better way to tell the rows and cols
         theTaskSpecObject.setExtra("Tetris Car from the RL-Library.  HEIGHT:" + gameState.getHeight() + " WIDTH:" + gameState.getWidth() + " Revision: " + this.getClass().getPackage().getImplementationVersion());
 
-        String newTaskSpecString = theTaskSpecObject.toTaskSpec();
-//
-//
-//
-//        //adding the plus 2 because we are sending the weidth and height also
-//        String oldTaskSpecString = "2.0:e:" + (boardSize + numPieces + 2) + "_[";
-//        for (int i = 0; i < intObsCount - 1; i++) {
-//            oldTaskSpecString = oldTaskSpecString + "i,";
-//        }
-//
-//        //Add 2 more for the num Rows and num Cols
-//        oldTaskSpecString = oldTaskSpecString + " i]";
-//        for (int i = 0; i < boardSize + numPieces; i++) {
-//            oldTaskSpecString = oldTaskSpecString + "_[0,1]";
-//        }
-//        //Added what the width and height are
-//        oldTaskSpecString = oldTaskSpecString + "_[" + gameState.getHeight() + "," + gameState.getHeight() + "]_[" + gameState.getWidth() + "," + gameState.getWidth() + "]";
-//        oldTaskSpecString = oldTaskSpecString + ":1_[i]_[0,5]:[0,1]";
-//
-//        return oldTaskSpecString;
-        return newTaskSpecString;
+        String taskSpecString = theTaskSpecObject.toTaskSpec();
+        
+        TaskSpec.checkTaskSpec(taskSpecString);
+        return taskSpecString;
     }
 
     public Observation env_start() {
