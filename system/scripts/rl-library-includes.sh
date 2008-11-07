@@ -1,8 +1,8 @@
 #Environments and Agent Jars are generally in here
-jarsPath=$systemPath/dist
+jarsPath=$systemPath/../products
 
 #Path to all of the RL-Viz libraries and stuff
-libPath=$systemPath/libs/rl-viz
+libPath=$systemPath/common/libs/rl-viz
 rlVizLibPath=$libPath/RLVizLib.jar
 vizAppLib=$libPath/RLVizApp.jar
 envShellLib=$libPath/EnvironmentShell.jar

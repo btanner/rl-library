@@ -4,27 +4,30 @@ http://rl-library.googlecode.com/
 brian@tannerpages.com
 http://brian.tannerpages.com
 
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-*/
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ */
 package org.rlcommunity.agents.random;
 
 import java.util.Random;
 
 import rlVizLib.general.ParameterHolder;
 import rlVizLib.general.hasVersionDetails;
-import rlVizLib.utilities.TaskSpecObject;
 
 import org.rlcommunity.rlglue.codec.AgentInterface;
+import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
+import org.rlcommunity.rlglue.codec.taskspec.ranges.AbstractRange;
+import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
+import org.rlcommunity.rlglue.codec.taskspec.ranges.IntRange;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 
@@ -36,12 +39,10 @@ import org.rlcommunity.rlglue.codec.types.Observation;
 public class RandomAgent implements AgentInterface {
 
     private Action action;
-    private int numInts = 1;
-    private int numDoubles = 0;
     private Random random = new Random();
-    TaskSpecObject TSO = null;
+    TaskSpec TSO = null;
 
-   public RandomAgent() {
+    public RandomAgent() {
         this(getDefaultParameters());
     }
 
@@ -58,10 +59,27 @@ public class RandomAgent implements AgentInterface {
         rlVizLib.utilities.UtilityShop.setVersionDetails(p, new DetailsProvider());
         return p;
     }
-    
+
     public void agent_init(String taskSpec) {
-        TSO = new TaskSpecObject(taskSpec);
-        action = new Action(TSO.num_discrete_action_dims, TSO.num_continuous_action_dims);
+        TSO = new TaskSpec(taskSpec);
+
+        //Do some checking on the ranges here so we don't feel bad if we crash later for not checking them.
+        for (int i = 0; i < TSO.getNumDiscreteActionDims(); i++) {
+            AbstractRange thisActionRange = TSO.getDiscreteActionRange(i);
+
+            if (thisActionRange.hasSpecialMinStatus() || thisActionRange.hasSpecialMaxStatus()) {
+                System.err.println("The random agent does not know how to deal with actions that are unbounded or unspecified ranges.");
+            }
+        }
+        for (int i = 0; i < TSO.getNumContinuousActionDims(); i++) {
+            AbstractRange thisActionRange = TSO.getContinuousActionRange(i);
+
+            if (thisActionRange.hasSpecialMinStatus() || thisActionRange.hasSpecialMaxStatus()) {
+                System.err.println("The random agent does not know how to deal with actions that are unbounded or unspecified ranges.");
+            }
+        }
+
+        action = new Action(TSO.getNumDiscreteActionDims(), TSO.getNumContinuousActionDims());
     }
 
     public Action agent_start(Observation o) {
@@ -78,18 +96,18 @@ public class RandomAgent implements AgentInterface {
     }
 
     private void setRandomActions(Action action) {
-        for (int i = 0; i < TSO.num_discrete_action_dims; i++) {
-            action.intArray[i] = random.nextInt(((int) TSO.action_maxs[i] + 1) - (int) TSO.action_mins[i]) + ((int) TSO.action_mins[i]);
+        for (int i = 0; i < TSO.getNumDiscreteActionDims(); i++) {
+            IntRange thisActionRange = TSO.getDiscreteActionRange(i);
+            action.intArray[i] = random.nextInt(thisActionRange.getMax() + 1 - thisActionRange.getMin()) + thisActionRange.getMin();
         }
-        for (int i = 0; i < TSO.num_continuous_action_dims; i++) {
-            action.doubleArray[i] = random.nextDouble() * (TSO.action_maxs[i] - TSO.action_mins[i]) + TSO.action_mins[i];
+        for (int i = 0; i < TSO.getNumContinuousActionDims(); i++) {
+            DoubleRange thisActionRange = TSO.getContinuousActionRange(i);
+            action.doubleArray[i] = random.nextDouble() * (thisActionRange.getMax() - thisActionRange.getMin()) + thisActionRange.getMin();
         }
     }
 
     public void agent_cleanup() {
-    }
-
-    public void agent_freeze() {
+        
     }
 
     public String agent_message(String theMessage) {

@@ -39,8 +39,10 @@ import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 
 import java.util.Random;
 import org.rlcommunity.environments.mountaincar.visualizer.MountainCarVisualizer;
+import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;
+import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
+import org.rlcommunity.rlglue.codec.taskspec.ranges.IntRange;
 import rlVizLib.general.hasVersionDetails;
-import rlVizLib.utilities.UtilityShop;
 
 /*
  * July 2007
@@ -53,6 +55,7 @@ import rlVizLib.utilities.UtilityShop;
  * capabilities which have polluted the code a little.  What I'm saying is that 
  * this is not the easiest environment to get started with.
  */
+import rlVizLib.rlVizCore;
 public class MountainCar extends EnvironmentBase implements
         getEnvMaxMinsInterface,
         getEnvObsForStateInterface,
@@ -61,7 +64,9 @@ public class MountainCar extends EnvironmentBase implements
     static final int numActions = 3;
     protected MountainCarState theState = null;
 
-    //Used for env_save_state and env_save_state
+    //Used for env_save_state and env_save_state, which don't exist anymore, but we will one day bring them back
+    //through the messaging system and RL-Viz.
+    
     protected Vector<MountainCarState> savedStates = null;
     //Problem parameters have been moved to MountainCar State
     private Random randomGenerator = new Random();
@@ -69,9 +74,15 @@ public class MountainCar extends EnvironmentBase implements
 
     public String env_init() {
         savedStates = new Vector<MountainCarState>();
-        //This should be like a final static member or something, or maybe it should be configurable... dunno
-        int taskSpecVersion = 2;
-        return taskSpecVersion + ":e:2_[f,f]_[" + theState.minPosition + "," + theState.maxPosition + "]_[" + theState.minVelocity + "," + theState.maxVelocity + "]:1_[i]_[0,2]:[-1,0]";
+        TaskSpecVRLGLUE3 theTaskSpecObject=new TaskSpecVRLGLUE3();
+        theTaskSpecObject.setEpisodic();
+        theTaskSpecObject.setDiscountFactor(1.0d);
+        theTaskSpecObject.addContinuousObservation(new DoubleRange(theState.minPosition,theState.maxPosition));
+        theTaskSpecObject.addContinuousObservation(new DoubleRange(theState.minVelocity,theState.maxVelocity));
+        theTaskSpecObject.addDiscreteAction(new IntRange(0,2));
+        theTaskSpecObject.setRewardRange(new DoubleRange(-1,0));
+        theTaskSpecObject.setExtra("Mountain Car from the RL-Library, Revision: "+this.getClass().getPackage().getImplementationVersion());
+        return theTaskSpecObject.toTaskSpec();
     }
 
     /**
