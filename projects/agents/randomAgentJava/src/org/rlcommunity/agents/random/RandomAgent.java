@@ -98,11 +98,11 @@ public class RandomAgent implements AgentInterface {
     private void setRandomActions(Action action) {
         for (int i = 0; i < TSO.getNumDiscreteActionDims(); i++) {
             IntRange thisActionRange = TSO.getDiscreteActionRange(i);
-            action.intArray[i] = random.nextInt(thisActionRange.getMax() + 1 - thisActionRange.getMin()) + thisActionRange.getMin();
+            action.intArray[i] = random.nextInt(thisActionRange.getRangeSize()) + thisActionRange.getMin();
         }
         for (int i = 0; i < TSO.getNumContinuousActionDims(); i++) {
             DoubleRange thisActionRange = TSO.getContinuousActionRange(i);
-            action.doubleArray[i] = random.nextDouble() * (thisActionRange.getMax() - thisActionRange.getMin()) + thisActionRange.getMin();
+            action.doubleArray[i] = random.nextDouble() * (thisActionRange.getRangeSize()) + thisActionRange.getMin();
         }
     }
 

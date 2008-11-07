@@ -56,7 +56,7 @@ if [ ! -x "$glueExe" ]       # Check if file exists.
 
 
 startEnvShellInBackGround(){
-java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH -classpath $ENV_CLASSPATH org.rlcommunity.rlglue.codec.util.EnvironmentLoader environmentShell.EnvironmentShell &
+java -enableassertions -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH -classpath $ENV_CLASSPATH org.rlcommunity.rlglue.codec.util.EnvironmentLoader environmentShell.EnvironmentShell &
 envShellPID=$!
 echo "-- Starting up dynamic environment loader - PID=$envShellPID"
 }
@@ -68,7 +68,7 @@ echo "++ Dynamic environment loader terminated"
 }
 
 startAgentShellInBackGround(){
-java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH -classpath $AGENT_CLASSPATH org.rlcommunity.rlglue.codec.util.AgentLoader agentShell.AgentShell &
+java -enableassertions -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH -classpath $AGENT_CLASSPATH org.rlcommunity.rlglue.codec.util.AgentLoader agentShell.AgentShell &
 agentShellPID=$!
 echo "-- Starting up dynamic agent loader - PID=$agentShellPID"
 }
@@ -81,29 +81,29 @@ echo "++ Dynamic agent loader terminated"
 
 startLocalGuiTrainer(){
 echo "-- Starting up Gui Trainer"
-java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.LocalGraphicalDriver
+java -enableassertions -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.LocalGraphicalDriver
 echo "++ Gui Trainer is finished"
 }
 startLocalGuiTrainerBothViz(){
 echo "-- Starting up Gui Trainer"
-java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.LocalGraphicalDriverBothDynamicBothViz
+java -enableassertions -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.LocalGraphicalDriverBothDynamicBothViz
 echo "++ Gui Trainer is finished"
 }
 
 startNetGuiTrainer(){
 echo "-- Starting up Networked Gui Trainer"
-java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.NetGraphicalDriverBothDynamic
+java -enableassertions -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.NetGraphicalDriverBothDynamic
 echo "++ Gui Trainer is finished"
 }
 
 startNetGuiTrainerDynamicEnvironmentStandardAgent(){
 echo "-- Starting up Networked Gui Trainer"
-java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.NetGraphicalDriverDynamicEnvStandardAgent
+java -enableassertions -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.NetGraphicalDriverDynamicEnvStandardAgent
 echo "++ Gui Trainer is finished"
 }
 startNetGuiTrainerDynamicAgentStandardEnvironment(){
 echo "-- Starting up Networked Gui Trainer"
-java -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.NetGraphicalDriverDynamicAgentStandardEnv
+java -enableassertions -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.NetGraphicalDriverDynamicAgentStandardEnv
 echo "++ Gui Trainer is finished"
 }
 

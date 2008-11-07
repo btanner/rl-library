@@ -39,6 +39,7 @@ import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 
 import java.util.Random;
 import org.rlcommunity.environments.mountaincar.visualizer.MountainCarVisualizer;
+import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.IntRange;
@@ -82,7 +83,11 @@ public class MountainCar extends EnvironmentBase implements
         theTaskSpecObject.addDiscreteAction(new IntRange(0,2));
         theTaskSpecObject.setRewardRange(new DoubleRange(-1,0));
         theTaskSpecObject.setExtra("Mountain Car from the RL-Library, Revision: "+this.getClass().getPackage().getImplementationVersion());
-        return theTaskSpecObject.toTaskSpec();
+        
+        String taskSpecString=theTaskSpecObject.toTaskSpec();
+        TaskSpec.checkTaskSpec(taskSpecString);
+     
+        return taskSpecString;
     }
 
     /**
