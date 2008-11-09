@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
+        <file>file:/Users/btanner/Documents/Java-Projects/rl-library/projects/environments/experimental/Helicopter/src/org/rlcommunity/environments/helicopter/HeliVector.java</file>
+        <file>file:/Users/btanner/Documents/Java-Projects/rl-library/projects/environments/experimental/Helicopter/src/org/rlcommunity/environments/helicopter/Helicopter.java</file>
+        <file>file:/Users/btanner/Documents/Java-Projects/rl-library/projects/environments/experimental/Helicopter/src/org/rlcommunity/environments/helicopter/HelicopterState.java</file>
+        <file>file:/Users/btanner/Documents/Java-Projects/rl-library/projects/environments/experimental/Helicopter/src/org/rlcommunity/environments/helicopter/Quaternion.java</file>
+        <file>file:/Users/btanner/Documents/Java-Projects/rl-library/projects/environments/experimental/Helicopter/src/org/rlcommunity/environments/helicopter/messages/HelicopterRangeRequest.java</file>
+        <file>file:/Users/btanner/Documents/Java-Projects/rl-library/projects/environments/experimental/Helicopter/src/org/rlcommunity/environments/helicopter/messages/HelicopterStateRequest.java</file>
+        <file>file:/Users/btanner/Documents/Java-Projects/rl-library/projects/environments/experimental/Helicopter/src/org/rlcommunity/environments/helicopter/visualizer/HelicopterVisualizer.java</file>
+    </open-files>
+</project-private>
