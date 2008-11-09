@@ -1,6 +1,5 @@
 package org.rlcommunity.environments.cartpole.visualizer;
 
-import java.util.Vector;
 
 import org.rlcommunity.environments.cartpole.messages.CartpoleTrackRequest;
 import org.rlcommunity.environments.cartpole.messages.CartpoleTrackResponse;

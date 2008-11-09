@@ -1,10 +1,9 @@
 package KeepAway;
 
-import rlVizLib.Environments.EnvironmentBase;
+import org.rlcommunity.rlglue.codec.EnvironmentInterface;
 import rlVizLib.general.RLVizVersion;
 import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
 
-import rlglue.environment.Environment;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 
@@ -15,7 +14,7 @@ import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 
 
 
-public class KeepAway implements HasAVisualizerInterface, Environment{
+public class KeepAway implements HasAVisualizerInterface, EnvironmentInterface{
 	
     protected Reward_observation_terminal makeRewardObservation(double reward, boolean isTerminal){
 		Reward_observation_terminal RO=new Reward_observation_terminal();
