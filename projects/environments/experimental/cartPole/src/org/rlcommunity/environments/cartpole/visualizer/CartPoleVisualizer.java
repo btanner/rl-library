@@ -34,14 +34,12 @@ public class CartPoleVisualizer extends AbstractVisualizer implements GlueStateP
         super.addVizComponentAtPositionWithSize(scoreComponent, 0, 0, 1.0, 1.0);
     }
 
-    public boolean updateTrack() {
-        CartpoleTrackResponse newState = CartpoleTrackRequest.Execute();
-        if (!newState.equals(trackResponse)) {
-            trackResponse = newState;
-            return true;
+        public void checkCoreData(){
+        if(trackResponse==null){
+            trackResponse=CartpoleTrackRequest.Execute();
         }
-        return false;
     }
+
 
     public boolean updateCart() {
 //		CartpoleCartResponse newState= CartpoleCartRequest.Execute();
@@ -57,20 +55,13 @@ public class CartPoleVisualizer extends AbstractVisualizer implements GlueStateP
     //Don't need to do anything for this because it comes from the state variables
     }
 
-    private void checkCartResponse() {
-        if (trackResponse == null) {
-            updateTrack();
-        }
-
-    }
-
     public double getLeftCartBound() {
-        checkCartResponse();
+        checkCoreData();
         return trackResponse.getLeftGoal();
     }
 
     public double getRightCartBound() {
-        checkCartResponse();
+        checkCoreData();
         return trackResponse.getRightGoal();
     }
 
@@ -83,6 +74,14 @@ public class CartPoleVisualizer extends AbstractVisualizer implements GlueStateP
         }
     }
 
+    public double getMinAngle(){
+        checkCoreData();
+        return trackResponse.getMinAngle() - 2.0 * Math.PI / 4.0;
+    }
+    public double getMaxAngle(){
+        checkCoreData();
+        return trackResponse.getMaxAngle() - 2.0 * Math.PI / 4.0;
+    }
     public double getAngle() {
         Observation lastObservation = theGlueState.getLastObservation();
         if (lastObservation != null) {

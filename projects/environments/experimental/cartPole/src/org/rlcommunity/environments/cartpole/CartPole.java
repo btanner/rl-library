@@ -1,6 +1,10 @@
 package org.rlcommunity.environments.cartpole;
 
 import org.rlcommunity.environments.cartpole.messages.*;
+import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
+import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;
+import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
+import org.rlcommunity.rlglue.codec.taskspec.ranges.IntRange;
 import rlVizLib.Environments.EnvironmentBase;
 import rlVizLib.general.ParameterHolder;
 import rlVizLib.general.hasVersionDetails;
@@ -88,29 +92,36 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
 
     /*RL GLUE METHODS*/
     public String env_init() {
-        double xMin = leftCartBound;
-        double xMax = rightCartBound;
-
-        //Dots are guesses
-        double xDotMin = -4.0d;
-        double xDotMax = 4.0d;
-        double thetaMin = leftAngleBound;
-        double thetaMax = rightAngleBound;
-        double thetaDotMin = -6.0d;
-        double thetaDotMax = 6.0d;
-
-        String taskSpec = "2:e:4_[f,f,f,f]_";
-        taskSpec += "[" + xMin + "," + xMax + "]_";
-        taskSpec += "[" + xDotMin + "," + xDotMax + "]_";
-        taskSpec += "[" + thetaMin + "," + thetaMax + "]_";
-        taskSpec += "[" + thetaDotMin + "," + thetaDotMax + "]";
-        taskSpec += ":1_[i]_[0,1]:[-1,0]";
         x = 0.0f;
         x_dot = 0.0f;
         theta = 0.0f;
         theta_dot = 0.0f;
 
-        return taskSpec;
+        double xMin = leftCartBound;
+        double xMax = rightCartBound;
+
+        //Dots are guesses
+        double xDotMin = -6.0d;
+        double xDotMax = 6.0d;
+        double thetaMin = leftAngleBound;
+        double thetaMax = rightAngleBound;
+        double thetaDotMin = -6.0d;
+        double thetaDotMax = 6.0d;
+
+        TaskSpecVRLGLUE3 theTaskSpecObject=new TaskSpecVRLGLUE3();
+        theTaskSpecObject.setEpisodic();
+        theTaskSpecObject.setDiscountFactor(1.0d);
+        theTaskSpecObject.addContinuousObservation(new DoubleRange(xMin,xMax));
+        theTaskSpecObject.addContinuousObservation(new DoubleRange(xDotMin,xDotMax));
+        theTaskSpecObject.addContinuousObservation(new DoubleRange(thetaMin,thetaMax));
+        theTaskSpecObject.addContinuousObservation(new DoubleRange(thetaDotMin,thetaDotMax));
+        theTaskSpecObject.addDiscreteAction(new IntRange(0,1));
+        theTaskSpecObject.setRewardRange(new DoubleRange(-1,0));
+        
+        String newTaskSpecString=theTaskSpecObject.toTaskSpec();
+        TaskSpec.checkTaskSpec(newTaskSpecString);
+
+        return newTaskSpecString;
     }
 
     public Observation env_start() {
@@ -150,7 +161,7 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
         theta += TAU * theta_dot;
         theta_dot += TAU * thetaacc;
 
-        while (theta > Math.PI) {
+        while (theta >= Math.PI) {
             theta -= 2.0d * Math.PI;
         }
         while (theta < -Math.PI) {

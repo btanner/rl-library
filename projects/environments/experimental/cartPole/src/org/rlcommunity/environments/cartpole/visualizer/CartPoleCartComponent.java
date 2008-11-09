@@ -36,20 +36,42 @@ public class CartPoleCartComponent implements VizComponent {
         int transX = (int) (UtilityShop.normalizeValue(cartVis.currentXPos(), cartVis.getLeftCartBound(), cartVis.getRightCartBound()) * (eightyPercent) + tenPercent);
         int transY = (int) eightyPercent;
         
+        g.setColor(Color.blue);
         Rectangle carRect=new Rectangle((int) (transX - tenPercent), transY, (int) twentyPercent, (int) fivePercent);
         g.fill(carRect);
         drawWheels(g,carRect);
-        g.setColor(Color.BLACK);
-        int x2 = transX + (int) (inverseScale * poleLength * Math.cos(cartVis.getAngle()));
-        int y2 = transY + (int) (inverseScale * poleLength * Math.sin(cartVis.getAngle()));
+        
+
+        //Draw the pole
         Stroke stroke = new BasicStroke(20.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
         g.setStroke(stroke);
+        int x2 = transX + (int) (inverseScale * poleLength * Math.cos(cartVis.getAngle()));
+        int y2 = transY + (int) (inverseScale * poleLength * Math.sin(cartVis.getAngle()));
+        g.setColor(Color.BLACK);
         g.drawLine(transX, transY, x2, y2);
+
+        
+        //Draw the failure lines
+        int failLeftX = transX + (int) (inverseScale * poleLength * Math.cos(cartVis.getMinAngle()));
+        int failLeftY = transY + (int) (inverseScale * poleLength * Math.sin(cartVis.getMinAngle()));
+        g.setColor(Color.RED);
+        g.drawLine(transX, transY, failLeftX, failLeftY);
+        int failRightX = transX + (int) (inverseScale * poleLength * Math.cos(cartVis.getMaxAngle()));
+        int failRightY = transY + (int) (inverseScale * poleLength * Math.sin(cartVis.getMaxAngle()));
+        g.setColor(Color.RED);
+        g.drawLine(transX, transY, failRightX, failRightY);
+        
+
+        
         g.setTransform(saveAT);
     }
 
     public boolean update() {
         return cartVis.updateCart();
+    }
+    
+    private void drawPole(Graphics2D g, double inverseScale,int transX,int transY){
+
     }
 
     private void drawWheels(Graphics2D g,Rectangle carRect) {
