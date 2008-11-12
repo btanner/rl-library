@@ -253,7 +253,7 @@ class DetailsProvider implements hasVersionDetails {
     }
 
     public String getInfoUrl() {
-        return "http://code.google.com/p/rl-library/wiki/Tetris";
+        return "http://library.rl-community.org/tetris";
     }
 
     public String getDescription() {
