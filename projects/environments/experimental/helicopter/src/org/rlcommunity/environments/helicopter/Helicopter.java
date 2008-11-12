@@ -17,7 +17,6 @@
 package org.rlcommunity.environments.helicopter;
 
 import org.rlcommunity.environments.helicopter.messages.HelicopterRangeResponse;
-import org.rlcommunity.environments.helicopter.messages.HelicopterStateResponse;
 import java.util.Vector;
 import org.rlcommunity.environments.helicopter.visualizer.HelicopterVisualizer;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
@@ -28,7 +27,6 @@ import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 import rlVizLib.Environments.EnvironmentBase;
 import rlVizLib.general.ParameterHolder;
-import rlVizLib.general.RLVizVersion;
 import rlVizLib.general.hasVersionDetails;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvironmentMessageParser;
@@ -148,11 +146,6 @@ public class Helicopter extends EnvironmentBase implements  HasAVisualizerInterf
         if (theMessageObject.getTheMessageType() == rlVizLib.messaging.environment.EnvMessageType.kEnvCustom.id()) {
 
             String theCustomType = theMessageObject.getPayLoad();
-
-            if (theCustomType.equals("GETHELISTATE")) {
-                HelicopterStateResponse theResponseObject = new HelicopterStateResponse(heli.velocity, heli.position, heli.angular_rate, heli.q);
-                return theResponseObject.makeStringResponse();
-            }
 
             if (theCustomType.equals("GETHELIRANGE")) {
                 HelicopterRangeResponse theResponseObject = new HelicopterRangeResponse(heli.mins, heli.maxs);

@@ -20,16 +20,20 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
+import java.util.Observable;
+import java.util.Observer;
 import rlVizLib.utilities.UtilityShop;
-import rlVizLib.visualization.VizComponent;
+import rlVizLib.visualization.SelfUpdatingVizComponent;
+import rlVizLib.visualization.VizComponentChangeListener;
 
-public class HelicopterEquilizerComponent implements VizComponent {
+public class HelicopterEquilizerComponent implements SelfUpdatingVizComponent, Observer {
 	private HelicopterVisualizer heliVis= null;
 	
      	int lastUpdateTimeStep=-1;
 
 	public HelicopterEquilizerComponent(HelicopterVisualizer helicopterVisualizer) {
 		heliVis = helicopterVisualizer;
+                helicopterVisualizer.getGlueState().addObserver(this);
 	}
 
 	public void render(Graphics2D g) {
@@ -67,16 +71,24 @@ public class HelicopterEquilizerComponent implements VizComponent {
 	    g.setTransform(saveAT);
 	}
 
-	public boolean update() {
-        	int currentTimeStep=heliVis.getGlueState().getTotalSteps();
+    /**
+     * This is the object (a renderObject) that should be told when this component needs to be drawn again.
+     */
+    private VizComponentChangeListener theChangeListener;
 
-		if(currentTimeStep!=lastUpdateTimeStep||heliVis.getForceDrawRefresh()){
-			heliVis.updateAgentState(heliVis.getForceDrawRefresh());
-                        heliVis.setForceDrawRefresh(false);
-			lastUpdateTimeStep=currentTimeStep;
-			return true;
-		}
-		return false;
-	}
+    public void setVizComponentChangeListener(VizComponentChangeListener theChangeListener) {
+        this.theChangeListener = theChangeListener;
+    }
+
+    /**
+     * This will be called when TinyGlue steps.
+     * @param o
+     * @param arg
+     */
+    public void update(Observable o, Object arg) {
+        if (theChangeListener != null) {
+            theChangeListener.vizComponentChanged(this);
+        }
+    }
 
 }

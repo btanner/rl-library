@@ -18,26 +18,19 @@ package org.rlcommunity.environments.helicopter.visualizer;
 
 import org.rlcommunity.environments.helicopter.messages.HelicopterRangeRequest;
 import org.rlcommunity.environments.helicopter.messages.HelicopterRangeResponse;
-import org.rlcommunity.environments.helicopter.messages.HelicopterStateRequest;
-import org.rlcommunity.environments.helicopter.messages.HelicopterStateResponse;
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Vector;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import rlVizLib.visualization.interfaces.GlueStateProvider;
 import rlVizLib.general.TinyGlue;
 import rlVizLib.visualization.AbstractVisualizer;
 import rlVizLib.visualization.GenericScoreComponent;
-import rlVizLib.visualization.VizComponent;
+import rlVizLib.visualization.SelfUpdatingVizComponent;
 import rlVizLib.visualization.interfaces.DynamicControlTarget;
 
-public class HelicopterVisualizer extends AbstractVisualizer implements GlueStateProvider, ActionListener {
+public class HelicopterVisualizer extends AbstractVisualizer implements GlueStateProvider {
 
-    private HelicopterStateResponse currentState = null;
     private HelicopterRangeResponse currentRange = null;
-    int lastTimeUpdate = -1;
     private TinyGlue theGlueState = null;
     private DynamicControlTarget theControlTarget = null;
 
@@ -46,12 +39,11 @@ public class HelicopterVisualizer extends AbstractVisualizer implements GlueStat
         super();
         this.theGlueState = theGlueState;
         this.theControlTarget = theControlTarget;
-        VizComponent theCounterViz = new GenericScoreComponent(this);
-        VizComponent theEquilizerViz = new HelicopterEquilizerComponent(this);
+        SelfUpdatingVizComponent theCounterViz = new GenericScoreComponent(this);
+        SelfUpdatingVizComponent theEquilizerViz = new HelicopterEquilizerComponent(this);
 
         addVizComponentAtPositionWithSize(theEquilizerViz, 0, 0, 1.0, 1.0);
         addVizComponentAtPositionWithSize(theCounterViz, 0, 0, 1.0, 0.5);
-        updateAgentState(false);
         updateParamRanges();
         addDesiredExtras();
 
@@ -72,16 +64,6 @@ public class HelicopterVisualizer extends AbstractVisualizer implements GlueStat
         }
     }
 
-    public boolean updateAgentState(boolean force) {
-        int currentStep = theGlueState.getTotalSteps();
-
-        if (currentStep != lastTimeUpdate || force) {
-            currentState = HelicopterStateRequest.Execute();
-            lastTimeUpdate = currentStep;
-            return true;
-        }
-        return false;
-    }
 
     public boolean updateParamRanges() {
         if (currentRange == null) {
@@ -94,7 +76,7 @@ public class HelicopterVisualizer extends AbstractVisualizer implements GlueStat
     // getters here
 
     public double[] getState() {
-        return currentState.getState();
+        return theGlueState.getLastObservation().doubleArray;
     }
 
     public double getMinAt(int i) {
@@ -119,26 +101,7 @@ public class HelicopterVisualizer extends AbstractVisualizer implements GlueStat
 
     @Override
     public String getName() {
-        return "Helicopter Hovering 1.0 (DEV)";
-    }
-    int lastSaveIndex = -1;
-    boolean forceDrawRefresh = false;
-
-    public boolean getForceDrawRefresh() {
-        return forceDrawRefresh;
-    }
-
-    public void setForceDrawRefresh(boolean newValue) {
-        forceDrawRefresh = newValue;
-    }
-
-    public void actionPerformed(ActionEvent event) {
-    }
-
-    //This is the one required from RLVizLib, ours has a forcing parameter.  Should update the VizLib
-
-    public void updateAgentState() {
-        updateAgentState(false);
+        return "Helicopter Hovering 1.1 (DEV)";
     }
 
     TinyGlue getGlueState() {
