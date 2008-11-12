@@ -64,6 +64,12 @@ public class TetrisVisualizer extends AbstractVisualizer {
         addPreferenceComponents();
     }
 
+    public void checkCoreData() {
+        if (currentState == null) {
+            currentState = TetrisStateRequest.Execute();
+        }
+    }
+
     protected void addPreferenceComponents() {
         //Setup the slider
         printGridCheckBox = new JCheckBox();
@@ -92,18 +98,19 @@ public class TetrisVisualizer extends AbstractVisualizer {
         int currentTimeStep = theGlueState.getTotalSteps();
 
 
-        if (currentTimeStep != lastUpdateTimeStep || force) {
+        if (currentState == null || currentTimeStep != lastUpdateTimeStep || force) {
             currentState = TetrisStateRequest.Execute();
             lastUpdateTimeStep = currentTimeStep;
         }
     }
 
     public int getWidth() {
+        checkCoreData();
         return currentState.getWidth();
     }
 
     public int getHeight() {
-
+        checkCoreData();
         return currentState.getHeight();
     }
 
@@ -112,9 +119,7 @@ public class TetrisVisualizer extends AbstractVisualizer {
     }
 
     public int[] getWorld() {
-//        int[] theWorld=new int[getWidth()*getHeight()];
-//        System.arraycopy(theGlueState.getLastObservation().intArray,0,theWorld,0,theWorld.length);
-//        return theWorld;
+        checkCoreData();
         return currentState.getWorld();
     }
 
@@ -131,23 +136,8 @@ public class TetrisVisualizer extends AbstractVisualizer {
     }
 
     public int getCurrentPiece() {
-        int[] lastIntArray=theGlueState.getLastObservation().intArray;
-        int endOfBoardIndex=getWidth()*getHeight();
-        
-        int whichPiece=-1;
-        for(int i=endOfBoardIndex;i<endOfBoardIndex+7;i++){
-            if(lastIntArray[i]==1){
-                if(whichPiece!=-1){
-                    System.err.println("Weird, seems that there is more than 1 piece, must be a bug.");
-                }
-                whichPiece=i-endOfBoardIndex;
-            }
-        }
-        if(whichPiece==-1){
-            System.err.println("Could not figure out which piece it was");
-        }
-        return whichPiece;
-        
+        checkCoreData();
+        return currentState.getCurrentPiece();
     }
 
     public TinyGlue getGlueState() {
@@ -169,15 +159,5 @@ public class TetrisVisualizer extends AbstractVisualizer {
 
     public String getName() {
         return "Tetris 1.1 (DEV)";
-    }
-    int lastSaveIndex = -1;
-    boolean forceBlocksRefresh = false;
-
-    public boolean getForceBlocksRefresh() {
-        return forceBlocksRefresh;
-    }
-
-    public void setForceBlocksRefresh(boolean newValue) {
-        forceBlocksRefresh = newValue;
     }
 }

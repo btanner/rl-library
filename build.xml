@@ -12,6 +12,14 @@
    <ant antfile="build.xml" dir="projects/environments/helicopter" inheritAll="false" target="all"/>
 </target>
 
+<target name="cartpole" description="Build Java Cartpole Jar" >
+   <ant antfile="build.xml" dir="projects/environments/cartpole" inheritAll="false" target="all"/>
+</target>
+
+<target name="acrobot" description="Build Java Acrobot Jar" >
+   <ant antfile="build.xml" dir="projects/environments/acrobot" inheritAll="false" target="all"/>
+</target>
+
 <target name="randomAgent" description="Build Java Random Agent Jar" >
    <ant antfile="build.xml" dir="projects/agents/randomAgentJava" inheritAll="false" target="all"/>
 </target>
@@ -26,7 +34,7 @@
 
 
 
-<target name="all" description="Build all environments and agents" depends="mountainCar,tetris,helicopter,randomAgent, keyboardAgentJava,genericVisualizers">
+<target name="all" description="Build all environments and agents" depends="mountainCar,tetris,helicopter,cartpole,acrobot,randomAgent, keyboardAgentJava,genericVisualizers">
 </target>	
 
 
@@ -34,6 +42,8 @@
    <ant antfile="build.xml" dir="projects/environments/mountainCar" inheritAll="false" target="clean"/>
    <ant antfile="build.xml" dir="projects/environments/tetris" inheritAll="false" target="clean"/>
    <ant antfile="build.xml" dir="projects/environments/helicopter" inheritAll="false" target="clean"/>
+   <ant antfile="build.xml" dir="projects/environments/cartpole" inheritAll="false" target="clean"/>
+   <ant antfile="build.xml" dir="projects/environments/acrobot" inheritAll="false" target="clean"/>
    <ant antfile="build.xml" dir="projects/agents/randomAgentJava" inheritAll="false" target="clean"/>
 	<ant antfile="build.xml" dir="projects/agents/keyboardAgentJava" inheritAll="false" target="clean"/>
 	<ant antfile="build.xml" dir="projects/GenericVisualizer" inheritAll="false" target="clean"/>

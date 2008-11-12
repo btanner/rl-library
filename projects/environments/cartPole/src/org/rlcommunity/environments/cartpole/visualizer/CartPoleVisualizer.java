@@ -1,6 +1,5 @@
 package org.rlcommunity.environments.cartpole.visualizer;
 
-
 import org.rlcommunity.environments.cartpole.messages.CartpoleTrackRequest;
 import org.rlcommunity.environments.cartpole.messages.CartpoleTrackResponse;
 import rlVizLib.general.TinyGlue;
@@ -34,13 +33,11 @@ public class CartPoleVisualizer extends AbstractVisualizer implements GlueStateP
         super.addVizComponentAtPositionWithSize(scoreComponent, 0, 0, 1.0, 1.0);
     }
 
-        public void checkCoreData(){
-        if(trackResponse==null){
-            trackResponse=CartpoleTrackRequest.Execute();
+    public void checkCoreData() {
+        if (trackResponse == null) {
+            trackResponse = CartpoleTrackRequest.Execute();
         }
     }
-
-
 
     public double getLeftCartBound() {
         checkCoreData();
@@ -61,14 +58,16 @@ public class CartPoleVisualizer extends AbstractVisualizer implements GlueStateP
         }
     }
 
-    public double getMinAngle(){
+    public double getMinAngle() {
         checkCoreData();
         return trackResponse.getMinAngle() - 2.0 * Math.PI / 4.0;
     }
-    public double getMaxAngle(){
+
+    public double getMaxAngle() {
         checkCoreData();
         return trackResponse.getMaxAngle() - 2.0 * Math.PI / 4.0;
     }
+
     public double getAngle() {
         Observation lastObservation = theGlueState.getLastObservation();
         if (lastObservation != null) {
