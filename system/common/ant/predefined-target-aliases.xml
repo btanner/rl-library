@@ -13,5 +13,5 @@
 <target name="test" depends="rl-test"/>
 <target name="javadoc" depends="rl-javadoc"/>
 <target name="clean-build" depends="clean, build"/>
-<target name="all" depends="clean, build, test, javadoc"/>
+<target name="all" depends="clean, build"/>
 </project>

@@ -13,12 +13,12 @@
 </target>
 
 <target name="genericVisualizers" description="Build the generic environment and agent visualizers" >
-   <ant antfile="build.xml" dir="projects/environments/genericEnvVisualizer" inheritAll="false" target="all"/>
+   <ant antfile="build.xml" dir="projects/GenericVisualizer" inheritAll="false" target="all"/>
 </target>
 
 
 
-<target name="all" description="Build all environments and agents" depends="mountainCar,randomAgent,tetris,genericEnvVisualizer">
+<target name="all" description="Build all environments and agents" depends="mountainCar,randomAgent,tetris,genericVisualizers">
 </target>	
 
 
@@ -26,7 +26,7 @@
    <ant antfile="build.xml" dir="projects/environments/mountainCar" inheritAll="false" target="clean"/>
    <ant antfile="build.xml" dir="projects/environments/tetris" inheritAll="false" target="clean"/>
    <ant antfile="build.xml" dir="projects/agents/randomAgentJava" inheritAll="false" target="clean"/>
-	<ant antfile="build.xml" dir="projects/environments/genericEnvVisualizer" inheritAll="false" target="clean"/>
+	<ant antfile="build.xml" dir="projects/GenericVisualizer" inheritAll="false" target="clean"/>
 </target>
 
 </project>
