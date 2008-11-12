@@ -4,34 +4,27 @@ http://rl-library.googlecode.com/
 brian@tannerpages.com
 http://brian.tannerpages.com
 
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-*/
-
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ */
 package org.rlcommunity.environments.mountaincar.visualizer;
 
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Vector;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import org.rlcommunity.environments.mountaincar.messages.MCGoalRequest;
 import org.rlcommunity.environments.mountaincar.messages.MCGoalResponse;
 import org.rlcommunity.environments.mountaincar.messages.MCHeightRequest;
 import org.rlcommunity.environments.mountaincar.messages.MCHeightResponse;
 import org.rlcommunity.environments.mountaincar.messages.MCStateRequest;
 import rlVizLib.general.TinyGlue;
-import org.rlcommunity.rlglue.codec.RLGlue;
 import rlVizLib.visualization.interfaces.AgentOnValueFunctionDataProvider;
 import rlVizLib.visualization.interfaces.ValueFunctionDataProvider;
 import rlVizLib.visualization.interfaces.GlueStateProvider;
@@ -45,13 +38,14 @@ import rlVizLib.visualization.AbstractVisualizer;
 import rlVizLib.visualization.AgentOnValueFunctionVizComponent;
 import rlVizLib.visualization.GenericScoreComponent;
 import rlVizLib.visualization.ValueFunctionVizComponent;
-import rlVizLib.visualization.VizComponent;
 import rlVizLib.visualization.interfaces.DynamicControlTarget;
 import org.rlcommunity.rlglue.codec.types.Observation;
 
 import org.rlcommunity.rlglue.codec.types.Action;
+import rlVizLib.messaging.NotAnRLVizMessageException;
+import rlVizLib.visualization.SelfUpdatingVizComponent;
 
-public class MountainCarVisualizer extends AbstractVisualizer implements ValueFunctionDataProvider, AgentOnValueFunctionDataProvider, GlueStateProvider, ActionListener {
+public class MountainCarVisualizer extends AbstractVisualizer implements ValueFunctionDataProvider, AgentOnValueFunctionDataProvider, GlueStateProvider {
 
     Vector<Double> mins = null;
     Vector<Double> maxs = null;
@@ -65,68 +59,37 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
     private int lastAgentValueUpdateTimeStep = -1;
     private boolean printedQueryError = false;
     //Will have to find a way to easily generalize this and move it to vizlib
-
     TinyGlue glueState = null;
     //This is a little interface that will let us dump controls to a panel somewhere.
-
     DynamicControlTarget theControlTarget = null;
-    javax.swing.JButton saveButton = null;
-    javax.swing.JButton loadButton = null;
-
+    private ValueFunctionVizComponent theValueFunction;
+    private AgentOnValueFunctionVizComponent theAgentOnValueFunction;
     public MountainCarVisualizer(TinyGlue glueState, DynamicControlTarget theControlTarget) {
         super();
 
         this.glueState = glueState;
         this.theControlTarget = theControlTarget;
+
         setupVizComponents();
-        addDesiredExtras();
-
-
     }
 
     protected void setupVizComponents() {
-        VizComponent theValueFunction = new ValueFunctionVizComponent(this, theControlTarget);
-        VizComponent agentOnVF = new AgentOnValueFunctionVizComponent(this);
-        VizComponent mountain = new MountainVizComponent(this);
-        VizComponent carOnMountain = new CarOnMountainVizComponent(this);
-        VizComponent scoreComponent = new GenericScoreComponent(this);
+        theValueFunction = new ValueFunctionVizComponent(this, theControlTarget, this.getTheGlueState());
+        theAgentOnValueFunction = new AgentOnValueFunctionVizComponent(this, this.getTheGlueState());
+        SelfUpdatingVizComponent mountain = new MountainVizComponent(this);
+        SelfUpdatingVizComponent carOnMountain = new CarOnMountainVizComponent(this);
+        SelfUpdatingVizComponent scoreComponent = new GenericScoreComponent(this);
 
-        super.addVizComponentAtPositionWithSize(theValueFunction, 0, .5, 1.0, .5);
-        super.addVizComponentAtPositionWithSize(agentOnVF, 0, .5, 1.0, .5);
+        super.addVizComponentAtPositionWithSize(theValueFunction, 0, .4, 1.0, .4);
+        super.addVizComponentAtPositionWithSize(theAgentOnValueFunction, 0, .4, 1.0, .4);
 
-        super.addVizComponentAtPositionWithSize(mountain, 0, 0, 1.0, .5);
-        super.addVizComponentAtPositionWithSize(carOnMountain, 0, 0, 1.0, .5);
+        super.addVizComponentAtPositionWithSize(mountain, 0, 0, 1.0, .4);
+        super.addVizComponentAtPositionWithSize(carOnMountain, 0, 0, 1.0, .4);
         super.addVizComponentAtPositionWithSize(scoreComponent, 0, 0, 1.0, 1.0);
+        GraphPanel GP = new GraphPanel(this);
+        super.addVizComponentAtPositionWithSize(GP, 0, .8, 1.0, .2);
 
     }
-
-    protected void addDesiredExtras() {
-        addPreferenceComponents();
-    }
-
-    public void addPreferenceComponents() {
-        saveButton = new JButton();
-        saveButton.setText("Save");
-        saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        loadButton = new JButton();
-        loadButton.setText("Load");
-        loadButton.setEnabled(false);
-        loadButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        saveButton.addActionListener(this);
-        loadButton.addActionListener(this);
-        if (theControlTarget != null) {
-            Vector<Component> newComponents = new Vector<Component>();
-            JLabel MCControlsLabel = new JLabel("MountainCar Visualizer Controls: ");
-            MCControlsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-            newComponents.add(MCControlsLabel);
-            newComponents.add(saveButton);
-            newComponents.add(loadButton);
-            theControlTarget.addControls(newComponents);
-        }
-    }
-
 
     public void updateEnvironmentVariableRanges() {
         //Get the Ranges (internalize this)
@@ -181,14 +144,20 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
             needsUpdate = true;
         }
         if (needsUpdate) {
-            theValueResponse = AgentValueForObsRequest.Execute(theQueryObs);
-            lastAgentValueUpdateTimeStep = currentTimeStep;
+            try {
+                theValueResponse = AgentValueForObsRequest.Execute(theQueryObs);
+                lastAgentValueUpdateTimeStep = currentTimeStep;
+            } catch (NotAnRLVizMessageException e) {
+                theValueResponse = null;
+            }
         }
 
         if (theValueResponse == null) {
             if (!printedQueryError) {
                 printedQueryError = true;
                 System.err.println("In the Mountain Car Visualizer: Asked an Agent for Values and didn't get back a parseable message.  I'm not printing this again.");
+                theValueFunction.setEnabled(false);
+                theAgentOnValueFunction.setEnabled(false);
             }
             //Return NULL and make sure that gets handled
             return null;
@@ -198,33 +167,28 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
     }
 
     public double getCurrentStateInDimension(int whichDimension) {
-        /*
-         * This is only allowed access to the state Variables which are defined
-         * in the Task Spec as being State Variables. The implicitly defined values,
-         * like the height, should not be accessed through here
-         */
-        if (theCurrentState == null) {
-            return 0;
-        }
         if (whichDimension == 0) {
-            return theCurrentState.getPosition();
+            return glueState.getLastObservation().doubleArray[0];
         } else {
-            return theCurrentState.getVelocity();
+            return glueState.getLastObservation().doubleArray[1];
         }
     }
 
     public int getLastAction() {
-	Action lastActionObject = getTheGlueState().getLastAction();
-	int lastAction = -1;
+        Action lastActionObject = getTheGlueState().getLastAction();
+        int lastAction = -1;
         //This might be null at the first step of an episode
-	if(lastActionObject != null){
-	    lastAction=lastActionObject.intArray[0];
-	}
-	return lastAction;
+        if (lastActionObject != null) {
+            lastAction = lastActionObject.intArray[0];
+        }
+        return lastAction;
     }
 
     public double getHeight() {
-        return theCurrentState.getHeight();
+        double currentX = getCurrentStateInDimension(0);
+        final double hillPeakFrequency = 3.0;
+        return -Math.sin(hillPeakFrequency * currentX);
+//        return theCurrentState.getHeight();
     }
 
     public double getMaxHeight() {
@@ -255,15 +219,19 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
         return theQueryPositions;
     }
 
+    /**
+     * This was used when we were actually putting an angled car on the hill.
+     * @return
+     */
     public double getDeltaHeight() {
         return theCurrentState.getDeltaheight();
     }
 
-    public void updateAgentState(boolean force) {
+    public synchronized void updateAgentState(boolean force) {
         //Only do this if we're on a new time step
         int currentTimeStep = glueState.getTotalSteps();
 
-        if (currentTimeStep != lastStateUpdateTimeStep || force) {
+        if (theCurrentState == null || currentTimeStep != lastStateUpdateTimeStep || force) {
             theCurrentState = MCStateRequest.Execute();
             lastStateUpdateTimeStep = currentTimeStep;
         }
@@ -314,7 +282,7 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
     }
 
     public String getName() {
-        return "Mountain Car 1.01 (DEV)";
+        return "Mountain Car 1.1 (DEV)";
     }
     int lastSaveIndex = -1;
     boolean forceDrawRefresh = false;
@@ -326,27 +294,25 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
     public void setForceDrawRefresh(boolean newValue) {
         forceDrawRefresh = newValue;
     }
-
-    public void actionPerformed(ActionEvent event) {
-        if (event.getSource() == loadButton) {
-//            State_key k = new State_key(1, 0);
-//            k.intArray[0] = lastSaveIndex;
-
-			System.err.println("This button doesn't work anymore.");
-//            RLGlue.RL_load_state(k);
-            setForceDrawRefresh(true);
-        }
-        if (event.getSource() == saveButton) {
-            loadButton.setEnabled(true);
-			System.err.println("This button doesn't work anymore.");
-//            State_key k = RLGlue.RL_save_state();
-//            lastSaveIndex = k.intArray[0];
-        }
-    }
-
     //This is the one required from RLVizLib, ours has a forcing parameter.  Should update the VizLib
-
     public void updateAgentState() {
         updateAgentState(false);
+    }
+
+    int getSubdivSteps() {
+        return -2;
+//      		JComboBox source = (JComboBox) evt.getSource();
+//		int index = source.getSelectedIndex();
+//		if (index < REWARD_PER_EPISODE_INDEX) {
+//			performanceSteps_ = (int) Math.pow(10, index);
+//		}
+//		if (index == REWARD_PER_EPISODE_INDEX) {
+//			performanceSteps_ = -2;
+//		}
+//		if (index == TOTAL_REWARD_COMBO_INDEX) {
+//			performanceSteps_ = -1;
+//		}
+
+
     }
 }

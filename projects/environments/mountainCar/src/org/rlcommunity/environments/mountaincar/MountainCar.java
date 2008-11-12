@@ -56,11 +56,10 @@ import rlVizLib.general.hasVersionDetails;
  * capabilities which have polluted the code a little.  What I'm saying is that 
  * this is not the easiest environment to get started with.
  */
-import rlVizLib.rlVizCore;
 public class MountainCar extends EnvironmentBase implements
         getEnvMaxMinsInterface,
         getEnvObsForStateInterface,
-        HasAVisualizerInterface {
+        HasAVisualizerInterface{
 
     static final int numActions = 3;
     protected MountainCarState theState = null;
@@ -82,7 +81,7 @@ public class MountainCar extends EnvironmentBase implements
         theTaskSpecObject.addContinuousObservation(new DoubleRange(theState.minVelocity,theState.maxVelocity));
         theTaskSpecObject.addDiscreteAction(new IntRange(0,2));
         theTaskSpecObject.setRewardRange(new DoubleRange(-1,0));
-        theTaskSpecObject.setExtra("Mountain Car from the RL-Library, Revision: "+this.getClass().getPackage().getImplementationVersion());
+        theTaskSpecObject.setExtra("EnvName:Mountain-Car Revision:"+this.getClass().getPackage().getImplementationVersion());
         
         String taskSpecString=theTaskSpecObject.toTaskSpec();
         TaskSpec.checkTaskSpec(taskSpecString);

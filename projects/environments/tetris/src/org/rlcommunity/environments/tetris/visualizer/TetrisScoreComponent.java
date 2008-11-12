@@ -23,22 +23,25 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.util.Observable;
+import java.util.Observer;
+import rlVizLib.visualization.SelfUpdatingVizComponent;
+import rlVizLib.visualization.VizComponentChangeListener;
 
-import rlVizLib.visualization.VizComponent;
 
-public class TetrisScoreComponent implements VizComponent{
+public class TetrisScoreComponent implements SelfUpdatingVizComponent, Observer{
 	private TetrisVisualizer tetVis = null;
 	
 	int lastScore=0;
 
-	private int lastUpdateTimeStep=-1;
-
 	public TetrisScoreComponent(TetrisVisualizer ev){
 		this.tetVis = ev;
+                ev.getGlueState().addObserver(this);
 		lastScore=-1;
 	}
 
 	public void render(Graphics2D g) {
+            tetVis.updateAgentState(false);
 		//This is some hacky stuff, someone better than me should clean it up
 		Font f = new Font("Verdana",0,8);     
 		g.setFont(f);
@@ -53,16 +56,23 @@ public class TetrisScoreComponent implements VizComponent{
 	    g.setTransform(saveAT);
 	}
 
-	public boolean update() {
-int currentTimeStep=tetVis.getGlueState().getTotalSteps();
+    /**
+     * This is the object (a renderObject) that should be told when this component needs to be drawn again.
+     */
+    private VizComponentChangeListener theChangeListener;
 
-		if(currentTimeStep!=lastUpdateTimeStep){
-			tetVis.updateAgentState(false);
-			lastUpdateTimeStep=currentTimeStep;
-			return true;
-		}
-		return false;
-	}
-	
-	
+    public void setVizComponentChangeListener(VizComponentChangeListener theChangeListener) {
+        this.theChangeListener = theChangeListener;
+    }
+
+    /**
+     * This will be called when TinyGlue steps.
+     * @param o
+     * @param arg
+     */
+    public void update(Observable o, Object arg) {
+        if (theChangeListener != null) {
+            theChangeListener.vizComponentChanged(this);
+        }
+    }
 }

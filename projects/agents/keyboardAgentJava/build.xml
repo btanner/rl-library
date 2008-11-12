@@ -1,4 +1,4 @@
-<project name="RandomAgent" basedir="." >
+<project name="KeyboardAgent" basedir="." >
 
 	<property name="baseLibraryDir" value="../../.."/>
 	<!-- Things required for build-common.xml -->
@@ -8,7 +8,7 @@
 	<import file="${this.project.system.directory}/common/ant/build-common.xml"/>
 
 	<!-- Things required for build-targets.xml -->
-	<property name="main.package.name" value="org.rlcommunity.agents.random/"/>
+	<property name="main.package.name" value="org.rlcommunity.agents.keyboard/"/>
 	<property name="main.package.spec.version" value="1.0"/>
 	<property name="main.vendor.name" value="Brian Tanner"/>
 	<path id="project.extra.classpath" />

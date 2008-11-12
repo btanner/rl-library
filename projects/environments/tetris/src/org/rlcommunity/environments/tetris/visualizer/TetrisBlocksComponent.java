@@ -24,23 +24,27 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
-import rlVizLib.visualization.VizComponent;
+import java.util.Observable;
+import java.util.Observer;
+import rlVizLib.visualization.SelfUpdatingVizComponent;
+import rlVizLib.visualization.VizComponentChangeListener;
 
-public class TetrisBlocksComponent implements VizComponent {
+public class TetrisBlocksComponent implements SelfUpdatingVizComponent, Observer {
 	private TetrisVisualizer tetVis = null;
 	private int lastUpdateTimeStep=-1;
 
 	public TetrisBlocksComponent(TetrisVisualizer ev){
 		// TODO Write Constructor
 		this.tetVis = ev;
+                ev.getGlueState().addObserver(this);
 	}
 
 	public void render(Graphics2D g) {
-		// TODO Auto-generated method stub
-		Rectangle2D agentRect;
+
+            Rectangle2D agentRect;
 		int numCols = tetVis.getWidth();
 		int numRows = tetVis.getHeight();
-		int [] tempWorld = tetVis.getWorld();
+		int[] tempWorld = tetVis.getWorld();
                 
                 //Desired abstract block size
                 int DABS=10;
@@ -102,16 +106,26 @@ public class TetrisBlocksComponent implements VizComponent {
 	    g.setTransform(saveAT);
 	}
 
-	public boolean update() {
-		int currentTimeStep=tetVis.getGlueState().getTotalSteps();
-                 //Basically if load got called, then we should force a viz update
-		if(currentTimeStep!=lastUpdateTimeStep||tetVis.getForceBlocksRefresh()){
-			tetVis.updateAgentState(tetVis.getForceBlocksRefresh());
-			lastUpdateTimeStep=currentTimeStep;
-                        tetVis.setForceBlocksRefresh(false);
-		return false;
-		}
-	return true;
-	}
+   /**
+     * This is the object (a renderObject) that should be told when this component needs to be drawn again.
+     */
+    private VizComponentChangeListener theChangeListener;
+
+    public void setVizComponentChangeListener(VizComponentChangeListener theChangeListener) {
+        this.theChangeListener = theChangeListener;
+    }
+
+    /**
+     * This will be called when TinyGlue steps.
+     * @param o
+     * @param arg
+     */
+    public void update(Observable o, Object arg) {
+        if (theChangeListener != null) {
+            tetVis.updateAgentState(false);
+            theChangeListener.vizComponentChanged(this);
+        }
+    }
+
 
 }

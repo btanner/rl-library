@@ -22,7 +22,6 @@ package org.rlcommunity.environments.tetris;
 import java.util.Random;
 import java.util.Vector;
 
-import rlVizLib.utilities.UtilityShop;
 import org.rlcommunity.rlglue.codec.types.Observation;
 
 public class TetrisState {
@@ -186,6 +185,7 @@ public class TetrisState {
                     }
                 }
                 nextY--;
+                break;
             default:
                 break;
         }

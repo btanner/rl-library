@@ -87,7 +87,10 @@ public class RandomAgent implements AgentInterface {
         return action;
     }
 
+    private int step=0;
     public Action agent_step(double arg0, Observation o) {
+        step++;
+        if(step%500==0)System.out.println("Agent on step: "+step);
         setRandomActions(action);
         return action;
     }

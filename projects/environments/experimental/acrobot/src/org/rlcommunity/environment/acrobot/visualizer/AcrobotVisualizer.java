@@ -4,7 +4,8 @@ import org.rlcommunity.rlglue.codec.types.Observation;
 import rlVizLib.general.TinyGlue;
 import rlVizLib.visualization.AbstractVisualizer;
 import rlVizLib.visualization.GenericScoreComponent;
-import rlVizLib.visualization.VizComponent;
+import rlVizLib.visualization.PollingVizComponent;
+import rlVizLib.visualization.SelfUpdatingVizComponent;
 import rlVizLib.visualization.interfaces.GlueStateProvider;
 
 public class AcrobotVisualizer extends AbstractVisualizer implements GlueStateProvider{
@@ -13,11 +14,11 @@ public class AcrobotVisualizer extends AbstractVisualizer implements GlueStatePr
 	public AcrobotVisualizer(TinyGlue theGlueState)  {
 		super();
                 this.theGlueState=theGlueState;
-		VizComponent theAcrobotVisualizer= new AcrobotBotComponent(this);
-		VizComponent theAcrobotCounter = new GenericScoreComponent(this);
+		PollingVizComponent theAcrobotVisualizer= new AcrobotBotComponent(this);
+//		SelfUpdatingVizComponent theAcrobotCounter = new GenericScoreComponent(this);
 		
 		addVizComponentAtPositionWithSize(theAcrobotVisualizer,0,0,1.0,1.0);
-		addVizComponentAtPositionWithSize(theAcrobotCounter,0,0,1.0,1.0);
+//		addVizComponentAtPositionWithSize(theAcrobotCounter,0,0,1.0,1.0);
 	}
 	
         public double getTheta1(){

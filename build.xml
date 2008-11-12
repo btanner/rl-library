@@ -12,7 +12,7 @@
    <ant antfile="build.xml" dir="projects/agents/randomAgentJava" inheritAll="false" target="all"/>
 </target>
 
-<target name="genericEnvVisualizer" description="Build the generic environment visualizer" >
+<target name="genericVisualizers" description="Build the generic environment and agent visualizers" >
    <ant antfile="build.xml" dir="projects/environments/genericEnvVisualizer" inheritAll="false" target="all"/>
 </target>
 

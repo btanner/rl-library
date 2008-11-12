@@ -7,9 +7,9 @@ import java.awt.geom.AffineTransform;
 
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
-import rlVizLib.visualization.VizComponent;
+import rlVizLib.visualization.PollingVizComponent;
 
-public class AcrobotBotComponent implements VizComponent {
+public class AcrobotBotComponent implements PollingVizComponent {
 	private AcrobotVisualizer acroVis; 
 	static final int joint1X = 50;
 	static final int joint1Y = 30;
@@ -64,7 +64,8 @@ public class AcrobotBotComponent implements VizComponent {
             
             if(thisUpdateStep>lastUpdateStep){
                 lastUpdateStep=thisUpdateStep;
-                return true;
+                System.out.println("Printing step: "+lastUpdateStep);
+                return false;
             }
             return false;
 	}

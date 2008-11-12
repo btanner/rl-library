@@ -90,7 +90,7 @@ public class Tetris extends EnvironmentBase implements HasAVisualizerInterface {
         theTaskSpecObject.setRewardRange(new DoubleRange(0, 1));
 
         //This is a better way to tell the rows and cols
-        theTaskSpecObject.setExtra("Tetris Car from the RL-Library.  HEIGHT:" + gameState.getHeight() + " WIDTH:" + gameState.getWidth() + " Revision: " + this.getClass().getPackage().getImplementationVersion());
+        theTaskSpecObject.setExtra("EnvName:Tetris HEIGHT:" + gameState.getHeight() + " WIDTH:" + gameState.getWidth() + " Revision: " + this.getClass().getPackage().getImplementationVersion());
 
         String taskSpecString = theTaskSpecObject.toTaskSpec();
         

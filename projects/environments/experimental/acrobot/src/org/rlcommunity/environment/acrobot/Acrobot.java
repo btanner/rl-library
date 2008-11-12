@@ -36,7 +36,7 @@ public class Acrobot extends EnvironmentBase implements HasAVisualizerInterface{
 	final static double  I1 = 1.0;
 	final static double  I2 = 1.0;
 	final static double  g = 9.8;
-	final static double  dt = 0.05;
+	final static double  dt = 0.01;
 
 	final static double acrobotGoalPosition = 1.0;
 	
@@ -93,6 +93,7 @@ public class Acrobot extends EnvironmentBase implements HasAVisualizerInterface{
                 
                 //Apparently we don't say the reward range.
                 theTaskSpecObject.setRewardRange(new DoubleRange());
+                theTaskSpecObject.setExtra("EnvName:Acrobot");
                 String taskSpecString=theTaskSpecObject.toTaskSpec();
                 TaskSpec.checkTaskSpec(taskSpecString);
                 return taskSpecString;
