@@ -16,8 +16,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.rlcommunity.agents.keyboard;
+package org.rlcommunity.agents.keyboard.mappings;
 
+import org.rlcommunity.agents.keyboard.*;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,12 +31,12 @@ import org.rlcommunity.rlglue.codec.types.Observation;
  *
  * @author Brian Tanner
  */
-class MountainCarKeyboardMapper extends KeyboardMapper implements IntActionReceiver {
+public class AcrobotKeyboardMapper extends KeyboardMapper implements IntActionReceiver {
 
     int nextAction = 0;
     boolean nextActionSet = false;
 
-    public MountainCarKeyboardMapper() {
+    public AcrobotKeyboardMapper() {
         super();
     }
 
@@ -51,7 +52,7 @@ class MountainCarKeyboardMapper extends KeyboardMapper implements IntActionRecei
             try {
                 Thread.sleep(50);
             } catch (InterruptedException ex) {
-                Logger.getLogger(MountainCarKeyboardMapper.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AcrobotKeyboardMapper.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         org.rlcommunity.rlglue.codec.types.Action theAction = new org.rlcommunity.rlglue.codec.types.Action(1, 0);
@@ -79,16 +80,16 @@ class MountainCarKeyboardMapper extends KeyboardMapper implements IntActionRecei
 
     @Override
     protected void addActions(JComponent theComponent) {
-        javax.swing.Action pushCarLeft=new SimpleIntAction(0, this);
-        javax.swing.Action pushCarRight=new SimpleIntAction(2, this);
-        javax.swing.Action pushCarNeutral=new SimpleIntAction(1, this);
+        javax.swing.Action pushArmLeft=new SimpleIntAction(0, this);
+        javax.swing.Action pushArmRight=new SimpleIntAction(2, this);
+        javax.swing.Action pushArmNeutral=new SimpleIntAction(1, this);
         
-        theComponent.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "pushCarLeft");
-        theComponent.getActionMap().put("pushCarLeft", pushCarLeft);
-        theComponent.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "pushCarRight");
-        theComponent.getActionMap().put("pushCarRight", pushCarRight);
-        theComponent.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "pushCarNeutral");
-        theComponent.getActionMap().put("pushCarNeutral", pushCarNeutral);
+        theComponent.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "pushArmLeft");
+        theComponent.getActionMap().put("pushArmLeft", pushArmLeft);
+        theComponent.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "pushArmRight");
+        theComponent.getActionMap().put("pushArmRight", pushArmRight);
+        theComponent.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "pushArmNeutral");
+        theComponent.getActionMap().put("pushArmNeutral", pushArmNeutral);
     }
 }
 

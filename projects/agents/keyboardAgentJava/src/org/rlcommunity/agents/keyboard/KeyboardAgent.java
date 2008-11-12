@@ -18,16 +18,18 @@ limitations under the License.
  */
 package org.rlcommunity.agents.keyboard;
 
+import org.rlcommunity.agents.keyboard.mappings.MountainCarKeyboardMapper;
+import org.rlcommunity.agents.keyboard.mappings.AcrobotKeyboardMapper;
+import org.rlcommunity.agents.keyboard.mappings.TetrisKeyBoardMapper;
+import org.rlcommunity.agents.keyboard.mappings.GridWorldMapper;
 import java.util.Random;
 
+import org.rlcommunity.agents.keyboard.mappings.CartPoleKeyboardMapper;
 import rlVizLib.general.ParameterHolder;
 import rlVizLib.general.hasVersionDetails;
 
 import org.rlcommunity.rlglue.codec.AgentInterface;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
-import org.rlcommunity.rlglue.codec.taskspec.ranges.AbstractRange;
-import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
-import org.rlcommunity.rlglue.codec.taskspec.ranges.IntRange;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 
@@ -81,6 +83,9 @@ public class KeyboardAgent implements AgentInterface {
         }
         if(extraString.contains("EnvName:Tetris")){
             theKeyBoardMapper=new TetrisKeyBoardMapper();
+        }
+        if(extraString.contains("EnvName:CartPole")){
+            theKeyBoardMapper=new CartPoleKeyboardMapper();
         }
         if (theKeyBoardMapper != null) {
             theKeyBoardMapper.ensureTaskSpecMatchesExpectation(TSO);

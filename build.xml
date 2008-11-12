@@ -4,12 +4,20 @@
    <ant antfile="build.xml" dir="projects/environments/mountainCar" inheritAll="false" target="all"/>
 </target>
 
-<target name="tetris" description="Build Java tetris Jar" >
+<target name="tetris" description="Build Java Tetris Jar" >
    <ant antfile="build.xml" dir="projects/environments/tetris" inheritAll="false" target="all"/>
+</target>
+
+<target name="helicopter" description="Build Java Helicopter Jar" >
+   <ant antfile="build.xml" dir="projects/environments/helicopter" inheritAll="false" target="all"/>
 </target>
 
 <target name="randomAgent" description="Build Java Random Agent Jar" >
    <ant antfile="build.xml" dir="projects/agents/randomAgentJava" inheritAll="false" target="all"/>
+</target>
+
+<target name="keyboardAgentJava" description="Build Java Keyboard Agent Jar" >
+   <ant antfile="build.xml" dir="projects/agents/keyboardAgentJava" inheritAll="false" target="all"/>
 </target>
 
 <target name="genericVisualizers" description="Build the generic environment and agent visualizers" >
@@ -18,15 +26,18 @@
 
 
 
-<target name="all" description="Build all environments and agents" depends="mountainCar,randomAgent,tetris,genericVisualizers">
+<target name="all" description="Build all environments and agents" depends="mountainCar,tetris,helicopter,randomAgent, keyboardAgentJava,genericVisualizers">
 </target>	
 
 
 <target name="clean" description="Clean everything">
    <ant antfile="build.xml" dir="projects/environments/mountainCar" inheritAll="false" target="clean"/>
    <ant antfile="build.xml" dir="projects/environments/tetris" inheritAll="false" target="clean"/>
+   <ant antfile="build.xml" dir="projects/environments/helicopter" inheritAll="false" target="clean"/>
    <ant antfile="build.xml" dir="projects/agents/randomAgentJava" inheritAll="false" target="clean"/>
+	<ant antfile="build.xml" dir="projects/agents/keyboardAgentJava" inheritAll="false" target="clean"/>
 	<ant antfile="build.xml" dir="projects/GenericVisualizer" inheritAll="false" target="clean"/>
 </target>
+
 
 </project>

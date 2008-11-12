@@ -16,8 +16,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.rlcommunity.agents.keyboard;
+package org.rlcommunity.agents.keyboard.mappings;
 
+import org.rlcommunity.agents.keyboard.*;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,7 +31,7 @@ import org.rlcommunity.rlglue.codec.types.Observation;
  *
  * @author Brian Tanner
  */
-class GridWorldMapper extends KeyboardMapper implements IntActionReceiver {
+public class GridWorldMapper extends KeyboardMapper implements IntActionReceiver {
 
     int nextAction = 0;
     boolean nextActionSet = false;

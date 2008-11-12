@@ -16,8 +16,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.rlcommunity.agents.keyboard;
+package org.rlcommunity.agents.keyboard.mappings;
 
+import org.rlcommunity.agents.keyboard.*;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,12 +31,12 @@ import org.rlcommunity.rlglue.codec.types.Observation;
  *
  * @author Brian Tanner
  */
-class AcrobotKeyboardMapper extends KeyboardMapper implements IntActionReceiver {
+public class TetrisKeyBoardMapper extends KeyboardMapper implements IntActionReceiver {
 
     int nextAction = 0;
     boolean nextActionSet = false;
 
-    public AcrobotKeyboardMapper() {
+    public TetrisKeyBoardMapper() {
         super();
     }
 
@@ -43,7 +44,7 @@ class AcrobotKeyboardMapper extends KeyboardMapper implements IntActionReceiver 
         assert (TSO.getNumDiscreteActionDims() == 1);
         assert (TSO.getNumContinuousActionDims() == 0);
         assert (TSO.getDiscreteActionRange(0).getMin() == 0);
-        assert (TSO.getDiscreteActionRange(0).getMax() == 2);
+        assert (TSO.getDiscreteActionRange(0).getMax() == 5);
     }
 
     private org.rlcommunity.rlglue.codec.types.Action getAction() {
@@ -51,7 +52,7 @@ class AcrobotKeyboardMapper extends KeyboardMapper implements IntActionReceiver 
             try {
                 Thread.sleep(50);
             } catch (InterruptedException ex) {
-                Logger.getLogger(AcrobotKeyboardMapper.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(TetrisKeyBoardMapper.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         org.rlcommunity.rlglue.codec.types.Action theAction = new org.rlcommunity.rlglue.codec.types.Action(1, 0);
@@ -79,16 +80,26 @@ class AcrobotKeyboardMapper extends KeyboardMapper implements IntActionReceiver 
 
     @Override
     protected void addActions(JComponent theComponent) {
-        javax.swing.Action pushArmLeft=new SimpleIntAction(0, this);
-        javax.swing.Action pushArmRight=new SimpleIntAction(2, this);
-        javax.swing.Action pushArmNeutral=new SimpleIntAction(1, this);
+
+        javax.swing.Action LEFT=new SimpleIntAction(0, this);
+        javax.swing.Action RIGHT=new SimpleIntAction(1, this);
+        javax.swing.Action CCW=new SimpleIntAction(2, this);
+        javax.swing.Action CW=new SimpleIntAction(3, this);
+        javax.swing.Action NONE=new SimpleIntAction(4, this);
+        javax.swing.Action FALL=new SimpleIntAction(5, this);
         
-        theComponent.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "pushArmLeft");
-        theComponent.getActionMap().put("pushArmLeft", pushArmLeft);
-        theComponent.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "pushArmRight");
-        theComponent.getActionMap().put("pushArmRight", pushArmRight);
-        theComponent.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "pushArmNeutral");
-        theComponent.getActionMap().put("pushArmNeutral", pushArmNeutral);
+        theComponent.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "LEFT");
+        theComponent.getActionMap().put("LEFT", LEFT);
+        theComponent.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "RIGHT");
+        theComponent.getActionMap().put("RIGHT", RIGHT);
+        theComponent.getInputMap().put(KeyStroke.getKeyStroke('x'), "CW");
+        theComponent.getActionMap().put("CW", CW);
+        theComponent.getInputMap().put(KeyStroke.getKeyStroke('z'), "CCW");
+        theComponent.getActionMap().put("CCW", CCW);
+        theComponent.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "NONE");
+        theComponent.getActionMap().put("NONE", NONE);
+        theComponent.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "FALL");
+        theComponent.getActionMap().put("FALL", FALL);
     }
 }
 
