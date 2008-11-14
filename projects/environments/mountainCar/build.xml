@@ -11,7 +11,10 @@
 	<property name="main.vendor.name" value="Brian Tanner"/>
 
 	<path id="project.extra.classpath" />
-	<import file="${this.project.system.directory}/common/ant/build-targets.xml"/>
+        <property name="jar.main.class" value="org.rlcommunity.environments.mountaincar.MountainCar" />
+        <property name="jar.extra.classpath" value="../system/common/libs/rl-viz/RLVizLib.jar" />
+
+        <import file="${this.project.system.directory}/common/ant/build-targets.xml"/>
 
 	<!-- this import gives you targets: clean, build, test, javadoc, all -->
 	<import file="${this.project.system.directory}/common/ant/predefined-target-aliases.xml"/>

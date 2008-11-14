@@ -4,9 +4,9 @@ jarsPath=$systemPath/../products
 #Path to all of the RL-Viz libraries and stuff
 libPath=$systemPath/common/libs/rl-viz
 rlVizLibPath=$libPath/RLVizLib.jar
-vizAppLib=$libPath/RLVizApp.jar
-envShellLib=$libPath/EnvironmentShell.jar
-agentShellLib=$libPath/AgentShell.jar
+VIZAPP_JAR=$libPath/RLVizApp.jar
+ENVSHELL_JAR=$libPath/EnvironmentShell.jar
+AGENTSHELL_JAR=$libPath/AgentShell.jar
 
 glueExe=/usr/local/bin/rl_glue
 
@@ -14,10 +14,8 @@ guiLib=$libPath/forms-1.1.0.jar
 
 pKillScript=$systemPath/bin/pkill
 
-RLVIZ_LIB_PATH=$PWD/$jarsPath
-ENV_CLASSPATH=$rlVizLibPath:$envShellLib
-AGENT_CLASSPATH=$rlVizLibPath:$agentShellLib
-VIZ_CLASSPATH=$rlVizLibPath:$guiLib:$vizAppLib:$envShellLib:$agentShellLib
+ENV_AGENT_JARS_PATH=$PWD/$jarsPath
+
 
 setMacAboutName ()
 { # This is about as simple as functions get.
@@ -31,11 +29,11 @@ setCygwinPaths ()
 if [[ `uname` == CYGWIN* ]]
 then
 	glueExe="$glueExe.exe"
-	RLVIZ_LIB_PATH=`cygpath -wp $RLVIZ_LIB_PATH`
-	ENV_CLASSPATH=`cygpath -wp $ENV_CLASSPATH`
-	VIZ_CLASSPATH=`cygpath -wp $VIZ_CLASSPATH`
-	vizAppLib=`cygpath -wp $vizAppLib`
+	ENV_AGENT_JARS_PATH=`cygpath -wp $ENV_AGENT_JARS_PATH`
+	VIZAPP_JAR=`cygpath -wp $VIZAPP_JAR`
 	rlVizLibPath=`cygpath -wp $rlVizLibPath`
+	ENVSHELL_JAR=`cygpath -wp $ENVSHELL_JAR`
+	AGENTSHELL_JAR=`cygpath -wp $AGENTSHELL_JAR`
 fi
 }
 
@@ -56,7 +54,7 @@ if [ ! -x "$glueExe" ]       # Check if file exists.
 
 
 startEnvShellInBackGround(){
-java -enableassertions -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH -classpath $ENV_CLASSPATH org.rlcommunity.rlglue.codec.util.EnvironmentLoader environmentShell.EnvironmentShell &
+java -enableassertions -Xmx128M -jar $ENVSHELL_JAR environment-jar-path=$ENV_AGENT_JARS_PATH &
 envShellPID=$!
 echo "-- Starting up dynamic environment loader - PID=$envShellPID"
 }
@@ -68,7 +66,7 @@ echo "++ Dynamic environment loader terminated"
 }
 
 startAgentShellInBackGround(){
-java -enableassertions -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH -classpath $AGENT_CLASSPATH org.rlcommunity.rlglue.codec.util.AgentLoader agentShell.AgentShell &
+java -enableassertions -Xmx128M -jar $AGENTSHELL_JAR agent-jar-path=$ENV_AGENT_JARS_PATH &
 agentShellPID=$!
 echo "-- Starting up dynamic agent loader - PID=$agentShellPID"
 }
@@ -81,29 +79,29 @@ echo "++ Dynamic agent loader terminated"
 
 startLocalGuiTrainer(){
 echo "-- Starting up Gui Trainer"
-java -enableassertions -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.LocalGraphicalDriver
+java -enableassertions -Xmx128M $osExtras -jar $VIZAPP_JAR agent-environment-jar-path=$ENV_AGENT_JARS_PATH list-agents=true list-environments=true env-viz=true local-glue=true
 echo "++ Gui Trainer is finished"
 }
 startLocalGuiTrainerBothViz(){
 echo "-- Starting up Gui Trainer"
-java -enableassertions -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.LocalGraphicalDriverBothDynamicBothViz
+java -enableassertions -Xmx128M $osExtras -jar $VIZAPP_JAR agent-environment-jar-path=$ENV_AGENT_JARS_PATH list-agents=true list-environments=true env-viz=true agent-viz=true local-glue=true
 echo "++ Gui Trainer is finished"
 }
 
 startNetGuiTrainer(){
 echo "-- Starting up Networked Gui Trainer"
-java -enableassertions -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.NetGraphicalDriverBothDynamic
+java -enableassertions -Xmx128M $osExtras -jar $VIZAPP_JAR agent-environment-jar-path=$ENV_AGENT_JARS_PATH list-agents=true list-environments=true env-viz=true
 echo "++ Gui Trainer is finished"
 }
 
 startNetGuiTrainerDynamicEnvironmentStandardAgent(){
 echo "-- Starting up Networked Gui Trainer"
-java -enableassertions -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.NetGraphicalDriverDynamicEnvStandardAgent
+java -enableassertions -Xmx128M $osExtras -jar $VIZAPP_JAR agent-environment-jar-path=$ENV_AGENT_JARS_PATH list-environments=true env-viz=true
 echo "++ Gui Trainer is finished"
 }
 startNetGuiTrainerDynamicAgentStandardEnvironment(){
 echo "-- Starting up Networked Gui Trainer"
-java -enableassertions -Xmx128M -DRLVIZ_LIB_PATH=$RLVIZ_LIB_PATH $osExtras -classpath $VIZ_CLASSPATH btViz.NetGraphicalDriverDynamicAgentStandardEnv
+java -enableassertions -Xmx128M $osExtras -jar $VIZAPP_JAR agent-environment-jar-path=$ENV_AGENT_JARS_PATH list-agents=true env-viz=true
 echo "++ Gui Trainer is finished"
 }
 

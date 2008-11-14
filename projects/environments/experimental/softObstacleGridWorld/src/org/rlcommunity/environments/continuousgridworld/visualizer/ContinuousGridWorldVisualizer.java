@@ -19,6 +19,7 @@ import rlVizLib.visualization.interfaces.AgentOnValueFunctionDataProvider;
 import rlVizLib.visualization.interfaces.ValueFunctionDataProvider;
 import org.rlcommunity.rlglue.codec.types.Observation;
 
+import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.visualization.SelfUpdatingVizComponent;
 import rlVizLib.visualization.interfaces.DynamicControlTarget;
 import rlVizLib.visualization.interfaces.GlueStateProvider;
@@ -35,6 +36,9 @@ public class ContinuousGridWorldVisualizer extends AbstractVisualizer implements
     TinyGlue theGlueState = null;
     private int lastAgentValueUpdateTimeStep = -1;
     DynamicControlTarget theControlTarget=null;
+    
+    ValueFunctionVizComponent theValueFunction=null;
+    AgentOnValueFunctionVizComponent theAgentOnValueFunction=null;
 
     public ContinuousGridWorldVisualizer(TinyGlue glueState, DynamicControlTarget theControlTarget) {
         super();
@@ -42,15 +46,15 @@ public class ContinuousGridWorldVisualizer extends AbstractVisualizer implements
 
         this.theGlueState = glueState;
 
-        SelfUpdatingVizComponent theValueFunction = new ValueFunctionVizComponent(this,theControlTarget,glueState);
-        SelfUpdatingVizComponent agentOnVF = new AgentOnValueFunctionVizComponent(this,glueState);
+        theValueFunction = new ValueFunctionVizComponent(this,theControlTarget,glueState);
+        theAgentOnValueFunction = new AgentOnValueFunctionVizComponent(this,glueState);
         SelfUpdatingVizComponent theMapComponent = new GridWorldMapComponent(this);
         SelfUpdatingVizComponent scoreComponent = new GenericScoreComponent(this);
 
 
         super.addVizComponentAtPositionWithSize(theValueFunction, 0, 0, 1.0, 1.0);
         super.addVizComponentAtPositionWithSize(theMapComponent, 0, 0, 1.0, 1.0);
-        super.addVizComponentAtPositionWithSize(agentOnVF, 0, 0, 1.0, 1.0);
+        super.addVizComponentAtPositionWithSize(theAgentOnValueFunction, 0, 0, 1.0, 1.0);
 //
         super.addVizComponentAtPositionWithSize(scoreComponent, 0, 0, 1.0, 1.0);
     }
@@ -109,7 +113,11 @@ public class ContinuousGridWorldVisualizer extends AbstractVisualizer implements
             needsUpdate = true;
         }
         if (needsUpdate) {
+            try{
             theValueResponse = AgentValueForObsRequest.Execute(theQueryObs);
+            }catch(NotAnRLVizMessageException e){
+                theValueFunction.setEnabled(false);
+            }
             lastAgentValueUpdateTimeStep = currentTimeStep;
         }
 

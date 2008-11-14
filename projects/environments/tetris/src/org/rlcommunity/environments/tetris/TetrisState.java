@@ -130,6 +130,11 @@ public class TetrisState {
                     //Writing currentBlockId +1 because blocks are 0 indexed, and we want spots to be
                     //0 if they are clear, and >0 if they are not.
                     int linearIndex = calculateLinearArrayPosition(currentX + x, currentY + y);
+                    if(linearIndex<0){
+                        System.err.printf("Bogus linear index %d for %d + %d, %d + %d\n",linearIndex,currentX,x,currentY,y);
+                        Thread.dumpStack();
+                        System.exit(1);
+                    }
                     game_world[linearIndex] = currentBlockId + 1;
                 }
             }
@@ -210,7 +215,9 @@ public class TetrisState {
      * @return
      */
     int calculateLinearArrayPosition(int x, int y) {
-        return y * worldWidth + x;
+        int returnValue=y * worldWidth + x;
+        assert returnValue >= 0 : " "+y+" * "+worldWidth+" + "+x+" was less than 0.";
+        return returnValue;
     }
 
     /**

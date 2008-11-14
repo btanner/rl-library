@@ -43,6 +43,24 @@ We'll try and rely on minimal variables from above.
     </exec>
 </target>
 
+<target name="set.jar.extra.classpath">
+	<if>
+		<not><isset property="jar.extra.classpath" /></not>
+		<then>
+			<property name="jar.extra.classpath" value=""/>
+		</then>
+	</if>
+</target>
+
+<target name="set.jar.main.class">
+	<if>
+		<not><isset property="jar.main.class" /></not>
+		<then>
+			<property name="jar.main.class" value=""/>
+		</then>
+	</if>
+</target>
+	
 
 
 <target name="print-imports">

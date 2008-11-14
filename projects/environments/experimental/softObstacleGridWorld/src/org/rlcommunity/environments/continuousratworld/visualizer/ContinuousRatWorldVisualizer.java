@@ -39,6 +39,10 @@ public class ContinuousRatWorldVisualizer extends AbstractVisualizer implements 
     private int lastAgentValueUpdateTimeStep = -1;
     DynamicControlTarget theControlTarget=null;
     HumanAgentInterface HAI = new HumanAgentInterface();
+    
+    ValueFunctionVizComponent theValueFunction;
+    AgentOnValueFunctionVizComponent agentOnVF;
+            
 
     public ContinuousRatWorldVisualizer(TinyGlue glueState, DynamicControlTarget theControlTarget) {
         super();
@@ -46,8 +50,8 @@ public class ContinuousRatWorldVisualizer extends AbstractVisualizer implements 
 
         this.theGlueState = glueState;
 
-        SelfUpdatingVizComponent theValueFunction = new ValueFunctionVizComponent(this,theControlTarget,glueState);
-        SelfUpdatingVizComponent agentOnVF = new AgentOnValueFunctionVizComponent(this,glueState);
+        theValueFunction = new ValueFunctionVizComponent(this,theControlTarget,glueState);
+        agentOnVF = new AgentOnValueFunctionVizComponent(this,glueState);
         SelfUpdatingVizComponent theMapComponent = new RatWorldMapComponent(this);
 
         SelfUpdatingVizComponent scoreComponent = new GenericScoreComponent(this);
@@ -116,8 +120,12 @@ public class ContinuousRatWorldVisualizer extends AbstractVisualizer implements 
             needsUpdate = true;
         }
         if (needsUpdate) {
+            try{
             theValueResponse = AgentValueForObsRequest.Execute(theQueryObs);
             lastAgentValueUpdateTimeStep = currentTimeStep;
+            }catch(Exception e){
+                theValueFunction.setEnabled(false);
+            }
         }
 
         if (theValueResponse == null) {

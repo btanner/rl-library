@@ -167,6 +167,7 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
     }
 
     public double getCurrentStateInDimension(int whichDimension) {
+        if(glueState.getLastObservation()==null)return 0;
         if (whichDimension == 0) {
             return glueState.getLastObservation().doubleArray[0];
         } else {
@@ -175,6 +176,7 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
     }
 
     public int getLastAction() {
+        if(glueState.getLastAction()==null)return 0;
         Action lastActionObject = getTheGlueState().getLastAction();
         int lastAction = -1;
         //This might be null at the first step of an episode

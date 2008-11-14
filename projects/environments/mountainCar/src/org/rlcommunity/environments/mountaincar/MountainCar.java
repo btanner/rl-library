@@ -43,6 +43,7 @@ import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.IntRange;
+import org.rlcommunity.rlglue.codec.util.EnvironmentLoader;
 import rlVizLib.general.hasVersionDetails;
 
 /*
@@ -213,6 +214,11 @@ public class MountainCar extends EnvironmentBase implements
         System.err.println("We need some code written in Env Message for MountainCar.. unknown request received: " + theMessage);
         Thread.dumpStack();
         return null;
+    }
+    
+    public static void main(String[] args){
+        EnvironmentLoader L=new EnvironmentLoader(new MountainCar());
+        L.run();
     }
 
     /**

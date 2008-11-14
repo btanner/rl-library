@@ -43,7 +43,6 @@ public class Tetris extends EnvironmentBase implements HasAVisualizerInterface {
     private int currentScore = 0;
     protected TetrisState gameState = null;
     static final int terminalScore = 0;
-    Vector<TetrisState> savedStates = new Vector<TetrisState>();
 
     public Tetris() {
         this(getDefaultParameters());
@@ -148,7 +147,6 @@ public class Tetris extends EnvironmentBase implements HasAVisualizerInterface {
     }
 
     public void env_cleanup() {
-        savedStates.clear();
     }
 
     public String env_message(String theMessage) {
