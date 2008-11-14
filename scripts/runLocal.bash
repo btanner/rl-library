@@ -6,8 +6,8 @@ systemPath=$basePath/system
 source $systemPath/scripts/rl-library-includes.sh
 
 
-startLocalGuiTrainer
-
+#startLocalGuiTrainer
+startLocalGuiTrainerBothViz
 
 # RLVizPath=../system/libs/rl-viz
 # AgentEnvPath=../system/dist

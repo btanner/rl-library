@@ -18,13 +18,11 @@ limitations under the License.
  */
 package org.rlcommunity.agents.keyboard;
 
-import org.rlcommunity.agents.keyboard.mappings.MountainCarKeyboardMapper;
-import org.rlcommunity.agents.keyboard.mappings.AcrobotKeyboardMapper;
-import org.rlcommunity.agents.keyboard.mappings.TetrisKeyBoardMapper;
-import org.rlcommunity.agents.keyboard.mappings.GridWorldMapper;
 import java.util.Random;
 
-import org.rlcommunity.agents.keyboard.mappings.CartPoleKeyboardMapper;
+import org.rlcommunity.agents.keyboard.messages.TaskSpecResponse;
+import org.rlcommunity.agents.keyboard.messages.TellAgentWhatToDoResponse;
+import org.rlcommunity.agents.keyboard.visualizer.KeyboardAgentVisualizer;
 import rlVizLib.general.ParameterHolder;
 import rlVizLib.general.hasVersionDetails;
 
@@ -32,6 +30,11 @@ import org.rlcommunity.rlglue.codec.AgentInterface;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
+import rlVizLib.messaging.NotAnRLVizMessageException;
+import rlVizLib.messaging.agent.AgentMessageParser;
+import rlVizLib.messaging.agent.AgentMessages;
+import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
+
 
 /**
  * Keyboard agent that lets you manually control the agent.
@@ -43,12 +46,10 @@ import org.rlcommunity.rlglue.codec.types.Observation;
  * you get to see the initial state, and the agent has already picked an action for it.
  * @author btanner
  */
-public class KeyboardAgent implements AgentInterface {
+public class KeyboardAgent implements AgentInterface,HasAVisualizerInterface {
 
     private Action action;
-    private Random random = new Random();
     TaskSpec TSO = null;
-    private KeyboardMapper theKeyBoardMapper;
 
     public KeyboardAgent() {
         this(getDefaultParameters());
@@ -70,36 +71,19 @@ public class KeyboardAgent implements AgentInterface {
 
     public void agent_init(String taskSpec) {
         TSO = new TaskSpec(taskSpec);
-        String extraString = TSO.getExtraString();
-        System.out.println("Extra string was: "+extraString);
-        if (extraString.contains("EnvName:Mountain-Car")) {
-            theKeyBoardMapper = new MountainCarKeyboardMapper();
-        }
-        if (extraString.contains("EnvName:Acrobot")) {
-            theKeyBoardMapper = new AcrobotKeyboardMapper();
-        }
-        if(extraString.contains("EnvName:ContinuousGridWorld")){
-            theKeyBoardMapper=new GridWorldMapper();
-        }
-        if(extraString.contains("EnvName:Tetris")){
-            theKeyBoardMapper=new TetrisKeyBoardMapper();
-        }
-        if(extraString.contains("EnvName:CartPole")){
-            theKeyBoardMapper=new CartPoleKeyboardMapper();
-        }
-        if (theKeyBoardMapper != null) {
-            theKeyBoardMapper.ensureTaskSpecMatchesExpectation(TSO);
-        }else{
-            System.err.println("Didn't know how to make a keyboard agent from string: "+extraString);
-        }
+        action=new Action(TSO.getNumDiscreteActionDims(),TSO.getNumContinuousActionDims(),0);
+        System.out.println("TSO tells us there are: "+TSO.getNumDiscreteActionDims()+" discrete actions");
+        System.out.println(taskSpec);
+        System.out.println(TSO.getStringRepresentation());
+
     }
 
     public Action agent_start(Observation o) {
-        return theKeyBoardMapper.getAction(o);
+        return action;
     }
 
     public Action agent_step(double reward, Observation o) {
-        return theKeyBoardMapper.getAction(reward, o);
+        return action;
     }
 
     public void agent_end(double reward) {
@@ -109,10 +93,48 @@ public class KeyboardAgent implements AgentInterface {
     }
 
     public String agent_message(String theMessage) {
+        AgentMessages theMessageObject;
+        try {
+            theMessageObject = AgentMessageParser.parseMessage(theMessage);
+        } catch (NotAnRLVizMessageException e) {
+            System.err.println("Someone sent keyboard agent a message that wasn't RL-Viz compatible");
+            return "I only respond to RL-Viz messages!";
+        }
+
+        if (theMessageObject.canHandleAutomatically(this)) {
+            return theMessageObject.handleAutomatically(this);
+        }
+        
+        if (theMessageObject.getTheMessageType() == rlVizLib.messaging.agent.AgentMessageType.kAgentCustom.id()) {
+
+            String theCustomType = theMessageObject.getPayLoad();
+
+            if (theCustomType.startsWith("SETACTION")) {
+                String[] splitPayload=theCustomType.split(":");
+                for(int i=1;i<splitPayload.length;i++){
+                    action.intArray[i-1]=Integer.parseInt(splitPayload[i]);
+                }
+                TellAgentWhatToDoResponse theResponseObject = new TellAgentWhatToDoResponse();
+                return theResponseObject.makeStringResponse();
+            }
+            if (theCustomType.startsWith("GETTASKSPEC")) {
+                if(TSO==null){
+                    System.out.println("Was asked for task spec before RL_init was called");
+                    
+                }
+                TaskSpecResponse theResponseObject = TaskSpecResponse.makeResponseFromTaskSpec(TSO.getStringRepresentation());
+                return theResponseObject.makeStringResponse();
+            }
+
+        }
+//        System.err.println("We need some code written in agent_message for keyboard agent. unknown request received: " + theMessage);
+//        Thread.dumpStack();
         return null;
     }
+    public String getVisualizerClassName() {
+        return KeyboardAgentVisualizer.class.getName();
+    }
 }
-
 /**
  * This is a little helper class that fills in the details about this environment
  * for the fancy print outs in the visualizer application.

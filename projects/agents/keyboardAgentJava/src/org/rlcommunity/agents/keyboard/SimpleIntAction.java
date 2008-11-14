@@ -28,21 +28,27 @@ import javax.swing.AbstractAction;
 public class SimpleIntAction extends AbstractAction {
 
     IntActionReceiver theReceiver;
-    private int theValue;
-    private int theDim;
+    private int[] theValues;
 
-    public SimpleIntAction(int theValue, int theDim, IntActionReceiver theReceiver) {
+    public SimpleIntAction(String name,int theValue, IntActionReceiver theReceiver) {
+        super(name);
         this.theReceiver = theReceiver;
-        this.theValue = theValue;
-        this.theDim = theDim;
+        theValues=new int[1];
+        this.theValues[0] = theValue;
     }
 
     public SimpleIntAction(int value, IntActionReceiver theReceiver) {
-        this(value, 0, theReceiver);
+        this("no name",value, theReceiver);
+    }
+    
+    public SimpleIntAction(String name,int[] values, IntActionReceiver theReceiver) {
+        super(name);
+        this.theReceiver=theReceiver;
+        this.theValues=values;
     }
 
     public void actionPerformed(ActionEvent e) {
-        theReceiver.receiveIntAction(theDim, theValue);
+        theReceiver.receiveIntAction(theValues);
         theReceiver.actionFinished();
     }
 }

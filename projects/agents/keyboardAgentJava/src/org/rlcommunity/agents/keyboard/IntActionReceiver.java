@@ -24,6 +24,6 @@ package org.rlcommunity.agents.keyboard;
  * @author btanner
  */
 public interface IntActionReceiver {
-    public void receiveIntAction(int dim, int val);
+    public void receiveIntAction(int[] values);
     public void actionFinished();
 }
