@@ -39,10 +39,13 @@ public class ExpandedCritterControlSettings{
 
     public static void addActions(JComponent thePanel, IntActionReceiver theTarget) {
         javax.swing.Action Forward=new SimpleIntAction("Forward",new int[]{1,50,0,0}, theTarget);
+        javax.swing.Action Back=new SimpleIntAction("Back",new int[]{1,-50,0,0}, theTarget);
         javax.swing.Action RotateLeft=new SimpleIntAction("Rotate Left",new int[]{1, 0, 0,20}, theTarget);
         javax.swing.Action RotateRight=new SimpleIntAction("Rotate Right",new int[]{1, 0, 0,-20}, theTarget);
         
-        thePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "Forward");
+        thePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "Back");
+        thePanel.getActionMap().put("Back", Back);
+        thePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "Forward");
         thePanel.getActionMap().put("Forward", Forward);
         thePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "RotateLeft");
         thePanel.getActionMap().put("RotateLeft", RotateLeft);
@@ -51,6 +54,7 @@ public class ExpandedCritterControlSettings{
 
 
         thePanel.add(new JButton(Forward));
+        thePanel.add(new JButton(Back));
         thePanel.add(new JButton(RotateLeft));
         thePanel.add(new JButton(RotateRight));
     }
