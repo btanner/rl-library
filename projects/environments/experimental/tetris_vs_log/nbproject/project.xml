@@ -3,17 +3,15 @@
     <type>org.netbeans.modules.ant.freeform</type>
     <configuration>
         <general-data xmlns="http://www.netbeans.org/ns/freeform-project/1">
-            <name>DiscreteGridWorld</name>
+            <name>Tetris</name>
         </general-data>
         <general-data xmlns="http://www.netbeans.org/ns/freeform-project/2">
             <!-- Do not use Project Properties customizer when editing this file manually. -->
-            <name>DiscreteGridWorld</name>
-            <properties>
-                <property name="ant.script">discreteGridWorld.xml</property>
-            </properties>
+            <name>Tetris</name>
+            <properties/>
             <folders>
                 <source-folder>
-                    <label>DiscreteGridWorld</label>
+                    <label>Tetris</label>
                     <location>.</location>
                     <encoding>UTF-8</encoding>
                 </source-folder>
@@ -32,21 +30,20 @@
             </folders>
             <ide-actions>
                 <action name="build">
-                    <script>${ant.script}</script>
-                    <target>compile</target>
+                    <target>build</target>
                 </action>
                 <action name="clean">
-                    <script>${ant.script}</script>
                     <target>clean</target>
                 </action>
                 <action name="javadoc">
-                    <script>${ant.script}</script>
-                    <target>rl-javadoc</target>
+                    <target>javadoc</target>
+                </action>
+                <action name="test">
+                    <target>test</target>
                 </action>
                 <action name="rebuild">
-                    <script>${ant.script}</script>
                     <target>clean</target>
-                    <target>compile</target>
+                    <target>build</target>
                 </action>
             </ide-actions>
             <view>
@@ -60,7 +57,7 @@
                         <location>test</location>
                     </source-folder>
                     <source-file>
-                        <location>${ant.script}</location>
+                        <location>build.xml</location>
                     </source-file>
                 </items>
                 <context-menu>
@@ -68,6 +65,7 @@
                     <ide-action name="rebuild"/>
                     <ide-action name="clean"/>
                     <ide-action name="javadoc"/>
+                    <ide-action name="test"/>
                 </context-menu>
             </view>
             <subprojects/>
@@ -75,7 +73,7 @@
         <java-data xmlns="http://www.netbeans.org/ns/freeform-project-java/2">
             <compilation-unit>
                 <package-root>src</package-root>
-                <classpath mode="compile">/Users/btanner/Documents/Java-Projects/rl-library/system/common/libs/rl-viz/RLVizLib.jar:/Users/btanner/Documents/Java-Projects/rl-library/system/common/libs/rl-viz/RLVizLib-src.jar</classpath>
+                <classpath mode="compile">../../../system/common/libs/rl-viz/RLVizLib.jar</classpath>
                 <source-level>1.5</source-level>
             </compilation-unit>
             <compilation-unit>
