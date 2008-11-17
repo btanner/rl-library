@@ -12,7 +12,7 @@ startAgentShellInBackGround
 echo "-------- NOTE ---------"
 echo "Start your RL-Glue Environment"
 echo "-----------------------"
-startNetGuiTrainerDynamicAgentStandardEnvironment
+startNetGuiTrainerDynamicAgentStandardEnvironmentBothViz
 
 waitForAgentShellToDie
 waitForRLGlueToDie
