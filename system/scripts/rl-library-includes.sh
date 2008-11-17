@@ -104,6 +104,11 @@ echo "-- Starting up Networked Gui Trainer"
 java -enableassertions -Xmx128M $osExtras -jar $VIZAPP_JAR agent-environment-jar-path=$ENV_AGENT_JARS_PATH list-agents=true env-viz=true
 echo "++ Gui Trainer is finished"
 }
+startNetGuiTrainerDynamicAgentStandardEnvironmentBothViz(){
+echo "-- Starting up Networked Gui Trainer"
+java -enableassertions -Xmx128M $osExtras -jar $VIZAPP_JAR agent-environment-jar-path=$ENV_AGENT_JARS_PATH list-agents=true env-viz=true agent-viz=true
+echo "++ Gui Trainer is finished"
+}
 
 
 
