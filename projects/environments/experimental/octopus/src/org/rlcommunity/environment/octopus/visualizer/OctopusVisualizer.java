@@ -19,15 +19,6 @@
 
 package org.rlcommunity.environment.octopus.visualizer;
 
-/**
- *
- * @author Brian Tanner
- */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 
 import java.util.List;
 import java.util.Set;
@@ -40,7 +31,7 @@ import org.rlcommunity.environment.octopus.messages.OctopusCoreDataResponse;
 import rlVizLib.general.TinyGlue;
 import rlVizLib.visualization.AbstractVisualizer;
 import rlVizLib.visualization.GenericScoreComponent;
-import rlVizLib.visualization.VizComponent;
+import rlVizLib.visualization.SelfUpdatingVizComponent;
 import rlVizLib.visualization.interfaces.DynamicControlTarget;
 import rlVizLib.visualization.interfaces.GlueStateProvider;
 
@@ -68,7 +59,7 @@ public class OctopusVisualizer extends AbstractVisualizer implements GlueStatePr
     }
 
     protected void setupVizComponents() {
-        VizComponent scoreComponent = new GenericScoreComponent(this);
+        SelfUpdatingVizComponent scoreComponent = new GenericScoreComponent(this);
         super.addVizComponentAtPositionWithSize(new OctopusVizComponent(this),0, 0, 1.0, 1.0);
         super.addVizComponentAtPositionWithSize(scoreComponent, 0, 0, 1.0, 1.0);
     }

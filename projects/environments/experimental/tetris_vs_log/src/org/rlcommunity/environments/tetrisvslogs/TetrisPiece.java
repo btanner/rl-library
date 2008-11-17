@@ -17,7 +17,7 @@ http://brian.tannerpages.com
  limitations under the License.
 */
 
-package org.rlcommunity.environments.tetris;
+package org.rlcommunity.environments.tetrisvslogs;
 
 public class TetrisPiece {
 	int thePiece[][][]=new int[4][5][5];

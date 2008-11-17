@@ -17,7 +17,7 @@ http://brian.tannerpages.com
  limitations under the License.
 */
 
-package org.rlcommunity.environments.tetris.visualizer;
+package org.rlcommunity.environments.tetrisvslogs.visualizer;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

@@ -17,7 +17,7 @@ http://brian.tannerpages.com
  limitations under the License.
 */
 
-package org.rlcommunity.environments.tetris;
+package org.rlcommunity.environments.tetrisvslogs;
 
 import java.util.Random;
 import java.util.Vector;

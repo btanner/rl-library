@@ -17,7 +17,7 @@ http://brian.tannerpages.com
  limitations under the License.
 */
 
-package org.rlcommunity.environments.tetris.messages;
+package org.rlcommunity.environments.tetrisvslogs.messages;
 
 import java.util.StringTokenizer;
 

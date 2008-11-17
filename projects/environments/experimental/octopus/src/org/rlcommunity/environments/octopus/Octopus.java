@@ -36,6 +36,7 @@ import org.rlcommunity.rlglue.codec.taskspec.ranges.IntRange;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
+import org.rlcommunity.rlglue.codec.util.EnvironmentLoader;
 import rlVizLib.Environments.EnvironmentBase;
 import rlVizLib.general.RLVizVersion;
 import rlVizLib.messaging.AbstractResponse;
@@ -60,7 +61,8 @@ public class Octopus extends EnvironmentBase implements HasAVisualizerInterface 
     public boolean useLocalViz = true;
 
     public static void main(String[] args) {
-        Octopus o = new Octopus();
+        EnvironmentLoader L=new EnvironmentLoader(new Octopus());
+        L.run();
     }
 
     public Octopus() {

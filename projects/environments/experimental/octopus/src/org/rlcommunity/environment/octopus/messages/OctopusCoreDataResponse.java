@@ -26,6 +26,7 @@ import java.io.ObjectOutputStream;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.codec.binary.Base64;
 import org.rlcommunity.environment.octopus.components.Target;
 import rlVizLib.messaging.AbstractResponse;
 import rlVizLib.messaging.GenericMessage;
@@ -74,7 +75,8 @@ public class OctopusCoreDataResponse extends AbstractResponse {
             OOS.writeDouble(theSurfaceLevel);
             OOS.close();
             byte[] theStringBytes = BOS.toByteArray();
-            String theBytesAsString = new String(theStringBytes);
+            byte[] b64encoded=Base64.encodeBase64(theStringBytes);
+            String theBytesAsString = new String(b64encoded);
             theResponseBuffer.append(theBytesAsString);
             return theResponseBuffer.toString();
         } catch (IOException ex) {
@@ -97,7 +99,8 @@ public class OctopusCoreDataResponse extends AbstractResponse {
     private void setVarsFromEncodedPayloadString(String thePayLoadString) {
         ObjectInputStream OIS = null;
         try {
-            byte[] payLoadInBytes = thePayLoadString.getBytes();
+            byte[] encodedPayload=thePayLoadString.getBytes();
+            byte[] payLoadInBytes = Base64.decodeBase64(encodedPayload);
             ByteArrayInputStream BIS = new ByteArrayInputStream(payLoadInBytes);
             OIS = new ObjectInputStream(BIS);
             theTargets = (Set<Target>) OIS.readObject();

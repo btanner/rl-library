@@ -27,6 +27,7 @@ import java.util.List;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.codec.binary.Base64;
 import org.rlcommunity.environment.octopus.components.Compartment;
 import org.rlcommunity.environment.octopus.components.Vector2D;
 import rlVizLib.messaging.AbstractResponse;
@@ -73,7 +74,8 @@ public class OctopusStateResponse extends AbstractResponse {
             OOS.writeObject(theCompartmentShapes);
             OOS.close();
             byte[] theStringBytes = BOS.toByteArray();
-            String theBytesAsString = new String(theStringBytes);
+            byte[] b64encoded=Base64.encodeBase64(theStringBytes);
+            String theBytesAsString = new String(b64encoded);
             theResponseBuffer.append(theBytesAsString);
             return theResponseBuffer.toString();
         } catch (IOException ex) {
@@ -96,19 +98,25 @@ public class OctopusStateResponse extends AbstractResponse {
     private List<List<Vector2D>> readEncodedPayloadFromString(String thePayLoadString) {
         ObjectInputStream OIS = null;
         try {
-            byte[] payLoadInBytes = thePayLoadString.getBytes();
-            ByteArrayInputStream BIS = new ByteArrayInputStream(payLoadInBytes);
+             byte[] encodedPayload=thePayLoadString.getBytes();
+            byte[] payLoadInBytes = Base64.decodeBase64(encodedPayload);
+           ByteArrayInputStream BIS = new ByteArrayInputStream(payLoadInBytes);
             OIS = new ObjectInputStream(BIS);
             theCompartmentShapes = (List<List<Vector2D>>) OIS.readObject();
             OIS.close();
             return theCompartmentShapes;
         } catch (IOException ex) {
-            Logger.getLogger(OctopusStateResponse.class.getName()).log(Level.SEVERE, "Payload had length: "+thePayLoadString.length(), ex);
+//            Logger.getLogger(OctopusStateResponse.class.getName()).log(Level.SEVERE, "Payload had length: "+thePayLoadString.length(), ex);
+//            List<List<Vector2D>> theReturnList=new ArrayList<List<Vector2D>>();
+//            return theReturnList;
+            return null;
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(OctopusStateResponse.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
+                if(OIS!=null){
                 OIS.close();
+                }
             } catch (IOException ex) {
                 Logger.getLogger(OctopusStateResponse.class.getName()).log(Level.SEVERE, "Problem deciding octopus state message", ex);
             }

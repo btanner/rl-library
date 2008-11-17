@@ -29,15 +29,18 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import org.rlcommunity.environment.octopus.components.Target;
 import org.rlcommunity.environment.octopus.components.Vector2D;
-import rlVizLib.visualization.VizComponent;
+import rlVizLib.visualization.SelfUpdatingVizComponent;
+import rlVizLib.visualization.VizComponentChangeListener;
 
 /**
  *
  * @author Brian Tanner
  */
-public class OctopusVizComponent implements VizComponent {
+public class OctopusVizComponent implements SelfUpdatingVizComponent, Observer {
 
     OctopusVisualizer theVisualizer = null;
     
@@ -59,10 +62,7 @@ public class OctopusVizComponent implements VizComponent {
 
     public OctopusVizComponent(OctopusVisualizer theVisualizer) {
         this.theVisualizer = theVisualizer;
-    }
-
-    public boolean update() {
-        return true;
+        theVisualizer.getTheGlueState().addObserver(this);
     }
 
     public void render(Graphics2D g2) {
@@ -154,5 +154,24 @@ public class OctopusVizComponent implements VizComponent {
         gp.closePath();
         return gp;
     }
+
+        private VizComponentChangeListener theChangeListener=null;
+        
+    public void setVizComponentChangeListener(VizComponentChangeListener theChangeListener) {
+        this.theChangeListener=theChangeListener;
+    }
+
+    /**
+     * This is probably getting called multiple times per step which is inefficient but not intolerable for now.
+     * @param o
+     * @param arg
+     */
+    public void update(Observable o, Object arg) {
+        if(theChangeListener!=null){
+            theChangeListener.vizComponentChanged(this);
+        }
+    }
+        
+        
 
 }

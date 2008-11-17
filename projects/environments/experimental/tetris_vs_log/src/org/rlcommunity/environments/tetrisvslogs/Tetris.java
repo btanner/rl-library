@@ -16,12 +16,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
-package org.rlcommunity.environments.tetris;
+package org.rlcommunity.environments.tetrisvslogs;
 
-import java.util.Vector;
 
-import org.rlcommunity.environments.tetris.messages.TetrisStateResponse;
-import org.rlcommunity.environments.tetris.visualizer.TetrisVisualizer;
+import org.rlcommunity.environments.tetrisvslogs.messages.TetrisStateResponse;
+import org.rlcommunity.environments.tetrisvslogs.visualizer.TetrisVisualizer;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
@@ -37,6 +36,7 @@ import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 
 import rlVizLib.general.hasVersionDetails;
+import tetrislogplayer.TetrisLogPlayer;
 
 public class Tetris extends EnvironmentBase implements HasAVisualizerInterface {
 
@@ -65,6 +65,8 @@ public class Tetris extends EnvironmentBase implements HasAVisualizerInterface {
 
     /*Base RL-Glue Functions*/
     public String env_init() {
+        String logFileName="/Users/btanner/Documents/Java-Projects/rl-competition/private/results/processedData/event_9_team_maia_Tue_Jun_24_06_51_54_-0600_2008";
+        TetrisLogPlayer theLogPlayer=new TetrisLogPlayer(logFileName);
         int boardSize = gameState.getHeight() * gameState.getWidth();
         int numPieces = gameState.possibleBlocks.size();
         int boardSizeObservations = 2;

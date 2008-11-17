@@ -10,10 +10,32 @@
 	<property name="main.package.spec.version" value="1.0"/>
 	<property name="main.vendor.name" value="Brian Tanner"/>
 
-	<path id="project.extra.classpath" />
+	<path id="project.extra.classpath">
+		<fileset dir="lib" >
+		    <include name="commons-codec-1.3.jar"/>
+		</fileset>
+	</path>
+        <property name="jar.main.class" value="org.rlcommunity.environments.octopus.Octopus" />
+        <property name="jar.extra.classpath" value="../system/common/libs/rl-viz/RLVizLib.jar" />
 	<import file="${this.project.system.directory}/common/ant/build-targets.xml"/>
 
 	<!-- this import gives you targets: clean, build, test, javadoc, all -->
-	<import file="${this.project.system.directory}/common/ant/predefined-target-aliases.xml"/>
+<!--	<import file="${this.project.system.directory}/common/ant/predefined-target-aliases.xml"/>-->
+<target name="build">
+	<unzip src="lib/commons-codec-1.3.jar" dest="build/classes/"/>
+	<antcall target="rl-jar" />
+</target>
+
+
+<target name="clean" depends="rl-clean"/>
+
+<target name="debug" depends="rl-set-debug,build"/>
+<target name="test" depends="rl-test"/>
+<target name="javadoc" depends="rl-javadoc"/>
+<target name="clean-build" depends="clean, build"/>
+
+<target name="all" depends="clean, build, test, javadoc"/>
+
+
 </project>
 
