@@ -61,7 +61,7 @@ public class RandomAgent implements AgentInterface {
         return p;
     }
 
-    public void main(String[] args){
+    public static void main(String[] args){
         AgentLoader L=new AgentLoader(new RandomAgent());
         L.run();
     }
