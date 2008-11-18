@@ -30,6 +30,7 @@ import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.IntRange;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
+import org.rlcommunity.rlglue.codec.util.AgentLoader;
 
 /**
  * Simple random agent that can do multidimensional continuous or discrete
@@ -60,6 +61,10 @@ public class RandomAgent implements AgentInterface {
         return p;
     }
 
+    public void main(String[] args){
+        AgentLoader L=new AgentLoader(new RandomAgent());
+        L.run();
+    }
     public void agent_init(String taskSpec) {
         TSO = new TaskSpec(taskSpec);
 
