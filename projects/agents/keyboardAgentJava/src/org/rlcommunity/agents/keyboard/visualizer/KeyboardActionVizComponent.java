@@ -121,7 +121,6 @@ class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Observer, 
     boolean firstStep = true;
 
     public void update(Observable o, Object arg) {
-        System.out.println("Update called");
         if (firstStep) {
             String taskSpec = TaskSpecRequest.Execute().getTaskSpec();
             assert (taskSpec != null);
@@ -129,15 +128,13 @@ class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Observer, 
             firstStep = false;
         }
         if (arg instanceof Observation) {
-            //RL_env_start just got called{
+            //RL_env_start just got called
             int[] theAction = waitForAction();
-            System.out.println("Env start happened I think, sending action: "+theAction[0]+" "+theAction[1]+" "+theAction[2]+" "+theAction[3] );
             TellAgentWhatToDoRequest.Execute(theAction);
         }
         if (arg instanceof Reward_observation_terminal) {
             //RL_env_step just got called
             int[] theAction = waitForAction();
-            System.out.println("Env step happened I think, sending action: "+theAction[0]+" "+theAction[1]+" "+theAction[2]+" "+theAction[3] );
             TellAgentWhatToDoRequest.Execute(theAction);
         }
 
@@ -167,10 +164,8 @@ class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Observer, 
 
         TaskSpec TSO = new TaskSpec(taskSpec);
         String extraString = TSO.getExtraString();
-        System.out.println("Extra string was: " + extraString);
         if (extraString.contains("EnvName:Mountain-Car")) {
             MountainCarControlSettings.addActions(theKeyListenerPanel, this);
-//            theKeyBoardMapper = new MountainCarKeyboardMapper();
         }
         if (extraString.contains("EnvName:Acrobot")) {
             AcrobotControlSettings.addActions(theKeyListenerPanel, this);

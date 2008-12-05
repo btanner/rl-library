@@ -42,9 +42,9 @@ public class ExpandedCritterControlSettings {
                                   IntActionReceiver theTarget) {
         javax.swing.Action Forward = new SimpleIntAction("Forward", new int[]{1, 20, 0, 0}, theTarget);
         javax.swing.Action Back = new SimpleIntAction("Back", new int[]{1, -20, 0, 0}, theTarget);
-        javax.swing.Action RotateLeft = new SimpleIntAction("Rotate Left",new int[]{1, 0, 0,-10}, theTarget);
+        javax.swing.Action RotateLeft = new SimpleIntAction("Rotate Left", new int[]{1, 0, 0, -10}, theTarget);
 
-        javax.swing.Action RotateRight = new SimpleIntAction("Rotate Right",new int[]{1, 0, 0,10}, theTarget);
+        javax.swing.Action RotateRight = new SimpleIntAction("Rotate Right", new int[]{1, 0, 0, 10}, theTarget);
 
         thePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN,
                 0), "Back");

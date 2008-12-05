@@ -38,7 +38,6 @@ public class TellAgentWhatToDoRequest extends AgentMessages{
                 payloadBuffer.append(":");
                 payloadBuffer.append(thisAction);
             }
-            System.out.println("Sending payload: "+payloadBuffer.toString());
             
 		String theRequest=AbstractMessage.makeMessage(
 				MessageUser.kAgent.id(),
