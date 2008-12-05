@@ -30,6 +30,7 @@ import rlVizLib.messaging.environment.EnvironmentMessages;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
+import rlVizLib.dynamicLoading.Unloadable;
 
 
 /**
@@ -44,7 +45,7 @@ import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
  * 
  * @author Brian Tanner
  */
-public class ContinuousRatWorld extends ContinuousGridWorld{
+public class ContinuousRatWorld extends ContinuousGridWorld implements Unloadable{
     
 
         
