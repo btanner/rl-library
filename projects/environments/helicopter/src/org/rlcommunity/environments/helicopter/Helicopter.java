@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. */
 package org.rlcommunity.environments.helicopter;
 
+import java.net.URL;
 import org.rlcommunity.environments.helicopter.messages.HelicopterRangeResponse;
 import java.util.Vector;
 import org.rlcommunity.environments.helicopter.visualizer.HelicopterVisualizer;
@@ -33,8 +34,10 @@ import rlVizLib.messaging.environment.EnvironmentMessageParser;
 import rlVizLib.messaging.environment.EnvironmentMessages;
 import rlVizLib.messaging.environmentShell.TaskSpecPayload;
 import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
+import rlVizLib.messaging.interfaces.HasImageInterface;
 
-public class Helicopter extends EnvironmentBase implements HasAVisualizerInterface {
+
+public class Helicopter extends EnvironmentBase implements  HasAVisualizerInterface, HasImageInterface {
 
     Observation o;
     HelicopterState heli = new HelicopterState();
@@ -243,6 +246,10 @@ public class Helicopter extends EnvironmentBase implements HasAVisualizerInterfa
     public String getVisualizerClassName() {
         return HelicopterVisualizer.class.getName();
     }
+    public URL getImageURL() {
+       URL imageURL = Helicopter.class.getResource("/images/helicopter.png");
+       return imageURL;
+   }      
 
     private String makeTaskSpec() {
 
