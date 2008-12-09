@@ -20,10 +20,18 @@ package org.rlcommunity.environments.mountaincar.visualizer;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import rlVizLib.utilities.UtilityShop;
 import rlVizLib.visualization.SelfUpdatingVizComponent;
 import rlVizLib.visualization.VizComponentChangeListener;
@@ -33,10 +41,20 @@ public class CarOnMountainVizComponent implements SelfUpdatingVizComponent, Obse
     private MountainCarVisualizer mcv = null;
     private boolean showAction = true;
     private VizComponentChangeListener theChangeListener;
+    
+    private Image theCarImage=null;
 
     public CarOnMountainVizComponent(MountainCarVisualizer mc) {
         this.mcv = mc;
         mc.getTheGlueState().addObserver(this);
+        URL carImageURL=CarOnMountainVizComponent.class.getResource("/images/auto.png");
+        try {
+            theCarImage = ImageIO.read(carImageURL);
+            theCarImage=theCarImage.getScaledInstance(50,50,Image.SCALE_SMOOTH);
+        } catch (IOException ex) {
+            System.err.println("ERROR: Problem getting car image.");
+        }
+        
     }
 
     public void setShowAction(boolean shouldShow) {
@@ -45,6 +63,8 @@ public class CarOnMountainVizComponent implements SelfUpdatingVizComponent, Obse
 
     public void render(Graphics2D g) {
         g.setColor(Color.RED);
+        AffineTransform saveAT = g.getTransform();
+        g.scale(.005, .005);
 
         //to bring things back into the window
         double minPosition = mcv.getMinValueForDim(0);
@@ -59,27 +79,38 @@ public class CarOnMountainVizComponent implements SelfUpdatingVizComponent, Obse
                 this.mcv.getHeight(),
                 mcv.getMinHeight(),
                 mcv.getMaxHeight());
-        transY = (1.0 - transY);
+        transY = (1.0 - transY-.05);
+        
+        transX*=200.0d;
+        transY*=200.0d;
 
         double rectWidth = .05;
         double rectHeight = .05;
-        Rectangle2D fillRect = new Rectangle2D.Double(transX - rectWidth / 2.0d, transY - rectHeight / 2.0d, rectWidth, rectHeight);
-        g.fill(fillRect);
-        if (showAction) {
-            double actionRectWdthOffset = 0;
-            if (lastAction == 0) {
-                actionRectWdthOffset = 0;
-            } else if (lastAction == 1) {
-                actionRectWdthOffset = 7 * (rectWidth / 16);
-            } else if (lastAction == 2) {
-                actionRectWdthOffset = 14 * (rectWidth / 16);
-            }
-            g.setColor(Color.CYAN);
-            Rectangle2D fillActionRect = new Rectangle2D.Double((transX - rectWidth / 2.0d) + actionRectWdthOffset,
-                    transY - rectHeight / 2.0d,
-                    rectWidth / 8.0, rectHeight);
-            g.fill(fillActionRect);
-        }
+        
+        double theta=mcv.getSlope()*1.25;
+//        Rectangle2D fillRect = new Rectangle2D.Double(transX - rectWidth / 2.0d, transY - rectHeight / 2.0d, rectWidth, rectHeight);
+//        g.fill(fillRect);
+        AffineTransform theTransform= AffineTransform.getTranslateInstance(transX-theCarImage.getWidth(null)/2.0d, transY-theCarImage.getHeight(null)/2.0d);
+        theTransform.concatenate(AffineTransform.getRotateInstance(theta,theCarImage.getWidth(null)/2,theCarImage.getHeight(null)/2));
+        
+        g.drawImage(theCarImage,theTransform, null);
+//        if (showAction) {
+//            double actionRectWdthOffset = 0;
+//            if (lastAction == 0) {
+//                actionRectWdthOffset = 0;
+//            } else if (lastAction == 1) {
+//                actionRectWdthOffset = 7 * (rectWidth / 16);
+//            } else if (lastAction == 2) {
+//                actionRectWdthOffset = 14 * (rectWidth / 16);
+//            }
+//            g.setColor(Color.CYAN);
+//            Rectangle2D fillActionRect = new Rectangle2D.Double((transX - rectWidth / 2.0d) + actionRectWdthOffset,
+//                    transY - rectHeight / 2.0d,
+//                    rectWidth / 8.0, rectHeight);
+//            g.fill(fillActionRect);
+//        }
+        g.setTransform(saveAT);
+        
     }
 
     public void setVizComponentChangeListener(VizComponentChangeListener theChangeListener) {

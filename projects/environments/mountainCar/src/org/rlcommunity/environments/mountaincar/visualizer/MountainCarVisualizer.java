@@ -192,6 +192,13 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
         return -Math.sin(hillPeakFrequency * currentX);
 //        return theCurrentState.getHeight();
     }
+    
+    public double getSlope(){
+        double currentX = getCurrentStateInDimension(0);
+        final double hillPeakFrequency = 3.0;
+        return -Math.cos(hillPeakFrequency * currentX);
+        
+    }
 
     public double getMaxHeight() {
         if (theQueryPositions == null) {

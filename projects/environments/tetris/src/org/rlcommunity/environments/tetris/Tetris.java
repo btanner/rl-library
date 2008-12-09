@@ -67,7 +67,7 @@ public class Tetris extends EnvironmentBase implements HasAVisualizerInterface, 
         return p;
     }
 
-        public static TaskSpecPayload getTaskSpecPayload(ParameterHolder P) {
+    public static TaskSpecPayload getTaskSpecPayload(ParameterHolder P) {
         Tetris theWorld = new Tetris(P);
         String taskSpec = theWorld.makeTaskSpec();
         return new TaskSpecPayload(taskSpec, false, "");
@@ -254,6 +254,7 @@ public class Tetris extends EnvironmentBase implements HasAVisualizerInterface, 
         return taskSpecString;
     }
 }
+
 class DetailsProvider implements hasVersionDetails {
 
     public String getName() {
