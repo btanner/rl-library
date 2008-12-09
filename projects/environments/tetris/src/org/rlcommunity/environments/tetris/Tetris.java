@@ -18,6 +18,7 @@ limitations under the License.
  */
 package org.rlcommunity.environments.tetris;
 
+import java.net.URL;
 import java.util.Vector;
 
 import org.rlcommunity.environments.tetris.messages.TetrisStateResponse;
@@ -37,10 +38,11 @@ import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 
 import rlVizLib.general.hasVersionDetails;
+import rlVizLib.messaging.interfaces.HasImageInterface;
 import rlVizLib.messaging.environmentShell.TaskSpecPayload;
 
+public class Tetris extends EnvironmentBase implements HasAVisualizerInterface, HasImageInterface {
 
-public class Tetris extends EnvironmentBase implements HasAVisualizerInterface {
 
     private int currentScore = 0;
     protected TetrisState gameState = null;
@@ -213,6 +215,11 @@ public class Tetris extends EnvironmentBase implements HasAVisualizerInterface {
     public String getVisualizerClassName() {
         return TetrisVisualizer.class.getName();
     }
+    public URL getImageURL() {
+       URL imageURL = Tetris.class.getResource("/images/tetris.png");
+       return imageURL;
+   }   
+
 
     private String makeTaskSpec() {
         int boardSize = gameState.getHeight() * gameState.getWidth();
