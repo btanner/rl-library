@@ -1,5 +1,6 @@
 package org.rlcommunity.environments.octopus;
 
+import java.net.URL;
 import org.rlcommunity.environments.octopus.odeframework.ODESolver;
 import org.rlcommunity.environments.octopus.odeframework.RungeKutta4Solver;
 import org.rlcommunity.environments.octopus.odeframework.ODEState;
@@ -46,8 +47,9 @@ import rlVizLib.messaging.environment.EnvironmentMessageParser;
 import rlVizLib.messaging.environment.EnvironmentMessages;
 import rlVizLib.messaging.environmentShell.TaskSpecPayload;
 import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
+import rlVizLib.messaging.interfaces.HasImageInterface;
 
-public class Octopus extends EnvironmentBase implements HasAVisualizerInterface {
+public class Octopus extends EnvironmentBase implements HasAVisualizerInterface, HasImageInterface {
 
     boolean useDiscreteActions = true;
     private Arm arm;
@@ -314,6 +316,11 @@ public class Octopus extends EnvironmentBase implements HasAVisualizerInterface 
     - O: fully contract all transversal muscles on the upper half of the arm
     - P: fully contract all ventral muscles on the upper half of the arm
      **/
+    public URL getImageURL() {
+       URL imageURL = Octopus.class.getResource("/images/octopus.png");
+       return imageURL;
+   }  
+    
     public String env_message(String theMessage) {
         EnvironmentMessages theMessageObject;
         try {
