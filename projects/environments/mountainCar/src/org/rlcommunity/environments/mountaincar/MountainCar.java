@@ -178,7 +178,6 @@ public class MountainCar extends EnvironmentBase implements
      */
     public String env_message(String theMessage) {
         EnvironmentMessages theMessageObject;
-        System.out.println("Message received by mc: " + theMessage);
         try {
             theMessageObject = EnvironmentMessageParser.parseMessage(theMessage);
         } catch (NotAnRLVizMessageException e) {
