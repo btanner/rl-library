@@ -16,6 +16,9 @@ import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
+import rlVizLib.messaging.environmentShell.TaskSpecPayload;
+
+
 
 
 /**
@@ -72,6 +75,13 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
             }
         }
     }
+    
+        public static TaskSpecPayload getTaskSpecPayload(ParameterHolder P) {
+        CartPole theWorld = new CartPole(P);
+        String taskSpec = theWorld.makeTaskSpec();
+        return new TaskSpecPayload(taskSpec, false, "");
+    }
+
 
     public static ParameterHolder getDefaultParameters() {
         ParameterHolder p = new ParameterHolder();
@@ -97,32 +107,7 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
         theta = 0.0f;
         theta_dot = 0.0f;
 
-        double xMin = leftCartBound;
-        double xMax = rightCartBound;
-
-        //Dots are guesses
-        double xDotMin = -6.0d;
-        double xDotMax = 6.0d;
-        double thetaMin = leftAngleBound;
-        double thetaMax = rightAngleBound;
-        double thetaDotMin = -6.0d;
-        double thetaDotMax = 6.0d;
-
-        TaskSpecVRLGLUE3 theTaskSpecObject=new TaskSpecVRLGLUE3();
-        theTaskSpecObject.setEpisodic();
-        theTaskSpecObject.setDiscountFactor(1.0d);
-        theTaskSpecObject.addContinuousObservation(new DoubleRange(xMin,xMax));
-        theTaskSpecObject.addContinuousObservation(new DoubleRange(xDotMin,xDotMax));
-        theTaskSpecObject.addContinuousObservation(new DoubleRange(thetaMin,thetaMax));
-        theTaskSpecObject.addContinuousObservation(new DoubleRange(thetaDotMin,thetaDotMax));
-        theTaskSpecObject.addDiscreteAction(new IntRange(0,1));
-        theTaskSpecObject.setRewardRange(new DoubleRange(-1,0));
-        theTaskSpecObject.setExtra("EnvName:CartPole");
-        
-        String newTaskSpecString=theTaskSpecObject.toTaskSpec();
-        TaskSpec.checkTaskSpec(newTaskSpecString);
-
-        return newTaskSpecString;
+        return makeTaskSpec();
     }
 
     public Observation env_start() {
@@ -255,9 +240,37 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
     public String getVisualizerClassName() {
         return "org.rlcommunity.environments.cartpole.visualizer.CartPoleVisualizer";
     }
+
+    private String makeTaskSpec() {
+
+        double xMin = leftCartBound;
+        double xMax = rightCartBound;
+
+        //Dots are guesses
+        double xDotMin = -6.0d;
+        double xDotMax = 6.0d;
+        double thetaMin = leftAngleBound;
+        double thetaMax = rightAngleBound;
+        double thetaDotMin = -6.0d;
+        double thetaDotMax = 6.0d;
+
+        TaskSpecVRLGLUE3 theTaskSpecObject = new TaskSpecVRLGLUE3();
+        theTaskSpecObject.setEpisodic();
+        theTaskSpecObject.setDiscountFactor(1.0d);
+        theTaskSpecObject.addContinuousObservation(new DoubleRange(xMin, xMax));
+        theTaskSpecObject.addContinuousObservation(new DoubleRange(xDotMin, xDotMax));
+        theTaskSpecObject.addContinuousObservation(new DoubleRange(thetaMin, thetaMax));
+        theTaskSpecObject.addContinuousObservation(new DoubleRange(thetaDotMin, thetaDotMax));
+        theTaskSpecObject.addDiscreteAction(new IntRange(0, 1));
+        theTaskSpecObject.setRewardRange(new DoubleRange(-1, 0));
+        theTaskSpecObject.setExtra("EnvName:CartPole");
+
+        String newTaskSpecString = theTaskSpecObject.toTaskSpec();
+        TaskSpec.checkTaskSpec(newTaskSpecString);
+
+        return newTaskSpecString;
+    }
 }
-
-
 /**
  * This is a little helper class that fills in the details about this environment
  * for the fancy print outs in the visualizer application.

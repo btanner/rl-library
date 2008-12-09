@@ -80,14 +80,14 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
         SelfUpdatingVizComponent carOnMountain = new CarOnMountainVizComponent(this);
         SelfUpdatingVizComponent scoreComponent = new GenericScoreComponent(this);
 
-        super.addVizComponentAtPositionWithSize(theValueFunction, 0, .4, 1.0, .4);
-        super.addVizComponentAtPositionWithSize(theAgentOnValueFunction, 0, .4, 1.0, .4);
+        super.addVizComponentAtPositionWithSize(theValueFunction, 0, .5, 1.0, .5);
+        super.addVizComponentAtPositionWithSize(theAgentOnValueFunction, 0, .5, 1.0, .5);
 
-        super.addVizComponentAtPositionWithSize(mountain, 0, 0, 1.0, .4);
-        super.addVizComponentAtPositionWithSize(carOnMountain, 0, 0, 1.0, .4);
+        super.addVizComponentAtPositionWithSize(mountain, 0, 0, 1.0, .5);
+        super.addVizComponentAtPositionWithSize(carOnMountain, 0, 0, 1.0, .5);
         super.addVizComponentAtPositionWithSize(scoreComponent, 0, 0, 1.0, 1.0);
-        GraphPanel GP = new GraphPanel(this);
-        super.addVizComponentAtPositionWithSize(GP, 0, .8, 1.0, .2);
+//        GraphPanel GP = new GraphPanel(this);
+//        super.addVizComponentAtPositionWithSize(GP, 0, .8, 1.0, .2);
 
     }
 
