@@ -36,6 +36,11 @@ We'll try and rely on minimal variables from above.
 
 <target name="rl-compile">
    <mkdir dir="${classes.dir}"/>
+<!-- make sure we get the resources -->
+	<copy todir="${classes.dir}">
+    	<fileset dir="${src.dir}" excludes="**/*.java"/>
+  	</copy>
+
     <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="${build.debug}"> 
 		<compilerarg value="-Xlint"/> 
 		<classpath>

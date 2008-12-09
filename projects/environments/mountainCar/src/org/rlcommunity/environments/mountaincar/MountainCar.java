@@ -4,23 +4,29 @@ http://rl-library.googlecode.com/
 brian@tannerpages.com
 http://brian.tannerpages.com
 
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-*/
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ */
 package org.rlcommunity.environments.mountaincar;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.IOException;
+import java.net.URL;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.rlcommunity.environments.mountaincar.messages.MCGoalResponse;
 import org.rlcommunity.environments.mountaincar.messages.MCHeightResponse;
 import org.rlcommunity.environments.mountaincar.messages.MCStateResponse;
@@ -38,6 +44,7 @@ import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 
 import java.util.Random;
+import javax.imageio.ImageIO;
 import org.rlcommunity.environments.mountaincar.visualizer.MountainCarVisualizer;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;
@@ -58,49 +65,48 @@ import rlVizLib.general.hasVersionDetails;
  * this is not the easiest environment to get started with.
  */
 import rlVizLib.messaging.environmentShell.TaskSpecPayload;
+import rlVizLib.messaging.interfaces.HasImageInterface;
 
 public class MountainCar extends EnvironmentBase implements
         getEnvMaxMinsInterface,
         getEnvObsForStateInterface,
-        HasAVisualizerInterface{
+        HasAVisualizerInterface,
+        HasImageInterface {
 
     static final int numActions = 3;
-    protected MountainCarState theState = null;
-
-    //Used for env_save_state and env_save_state, which don't exist anymore, but we will one day bring them back
+    protected MountainCarState theState = null;    //Used for env_save_state and env_save_state, which don't exist anymore, but we will one day bring them back
     //through the messaging system and RL-Viz.
-    
     protected Vector<MountainCarState> savedStates = null;
     //Problem parameters have been moved to MountainCar State
     private Random randomGenerator = new Random();
 
-    public static TaskSpecPayload getTaskSpecPayload(ParameterHolder P){
-        MountainCar theMC=new MountainCar(P);
-        String taskSpec=theMC.makeTaskSpec();
+    public static TaskSpecPayload getTaskSpecPayload(ParameterHolder P) {
+        MountainCar theMC = new MountainCar(P);
+        String taskSpec = theMC.makeTaskSpec();
         return new TaskSpecPayload(taskSpec, false, "");
     }
 
-
-    private  String makeTaskSpec(){
-        TaskSpecVRLGLUE3 theTaskSpecObject=new TaskSpecVRLGLUE3();
+    private String makeTaskSpec() {
+        TaskSpecVRLGLUE3 theTaskSpecObject = new TaskSpecVRLGLUE3();
         theTaskSpecObject.setEpisodic();
         theTaskSpecObject.setDiscountFactor(1.0d);
-        theTaskSpecObject.addContinuousObservation(new DoubleRange(theState.minPosition,theState.maxPosition));
-        theTaskSpecObject.addContinuousObservation(new DoubleRange(theState.minVelocity,theState.maxVelocity));
-        theTaskSpecObject.addDiscreteAction(new IntRange(0,2));
-        theTaskSpecObject.setRewardRange(new DoubleRange(-1,0));
-        theTaskSpecObject.setExtra("EnvName:Mountain-Car Revision:"+this.getClass().getPackage().getImplementationVersion());
-        
-        String taskSpecString=theTaskSpecObject.toTaskSpec();
+        theTaskSpecObject.addContinuousObservation(new DoubleRange(theState.minPosition, theState.maxPosition));
+        theTaskSpecObject.addContinuousObservation(new DoubleRange(theState.minVelocity, theState.maxVelocity));
+        theTaskSpecObject.addDiscreteAction(new IntRange(0, 2));
+        theTaskSpecObject.setRewardRange(new DoubleRange(-1, 0));
+        theTaskSpecObject.setExtra("EnvName:Mountain-Car Revision:" + this.getClass().getPackage().getImplementationVersion());
+
+        String taskSpecString = theTaskSpecObject.toTaskSpec();
         TaskSpec.checkTaskSpec(taskSpecString);
-        
+
         return taskSpecString;
-        
+
     }
+
     public String env_init() {
         savedStates = new Vector<MountainCarState>();
         return makeTaskSpec();
-     
+
     }
 
     /**
@@ -124,7 +130,8 @@ public class MountainCar extends EnvironmentBase implements
      * Takes a step.  If an invalid action is selected, choose a random action.
      * @param theAction
      * @return
-     */public Reward_observation_terminal env_step(Action theAction) {
+     */
+    public Reward_observation_terminal env_step(Action theAction) {
 
         int a = theAction.intArray[0];
 
@@ -137,7 +144,6 @@ public class MountainCar extends EnvironmentBase implements
 
         return makeRewardObservation(theState.getReward(), theState.inGoalRegion());
     }
-
 
     /**
      * Return the ParameterHolder object that contains the default parameters for
@@ -165,10 +171,10 @@ public class MountainCar extends EnvironmentBase implements
             }
         }
     }
+
     public MountainCar() {
         this(getDefaultParameters());
     }
-
 
     /**
      * Handles messages that find out the version, what visualizer is available, 
@@ -178,6 +184,7 @@ public class MountainCar extends EnvironmentBase implements
      */
     public String env_message(String theMessage) {
         EnvironmentMessages theMessageObject;
+        System.out.println("Message received by mc: " + theMessage);
         try {
             theMessageObject = EnvironmentMessageParser.parseMessage(theMessage);
         } catch (NotAnRLVizMessageException e) {
@@ -232,9 +239,9 @@ public class MountainCar extends EnvironmentBase implements
         Thread.dumpStack();
         return null;
     }
-    
-    public static void main(String[] args){
-        EnvironmentLoader L=new EnvironmentLoader(new MountainCar());
+
+    public static void main(String[] args) {
+        EnvironmentLoader L = new EnvironmentLoader(new MountainCar());
         L.run();
     }
 
@@ -252,54 +259,53 @@ public class MountainCar extends EnvironmentBase implements
         return currentObs;
     }
 
-
     public void env_cleanup() {
         if (savedStates != null) {
             savedStates.clear();
         }
     }
 
-/**
- * Provides a random seed that can be used with env_load_random_seed to sample
- * multiple transitions from a single state.
- * <p>
- * Note that calling this method has a side effect, it creates a new seed and 
- * sets it.
- * @return
- */
-/*
+    /**
+     * Provides a random seed that can be used with env_load_random_seed to sample
+     * multiple transitions from a single state.
+     * <p>
+     * Note that calling this method has a side effect, it creates a new seed and 
+     * sets it.
+     * @return
+     */
+    /*
     public Random_seed_key env_save_random_seed() {
-        Random_seed_key k = new Random_seed_key(2, 0);
-        long newSeed = getRandomGenerator().nextLong();
-        getRandomGenerator().setSeed(newSeed);
-        k.intArray[0] = UtilityShop.LongHighBitsToInt(newSeed);
-        k.intArray[1] = UtilityShop.LongLowBitsToInt(newSeed);
-        return k;
+    Random_seed_key k = new Random_seed_key(2, 0);
+    long newSeed = getRandomGenerator().nextLong();
+    getRandomGenerator().setSeed(newSeed);
+    k.intArray[0] = UtilityShop.LongHighBitsToInt(newSeed);
+    k.intArray[1] = UtilityShop.LongLowBitsToInt(newSeed);
+    return k;
     }
-
+    
     public void env_load_random_seed(Random_seed_key k) {
-        long storedSeed = UtilityShop.intsToLong(k.intArray[0], k.intArray[1]);
-        getRandomGenerator().setSeed(storedSeed);
+    long storedSeed = UtilityShop.intsToLong(k.intArray[0], k.intArray[1]);
+    getRandomGenerator().setSeed(storedSeed);
     }
-
+    
     public State_key env_save_state() {
-        savedStates.add(new MountainCarState(theState));
-        State_key k = new State_key(1, 0);
-        k.intArray[0] = savedStates.size() - 1;
-        return k;
+    savedStates.add(new MountainCarState(theState));
+    State_key k = new State_key(1, 0);
+    k.intArray[0] = savedStates.size() - 1;
+    return k;
     }
-
+    
     public void env_load_state(State_key k) {
-        int theIndex = k.intArray[0];
-
-        if (savedStates == null || theIndex >= savedStates.size()) {
-            System.err.println("Could not set state to index:" + theIndex + ", that's higher than saved size");
-            return;
-        }
-        MountainCarState oldState = savedStates.get(k.intArray[0]);
-        this.theState = new MountainCarState(oldState);
+    int theIndex = k.intArray[0];
+    
+    if (savedStates == null || theIndex >= savedStates.size()) {
+    System.err.println("Could not set state to index:" + theIndex + ", that's higher than saved size");
+    return;
     }
-*/
+    MountainCarState oldState = savedStates.get(k.intArray[0]);
+    this.theState = new MountainCarState(oldState);
+    }
+     */
     /**
      * The value function will be drawn over the position and velocity.  This 
      * method provides the max values for those variables.
@@ -328,7 +334,6 @@ public class MountainCar extends EnvironmentBase implements
         }
     }
 
-
     /**
      * Given a state, return an observation.  This is trivial in mountain car
      * because the observation is the same as the internal state 
@@ -346,6 +351,7 @@ public class MountainCar extends EnvironmentBase implements
     public int getNumVars() {
         return 2;
     }
+
     /**
      * Used by MCHeightRequest Message
      * @return
@@ -357,11 +363,19 @@ public class MountainCar extends EnvironmentBase implements
     public String getVisualizerClassName() {
         return MountainCarVisualizer.class.getName();
     }
-    
+
     private Random getRandomGenerator() {
         return randomGenerator;
     }
 
+    /**
+     * So we can draw a pretty image in the visualizer before we start
+     * @return
+     */
+    public URL getImageURL() {
+        URL imageURL = MountainCar.class.getResource("/images/mountaincar.png");
+        return imageURL;
+    }
 }
 
 /**
