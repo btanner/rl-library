@@ -38,11 +38,13 @@ import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 import org.rlcommunity.rlglue.codec.util.EnvironmentLoader;
 import rlVizLib.Environments.EnvironmentBase;
+import rlVizLib.general.ParameterHolder;
 import rlVizLib.general.RLVizVersion;
 import rlVizLib.messaging.AbstractResponse;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvironmentMessageParser;
 import rlVizLib.messaging.environment.EnvironmentMessages;
+import rlVizLib.messaging.environmentShell.TaskSpecPayload;
 import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
 
 public class Octopus extends EnvironmentBase implements HasAVisualizerInterface {
@@ -61,7 +63,7 @@ public class Octopus extends EnvironmentBase implements HasAVisualizerInterface 
     public boolean useLocalViz = true;
 
     public static void main(String[] args) {
-        EnvironmentLoader L=new EnvironmentLoader(new Octopus());
+        EnvironmentLoader L = new EnvironmentLoader(new Octopus());
         L.run();
     }
 
@@ -100,6 +102,10 @@ public class Octopus extends EnvironmentBase implements HasAVisualizerInterface 
 //        }
 
 
+        return makeTaskSpec();
+    }
+
+    private String makeTaskSpec() {
         double minXPos = -12.0d;
         double maxXPos = 12.0d;
 
@@ -110,6 +116,7 @@ public class Octopus extends EnvironmentBase implements HasAVisualizerInterface 
         double maxVel = 1.0d;
         double minAction = 0.0d;
         double maxAction = 1.0d;
+
 
         TaskDescription ts = getTaskSpec();
 
@@ -147,6 +154,13 @@ public class Octopus extends EnvironmentBase implements HasAVisualizerInterface 
         TaskSpec.checkTaskSpec(newTaskSpecString);
 
         return newTaskSpecString;
+
+    }
+
+    public static TaskSpecPayload getTaskSpecPayload(ParameterHolder P) {
+        Octopus theOctopus = new Octopus();
+        String taskSpec = theOctopus.makeTaskSpec();
+        return new TaskSpecPayload(taskSpec, false, "");
     }
 
     public TaskDescription getTaskSpec() {
