@@ -76,6 +76,9 @@ public class HelicopterVisualizer extends AbstractVisualizer implements GlueStat
     // getters here
 
     public double[] getState() {
+        if(theGlueState.getLastObservation()==null){
+            return null;
+        }
         return theGlueState.getLastObservation().doubleArray;
     }
 

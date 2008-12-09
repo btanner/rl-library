@@ -18,15 +18,10 @@ limitations under the License.
  */
 package org.rlcommunity.environments.mountaincar;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
-import java.io.IOException;
 import java.net.URL;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.rlcommunity.environments.mountaincar.messages.MCGoalResponse;
 import org.rlcommunity.environments.mountaincar.messages.MCHeightResponse;
 import org.rlcommunity.environments.mountaincar.messages.MCStateResponse;
@@ -44,7 +39,6 @@ import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 
 import java.util.Random;
-import javax.imageio.ImageIO;
 import org.rlcommunity.environments.mountaincar.visualizer.MountainCarVisualizer;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;

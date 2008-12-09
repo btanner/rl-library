@@ -31,10 +31,10 @@ import rlVizLib.general.hasVersionDetails;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvironmentMessageParser;
 import rlVizLib.messaging.environment.EnvironmentMessages;
+import rlVizLib.messaging.environmentShell.TaskSpecPayload;
 import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
 
-
-public class Helicopter extends EnvironmentBase implements  HasAVisualizerInterface {
+public class Helicopter extends EnvironmentBase implements HasAVisualizerInterface {
 
     Observation o;
     HelicopterState heli = new HelicopterState();
@@ -51,6 +51,12 @@ public class Helicopter extends EnvironmentBase implements  HasAVisualizerInterf
                 setWind1(p.getDoubleParam("wind1"));
             }
         }
+    }
+
+    public static TaskSpecPayload getTaskSpecPayload(ParameterHolder P) {
+        Helicopter theWorld = new Helicopter(P);
+        String taskSpec = theWorld.makeTaskSpec();
+        return new TaskSpecPayload(taskSpec, false, "");
     }
 
     public static ParameterHolder getDefaultParameters() {
@@ -75,35 +81,8 @@ public class Helicopter extends EnvironmentBase implements  HasAVisualizerInterf
     public String env_init() {
         o = new Observation(0, 12);
 
-        TaskSpecVRLGLUE3 taskSpecObject=new TaskSpecVRLGLUE3();
-        taskSpecObject.setEpisodic();
-        taskSpecObject.setDiscountFactor(1.0d);
-//The 3 velocities: forward, sideways, up
-//# forward velocity
-//# sideways velocity (to the right)
-//# downward velocity 
-        taskSpecObject.addContinuousObservation(new DoubleRange(-HelicopterState.MAX_VEL,HelicopterState.MAX_VEL,3));
-//# helicopter x-coord position - desired x-coord position -- helicopter's x-axis points forward
-//# helicopter y-coord position - desired y-coord position -- helicopter's y-axis points to the right
-//# helicopter z-coord position - desired z-coord position -- helicopter's z-axis points down 
-        taskSpecObject.addContinuousObservation(new DoubleRange(-HelicopterState.MAX_POS,HelicopterState.MAX_POS,3));
-//# angular rate around helicopter's x axis
-//# angular rate around helicopter's y axis
-//# angular rate around helicopter's z axis         
-        taskSpecObject.addContinuousObservation(new DoubleRange(-HelicopterState.MAX_RATE,HelicopterState.MAX_RATE,3));
-//quaternion x,y,z entries
-        taskSpecObject.addContinuousObservation(new DoubleRange(-HelicopterState.MAX_QUAT,HelicopterState.MAX_QUAT,3));
-        
-        taskSpecObject.addContinuousAction(new DoubleRange(-HelicopterState.MAX_ACTION,HelicopterState.MAX_ACTION,4));
-//Apparently we're not specifying the rewards
-        DoubleRange theRewardRange=new DoubleRange(0,0);
-        theRewardRange.setMinUnspecified();
-        taskSpecObject.setRewardRange(theRewardRange);
-        String newTaskSpecString=taskSpecObject.toTaskSpec();
-        TaskSpec.checkTaskSpec(newTaskSpecString);
-        
-        
-        return newTaskSpecString;
+
+        return makeTaskSpec();
     }
 
     public Observation env_start() {
@@ -193,7 +172,6 @@ public class Helicopter extends EnvironmentBase implements  HasAVisualizerInterf
         return heli.makeObservation();
     }
 
-    
     public double getMaxValueForQuerableVariable(int dimension) {
         switch (dimension) {
             case 0:
@@ -266,7 +244,40 @@ public class Helicopter extends EnvironmentBase implements  HasAVisualizerInterf
         return HelicopterVisualizer.class.getName();
     }
 
+    private String makeTaskSpec() {
+
+        TaskSpecVRLGLUE3 taskSpecObject = new TaskSpecVRLGLUE3();
+        taskSpecObject.setEpisodic();
+        taskSpecObject.setDiscountFactor(1.0d);
+//The 3 velocities: forward, sideways, up
+//# forward velocity
+//# sideways velocity (to the right)
+//# downward velocity
+        taskSpecObject.addContinuousObservation(new DoubleRange(-HelicopterState.MAX_VEL, HelicopterState.MAX_VEL, 3));
+//# helicopter x-coord position - desired x-coord position -- helicopter's x-axis points forward
+//# helicopter y-coord position - desired y-coord position -- helicopter's y-axis points to the right
+//# helicopter z-coord position - desired z-coord position -- helicopter's z-axis points down
+        taskSpecObject.addContinuousObservation(new DoubleRange(-HelicopterState.MAX_POS, HelicopterState.MAX_POS, 3));
+//# angular rate around helicopter's x axis
+//# angular rate around helicopter's y axis
+//# angular rate around helicopter's z axis
+        taskSpecObject.addContinuousObservation(new DoubleRange(-HelicopterState.MAX_RATE, HelicopterState.MAX_RATE, 3));
+//quaternion x,y,z entries
+        taskSpecObject.addContinuousObservation(new DoubleRange(-HelicopterState.MAX_QUAT, HelicopterState.MAX_QUAT, 3));
+
+        taskSpecObject.addContinuousAction(new DoubleRange(-HelicopterState.MAX_ACTION, HelicopterState.MAX_ACTION, 4));
+//Apparently we're not specifying the rewards
+        DoubleRange theRewardRange = new DoubleRange(0, 0);
+        theRewardRange.setMinUnspecified();
+        taskSpecObject.setRewardRange(theRewardRange);
+        String newTaskSpecString = taskSpecObject.toTaskSpec();
+        TaskSpec.checkTaskSpec(newTaskSpecString);
+
+
+        return newTaskSpecString;
+    }
 }
+
 class DetailsProvider implements hasVersionDetails {
 
     public String getName() {

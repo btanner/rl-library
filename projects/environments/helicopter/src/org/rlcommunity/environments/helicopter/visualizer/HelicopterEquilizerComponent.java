@@ -37,6 +37,10 @@ public class HelicopterEquilizerComponent implements SelfUpdatingVizComponent, O
 	}
 
 	public void render(Graphics2D g) {
+		double[] state = heliVis.getState();
+                if(state==null){
+                    return;
+                }
 	    //SET COLOR
             g.setColor(Color.WHITE);
             g.fillRect(0,0,1,1);
@@ -49,7 +53,6 @@ public class HelicopterEquilizerComponent implements SelfUpdatingVizComponent, O
             double lineRangeSize=topOfLines-bottomOfLines;
 	    AffineTransform saveAT = g.getTransform();
 		g.scale(.01, .01);
-		double[] state = heliVis.getState();
 		double min =0.0d;
 		double max = 0.0d;
 		for(int i=0; i<12; i++){
