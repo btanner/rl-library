@@ -1,5 +1,6 @@
 package org.rlcommunity.environments.cartpole;
 
+import java.net.URL;
 import org.rlcommunity.environments.cartpole.messages.*;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;
@@ -16,6 +17,7 @@ import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
+import rlVizLib.messaging.interfaces.HasImageInterface;
 import rlVizLib.messaging.environmentShell.TaskSpecPayload;
 
 /**
@@ -27,7 +29,7 @@ import rlVizLib.messaging.environmentShell.TaskSpecPayload;
  * 
  * @author btanner
  */
-public class CartPole extends EnvironmentBase implements HasAVisualizerInterface {
+public class CartPole extends EnvironmentBase implements HasAVisualizerInterface, HasImageInterface {
 
     final static double GRAVITY = 9.8;
     final static double MASSCART = 1.0;
@@ -235,6 +237,12 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
     public String getVisualizerClassName() {
         return "org.rlcommunity.environments.cartpole.visualizer.CartPoleVisualizer";
     }
+    public URL getImageURL() {
+       URL imageURL = CartPole.class.getResource("/images/cartpole.png");
+       return imageURL;
+   }      
+
+
 
     private String makeTaskSpec() {
 
