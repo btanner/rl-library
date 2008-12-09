@@ -20,6 +20,7 @@ import rlVizLib.general.ParameterHolder;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
+import rlVizLib.dynamicLoading.Unloadable;
 
 /**
  * This is very much like the Continuous Grid World, but we have a discretized, 
@@ -33,7 +34,7 @@ import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
  * 
  * @author Brian Tanner
  */
-public class DiscreteGridWorld extends ContinuousGridWorld {
+public class DiscreteGridWorld extends ContinuousGridWorld implements Unloadable {
 
     protected int xDiscFactor = 25;
     protected int yDiscFactor = 25;

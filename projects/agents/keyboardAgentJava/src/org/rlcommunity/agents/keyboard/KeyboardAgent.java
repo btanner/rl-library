@@ -18,6 +18,7 @@ limitations under the License.
  */
 package org.rlcommunity.agents.keyboard;
 
+import java.net.URL;
 import java.util.Random;
 
 import org.rlcommunity.agents.keyboard.messages.TaskSpecResponse;
@@ -36,6 +37,7 @@ import rlVizLib.messaging.agent.AgentMessageParser;
 import rlVizLib.messaging.agent.AgentMessages;
 import rlVizLib.messaging.agentShell.TaskSpecResponsePayload;
 import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
+import rlVizLib.messaging.interfaces.HasImageInterface;
 
 
 /**
@@ -48,7 +50,7 @@ import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
  * you get to see the initial state, and the agent has already picked an action for it.
  * @author btanner
  */
-public class KeyboardAgent implements AgentInterface,HasAVisualizerInterface {
+public class KeyboardAgent implements AgentInterface,HasAVisualizerInterface,HasImageInterface {
 
     private Action action;
     TaskSpec TSO = null;
@@ -151,6 +153,10 @@ public class KeyboardAgent implements AgentInterface,HasAVisualizerInterface {
     }
     public String getVisualizerClassName() {
         return KeyboardAgentVisualizer.class.getName();
+    }
+
+    public URL getImageURL() {
+        return this.getClass().getResource("/images/keyboardagent.png");
     }
 }
 /**

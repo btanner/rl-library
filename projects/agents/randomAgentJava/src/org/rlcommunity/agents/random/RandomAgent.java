@@ -18,6 +18,7 @@ limitations under the License.
  */
 package org.rlcommunity.agents.random;
 
+import java.net.URL;
 import java.util.Random;
 
 import rlVizLib.general.ParameterHolder;
@@ -31,14 +32,18 @@ import org.rlcommunity.rlglue.codec.taskspec.ranges.IntRange;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.util.AgentLoader;
+import rlVizLib.messaging.NotAnRLVizMessageException;
+import rlVizLib.messaging.agent.AgentMessageParser;
+import rlVizLib.messaging.agent.AgentMessages;
 import rlVizLib.messaging.agentShell.TaskSpecResponsePayload;
+import rlVizLib.messaging.interfaces.HasImageInterface;
 
 /**
  * Simple random agent that can do multidimensional continuous or discrete
  * actions.
  * @author btanner
  */
-public class RandomAgent implements AgentInterface {
+public class RandomAgent implements AgentInterface,HasImageInterface {
 
     private Action action;
     private Random random = new Random();
@@ -130,8 +135,25 @@ public class RandomAgent implements AgentInterface {
     }
 
     public String agent_message(String theMessage) {
+        AgentMessages theMessageObject;
+        try {
+            theMessageObject = AgentMessageParser.parseMessage(theMessage);
+        } catch (NotAnRLVizMessageException e) {
+            System.err.println("Someone sent random agent a message that wasn't RL-Viz compatible");
+            return "I only respond to RL-Viz messages!";
+        }
+
+        if (theMessageObject.canHandleAutomatically(this)) {
+            return theMessageObject.handleAutomatically(this);
+        }
+        System.err.println("Didn't know how to respond to message.");
         return null;
     }
+
+    public URL getImageURL() {
+        return this.getClass().getResource("/images/randomagent.png");
+    }
+
 }
 
 /**
