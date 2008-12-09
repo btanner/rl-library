@@ -1,8 +1,10 @@
 package org.rlcommunity.environment.acrobot;
 
+import java.net.URL;
 import java.util.Random;
 
 
+import javax.naming.ldap.HasControls;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
@@ -18,8 +20,9 @@ import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.IntRange;
 import rlVizLib.general.hasVersionDetails;
 import rlVizLib.messaging.environmentShell.TaskSpecPayload;
+import rlVizLib.messaging.interfaces.HasImageInterface;
 
-public class Acrobot extends EnvironmentBase implements HasAVisualizerInterface {
+public class Acrobot extends EnvironmentBase implements HasAVisualizerInterface, HasImageInterface {
     /*STATIC CONSTANTS*/
 
     final static int stateSize = 4;
@@ -263,6 +266,11 @@ public class Acrobot extends EnvironmentBase implements HasAVisualizerInterface 
     public String getVisualizerClassName() {
         return AcrobotVisualizer.class.getName();
     }
+    
+    public URL getImageURL() {
+       URL imageURL = Acrobot.class.getResource("/images/acrobot.png");
+       return imageURL;
+   }    
 }
 
 class DetailsProvider implements hasVersionDetails {
