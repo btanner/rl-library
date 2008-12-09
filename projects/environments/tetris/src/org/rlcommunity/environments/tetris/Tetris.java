@@ -37,6 +37,8 @@ import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 
 import rlVizLib.general.hasVersionDetails;
+import rlVizLib.messaging.environmentShell.TaskSpecPayload;
+
 
 public class Tetris extends EnvironmentBase implements HasAVisualizerInterface {
 
@@ -63,38 +65,15 @@ public class Tetris extends EnvironmentBase implements HasAVisualizerInterface {
         return p;
     }
 
+        public static TaskSpecPayload getTaskSpecPayload(ParameterHolder P) {
+        Tetris theWorld = new Tetris(P);
+        String taskSpec = theWorld.makeTaskSpec();
+        return new TaskSpecPayload(taskSpec, false, "");
+    }
+
     /*Base RL-Glue Functions*/
     public String env_init() {
-        int boardSize = gameState.getHeight() * gameState.getWidth();
-        int numPieces = gameState.possibleBlocks.size();
-        int boardSizeObservations = 2;
-        int intObsCount = boardSize + numPieces + boardSizeObservations;
-
-        TaskSpecVRLGLUE3 theTaskSpecObject = new TaskSpecVRLGLUE3();
-        theTaskSpecObject.setEpisodic();
-        theTaskSpecObject.setDiscountFactor(1.0d);
-        //First add the binary variables for the board
-        theTaskSpecObject.addDiscreteObservation(new IntRange(0, 1, boardSize));
-        //Now the binary features to tell what piece is falling
-        theTaskSpecObject.addDiscreteObservation(new IntRange(0, 1, numPieces));
-        //Now the actual board size in the observation. The reason this was here is/was because
-        //there was no way to add meta-data to the task spec before.
-        //First height
-        theTaskSpecObject.addDiscreteObservation(new IntRange(gameState.getHeight(), gameState.getHeight()));
-        //Then width
-        theTaskSpecObject.addDiscreteObservation(new IntRange(gameState.getWidth(), gameState.getWidth()));
-
-        theTaskSpecObject.addDiscreteAction(new IntRange(0, 5));
-        //This is actually a lie... the rewards aren't in that range.
-        theTaskSpecObject.setRewardRange(new DoubleRange(0, 1));
-
-        //This is a better way to tell the rows and cols
-        theTaskSpecObject.setExtra("EnvName:Tetris HEIGHT:" + gameState.getHeight() + " WIDTH:" + gameState.getWidth() + " Revision: " + this.getClass().getPackage().getImplementationVersion());
-
-        String taskSpecString = theTaskSpecObject.toTaskSpec();
-        
-        TaskSpec.checkTaskSpec(taskSpecString);
-        return taskSpecString;
+        return makeTaskSpec();
     }
 
     public Observation env_start() {
@@ -234,8 +213,40 @@ public class Tetris extends EnvironmentBase implements HasAVisualizerInterface {
     public String getVisualizerClassName() {
         return TetrisVisualizer.class.getName();
     }
-}
 
+    private String makeTaskSpec() {
+        int boardSize = gameState.getHeight() * gameState.getWidth();
+        int numPieces = gameState.possibleBlocks.size();
+        int boardSizeObservations = 2;
+        int intObsCount = boardSize + numPieces + boardSizeObservations;
+
+        TaskSpecVRLGLUE3 theTaskSpecObject = new TaskSpecVRLGLUE3();
+        theTaskSpecObject.setEpisodic();
+        theTaskSpecObject.setDiscountFactor(1.0d);
+        //First add the binary variables for the board
+        theTaskSpecObject.addDiscreteObservation(new IntRange(0, 1, boardSize));
+        //Now the binary features to tell what piece is falling
+        theTaskSpecObject.addDiscreteObservation(new IntRange(0, 1, numPieces));
+        //Now the actual board size in the observation. The reason this was here is/was because
+        //there was no way to add meta-data to the task spec before.
+        //First height
+        theTaskSpecObject.addDiscreteObservation(new IntRange(gameState.getHeight(), gameState.getHeight()));
+        //Then width
+        theTaskSpecObject.addDiscreteObservation(new IntRange(gameState.getWidth(), gameState.getWidth()));
+
+        theTaskSpecObject.addDiscreteAction(new IntRange(0, 5));
+        //This is actually a lie... the rewards aren't in that range.
+        theTaskSpecObject.setRewardRange(new DoubleRange(0, 1));
+
+        //This is a better way to tell the rows and cols
+        theTaskSpecObject.setExtra("EnvName:Tetris HEIGHT:" + gameState.getHeight() + " WIDTH:" + gameState.getWidth() + " Revision: " + this.getClass().getPackage().getImplementationVersion());
+
+        String taskSpecString = theTaskSpecObject.toTaskSpec();
+
+        TaskSpec.checkTaskSpec(taskSpecString);
+        return taskSpecString;
+    }
+}
 class DetailsProvider implements hasVersionDetails {
 
     public String getName() {

@@ -18,9 +18,6 @@ import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 import rlVizLib.messaging.environmentShell.TaskSpecPayload;
 
-
-
-
 /**
  * This is based on David Finton's code from:
  * http://pages.cs.wisc.edu/~finton/poledriver.html which in turn is credited to
@@ -42,7 +39,7 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
     final static double FORCE_MAG = 10.0;
     final static double TAU = 0.02;	  /* seconds between state updates */
 
-    final static double FOURTHIRDS = 4.0d/3.0d;
+    final static double FOURTHIRDS = 4.0d / 3.0d;
     final static double DEFAULTLEFTCARTBOUND = -2.4;
     final static double DEFAULTRIGHTCARTBOUND = 2.4;
     final static double DEFAULTLEFTANGLEBOUND = -Math.toRadians(12.0d);
@@ -50,15 +47,16 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
     double leftCartBound;
     double rightCartBound;
     double leftAngleBound;
-    double rightAngleBound;
-
-    //State variables
+    double rightAngleBound;    //State variables
     double x;			/* cart position, meters */
+
     double x_dot;			/* cart velocity */
+
     double theta;			/* pole angle, radians */
+
     double theta_dot;		/* pole angular velocity */
 
-    
+
     public CartPole() {
         this(getDefaultParameters());
     }
@@ -75,13 +73,12 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
             }
         }
     }
-    
-        public static TaskSpecPayload getTaskSpecPayload(ParameterHolder P) {
+
+    public static TaskSpecPayload getTaskSpecPayload(ParameterHolder P) {
         CartPole theWorld = new CartPole(P);
         String taskSpec = theWorld.makeTaskSpec();
         return new TaskSpecPayload(taskSpec, false, "");
     }
-
 
     public static ParameterHolder getDefaultParameters() {
         ParameterHolder p = new ParameterHolder();
@@ -156,8 +153,7 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
 
 
 
-        if (inFailure())
-        {
+        if (inFailure()) {
             return new Reward_observation_terminal(-1.0d, makeObservation(), 1);
         } else {
             return new Reward_observation_terminal(1.0d, makeObservation(), 0);
@@ -236,7 +232,6 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
         return this.leftAngleBound;
     }
 
-    
     public String getVisualizerClassName() {
         return "org.rlcommunity.environments.cartpole.visualizer.CartPoleVisualizer";
     }
@@ -271,6 +266,7 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
         return newTaskSpecString;
     }
 }
+
 /**
  * This is a little helper class that fills in the details about this environment
  * for the fancy print outs in the visualizer application.
