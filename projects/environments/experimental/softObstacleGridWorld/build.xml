@@ -1,24 +1,5 @@
 <project name="ContinuousGridWorld" basedir="." >
 
-	<path id="project.extra.classpath">
-		<fileset dir="libs" >
-		<include name="rubios.jar"/>
-		<include name="QuickServer.jar"/>
-		<include name="phidget20.jar"/>
-		<include name="phidget21.jar"/>
-		
-		</fileset>
-	</path>
-	
-	<target name="build">
-		<unzip src="libs/rubios.jar" dest="build/classes/"/>
-<!--		<unzip src="libs/QuickServer.jar" dest="build/classes/"/>
-		<unzip src="libs/phidget20.jar" dest="build/classes/"/>
-		<unzip src="libs/phidget21.jar" dest="build/classes/"/>
--->
-		<antcall target="rl-jar" />
-	</target>	
-
 	<property name="baseLibraryDir" value="../../../.."/>
 	<property name="this.project.system.directory" value="${baseLibraryDir}/system"/>
 	<property name="this.project.product.directory" value="${baseLibraryDir}/products"/>
@@ -33,5 +14,6 @@
 	<import file="${this.project.system.directory}/common/ant/build-targets.xml"/>
 
 	<import file="${this.project.system.directory}/common/ant/predefined-target-aliases.xml"/>
+	
 </project>
 
