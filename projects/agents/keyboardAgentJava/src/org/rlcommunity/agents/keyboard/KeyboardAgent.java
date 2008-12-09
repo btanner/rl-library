@@ -22,6 +22,7 @@ import java.util.Random;
 
 import org.rlcommunity.agents.keyboard.messages.TaskSpecResponse;
 import org.rlcommunity.agents.keyboard.messages.TellAgentWhatToDoResponse;
+import org.rlcommunity.agents.keyboard.visualizer.KeyboardActionVizComponent;
 import org.rlcommunity.agents.keyboard.visualizer.KeyboardAgentVisualizer;
 import rlVizLib.general.ParameterHolder;
 import rlVizLib.general.hasVersionDetails;
@@ -33,6 +34,7 @@ import org.rlcommunity.rlglue.codec.types.Observation;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.agent.AgentMessageParser;
 import rlVizLib.messaging.agent.AgentMessages;
+import rlVizLib.messaging.agentShell.TaskSpecResponsePayload;
 import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
 
 
@@ -58,6 +60,22 @@ public class KeyboardAgent implements AgentInterface,HasAVisualizerInterface {
     public KeyboardAgent(ParameterHolder p) {
         super();
     }
+    
+   /**
+     * Random agent can take any task spec.
+     * @param P
+     * @param TaskSpec
+     * @return
+     */
+    public static TaskSpecResponsePayload isCompatible(ParameterHolder P, String TaskSpec){
+        boolean supported=KeyboardActionVizComponent.supportsEnvironment(TaskSpec);
+        if(supported){
+            return new TaskSpecResponsePayload(false,"");
+        }else{
+            return new TaskSpecResponsePayload(true,"Keyboard agent does not have a mapping for this environment.");
+        }
+    }
+
 
     /**
      * Tetris doesn't really have any parameters
@@ -72,9 +90,9 @@ public class KeyboardAgent implements AgentInterface,HasAVisualizerInterface {
     public void agent_init(String taskSpec) {
         TSO = new TaskSpec(taskSpec);
         action=new Action(TSO.getNumDiscreteActionDims(),TSO.getNumContinuousActionDims(),0);
-        System.out.println("TSO tells us there are: "+TSO.getNumDiscreteActionDims()+" discrete actions");
-        System.out.println(taskSpec);
-        System.out.println(TSO.getStringRepresentation());
+//        System.out.println("TSO tells us there are: "+TSO.getNumDiscreteActionDims()+" discrete actions");
+//        System.out.println(taskSpec);
+//        System.out.println(TSO.getStringRepresentation());
 
     }
 

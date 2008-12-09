@@ -57,6 +57,8 @@ import rlVizLib.general.hasVersionDetails;
  * capabilities which have polluted the code a little.  What I'm saying is that 
  * this is not the easiest environment to get started with.
  */
+import rlVizLib.messaging.environmentShell.TaskSpecPayload;
+
 public class MountainCar extends EnvironmentBase implements
         getEnvMaxMinsInterface,
         getEnvObsForStateInterface,
@@ -72,9 +74,14 @@ public class MountainCar extends EnvironmentBase implements
     //Problem parameters have been moved to MountainCar State
     private Random randomGenerator = new Random();
 
+    public static TaskSpecPayload getTaskSpecPayload(ParameterHolder P){
+        MountainCar theMC=new MountainCar(P);
+        String taskSpec=theMC.makeTaskSpec();
+        return new TaskSpecPayload(taskSpec, false, "");
+    }
 
-    public String env_init() {
-        savedStates = new Vector<MountainCarState>();
+
+    private  String makeTaskSpec(){
         TaskSpecVRLGLUE3 theTaskSpecObject=new TaskSpecVRLGLUE3();
         theTaskSpecObject.setEpisodic();
         theTaskSpecObject.setDiscountFactor(1.0d);
@@ -86,8 +93,14 @@ public class MountainCar extends EnvironmentBase implements
         
         String taskSpecString=theTaskSpecObject.toTaskSpec();
         TaskSpec.checkTaskSpec(taskSpecString);
-     
+        
         return taskSpecString;
+        
+    }
+    public String env_init() {
+        savedStates = new Vector<MountainCarState>();
+        return makeTaskSpec();
+     
     }
 
     /**
@@ -152,6 +165,10 @@ public class MountainCar extends EnvironmentBase implements
             }
         }
     }
+    public MountainCar() {
+        this(getDefaultParameters());
+    }
+
 
     /**
      * Handles messages that find out the version, what visualizer is available, 
@@ -235,9 +252,6 @@ public class MountainCar extends EnvironmentBase implements
         return currentObs;
     }
 
-    public MountainCar() {
-        this(getDefaultParameters());
-    }
 
     public void env_cleanup() {
         if (savedStates != null) {

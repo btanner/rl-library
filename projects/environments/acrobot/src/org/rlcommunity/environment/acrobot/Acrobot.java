@@ -17,6 +17,7 @@ import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.IntRange;
 import rlVizLib.general.hasVersionDetails;
+import rlVizLib.messaging.environmentShell.TaskSpecPayload;
 
 public class Acrobot extends EnvironmentBase implements HasAVisualizerInterface {
     /*STATIC CONSTANTS*/
@@ -70,12 +71,15 @@ public class Acrobot extends EnvironmentBase implements HasAVisualizerInterface 
         p.setAlias("rstarts", "Random Starts");
         return p;
     }
-
-    /*Beginning of RL-GLUE methods*/
-    public String env_init() {
-        numEpisodes = 0;
-        numSteps = 0;
-        totalNumSteps = 0;
+    
+    
+    public static TaskSpecPayload getTaskSpecPayload(ParameterHolder P){
+        Acrobot theAcrobot=new Acrobot(P);
+        String taskSpec=theAcrobot.makeTaskSpec();
+        return new TaskSpecPayload(taskSpec, false, "");
+    }
+    
+    private String makeTaskSpec(){
         TaskSpecVRLGLUE3 theTaskSpecObject = new TaskSpecVRLGLUE3();
         theTaskSpecObject.setEpisodic();
         theTaskSpecObject.setDiscountFactor(1.0d);
@@ -91,15 +95,17 @@ public class Acrobot extends EnvironmentBase implements HasAVisualizerInterface 
         theTaskSpecObject.setExtra("EnvName:Acrobot");
         String taskSpecString = theTaskSpecObject.toTaskSpec();
         TaskSpec.checkTaskSpec(taskSpecString);
-        return taskSpecString;
-//                
-//                String taskSpec = "1:e:4_[f,f,f,f]_";
-//		taskSpec = taskSpec.concat("[" + -maxTheta1 + "," + maxTheta1 + "]_");
-//		taskSpec = taskSpec.concat("[" + -maxTheta2 + "," + maxTheta2 + "]_");
-//		taskSpec = taskSpec.concat("[" + -maxTheta1Dot + "," + maxTheta1Dot + "]_");
-//		taskSpec = taskSpec.concat("[" + -maxTheta2Dot + "," + maxTheta2Dot + "]");
-//		taskSpec = taskSpec.concat(":1_[i]_[0," + (numActions-1)+"]:[]");
-//		return taskSpec;
+        return taskSpecString;        
+    }
+
+
+
+    /*Beginning of RL-GLUE methods*/
+    public String env_init() {
+        numEpisodes = 0;
+        numSteps = 0;
+        totalNumSteps = 0;
+        return makeTaskSpec();
     }
 
     public Observation env_start() {

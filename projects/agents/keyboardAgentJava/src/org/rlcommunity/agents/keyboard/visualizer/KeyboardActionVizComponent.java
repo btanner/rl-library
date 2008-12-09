@@ -42,7 +42,7 @@ import rlVizLib.visualization.interfaces.DynamicControlTarget;
  *
  * @author btanner
  */
-class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Observer, IntActionReceiver {
+public class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Observer, IntActionReceiver {
 
     TinyGlue theGlueState = null;
     DynamicControlTarget theControlTarget;
@@ -158,6 +158,16 @@ class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Observer, 
     public void actionFinished() {
     }
 
+    static String supportedEnvStrings[]={"EnvName:Mountain-Car","EnvName:Acrobot",
+    "EnvName:ContinuousGridWorld","EnvName:Tetris","EnvName:Tetris","EnvName:ExpandedCritter"};
+
+    public static boolean supportsEnvironment(String taskSpec){
+        for (String thisString : supportedEnvStrings) {
+            if(taskSpec.contains(thisString))
+                return true;
+        }
+        return false;
+    }
     private void setupPanels(String taskSpec) {
         theControlTarget.removeControl(theKeyListenerPanel);
         theKeyListenerPanel = new JPanel();
@@ -176,8 +186,8 @@ class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Observer, 
         if (extraString.contains("EnvName:Tetris")) {
             TetrisControlSettings.addActions(theKeyListenerPanel, this);
         }
-        if (extraString.contains("EnvName:Tetris")) {
-            TetrisControlSettings.addActions(theKeyListenerPanel, this);
+        if (extraString.contains("EnvName:CartPole")) {
+            CartPoleControlSettings.addActions(theKeyListenerPanel, this);
         }
         if (extraString.contains("EnvName:ExpandedCritter")) {
             ExpandedCritterControlSettings.addActions(theKeyListenerPanel, this);

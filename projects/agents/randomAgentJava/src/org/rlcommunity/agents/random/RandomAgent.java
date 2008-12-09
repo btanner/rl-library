@@ -31,6 +31,7 @@ import org.rlcommunity.rlglue.codec.taskspec.ranges.IntRange;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.util.AgentLoader;
+import rlVizLib.messaging.agentShell.TaskSpecResponsePayload;
 
 /**
  * Simple random agent that can do multidimensional continuous or discrete
@@ -49,6 +50,16 @@ public class RandomAgent implements AgentInterface {
 
     public RandomAgent(ParameterHolder p) {
         super();
+    }
+    
+    /**
+     * Random agent can take any task spec.
+     * @param P
+     * @param TaskSpec
+     * @return
+     */
+    public static TaskSpecResponsePayload isCompatible(ParameterHolder P, String TaskSpec){
+        return new TaskSpecResponsePayload(false,"");
     }
 
     /**
