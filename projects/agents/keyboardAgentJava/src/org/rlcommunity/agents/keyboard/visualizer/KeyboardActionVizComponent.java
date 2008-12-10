@@ -49,6 +49,9 @@ public class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Obs
     TinyGlue theGlueState = null;
     DynamicControlTarget theControlTarget;
     JPanel theKeyListenerPanel = new JPanel();
+    boolean sendNullActions = false;
+    int nullActionMSInterval = 200;
+    Action nullAction = null;
 
     public KeyboardActionVizComponent(TinyGlue theGlueState, DynamicControlTarget theControlTarget) {
         this.theControlTarget = theControlTarget;
@@ -137,7 +140,7 @@ public class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Obs
         if (arg instanceof Reward_observation_terminal) {
             //RL_env_step just got called
             final int[] theAction = waitForAction();
-                    TellAgentWhatToDoRequest.Execute(theAction);
+            TellAgentWhatToDoRequest.Execute(theAction);
         }
 
         //Have this listen for right events from tinyglue and make sure a new action comes
@@ -174,6 +177,8 @@ public class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Obs
     }
 
     private void setupPanels(String taskSpec) {
+        this.sendNullActions = false;
+
         theControlTarget.removeControl(theKeyListenerPanel);
         theKeyListenerPanel = new JPanel();
 
@@ -196,6 +201,13 @@ public class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Obs
         }
         if (extraString.contains("EnvName:ExpandedCritter")) {
             ExpandedCritterControlSettings.addActions(theKeyListenerPanel, this);
+        }
+        if (extraString.contains("EnvName:ExpandedPhysicalCritter")) {
+            ExpandedCritterControlSettings.addActions(theKeyListenerPanel, this);
+            this.sendNullActions = true;
+            this.nullActionMSInterval = 200;
+            nullAction = new Action(4, 0, 0);
+            nullAction.intArray = new int[]{1, 0, 0, 0};
         } //        if (theKeyBoardMapper != null) {
         //            theKeyBoardMapper.ensureTaskSpecMatchesExpectation(TSO);
         else {
@@ -208,14 +220,23 @@ public class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Obs
         theControlTarget.addControls(v);
 
     }
+    long lastActionTime = System.currentTimeMillis();
 
     private int[] waitForAction() {
         int[] theAction = null;
         while (true) {
             synchronized (syncLock) {
-                if (haveNextAction) {
-                    theAction = nextAction;
-                    haveNextAction=false;
+                boolean nullTimeOut = (lastActionTime + nullActionMSInterval) < System.currentTimeMillis();
+                if (haveNextAction || (sendNullActions && nullTimeOut)) {
+                    if (haveNextAction) {
+                        theAction = nextAction;
+                    } else {
+                        if (nullTimeOut && sendNullActions) {
+                            theAction = nullAction.intArray;
+                        }
+                    }
+                    haveNextAction = false;
+                    lastActionTime = System.currentTimeMillis();
 //                    theButtonPanel.add(new JButton("Test"));
 //                    theButtonPanel.getParent().invalidate();
                     break;

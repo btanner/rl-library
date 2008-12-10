@@ -8,11 +8,11 @@ source $systemPath/scripts/rl-library-includes.sh
 
 startRLGlueInBackGround
 startAgentShellInBackGround
-startEnvShellInBackGround
+
 echo "-------- NOTE ---------"
 echo "Start your RL-Glue Environment"
 echo "-----------------------"
-startNetGuiTrainerDynamicEnvAgentBothViz
+startNetGuiTrainerDynamicAgentStandardEnvironmentBothViz
 
 waitForAgentShellToDie
 waitForRLGlueToDie
