@@ -14,6 +14,8 @@ import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 
 import java.util.Observer;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -51,7 +53,7 @@ public class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Obs
     public KeyboardActionVizComponent(TinyGlue theGlueState, DynamicControlTarget theControlTarget) {
         this.theControlTarget = theControlTarget;
         this.theGlueState = theGlueState;
-        theGlueState.addObserver(this);
+        theGlueState.addLastObserver(this);
         javax.swing.Action pushCarLeft = new SimpleIntAction(0, this);
         javax.swing.Action pushCarRight = new SimpleIntAction(2, this);
         javax.swing.Action pushCarNeutral = new SimpleIntAction(1, this);
@@ -134,8 +136,8 @@ public class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Obs
         }
         if (arg instanceof Reward_observation_terminal) {
             //RL_env_step just got called
-            int[] theAction = waitForAction();
-            TellAgentWhatToDoRequest.Execute(theAction);
+            final int[] theAction = waitForAction();
+                    TellAgentWhatToDoRequest.Execute(theAction);
         }
 
         //Have this listen for right events from tinyglue and make sure a new action comes
@@ -157,17 +159,20 @@ public class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Obs
 
     public void actionFinished() {
     }
+    static String supportedEnvStrings[] = {"EnvName:Mountain-Car", "EnvName:Acrobot",
+        "EnvName:ContinuousGridWorld", "EnvName:Tetris", "EnvName:Tetris", "EnvName:ExpandedCritter",
+        "EnvName:CartPole"
+    };
 
-    static String supportedEnvStrings[]={"EnvName:Mountain-Car","EnvName:Acrobot",
-    "EnvName:ContinuousGridWorld","EnvName:Tetris","EnvName:Tetris","EnvName:ExpandedCritter"};
-
-    public static boolean supportsEnvironment(String taskSpec){
+    public static boolean supportsEnvironment(String taskSpec) {
         for (String thisString : supportedEnvStrings) {
-            if(taskSpec.contains(thisString))
+            if (taskSpec.contains(thisString)) {
                 return true;
+            }
         }
         return false;
     }
+
     private void setupPanels(String taskSpec) {
         theControlTarget.removeControl(theKeyListenerPanel);
         theKeyListenerPanel = new JPanel();
@@ -205,19 +210,19 @@ public class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Obs
     }
 
     private int[] waitForAction() {
-        int[] theAction=null;
+        int[] theAction = null;
         while (true) {
             synchronized (syncLock) {
                 if (haveNextAction) {
                     theAction = nextAction;
-                    haveNextAction = false;
+                    haveNextAction=false;
 //                    theButtonPanel.add(new JButton("Test"));
 //                    theButtonPanel.getParent().invalidate();
                     break;
                 }
             }
             try {
-                Thread.sleep(25);
+                Thread.yield();
             } catch (Exception e) {
                 System.err.println("Bad sleep: " + e);
             }

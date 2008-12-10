@@ -26,6 +26,10 @@ import java.awt.geom.Rectangle2D;
 
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.rlcommunity.rlglue.codec.types.Observation;
+import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 import rlVizLib.visualization.SelfUpdatingVizComponent;
 import rlVizLib.visualization.VizComponentChangeListener;
 
@@ -122,8 +126,14 @@ public class TetrisBlocksComponent implements SelfUpdatingVizComponent, Observer
      */
     public void update(Observable o, Object arg) {
         if (theChangeListener != null) {
-            tetVis.updateAgentState(false);
-            theChangeListener.vizComponentChanged(this);
+            if(arg instanceof Observation){
+                tetVis.updateAgentState(false);
+                theChangeListener.vizComponentChanged(this);
+            }
+            if(arg instanceof Reward_observation_terminal){
+                tetVis.updateAgentState(false);
+                theChangeListener.vizComponentChanged(this);
+            }
         }
     }
 

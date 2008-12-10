@@ -98,10 +98,12 @@ public class TetrisVisualizer extends AbstractVisualizer {
         int currentTimeStep = theGlueState.getTotalSteps();
 
 
-        if (currentState == null || currentTimeStep != lastUpdateTimeStep || force) {
+//        if (currentState == null || currentTimeStep != lastUpdateTimeStep || force) {
+            System.out.println("\t\tRequesting tetris state");
             currentState = TetrisStateRequest.Execute();
+            System.out.println("\t\tGot tetris state");
             lastUpdateTimeStep = currentTimeStep;
-        }
+//        }
     }
 
     public int getWidth() {
