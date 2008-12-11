@@ -2,6 +2,7 @@ package org.rlcommunity.environments.continuousgridworld;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.net.URL;
 import java.util.Vector;
 
 import org.rlcommunity.environments.continuousgridworld.messages.CGWMapResponse;
@@ -35,11 +36,14 @@ import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
  */
 import rlVizLib.general.hasVersionDetails;
 import rlVizLib.messaging.environmentShell.TaskSpecPayload;
+import rlVizLib.messaging.interfaces.HasImageInterface;
+
 
 public class ContinuousGridWorld extends EnvironmentBase implements
         getEnvMaxMinsInterface,
         getEnvObsForStateInterface,
-        HasAVisualizerInterface {
+        HasAVisualizerInterface,
+HasImageInterface{
 
     protected Point2D agentPos;
     protected Point2D agentSize;
@@ -373,8 +377,11 @@ public class ContinuousGridWorld extends EnvironmentBase implements
     public String getVisualizerClassName() {
         return ContinuousGridWorldVisualizer.class.getName();
     }
-}
 
+    public URL getImageURL() {
+        return this.getClass().getResource("/images/cgwsplash.png");
+    }
+}
 class DetailsProvider implements hasVersionDetails {
 
     public String getName() {
