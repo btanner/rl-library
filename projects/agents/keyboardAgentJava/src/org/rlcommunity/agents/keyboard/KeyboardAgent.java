@@ -63,12 +63,6 @@ public class KeyboardAgent implements AgentInterface,HasAVisualizerInterface,Has
         super();
     }
     
-   /**
-     * Random agent can take any task spec.
-     * @param P
-     * @param TaskSpec
-     * @return
-     */
     public static TaskSpecResponsePayload isCompatible(ParameterHolder P, String TaskSpec){
         boolean supported=KeyboardActionVizComponent.supportsEnvironment(TaskSpec);
         if(supported){

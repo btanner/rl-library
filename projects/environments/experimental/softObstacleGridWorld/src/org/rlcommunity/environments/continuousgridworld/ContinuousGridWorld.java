@@ -33,6 +33,7 @@ import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
  *  Copyright 2007 Brian Tanner. All rights reserved.
  *
  */
+import rlVizLib.general.hasVersionDetails;
 import rlVizLib.messaging.environmentShell.TaskSpecPayload;
 
 public class ContinuousGridWorld extends EnvironmentBase implements
@@ -53,6 +54,8 @@ public class ContinuousGridWorld extends EnvironmentBase implements
 
     public static ParameterHolder getDefaultParameters() {
         ParameterHolder p = new ParameterHolder();
+        rlVizLib.utilities.UtilityShop.setVersionDetails(p, new DetailsProvider());
+
         p.addDoubleParam("cont-grid-world-minX", 0.0d);
         p.addDoubleParam("cont-grid-world-minY", 0.0d);
         p.addDoubleParam("cont-grid-world-width", 200.0d);
@@ -66,6 +69,7 @@ public class ContinuousGridWorld extends EnvironmentBase implements
     }
 
     public ContinuousGridWorld(ParameterHolder theParams) {
+
         double minX = theParams.getDoubleParam("cont-grid-world-minX");
         double minY = theParams.getDoubleParam("cont-grid-world-minY");
         double width = theParams.getDoubleParam("cont-grid-world-width");
@@ -368,5 +372,28 @@ public class ContinuousGridWorld extends EnvironmentBase implements
 
     public String getVisualizerClassName() {
         return ContinuousGridWorldVisualizer.class.getName();
+    }
+}
+
+class DetailsProvider implements hasVersionDetails {
+
+    public String getName() {
+        return "Soft Obstacle Continuous Grid World 0.1";
+    }
+
+    public String getShortName() {
+        return "Cont-Grid-World";
+    }
+
+    public String getAuthors() {
+        return "Brian Tanner";
+    }
+
+    public String getInfoUrl() {
+        return "http://library.rl-community.org/environments/continuousgridworld";
+    }
+
+    public String getDescription() {
+        return "RL-Library Java Version of a continuous grid world with soft obstacles.";
     }
 }

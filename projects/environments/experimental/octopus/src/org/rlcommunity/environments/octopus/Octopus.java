@@ -48,6 +48,7 @@ import rlVizLib.messaging.environment.EnvironmentMessages;
 import rlVizLib.messaging.environmentShell.TaskSpecPayload;
 import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
 import rlVizLib.messaging.interfaces.HasImageInterface;
+import rlVizLib.general.hasVersionDetails;
 
 public class Octopus extends EnvironmentBase implements HasAVisualizerInterface, HasImageInterface {
 
@@ -76,6 +77,14 @@ public class Octopus extends EnvironmentBase implements HasAVisualizerInterface,
         }
         initFromSpec(newC.getEnvironment());
     }
+    
+        public static ParameterHolder getDefaultParameters() {
+        ParameterHolder p = new ParameterHolder();
+        rlVizLib.utilities.UtilityShop.setVersionDetails(p, new DetailsProvider());
+
+        return p;
+    }
+
 
     public void initFromSpec(EnvSpec spec) {
         arm = new Arm(spec.getArm());
@@ -719,5 +728,28 @@ public class Octopus extends EnvironmentBase implements HasAVisualizerInterface,
                 target.setHighlighted(false);
             }
         }
+    }
+}
+
+class DetailsProvider implements hasVersionDetails {
+
+    public String getName() {
+        return "Octopus Arm";
+    }
+
+    public String getShortName() {
+        return "Octopus";
+    }
+
+    public String getAuthors() {
+        return "McGill RL Competition Team";
+    }
+
+    public String getInfoUrl() {
+        return "http://library.rl-community.org/environments/octopus";
+    }
+
+    public String getDescription() {
+        return "Alpha RL-Library Java Version of an octopus arm.";
     }
 }
