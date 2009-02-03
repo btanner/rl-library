@@ -41,7 +41,7 @@ We'll try and rely on minimal variables from above.
     	<fileset dir="${src.dir}" excludes="**/*.java"/>
   	</copy>
 
-    <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="${build.debug}"> 
+    <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="${build.debug}" target="1.5"> 
 		<compilerarg value="-Xlint"/> 
 		<classpath>
             <path refid="rlvizlib.classpath" />
@@ -77,7 +77,7 @@ We'll try and rely on minimal variables from above.
 
 <target name="rl-compile-tests" depends="rl-jar">
     <mkdir dir="${test.classes.dir}"/>
-    <javac srcdir="${test.dir}" destdir="${test.classes.dir}">
+    <javac srcdir="${test.dir}" destdir="${test.classes.dir}" target="1.5">
         <classpath>
             <path refid="rlvizlib.classpath" />
             <path refid="junit.classpath" />
