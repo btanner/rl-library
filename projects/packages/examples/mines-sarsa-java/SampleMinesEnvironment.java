@@ -39,6 +39,9 @@ import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
  * This code is adapted from the Mines.cpp code written by Adam White
  * for earlier versions of RL-Glue.
  *
+ * See the RL-Library page: 
+ * http://library.rl-community.org/environments/mines
+ *
  *	This is a very simple discrete-state, episodic grid world that has
  *	exploding mines in it.  If the agent steps on a mine, the episode
  *	ends with a large negative reward.
