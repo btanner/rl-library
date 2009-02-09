@@ -1,5 +1,5 @@
-LDFLAGS := $(LDFLAGS) $(EXTRA_LDFLAGS) -lm -lrlutils -lrlenvironment -lrlgluenetdev
-CFLAGS := $(CFLAGS) $(EXTRA_CFLAGS) -Wall -pedantic
+LDFLAGS := $(LDFLAGS) -lm -lrlutils -lrlenvironment -lrlgluenetdev
+CFLAGS := $(CFLAGS)  -Wall -pedantic
 
 all: SampleMinesEnvironment
 

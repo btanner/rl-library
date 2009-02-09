@@ -1,21 +1,19 @@
 
 #If RL-Glue Core or the C/C++ Codecs are not installed to default locations
-#You may need to use set the EXTRA_CFLAGS and EXTRA_LDFLAGS. 
+#You may need to use set the CFLAGS and LDFLAGS. 
 
 #Current values of these two vars is supposed to be illustrative, not correct for you.
 #This is what you would use if you installed the C/C++ Codec with:
 # ./configure --prefix=/Users/btanner/rl-glue
-#EXTRA_CFLAGS = -I/Users/btanner/rl-glue/include/rlglue
-#EXTRA_LDFLAGS =-L/Users/btanner/rl-glue/lib 
+ LDFLAGS := $(LDFLAGS) -L/Users/btanner/rl-glue/lib
+ CFLAGS := $(CFLAGS) -I/Users/btanner/rl-glue/include/rlglue
 
-# take the ones passed in to this makefile as default extra flags
-EXTRA_CFLAGS=$(CFLAGS)
-EXTRA_LDFLAGS=$(LDFLAGS)
+
 
 all: 	
-	EXTRA_CFLAGS=$(EXTRA_CFLAGS) EXTRA_LDFLAGS=$(EXTRA_LDFLAGS) make -f Makefile.agent 
-	EXTRA_CFLAGS=$(EXTRA_CFLAGS) EXTRA_LDFLAGS=$(EXTRA_LDFLAGS) make -f Makefile.environment 
-	EXTRA_CFLAGS=$(EXTRA_CFLAGS) EXTRA_LDFLAGS=$(EXTRA_LDFLAGS) make -f Makefile.experiment
+	CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" make -f Makefile.agent 
+	CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" make -f Makefile.environment 
+	CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" make -f Makefile.experiment
 
 clean:
 	make -f Makefile.agent  clean
