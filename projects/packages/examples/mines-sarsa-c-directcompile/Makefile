@@ -2,7 +2,7 @@
 #You may need to use set the CFLAGS and LDFLAGS. 
 
 #Current values of these two vars is supposed to be illustrative, not correct for you.
-#This is what you would use if you installed the C/C++ Codec with:
+#This is what you would use if you installed the RL-Glue Core with:
 # ./configure --prefix=/Users/btanner/rl-glue
 # LDFLAGS := $(LDFLAGS) -L/Users/btanner/rl-glue/lib
 # CFLAGS := $(CFLAGS) -I/Users/btanner/rl-glue/include/rlglue
