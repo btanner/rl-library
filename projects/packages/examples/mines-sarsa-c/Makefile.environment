@@ -1,10 +1,10 @@
-LDFLAGS := $(LDFLAGS)
-CFLAGS := $(CFLAGS) -Wall -pedantic
+LDFLAGS := $(EXTRA_LDFLAGS) -lm -lrlutils -lrlenvironment -lrlgluenetdev
+CFLAGS := $(EXTRA_CFLAGS) -Wall -pedantic
 
 all: SampleMinesEnvironment
 
 SampleMinesEnvironment: SampleMinesEnvironment.o 
-	$(CC)  $(LDFLAGS) SampleMinesEnvironment.o -lrlutils -lrlenvironment -lrlgluenetdev -o SampleMinesEnvironment      
+	$(CC)   SampleMinesEnvironment.o $(LDFLAGS) -o SampleMinesEnvironment      
 
 SampleMinesEnvironment.o: SampleMinesEnvironment.c
 	$(CC)  $(CFLAGS) -c SampleMinesEnvironment.c -o SampleMinesEnvironment.o 

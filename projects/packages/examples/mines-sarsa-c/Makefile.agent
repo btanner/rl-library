@@ -1,10 +1,10 @@
-LDFLAGS := $(LDFLAGS)
-CFLAGS := $(CFLAGS) -Wall -pedantic
+LDFLAGS := $(EXTRA_LDFLAGS) -lm -lrlutils -lrlagent -lrlgluenetdev
+CFLAGS := $(EXTRA_CFLAGS) -Wall -pedantic
 
 all: SampleSarsaAgent
 
 SampleSarsaAgent: SampleSarsaAgent.o 
-	$(CC)  $(LDFLAGS) SampleSarsaAgent.o -lm -lrlutils -lrlagent -lrlgluenetdev -o SampleSarsaAgent      
+	$(CC)   SampleSarsaAgent.o $(LDFLAGS) -o SampleSarsaAgent      
 
 SampleSarsaAgent.o: SampleSarsaAgent.c
 	$(CC)  $(CFLAGS) -c SampleSarsaAgent.c -o SampleSarsaAgent.o 
