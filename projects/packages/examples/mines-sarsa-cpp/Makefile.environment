@@ -4,10 +4,10 @@ CFLAGS := $(CFLAGS) $(EXTRA_CFLAGS) -Wall -pedantic
 all: SampleMinesEnvironment
 
 SampleMinesEnvironment: SampleMinesEnvironment.o 
-	$(CC)   SampleMinesEnvironment.o $(LDFLAGS) -o SampleMinesEnvironment      
+	$(CXX)   SampleMinesEnvironment.o $(LDFLAGS) -o SampleMinesEnvironment      
 
-SampleMinesEnvironment.o: SampleMinesEnvironment.c
-	$(CC)  $(CFLAGS) -c SampleMinesEnvironment.c -o SampleMinesEnvironment.o 
+SampleMinesEnvironment.o: SampleMinesEnvironment.cpp
+	$(CXX)  $(CFLAGS) -c SampleMinesEnvironment.cpp -o SampleMinesEnvironment.o 
 
 clean:
 	rm -rf SampleMinesEnvironment SampleMinesEnvironment.exe *.o

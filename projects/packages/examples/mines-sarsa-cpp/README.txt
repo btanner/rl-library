@@ -1,5 +1,5 @@
 =================================
-RL-Glue C MINES-SARSA-SAMPLE README
+RL-Glue C++ MINES-SARSA-SAMPLE README
 =================================
 ----------------------------
 Introduction

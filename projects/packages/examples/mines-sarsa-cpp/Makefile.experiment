@@ -4,10 +4,10 @@ CFLAGS := $(CFLAGS) $(EXTRA_CFLAGS) -Wall -pedantic
 all: SampleExperiment
 
 SampleExperiment: SampleExperiment.o 
-	$(CC)  SampleExperiment.o $(LDFLAGS) -o SampleExperiment
+	$(CXX)  SampleExperiment.o $(LDFLAGS) -o SampleExperiment
 
-SampleExperiment.o: SampleExperiment.c
-	$(CC)  $(CFLAGS) -c SampleExperiment.c -o SampleExperiment.o 
+SampleExperiment.o: SampleExperiment.cpp
+	$(CXX)  $(CFLAGS) -c SampleExperiment.cpp -o SampleExperiment.o 
 
 clean:
 	rm -rf SampleExperiment SampleExperiment.exe *.o
