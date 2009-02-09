@@ -1,4 +1,3 @@
-
 #If RL-Glue Core or the C/C++ Codecs are not installed to default locations
 #You may need to use set the CFLAGS and LDFLAGS. 
 
