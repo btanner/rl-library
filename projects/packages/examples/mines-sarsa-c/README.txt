@@ -13,7 +13,7 @@ Compiling
 ----------------------------
 Depending on whether you have RL-Glue Core and the C/C++ codec installed in your include and library paths, you may have to update the Makefile or not.
 If the installation was to the default location, this Makefile may not need to be edited.
-If you have to update the Makefile, set the -I and -L for EXTRA_CFLAGS and EXTRA_LDFLAGS to point to where you installed the headers and libs.  
+If you have to update the Makefile, set the -I and -L for CFLAGS and LDFLAGS to point to where you installed the headers and libs.  
 
 >$ make
 

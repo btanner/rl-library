@@ -1,5 +1,5 @@
-LDFLAGS := $(LDFLAGS) $(EXTRA_LDFLAGS) -lm -lrlutils -lrlexperiment -lrlgluenetdev
-CFLAGS := $(CFLAGS) $(EXTRA_CFLAGS) -Wall -pedantic
+LDFLAGS := $(LDFLAGS)  -lm -lrlutils -lrlexperiment -lrlgluenetdev
+CFLAGS := $(CFLAGS)  -Wall -pedantic
 
 all: SampleExperiment
 
