@@ -9,7 +9,6 @@ This is a sample experiment that has the "Mines" environment and a simple tabula
 This example requires the Python Codec:
 http://glue.rl-community.org/Home/Extensions/python-codec
 
-This example also requires that you have NumPy installed! (http://numpy.scipy.org)
 Running
 ----------------------------
 - These instructions assume that you have rl_glue (or rl_glue.exe) installed on your path so that you don't have to type the full path to it.

@@ -32,8 +32,6 @@ from rlglue.utils import TaskSpecVRLGLUE3
 from random import Random
 
 
-#This example project requires numPy
-import numpy;
 
 # This is a very simple Sarsa agent for discrete-action, discrete-state
 # environments.  It uses epsilon-greedy exploration.
@@ -55,18 +53,18 @@ class sarsa_agent(Agent):
 	randGenerator=Random()
 	lastAction=Action()
 	lastObservation=Observation()
-	sarsa_stepsize = 0.1;
-	sarsa_epsilon = 0.1;
-	sarsa_gamma = 1.0;
-	numStates = 0;
-	numActions = 0;
-	value_function = None;
+	sarsa_stepsize = 0.1
+	sarsa_epsilon = 0.1
+	sarsa_gamma = 1.0
+	numStates = 0
+	numActions = 0
+	value_function = None
 	
-	policyFrozen=False;
-	exploringFrozen=False;
+	policyFrozen=False
+	exploringFrozen=False
 	
 	def agent_init(self,taskSpecString):
-		TaskSpec = TaskSpecVRLGLUE3.TaskSpecParser(taskSpecString);
+		TaskSpec = TaskSpecVRLGLUE3.TaskSpecParser(taskSpecString)
 		if TaskSpec.valid:
 			assert len(TaskSpec.getIntObservations())==1, "expecting 1-dimensional discrete observations"
 			assert len(TaskSpec.getDoubleObservations())==0, "expecting no continuous observations"
@@ -80,7 +78,8 @@ class sarsa_agent(Agent):
 			assert not TaskSpec.isSpecial(TaskSpec.getIntActions()[0][1]), " expecting max action to be a number not a special value"
 			self.numActions=TaskSpec.getIntActions()[0][1]+1;
 			
-			self.value_function=numpy.zeros([self.numStates,self.numActions]);
+			self.value_function=[self.numActions*[0.0] for i in range(self.numStates)]
+
 		else:
 			print "Task Spec could not be parsed: "+taskSpecString;
 			
@@ -88,17 +87,19 @@ class sarsa_agent(Agent):
 		self.lastObservation=Observation()
 		
 	def egreedy(self, state):
-		maxIndex=0;
-		a=1;
+		maxIndex=0
+		a=1
 		if not self.exploringFrozen and self.randGenerator.random()<self.sarsa_epsilon:
-			return self.randGenerator.randint(0,self.numActions-1);
+			return self.randGenerator.randint(0,self.numActions-1)
+
+                
+		return self.value_function[state].index(max(self.value_function[state]))
 		
-		return self.value_function[state].argmax();
 		
 	
 	def agent_start(self,observation):
-		theState=observation.intArray[0];
-		thisIntAction=self.egreedy(theState);
+		theState=observation.intArray[0]
+		thisIntAction=self.egreedy(theState)
 		returnAction=Action()
 		returnAction.intArray=[thisIntAction]
 		
@@ -108,20 +109,20 @@ class sarsa_agent(Agent):
 		return returnAction
 	
 	def agent_step(self,reward, observation):
-		newState=observation.intArray[0];
-		lastState=self.lastObservation.intArray[0];
-		lastAction=self.lastAction.intArray[0];
+		newState=observation.intArray[0]
+		lastState=self.lastObservation.intArray[0]
+		lastAction=self.lastAction.intArray[0]
 
-		newIntAction=self.egreedy(newState);
+		newIntAction=self.egreedy(newState)
 
-		Q_sa=self.value_function[lastState,lastAction];
-		Q_sprime_aprime=self.value_function[newState,newIntAction];
+		Q_sa=self.value_function[lastState][lastAction]
+		Q_sprime_aprime=self.value_function[newState][newIntAction]
 
-		new_Q_sa=Q_sa + self.sarsa_stepsize * (reward + self.sarsa_gamma * Q_sprime_aprime - Q_sa);
+		new_Q_sa=Q_sa + self.sarsa_stepsize * (reward + self.sarsa_gamma * Q_sprime_aprime - Q_sa)
 
 
 		if not self.policyFrozen:
-			self.value_function[lastState,lastAction]=new_Q_sa;
+			self.value_function[lastState][lastAction]=new_Q_sa
 
 		returnAction=Action()
 		returnAction.intArray=[newIntAction]
@@ -132,29 +133,29 @@ class sarsa_agent(Agent):
 		return returnAction
 	
 	def agent_end(self,reward):
-		lastState=self.lastObservation.intArray[0];
-		lastAction=self.lastAction.intArray[0];
+		lastState=self.lastObservation.intArray[0]
+		lastAction=self.lastAction.intArray[0]
 
-		Q_sa=self.value_function[lastState,lastAction];
+		Q_sa=self.value_function[lastState][lastAction]
 
-		new_Q_sa=Q_sa + self.sarsa_stepsize * (reward - Q_sa);
+		new_Q_sa=Q_sa + self.sarsa_stepsize * (reward - Q_sa)
 
 		if not self.policyFrozen:
-			self.value_function[lastState,lastAction]=new_Q_sa;
+			self.value_function[lastState][lastAction]=new_Q_sa
 
 	
 	def agent_cleanup(self):
 		pass
 
 	def save_value_function(self, fileName):
-		theFile = open(fileName, "w");
-		pickle.dump(self.value_function, theFile);
-		theFile.close();
+		theFile = open(fileName, "w")
+		pickle.dump(self.value_function, theFile)
+		theFile.close()
 
 	def load_value_function(self, fileName):
-		theFile = open(fileName, "r");
-		self.value_function=pickle.load(theFile);
-		theFile.close();
+		theFile = open(fileName, "r")
+		self.value_function=pickle.load(theFile)
+		theFile.close()
 	
 	def agent_message(self,inMessage):
 		
@@ -163,32 +164,32 @@ class sarsa_agent(Agent):
 		# Action: Set flag to stop updating policy
 		#
 		if inMessage.startswith("freeze learning"):
-			self.policyFrozen=True;
-			return "message understood, policy frozen";
+			self.policyFrozen=True
+			return "message understood, policy frozen"
 
 		#	Message Description
 	 	# unfreeze learning
 	 	# Action: Set flag to resume updating policy
 		#
 		if inMessage.startswith("unfreeze learning"):
-			self.policyFrozen=False;
-			return "message understood, policy unfrozen";
+			self.policyFrozen=False
+			return "message understood, policy unfrozen"
 
 		#Message Description
 	 	# freeze exploring
 	 	# Action: Set flag to stop exploring (greedy actions only)
 		#
 		if inMessage.startswith("freeze exploring"):
-			self.exploringFrozen=True;
-			return "message understood, exploring frozen";
+			self.exploringFrozen=True
+			return "message understood, exploring frozen"
 
 		#Message Description
 	 	# unfreeze exploring
 	 	# Action: Set flag to resume exploring (e-greedy actions)
 		#
 		if inMessage.startswith("unfreeze exploring"):
-			self.exploringFrozen=False;
-			return "message understood, exploring frozen";
+			self.exploringFrozen=False
+			return "message understood, exploring frozen"
 
 		#Message Description
 	 	# save_policy FILENAME
@@ -199,7 +200,7 @@ class sarsa_agent(Agent):
 			splitString=inMessage.split(" ");
 			self.save_value_function(splitString[1]);
 			print "Saved.";
-			return "message understood, saving policy";
+			return "message understood, saving policy"
 
 		#Message Description
 	 	# load_policy FILENAME
@@ -207,12 +208,12 @@ class sarsa_agent(Agent):
 		# file called FILENAME
 		#
 		if inMessage.startswith("load_policy"):
-			splitString=inMessage.split(" ");
-			self.load_value_function(splitString[1]);
-			print "Loaded.";
-			return "message understood, loading policy";
+			splitString=inMessage.split(" ")
+			self.load_value_function(splitString[1])
+			print "Loaded."
+			return "message understood, loading policy"
 
-		return "SampleSarsaAgent(Python) does not understand your message.";
+		return "SampleSarsaAgent(Python) does not understand your message."
 
 
 
