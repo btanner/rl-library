@@ -73,7 +73,6 @@ HasImageInterface{
     }
 
     public ContinuousGridWorld(ParameterHolder theParams) {
-
         double minX = theParams.getDoubleParam("cont-grid-world-minX");
         double minY = theParams.getDoubleParam("cont-grid-world-minY");
         double width = theParams.getDoubleParam("cont-grid-world-width");
@@ -83,16 +82,20 @@ HasImageInterface{
         worldRect = new Rectangle2D.Double(minX, minY, width, height);
         agentSize = new Point2D.Double(1.0d, 1.0d);
 
+        addRewardRegion(new Rectangle2D.Double(0.0d, 0.0d, 200.0d, 200.0d), -1.0d);
+
+        addBarriersAndGoal(theParams);
+    }
+
+    protected void addBarriersAndGoal(ParameterHolder theParams) {
         addResetRegion(new Rectangle2D.Double(75.0d, 75.0d, 25.0d, 25.0d));
         addRewardRegion(new Rectangle2D.Double(75.0d, 75.0d, 25.0d, 25.0d), 1.0d);
-
-        addRewardRegion(new Rectangle2D.Double(0.0d, 0.0d, 200.0d, 200.0d), -1.0d);
 
         addBarrierRegion(new Rectangle2D.Double(50.0d, 50.0d, 10.0d, 100.0d), 1.0d);
         addBarrierRegion(new Rectangle2D.Double(50.0d, 50.0d, 100.0d, 10.0d), 1.0d);
         addBarrierRegion(new Rectangle2D.Double(150.0d, 50.0d, 10.0d, 100.0d), 1.0d);
     }
-
+    
     protected Rectangle2D makeAgentSizedRectFromPosition(Point2D thePos) {
         return new Rectangle2D.Double(thePos.getX(), thePos.getY(), agentSize.getX(), agentSize.getY());
     }
@@ -249,7 +252,7 @@ HasImageInterface{
     //Penalty is between 0 and 1, its a movement penalty
     protected void addBarrierRegion(Rectangle2D barrierRegion, double penalty) {
         barrierRegions.add(barrierRegion);
-
+        System.out.println ("Adding a barrier at "+barrierRegion);
         assert (penalty >= 0);
         assert (penalty <= 1);
         thePenalties.add(penalty);
