@@ -252,7 +252,6 @@ HasImageInterface{
     //Penalty is between 0 and 1, its a movement penalty
     protected void addBarrierRegion(Rectangle2D barrierRegion, double penalty) {
         barrierRegions.add(barrierRegion);
-        System.out.println ("Adding a barrier at "+barrierRegion);
         assert (penalty >= 0);
         assert (penalty <= 1);
         thePenalties.add(penalty);
