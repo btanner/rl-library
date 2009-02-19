@@ -170,8 +170,6 @@ HasImageInterface{
     public Observation env_start() {
         randomizeAgentPosition();
 
-//		setAgentPosition(new Point2D.Double(startX,startY));
-
         while (calculateMaxBarrierAtPosition(currentAgentRect) >= 1.0f || !getWorldRect().contains(currentAgentRect)) {
             randomizeAgentPosition();
         }
@@ -270,6 +268,8 @@ HasImageInterface{
         double startX = Math.random() * getWorldRect().getWidth();
         double startY = Math.random() * getWorldRect().getHeight();
 
+        // @todo maybe someone should decide whether the position should be
+        //   random or fixed?
         startX = .1;
         startY = .1;
 

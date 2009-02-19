@@ -11,6 +11,7 @@ import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.IntRange;
 import org.rlcommunity.rlglue.codec.types.Action;
+import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 import rlVizLib.general.ParameterHolder;
 import rlVizLib.messaging.environmentShell.TaskSpecPayload;
@@ -27,7 +28,8 @@ public class PotentialFuncContinuousGridWorld extends ContinuousGridWorld {
     
     protected Point2D lastAgentPos;
     protected Point2D goalPos;
-
+    protected Point2D startPos;
+    
     protected double shapingRewardScale;
     
     public static ParameterHolder getDefaultParameters() {
@@ -36,9 +38,12 @@ public class PotentialFuncContinuousGridWorld extends ContinuousGridWorld {
         // Default goal (centered at 87.5)
         p.addDoubleParam("cont-grid-world-goalX", 87.5);
         p.addDoubleParam("cont-grid-world-goalY", 87.5);
+        p.addDoubleParam("cont-grid-world-startX", 0.1);
+        p.addDoubleParam("cont-grid-world-startY", 0.1);
+        p.addDoubleParam("potential-function-scale", 1.0);
         p.addBooleanParam("give-potential-function-reward", false);
         p.addBooleanParam("use-cup-barriers", true);
-        
+
         return p;
     }
 
@@ -50,14 +55,18 @@ public class PotentialFuncContinuousGridWorld extends ContinuousGridWorld {
         super(theParams);
     }
 
+    @Override
     public void addBarriersAndGoal(ParameterHolder theParams) {
         double width = theParams.getDoubleParam("cont-grid-world-width");
         double height = theParams.getDoubleParam("cont-grid-world-height");
         double goalX = theParams.getDoubleParam("cont-grid-world-goalX");
         double goalY = theParams.getDoubleParam("cont-grid-world-goalY");
+        double startX = theParams.getDoubleParam("cont-grid-world-startX");
+        double startY = theParams.getDoubleParam("cont-grid-world-startY");
 
         goalPos = new Point2D.Double(goalX, goalY);
-
+        startPos = new Point2D.Double(startX, startY);
+        
         usePotentialFunction = theParams.getBooleanParam("give-potential-function-reward");
         useBarriers = theParams.getBooleanParam("use-cup-barriers");
 
@@ -80,12 +89,20 @@ public class PotentialFuncContinuousGridWorld extends ContinuousGridWorld {
         }
 
         // Set the shaping reward scale, which is the maximum distance in the world
-        shapingRewardScale = 1;//Math.sqrt(width*width + height*height);
+        shapingRewardScale = theParams.getDoubleParam("potential-function-scale");
     }
     
     @Override
     public String env_init() {
         return makeTaskSpec();
+    }
+
+    @Override
+    public Observation env_start() {
+		setAgentPosition(startPos);
+
+        return makeObservation();
+
     }
 
     private String makeTaskSpec() {
