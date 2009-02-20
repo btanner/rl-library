@@ -6,6 +6,7 @@ package org.rlcommunity.environments.continuousgridworld;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.Random;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
@@ -23,15 +24,24 @@ import rlVizLib.messaging.environmentShell.TaskSpecPayload;
  * @author Marc G. Bellemare (mg17 at cs ualberta ca)
  */
 public class PotentialFuncContinuousGridWorld extends ContinuousGridWorld {
-    protected boolean usePotentialFunction;
-    protected boolean useBarriers;
+    public static final int MAP_EMPTY = 0;
+    public static final int MAP_CUP   = 1;
+
+    public static final int numActions = 4;
     
+    protected boolean usePotentialFunction;
+    protected int mapNumber;
+
+    protected final Random randomMaker = new Random();
+
     protected Point2D lastAgentPos;
     protected Point2D goalPos;
     protected Point2D startPos;
     
     protected double shapingRewardScale;
-    
+    protected double randomActionProbability;
+    protected double movementNoise;
+
     public static ParameterHolder getDefaultParameters() {
         ParameterHolder p = ContinuousGridWorld.getDefaultParameters();
 
@@ -42,8 +52,11 @@ public class PotentialFuncContinuousGridWorld extends ContinuousGridWorld {
         p.addDoubleParam("cont-grid-world-startY", 0.1);
         p.addDoubleParam("potential-function-scale", 1.0);
         p.addBooleanParam("give-potential-function-reward", false);
-        p.addBooleanParam("use-cup-barriers", true);
 
+        p.addIntegerParam("map-number", MAP_EMPTY);
+        p.addDoubleParam("random-action-prob", 0.0);
+        p.addDoubleParam("movement-noise", 0.0);
+        
         return p;
     }
 
@@ -68,8 +81,11 @@ public class PotentialFuncContinuousGridWorld extends ContinuousGridWorld {
         startPos = new Point2D.Double(startX, startY);
         
         usePotentialFunction = theParams.getBooleanParam("give-potential-function-reward");
-        useBarriers = theParams.getBooleanParam("use-cup-barriers");
+        mapNumber = theParams.getIntegerParam("map-number");
 
+        randomActionProbability = theParams.getDoubleParam("random-action-prob");
+        movementNoise = theParams.getDoubleParam("movement-noise");
+        
         double goalWidth, goalHeight;
         goalWidth = goalHeight = 25.0;
 
@@ -82,16 +98,26 @@ public class PotentialFuncContinuousGridWorld extends ContinuousGridWorld {
                 goalY-goalHeight/2,
                 goalWidth, goalHeight), 1.0);
 
-        if (useBarriers) {
-            addBarrierRegion(new Rectangle2D.Double(50.0d, 50.0d, 10.0d, 100.0d), 1.0d);
-            addBarrierRegion(new Rectangle2D.Double(50.0d, 50.0d, 100.0d, 10.0d), 1.0d);
-            addBarrierRegion(new Rectangle2D.Double(150.0d, 50.0d, 10.0d, 100.0d), 1.0d);
-        }
+        createMap(mapNumber);
 
         // Set the shaping reward scale, which is the maximum distance in the world
         shapingRewardScale = theParams.getDoubleParam("potential-function-scale");
     }
-    
+
+    private void createMap(int number) {
+        switch (number) {
+            case MAP_EMPTY: // Empty map
+                break;
+            case 1: // Cup map
+                addBarrierRegion(new Rectangle2D.Double(50.0d, 50.0d, 10.0d, 100.0d), 1.0d);
+                addBarrierRegion(new Rectangle2D.Double(50.0d, 50.0d, 100.0d, 10.0d), 1.0d);
+                addBarrierRegion(new Rectangle2D.Double(150.0d, 50.0d, 10.0d, 100.0d), 1.0d);
+                break;
+            default:
+                throw new IllegalArgumentException ("Map number "+number);
+        }
+    }
+
     @Override
     public String env_init() {
         return makeTaskSpec();
@@ -129,9 +155,53 @@ public class PotentialFuncContinuousGridWorld extends ContinuousGridWorld {
 
     @Override
     public Reward_observation_terminal env_step(Action action) {
-        // This gets called after env_start, so agentPos will not be null
         lastAgentPos = agentPos;
-        return super.env_step(action);
+        // Fudge the action a bit
+        int theAction;
+        if (randomActionProbability > 0 && 
+                randomMaker.nextDouble() < randomActionProbability) {
+            theAction = (int)(randomMaker.nextDouble() * numActions);
+        }
+        else
+            theAction = action.intArray[0];
+
+        double dx = 0;
+        double dy = 0;
+
+        if (theAction == 0) {
+            dx = walkSpeed;
+        }
+        if (theAction == 1) {
+            dx = -walkSpeed;
+        }
+        if (theAction == 2) {
+            dy = walkSpeed;
+        }
+        if (theAction == 3) {
+            dy = -walkSpeed;        //Add a small bit of random noise
+        }
+        double noiseX = randomMaker.nextGaussian() * movementNoise;
+        double noiseY = randomMaker.nextGaussian() * movementNoise;
+
+        dx += noiseX;
+        dy += noiseY;
+        Point2D nextPos = new Point2D.Double(agentPos.getX() + dx, agentPos.getY() + dy);
+
+
+        nextPos = updateNextPosBecauseOfWorldBoundary(nextPos);
+        nextPos = updateNextPosBecauseOfBarriers(nextPos);
+
+        agentPos = nextPos;
+        updateCurrentAgentRect();
+        boolean inResetRegion = false;
+
+        for (int i = 0; i < resetRegions.size(); i++) {
+            if (resetRegions.get(i).contains(currentAgentRect)) {
+                inResetRegion = true;
+            }
+        }
+
+        return makeRewardObservation(getReward(), inResetRegion);
     }
 
     /** Provide the agent with some reward, possibly with a potential function
