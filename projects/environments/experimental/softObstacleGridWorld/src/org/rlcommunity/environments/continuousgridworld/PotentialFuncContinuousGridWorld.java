@@ -42,6 +42,8 @@ public class PotentialFuncContinuousGridWorld extends ContinuousGridWorld {
     protected double randomActionProbability;
     protected double movementNoise;
 
+    protected double discountFactor = 1.0;
+    
     public static ParameterHolder getDefaultParameters() {
         ParameterHolder p = ContinuousGridWorld.getDefaultParameters();
 
@@ -108,7 +110,7 @@ public class PotentialFuncContinuousGridWorld extends ContinuousGridWorld {
         switch (number) {
             case MAP_EMPTY: // Empty map
                 break;
-            case 1: // Cup map
+            case MAP_CUP: // Cup map
                 addBarrierRegion(new Rectangle2D.Double(50.0d, 50.0d, 10.0d, 100.0d), 1.0d);
                 addBarrierRegion(new Rectangle2D.Double(50.0d, 50.0d, 100.0d, 10.0d), 1.0d);
                 addBarrierRegion(new Rectangle2D.Double(150.0d, 50.0d, 10.0d, 100.0d), 1.0d);
@@ -134,7 +136,7 @@ public class PotentialFuncContinuousGridWorld extends ContinuousGridWorld {
     private String makeTaskSpec() {
         TaskSpecVRLGLUE3 theTaskSpecObject = new TaskSpecVRLGLUE3();
         theTaskSpecObject.setEpisodic();
-        theTaskSpecObject.setDiscountFactor(1.0d);
+        theTaskSpecObject.setDiscountFactor(discountFactor);
         theTaskSpecObject.addContinuousObservation(new DoubleRange(getWorldRect().getMinX(), getWorldRect().getMaxX()));
         theTaskSpecObject.addContinuousObservation(new DoubleRange(getWorldRect().getMinY(), getWorldRect().getMaxY()));
         theTaskSpecObject.addDiscreteAction(new IntRange(0, 3));
@@ -215,8 +217,9 @@ public class PotentialFuncContinuousGridWorld extends ContinuousGridWorld {
         double shapingReward;
 
         if (usePotentialFunction) {
+            // Multiply the next potential by the discount factor
             double lastDist = lastAgentPos.distance(goalPos);
-            double dist = agentPos.distance(goalPos);
+            double dist = discountFactor*agentPos.distance(goalPos);
 
             shapingReward = (lastDist - dist) / shapingRewardScale;
         }
