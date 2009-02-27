@@ -69,9 +69,11 @@ public class DiscontinuousContinuousGridWorld extends ContinuousGridWorld {
         p.addDoubleParam("cont-grid-world-goalY", 87.5);
         p.addDoubleParam("cont-grid-world-startX", 0.1);
         p.addDoubleParam("cont-grid-world-startY", 0.1);
-
         p.addIntegerParam("observation-mapping", MAPPING_DISCONTINUOUS_TILES);
-
+        //this does nothing for now
+        p.addIntegerParam("invert-slopes",0);
+        //this does nothing for now
+        p.addIntegerParam("mapping-seed",27);
         p.addIntegerParam("map-number", MAP_EMPTY);
         p.addDoubleParam("random-action-prob", 0.0);
         p.addDoubleParam("movement-noise", 0.0);
