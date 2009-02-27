@@ -49,8 +49,8 @@ public class DiscontinuousContinuousGridWorld extends ContinuousGridWorld {
     protected final Random randomMaker;
 
     protected Point2D lastAgentPos;
-    protected Point2D goalPos;
-    protected Point2D startPos;
+    protected Point2D.Double goalPos;
+    protected Point2D.Double startPos;
     
     protected double randomActionProbability;
     protected double movementNoise;
@@ -212,6 +212,8 @@ public class DiscontinuousContinuousGridWorld extends ContinuousGridWorld {
         theTaskSpecObject.addDiscreteAction(new IntRange(0, 3));
         theTaskSpecObject.setRewardRange(new DoubleRange(-1, 1));
         theTaskSpecObject.setExtra("EnvName:DiscontinuousContinuousGridWorld");
+        theTaskSpecObject.setExtra("GOALINFO:"+goalPos.x+":"+goalPos.y);
+        
         String taskSpecString = theTaskSpecObject.toTaskSpec();
         TaskSpec.checkTaskSpec(taskSpecString);
         return taskSpecString;
