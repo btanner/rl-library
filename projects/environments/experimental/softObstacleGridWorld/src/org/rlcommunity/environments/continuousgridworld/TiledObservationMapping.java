@@ -182,29 +182,4 @@ public class TiledObservationMapping implements ObservationMapping {
 
         return mappedObservation;
     }
-
-    public static void main(String[] args) {
-        Random rnd = new Random();
-
-        int numDims = 2;
-        int numCells = 2;
-        
-        TiledObservationMapping map = new TiledObservationMapping(2,2,rnd);
-
-        Observation obs = new Observation(0, numDims);
-        double[] xv = new double[] {0.01,0.49,0.51,0.99};
-        double[] yv = new double[] {0.01,0.49,0.51,0.99};
-
-        if (false) for (int xi = 0; xi < xv.length; xi++) {
-            for (int yi = 0; yi < yv.length; yi++) {
-                obs.doubleArray[0] = xv[xi];
-                obs.doubleArray[1] = yv[yi];
-
-                Observation mapObs = map.map(obs);
-
-                System.out.println(Arrays.toString(obs.doubleArray)+ "  ->  "+
-                        Arrays.toString(mapObs.doubleArray));
-            }
-        }
-    }
 }
