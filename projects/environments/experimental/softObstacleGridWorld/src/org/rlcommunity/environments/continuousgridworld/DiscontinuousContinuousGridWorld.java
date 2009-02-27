@@ -7,6 +7,8 @@ package org.rlcommunity.environments.continuousgridworld;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Random;
+import java.util.Vector;
+import org.rlcommunity.environments.continuousgridworld.visualizer.DiscontinuousContinuousGridWorldVisualizer;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
@@ -15,6 +17,11 @@ import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 import rlVizLib.general.ParameterHolder;
+import rlVizLib.messaging.NotAnRLVizMessageException;
+import rlVizLib.messaging.environment.EnvObsForStateRequest;
+import rlVizLib.messaging.environment.EnvObsForStateResponse;
+import rlVizLib.messaging.environment.EnvironmentMessageParser;
+import rlVizLib.messaging.environment.EnvironmentMessages;
 import rlVizLib.messaging.environmentShell.TaskSpecPayload;
 
 /** An extension of the Continuous grid world that includes a specified goal
@@ -155,6 +162,39 @@ public class DiscontinuousContinuousGridWorld extends ContinuousGridWorld {
         return makeTaskSpec();
     }
 
+    public String env_message(String theMessage) {
+        EnvironmentMessages theMessageObject;
+        try {
+            theMessageObject = EnvironmentMessageParser.parseMessage(theMessage);
+        } catch (NotAnRLVizMessageException e) {
+            System.err.println("Someone sent mountain Car a message that wasn't RL-Viz compatible");
+            return "I only respond to RL-Viz messages!";
+        }
+
+        // Map requested observations
+        if (theMessageObject instanceof EnvObsForStateRequest) {
+            EnvObsForStateRequest requestMessage = (EnvObsForStateRequest)theMessageObject;
+            Vector<Observation> requestedStates = requestMessage.getTheRequestStates();
+
+            Vector<Observation> theObservations = new Vector<Observation>();
+            for(Observation o : requestedStates) {
+                Observation thisObs;
+                
+                if (obsMapping != null)
+                    thisObs = obsMapping.map(o);
+                else
+                    thisObs = o;
+                
+                theObservations.add(thisObs);
+            }
+
+            EnvObsForStateResponse theResponse = new EnvObsForStateResponse(theObservations);
+            return theResponse.makeStringResponse();
+        }
+        else
+            return super.env_message(theMessage);
+    }
+
     @Override
     public Observation env_start() {
 		setAgentPosition(startPos);
@@ -183,6 +223,10 @@ public class DiscontinuousContinuousGridWorld extends ContinuousGridWorld {
                 new DiscontinuousContinuousGridWorld(P);
         String taskSpec = theGridWorld.makeTaskSpec();
         return new TaskSpecPayload(taskSpec, false, "");
+    }
+
+    public String getVisualizerClassName() {
+        return DiscontinuousContinuousGridWorldVisualizer.class.getName();
     }
 
     @Override
