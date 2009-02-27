@@ -4,6 +4,9 @@
 
 package org.rlcommunity.environments.continuousgridworld;
 
+import org.rlcommunity.environments.continuousgridworld.observationmapping.TiledObservationMapping;
+import org.rlcommunity.environments.continuousgridworld.observationmapping.ObservationMapping;
+import org.rlcommunity.environments.continuousgridworld.observationmapping.ScaledMapping;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Random;
@@ -34,30 +37,29 @@ import rlVizLib.messaging.environmentShell.TaskSpecPayload;
  * @author Marc G. Bellemare (mg17 at cs ualberta ca)
  */
 public class DiscontinuousContinuousGridWorld extends ContinuousGridWorld {
-    public static final int MAP_EMPTY = 0;
-    public static final int MAP_CUP   = 1;
+    private static final int MAP_EMPTY = 0;
+    private static final int MAP_CUP   = 1;
 
-    public static final int MAPPING_DIRECT = 0;
-    public static final int MAPPING_DISCONTINUOUS_TILES = 1;
+    private static final int MAPPING_DIRECT = 0;
+    private static final int MAPPING_DISCONTINUOUS_TILES = 1;
     
-    public static final int numActions = 4;
-    public static final int numObsDimensions = 2;
+    private static final int numActions = 4;
+    private static final int numObsDimensions = 2;
     
     protected int mapNumber;
     protected int mappingType;
     
     protected final Random randomMaker;
 
-    protected Point2D lastAgentPos;
-    protected Point2D.Double goalPos;
-    protected Point2D.Double startPos;
+    private Point2D.Double goalPos;
+    private Point2D.Double startPos;
     
-    protected double randomActionProbability;
-    protected double movementNoise;
+    private double randomActionProbability;
+    private double movementNoise;
 
-    protected double discountFactor = 1.0;
+    private double discountFactor = 1.0;
 
-    protected ObservationMapping obsMapping;
+    private ObservationMapping obsMapping;
     
     public static ParameterHolder getDefaultParameters() {
         ParameterHolder p = ContinuousGridWorld.getDefaultParameters();
@@ -93,8 +95,6 @@ public class DiscontinuousContinuousGridWorld extends ContinuousGridWorld {
 
     @Override
     public void addBarriersAndGoal(ParameterHolder theParams) {
-        double width = theParams.getDoubleParam("cont-grid-world-width");
-        double height = theParams.getDoubleParam("cont-grid-world-height");
         double goalX = theParams.getDoubleParam("cont-grid-world-goalX");
         double goalY = theParams.getDoubleParam("cont-grid-world-goalY");
         double startX = theParams.getDoubleParam("cont-grid-world-startX");
@@ -162,12 +162,13 @@ public class DiscontinuousContinuousGridWorld extends ContinuousGridWorld {
         return makeTaskSpec();
     }
 
+    @Override
     public String env_message(String theMessage) {
         EnvironmentMessages theMessageObject;
         try {
             theMessageObject = EnvironmentMessageParser.parseMessage(theMessage);
         } catch (NotAnRLVizMessageException e) {
-            System.err.println("Someone sent mountain Car a message that wasn't RL-Viz compatible");
+            System.err.println("Someone sent Grid World a message that wasn't RL-Viz compatible");
             return "I only respond to RL-Viz messages!";
         }
 
@@ -191,8 +192,10 @@ public class DiscontinuousContinuousGridWorld extends ContinuousGridWorld {
             EnvObsForStateResponse theResponse = new EnvObsForStateResponse(theObservations);
             return theResponse.makeStringResponse();
         }
-        else
+        else{
+            //Get map and getAgentPos are handled in ContinuousGridWorld
             return super.env_message(theMessage);
+        }
     }
 
     @Override
@@ -211,8 +214,7 @@ public class DiscontinuousContinuousGridWorld extends ContinuousGridWorld {
         theTaskSpecObject.addContinuousObservation(new DoubleRange(getWorldRect().getMinY(), getWorldRect().getMaxY()));
         theTaskSpecObject.addDiscreteAction(new IntRange(0, 3));
         theTaskSpecObject.setRewardRange(new DoubleRange(-1, 1));
-        theTaskSpecObject.setExtra("EnvName:DiscontinuousContinuousGridWorld");
-        theTaskSpecObject.setExtra("GOALINFO:"+goalPos.x+":"+goalPos.y);
+        theTaskSpecObject.setExtra("EnvName:DiscontinuousContinuousGridWorld:GOALINFO:"+goalPos.x+":"+goalPos.y);
         
         String taskSpecString = theTaskSpecObject.toTaskSpec();
         TaskSpec.checkTaskSpec(taskSpecString);
@@ -227,18 +229,18 @@ public class DiscontinuousContinuousGridWorld extends ContinuousGridWorld {
         return new TaskSpecPayload(taskSpec, false, "");
     }
 
+    @Override
     public String getVisualizerClassName() {
         return DiscontinuousContinuousGridWorldVisualizer.class.getName();
     }
 
     @Override
     public Reward_observation_terminal env_step(Action action) {
-        lastAgentPos = agentPos;
         // Fudge the action a bit
         int theAction;
         if (randomActionProbability > 0 && 
                 randomMaker.nextDouble() < randomActionProbability) {
-            theAction = (int)(randomMaker.nextDouble() * numActions);
+            theAction = randomMaker.nextInt(numActions);
         }
         else
             theAction = action.intArray[0];

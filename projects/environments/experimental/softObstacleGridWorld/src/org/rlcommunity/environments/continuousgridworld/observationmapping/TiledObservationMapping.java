@@ -2,7 +2,7 @@
  * (c) 2009 Marc G. Bellemare.
  */
 
-package org.rlcommunity.environments.continuousgridworld;
+package org.rlcommunity.environments.continuousgridworld.observationmapping;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,6 +15,8 @@ import org.rlcommunity.rlglue.codec.types.Observation;
  * @author Marc G. Bellemare (mg17 at cs ualberta ca)
  */
 public class TiledObservationMapping implements ObservationMapping {
+    private boolean debugPrint = false;
+
     protected int aNumCells;
     protected int aNumDims;
 
@@ -118,7 +120,6 @@ public class TiledObservationMapping implements ObservationMapping {
         return privatePermutation;
     }
 
-    private boolean debugPrint = false;
     
     /** Maps a given observation (with values in range [0,1]) to a 'tiled'
      *    observation (where things are re-mapped in a discontinuous, piecewise

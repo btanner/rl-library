@@ -15,10 +15,10 @@ import rlVizLib.visualization.VizComponentChangeListener;
 
 public class DiscontinuousGridWorldMapComponent implements SelfUpdatingVizComponent, Observer {
 
-    DiscontinuousContinuousGridWorldVisualizer CGWViz;
+    GridWorldVisualizerInterface CGWViz;
     private VizComponentChangeListener theChangeListener;
 
-    public DiscontinuousGridWorldMapComponent(DiscontinuousContinuousGridWorldVisualizer CGWViz) {
+    public DiscontinuousGridWorldMapComponent(GridWorldVisualizerInterface CGWViz) {
         this.CGWViz = CGWViz;
         CGWViz.getTheGlueState().addObserver(this);
     }
@@ -66,7 +66,7 @@ public class DiscontinuousGridWorldMapComponent implements SelfUpdatingVizCompon
                 double[] observation = mappedQueries.get(idx).doubleArray;
 
                 Rectangle2D realRect = new Rectangle2D.Double(px, py, w, h);
-                System.out.println (px+" "+py+" maps to "+observation[0]+" "+observation[1]);
+//                System.out.println (px+" "+py+" maps to "+observation[0]+" "+observation[1]);
                 Rectangle2D fillRect = 
                         new Rectangle2D.Double(observation[0], observation[1], w, h);
                 boolean done = false;

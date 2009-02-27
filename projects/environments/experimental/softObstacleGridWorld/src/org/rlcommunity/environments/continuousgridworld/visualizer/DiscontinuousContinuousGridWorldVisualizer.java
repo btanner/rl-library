@@ -2,6 +2,8 @@ package org.rlcommunity.environments.continuousgridworld.visualizer;
 
 import java.awt.geom.Rectangle2D;
 import java.util.Vector;
+import org.rlcommunity.environments.continuousgridworld.messages.AgentCurrentPositionRequest;
+import org.rlcommunity.environments.continuousgridworld.messages.AgentCurrentPositionResponse;
 import org.rlcommunity.environments.continuousgridworld.messages.CGWMapRequest;
 import org.rlcommunity.environments.continuousgridworld.messages.CGWMapResponse;
 import rlVizLib.general.TinyGlue;
@@ -24,7 +26,7 @@ import rlVizLib.visualization.SelfUpdatingVizComponent;
 import rlVizLib.visualization.interfaces.DynamicControlTarget;
 import rlVizLib.visualization.interfaces.GlueStateProvider;
 
-public class DiscontinuousContinuousGridWorldVisualizer extends AbstractVisualizer implements ValueFunctionDataProvider, AgentOnValueFunctionDataProvider, GlueStateProvider {
+public class DiscontinuousContinuousGridWorldVisualizer extends AbstractVisualizer implements GridWorldVisualizerInterface{
 
     Vector<Double> mins = null;
     Vector<Double> maxs = null;
@@ -32,9 +34,12 @@ public class DiscontinuousContinuousGridWorldVisualizer extends AbstractVisualiz
     //Keep these responses around so we don't have to ask twice
     CGWMapResponse theMapResponse = null;
     AgentValueForObsResponse theValueResponse = null;
+    AgentCurrentPositionResponse thePositionResponse=null;
     Vector<Double> theQueryPositions = null;
     TinyGlue theGlueState = null;
     private int lastAgentValueUpdateTimeStep = -1;
+    private int lastPositionUpdateTimeStep=-1;
+
     DynamicControlTarget theControlTarget=null;
     
     ValueFunctionVizComponent theValueFunction=null;
@@ -48,13 +53,16 @@ public class DiscontinuousContinuousGridWorldVisualizer extends AbstractVisualiz
 
         theValueFunction = new ValueFunctionVizComponent(this,theControlTarget,glueState);
         theAgentOnValueFunction = new AgentOnValueFunctionVizComponent(this,glueState);
+        SelfUpdatingVizComponent theRegularMapComponent = new GridWorldMapComponent(this);
         SelfUpdatingVizComponent theMapComponent = new DiscontinuousGridWorldMapComponent(this);
         SelfUpdatingVizComponent scoreComponent = new GenericScoreComponent(this);
 
 
-        super.addVizComponentAtPositionWithSize(theValueFunction, 0, 0, 1.0, 1.0);
-        super.addVizComponentAtPositionWithSize(theMapComponent, 0, 0, 1.0, 1.0);
-        super.addVizComponentAtPositionWithSize(theAgentOnValueFunction, 0, 0, 1.0, 1.0);
+        super.addVizComponentAtPositionWithSize(theValueFunction, 0, 0, .5, 1.0);
+        super.addVizComponentAtPositionWithSize(theRegularMapComponent, 0, 0, .5, 1.0);
+        super.addVizComponentAtPositionWithSize(theAgentOnValueFunction, 0, 0, .5, 1.0);
+
+        super.addVizComponentAtPositionWithSize(theMapComponent, .5, 0, .5, 1.0);
 //
         super.addVizComponentAtPositionWithSize(scoreComponent, 0, 0, 1.0, 1.0);
     }
@@ -132,17 +140,33 @@ public class DiscontinuousContinuousGridWorldVisualizer extends AbstractVisualiz
 
         return theValueResponse.getTheValues();
     }
-
+    /**
+     * This should actually be STATE, not observation
+     * @param whichDimension
+     * @return
+     */
     public double getCurrentStateInDimension(int whichDimension) {
+     //Lets not worry about drawing until things actually start
+        if (theGlueState.getLastObservation() == null) {
+            return 0;
+        }
+
         /*
          * This is only allowed access to the state Variables which are defined
          * in the Task Spec as being State Variables. The implicitly defined values,
          * like the height, should not be accessed through here
          */
-        if (theGlueState.getLastObservation() == null) {
-            return 0;
+      int currentTimeStep = theGlueState.getTotalSteps();
+
+        if (currentTimeStep != lastPositionUpdateTimeStep || thePositionResponse==null) {
+            thePositionResponse=AgentCurrentPositionRequest.Execute();
+            lastPositionUpdateTimeStep=currentTimeStep;
         }
-        return theGlueState.getLastObservation().doubleArray[whichDimension];
+
+      if(whichDimension==0)
+          return thePositionResponse.getX();
+      else
+          return thePositionResponse.getY();
     }
 
     public void updateAgentState() {

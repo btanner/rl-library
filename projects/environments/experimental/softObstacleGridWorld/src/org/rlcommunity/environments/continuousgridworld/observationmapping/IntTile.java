@@ -2,9 +2,8 @@
  * (c) 2009 Marc G. Bellemare.
  */
 
-package org.rlcommunity.environments.continuousgridworld;
+package org.rlcommunity.environments.continuousgridworld.observationmapping;
 
-import java.util.Arrays;
 
 /**
  * Defines a tile (a portion of the observation space) to be used with

@@ -13,10 +13,10 @@ import rlVizLib.visualization.VizComponentChangeListener;
 
 public class GridWorldMapComponent implements SelfUpdatingVizComponent, Observer {
 
-    ContinuousGridWorldVisualizer CGWViz;
+    GridWorldVisualizerInterface CGWViz;
     private VizComponentChangeListener theChangeListener;
 
-    public GridWorldMapComponent(ContinuousGridWorldVisualizer CGWViz) {
+    public GridWorldMapComponent(GridWorldVisualizerInterface CGWViz) {
         this.CGWViz = CGWViz;
         CGWViz.getTheGlueState().addObserver(this);
     }

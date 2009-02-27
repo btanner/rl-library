@@ -5,6 +5,7 @@ import java.awt.geom.Rectangle2D;
 import java.net.URL;
 import java.util.Vector;
 
+import org.rlcommunity.environments.continuousgridworld.messages.AgentCurrentPositionResponse;
 import org.rlcommunity.environments.continuousgridworld.messages.CGWMapResponse;
 
 import org.rlcommunity.environments.continuousgridworld.visualizer.ContinuousGridWorldVisualizer;
@@ -38,12 +39,11 @@ import rlVizLib.general.hasVersionDetails;
 import rlVizLib.messaging.environmentShell.TaskSpecPayload;
 import rlVizLib.messaging.interfaces.HasImageInterface;
 
-
 public class ContinuousGridWorld extends EnvironmentBase implements
         getEnvMaxMinsInterface,
         getEnvObsForStateInterface,
         HasAVisualizerInterface,
-HasImageInterface{
+        HasImageInterface {
 
     protected Point2D agentPos;
     protected Point2D agentSize;
@@ -95,7 +95,7 @@ HasImageInterface{
         addBarrierRegion(new Rectangle2D.Double(50.0d, 50.0d, 100.0d, 10.0d), 1.0d);
         addBarrierRegion(new Rectangle2D.Double(150.0d, 50.0d, 10.0d, 100.0d), 1.0d);
     }
-    
+
     protected Rectangle2D makeAgentSizedRectFromPosition(Point2D thePos) {
         return new Rectangle2D.Double(thePos.getX(), thePos.getY(), agentSize.getX(), agentSize.getY());
     }
@@ -145,7 +145,7 @@ HasImageInterface{
         try {
             theMessageObject = EnvironmentMessageParser.parseMessage(theMessage);
         } catch (NotAnRLVizMessageException e) {
-            System.err.println("Someone sent mountain Car a message that wasn't RL-Viz compatible");
+            System.err.println("Someone sent a Grid World message that wasn't RL-Viz compatible");
             return "I only respond to RL-Viz messages!";
         }
 
@@ -157,10 +157,16 @@ HasImageInterface{
             String theCustomType = theMessageObject.getPayLoad();
 
             if (theCustomType.equals("GETCGWMAP")) {
-                //It is a request for the state
+                //It is a request for the map details
                 CGWMapResponse theResponseObject = new CGWMapResponse(getWorldRect(), resetRegions, rewardRegions, theRewards, barrierRegions, thePenalties);
                 return theResponseObject.makeStringResponse();
             }
+            if (theCustomType.equals("GETAGENTPOS")) {
+                //It is a request for the state
+                AgentCurrentPositionResponse theResponseObject = new AgentCurrentPositionResponse(agentPos.getX(), agentPos.getY());
+                return theResponseObject.makeStringResponse();
+            }
+
         }
         System.err.println("We need some code written in Env Message for ContinuousGridWorld.. unknown request received: " + theMessage);
         Thread.dumpStack();
@@ -384,6 +390,7 @@ HasImageInterface{
         return this.getClass().getResource("/images/cgwsplash.png");
     }
 }
+
 class DetailsProvider implements hasVersionDetails {
 
     public String getName() {

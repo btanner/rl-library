@@ -15,16 +15,13 @@ import rlVizLib.visualization.AbstractVisualizer;
 import rlVizLib.visualization.AgentOnValueFunctionVizComponent;
 import rlVizLib.visualization.GenericScoreComponent;
 import rlVizLib.visualization.ValueFunctionVizComponent;
-import rlVizLib.visualization.interfaces.AgentOnValueFunctionDataProvider;
-import rlVizLib.visualization.interfaces.ValueFunctionDataProvider;
 import org.rlcommunity.rlglue.codec.types.Observation;
 
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.visualization.SelfUpdatingVizComponent;
 import rlVizLib.visualization.interfaces.DynamicControlTarget;
-import rlVizLib.visualization.interfaces.GlueStateProvider;
 
-public class ContinuousGridWorldVisualizer extends AbstractVisualizer implements ValueFunctionDataProvider, AgentOnValueFunctionDataProvider, GlueStateProvider {
+public class ContinuousGridWorldVisualizer extends AbstractVisualizer implements GridWorldVisualizerInterface {
 
     Vector<Double> mins = null;
     Vector<Double> maxs = null;

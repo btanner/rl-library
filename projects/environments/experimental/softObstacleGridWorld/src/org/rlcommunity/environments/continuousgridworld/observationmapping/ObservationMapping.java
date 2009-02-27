@@ -2,7 +2,7 @@
  * (c) 2009 Marc G. Bellemare.
  */
 
-package org.rlcommunity.environments.continuousgridworld;
+package org.rlcommunity.environments.continuousgridworld.observationmapping;
 
 import org.rlcommunity.rlglue.codec.types.Observation;
 
