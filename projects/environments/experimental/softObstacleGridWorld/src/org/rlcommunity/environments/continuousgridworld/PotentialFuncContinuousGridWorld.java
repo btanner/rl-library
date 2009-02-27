@@ -54,7 +54,6 @@ public class PotentialFuncContinuousGridWorld extends ContinuousGridWorld {
         p.addDoubleParam("cont-grid-world-startY", 0.1);
         p.addDoubleParam("potential-function-scale", 1.0);
         p.addBooleanParam("give-potential-function-reward", false);
-
         p.addIntegerParam("map-number", MAP_EMPTY);
         p.addDoubleParam("random-action-prob", 0.0);
         p.addDoubleParam("movement-noise", 0.0);
@@ -214,7 +213,7 @@ public class PotentialFuncContinuousGridWorld extends ContinuousGridWorld {
     @Override
     protected double getReward() {
         double baseReward = super.getReward();
-        double shapingReward;
+        double shapingReward=0.0d;
 
         if (usePotentialFunction) {
             // Multiply the next potential by the discount factor
@@ -223,7 +222,6 @@ public class PotentialFuncContinuousGridWorld extends ContinuousGridWorld {
 
             shapingReward = (lastDist - dist) / shapingRewardScale;
         }
-        else shapingReward = 0;
 
         return baseReward + shapingReward;
     }

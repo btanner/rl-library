@@ -214,7 +214,8 @@ public class DiscontinuousContinuousGridWorld extends ContinuousGridWorld {
         theTaskSpecObject.addContinuousObservation(new DoubleRange(getWorldRect().getMinY(), getWorldRect().getMaxY()));
         theTaskSpecObject.addDiscreteAction(new IntRange(0, 3));
         theTaskSpecObject.setRewardRange(new DoubleRange(-1, 1));
-        theTaskSpecObject.setExtra("EnvName:DiscontinuousContinuousGridWorld:GOALINFO:"+goalPos.x+":"+goalPos.y);
+        //GOALINFO:NUMVARS:VAL1:VAL2:...:VALNUMVARS
+        theTaskSpecObject.setExtra("EnvName:DiscontinuousContinuousGridWorld:GOALINFO:2:"+goalPos.x+":"+goalPos.y);
         
         String taskSpecString = theTaskSpecObject.toTaskSpec();
         TaskSpec.checkTaskSpec(taskSpecString);
