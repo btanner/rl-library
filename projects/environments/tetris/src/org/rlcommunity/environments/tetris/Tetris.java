@@ -37,12 +37,12 @@ import org.rlcommunity.rlglue.codec.types.Observation;
 
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 
+import org.rlcommunity.rlglue.codec.util.EnvironmentLoader;
 import rlVizLib.general.hasVersionDetails;
 import rlVizLib.messaging.interfaces.HasImageInterface;
 import rlVizLib.messaging.environmentShell.TaskSpecPayload;
 
 public class Tetris extends EnvironmentBase implements HasAVisualizerInterface, HasImageInterface {
-
 
     private int currentScore = 0;
     protected TetrisState gameState = null;
@@ -215,11 +215,11 @@ public class Tetris extends EnvironmentBase implements HasAVisualizerInterface, 
     public String getVisualizerClassName() {
         return TetrisVisualizer.class.getName();
     }
-    public URL getImageURL() {
-       URL imageURL = Tetris.class.getResource("/images/tetris.png");
-       return imageURL;
-   }   
 
+    public URL getImageURL() {
+        URL imageURL = Tetris.class.getResource("/images/tetris.png");
+        return imageURL;
+    }
 
     private String makeTaskSpec() {
         int boardSize = gameState.getHeight() * gameState.getWidth();
@@ -252,6 +252,11 @@ public class Tetris extends EnvironmentBase implements HasAVisualizerInterface, 
 
         TaskSpec.checkTaskSpec(taskSpecString);
         return taskSpecString;
+    }
+
+    public static void main(String[] args) {
+        EnvironmentLoader L = new EnvironmentLoader(new Tetris());
+        L.run();
     }
 }
 

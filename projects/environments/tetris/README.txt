@@ -1,4 +1,4 @@
-#summary This is the page for download information and details about the Java Mountain Car Domain.
+#summary This is the page for download information and details about the Java Tetris Domain.
 #labels Language-Java,Type-Environment,Page-Download
 #sidebar Downloads
 
