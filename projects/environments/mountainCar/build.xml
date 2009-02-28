@@ -1,9 +1,10 @@
 <project name="MountainCar" basedir="." >
 
-	<property name="baseLibraryDir" value="../../.."/>
+	<property name="baseLibraryDir" value="../77s_5/../../../../blargl"/>
 	<property name="this.project.system.directory" value="${baseLibraryDir}/system"/>
 	<property name="this.project.product.directory" value="${baseLibraryDir}/products"/>
 	<property name="project.name" value="${ant.project.name}"/>
+	<property name="main.project.name" value="${ant.project.name}"/>
 	<import file="${this.project.system.directory}/common/ant/build-common.xml"/>
 
 	<property name="main.package.name" value="org.rlcommunity.environments.mountaincar/"/>
