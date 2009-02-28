@@ -86,9 +86,6 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
         super.addVizComponentAtPositionWithSize(mountain, 0, 0, 1.0, .5);
         super.addVizComponentAtPositionWithSize(carOnMountain, 0, 0, 1.0, .5);
         super.addVizComponentAtPositionWithSize(scoreComponent, 0, 0, 1.0, 1.0);
-//        GraphPanel GP = new GraphPanel(this);
-//        super.addVizComponentAtPositionWithSize(GP, 0, .8, 1.0, .2);
-
     }
 
     public void updateEnvironmentVariableRanges() {
@@ -190,7 +187,6 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
         double currentX = getCurrentStateInDimension(0);
         final double hillPeakFrequency = 3.0;
         return -Math.sin(hillPeakFrequency * currentX);
-//        return theCurrentState.getHeight();
     }
     
     public double getSlope(){
@@ -290,8 +286,9 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
         return glueState;
     }
 
+    @Override
     public String getName() {
-        return "Mountain Car 1.1 (DEV)";
+        return "Mountain Car 1.3 ";
     }
     int lastSaveIndex = -1;
     boolean forceDrawRefresh = false;
@@ -308,20 +305,4 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
         updateAgentState(false);
     }
 
-    int getSubdivSteps() {
-        return -2;
-//      		JComboBox source = (JComboBox) evt.getSource();
-//		int index = source.getSelectedIndex();
-//		if (index < REWARD_PER_EPISODE_INDEX) {
-//			performanceSteps_ = (int) Math.pow(10, index);
-//		}
-//		if (index == REWARD_PER_EPISODE_INDEX) {
-//			performanceSteps_ = -2;
-//		}
-//		if (index == TOTAL_REWARD_COMBO_INDEX) {
-//			performanceSteps_ = -1;
-//		}
-
-
-    }
 }

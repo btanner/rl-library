@@ -1,6 +1,6 @@
 <project name="MountainCar" basedir="." >
 
-	<property name="baseLibraryDir" value="../77s_5/../../../../blargl"/>
+	<property name="baseLibraryDir" value="../../.."/>
 	<property name="this.project.system.directory" value="${baseLibraryDir}/system"/>
 	<property name="this.project.product.directory" value="${baseLibraryDir}/products"/>
 	<property name="project.name" value="${ant.project.name}"/>

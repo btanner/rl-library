@@ -379,7 +379,7 @@ public class MountainCar extends EnvironmentBase implements
 class DetailsProvider implements hasVersionDetails {
 
     public String getName() {
-        return "Mountain Car 1.20";
+        return "Mountain Car 1.30";
     }
 
     public String getShortName() {
@@ -391,7 +391,7 @@ class DetailsProvider implements hasVersionDetails {
     }
 
     public String getInfoUrl() {
-        return "http://library.rl-community.org/mountaincar";
+        return "http://library.rl-community.org/environments/mountaincar";
     }
 
     public String getDescription() {

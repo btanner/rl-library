@@ -122,7 +122,7 @@ public class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Obs
     }
     static String supportedEnvStrings[] = {"EnvName:Mountain-Car", "EnvName:Acrobot",
         "EnvName:ContinuousGridWorld", "EnvName:Tetris", "EnvName:Tetris", "EnvName:ExpandedCritter",
-        "EnvName:CartPole"
+        "EnvName:CartPole","EnvName:PotentialFuncContinuousGridWorld","EnvName:DiscontinuousContinuousGridWorld"
     };
 
     public static boolean supportsEnvironment(String taskSpec) {
@@ -142,23 +142,34 @@ public class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Obs
 
         TaskSpec TSO = new TaskSpec(taskSpec);
         String extraString = TSO.getExtraString();
+
+        boolean foundMatch=false;
+
         if (extraString.contains("EnvName:Mountain-Car")) {
             MountainCarControlSettings.addActions(theKeyListenerPanel, this);
+            foundMatch=true;
         }
         if (extraString.contains("EnvName:Acrobot")) {
             AcrobotControlSettings.addActions(theKeyListenerPanel, this);
+            foundMatch=true;
         }
-        if (extraString.contains("EnvName:ContinuousGridWorld")) {
+        if (extraString.contains("EnvName:ContinuousGridWorld")
+                || extraString.contains("EnvName:DiscontinuousContinuousGridWorld")
+                || extraString.contains("EnvName:PotentialFuncContinuousGridWorld")) {
             GridWorldControlSettings.addActions(theKeyListenerPanel, this);
+            foundMatch=true;
         }
         if (extraString.contains("EnvName:Tetris")) {
             TetrisControlSettings.addActions(theKeyListenerPanel, this);
+            foundMatch=true;
         }
         if (extraString.contains("EnvName:CartPole")) {
             CartPoleControlSettings.addActions(theKeyListenerPanel, this);
+            foundMatch=true;
         }
         if (extraString.contains("EnvName:ExpandedCritter")) {
             ExpandedCritterControlSettings.addActions(theKeyListenerPanel, this);
+            foundMatch=true;
         }
         if (extraString.contains("EnvName:ExpandedPhysicalCritter")) {
             ExpandedCritterControlSettings.addActions(theKeyListenerPanel, this);
@@ -166,11 +177,12 @@ public class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Obs
             this.nullActionMSInterval = 200;
             nullAction = new Action(4, 0, 0);
             nullAction.intArray = new int[]{1, 0, 0, 0};
+            foundMatch=true;
         } //        if (theKeyBoardMapper != null) {
         //            theKeyBoardMapper.ensureTaskSpecMatchesExpectation(TSO);
-        else {
+
+        if(!foundMatch)
             System.err.println("Didn't know how to make a keyboard agent from string: " + extraString);
-        }
 
         Vector<Component> v = new Vector<Component>();
 
