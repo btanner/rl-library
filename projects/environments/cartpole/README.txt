@@ -31,22 +31,18 @@ This download can be used to augment your existing local RL-Library (if you have
 {{{
 #Create a directory for your rl-library. Call it whatever you like.
 mkdir rl-library
-
-#Copy this new download into rl-library
-cp FILENAME rl-library/
-cd rl-library
-
-#This will create folders system and products, which are used by all projects.
-#It will also create a folder for this particular project
-tar -zxf FILENAME
-
-#Clean up
-rm FILENAME
 }}}
 
+That's all you have to do special for the *first time* you download a rl-library component.  Continue on now
+to the next section.
+
 === Adding To An Existing RL-Library Download ===
-These directions are almost identical to above, but you don't create the rl-library folder.
+
 {{{
+#First, download the file.  Depending on your platform, you might have to do this manually with a web browser. 
+
+#If you are on Linux, you can use wget which will download FILENAME for you
+wget FILELINK
 
 #Copy the download to your local rl-library folder (whatever it is called)
 cp FILENAME rl-library/
