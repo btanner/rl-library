@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Make the distribution for Mountain Car.
+#Make the distribution for Tetris.
 #This relies on a fairly general script that will work for most Java environments and agents.
 #Requirements
 #	this should be done with code that is in a subversion checkout

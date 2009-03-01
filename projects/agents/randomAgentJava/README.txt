@@ -18,7 +18,7 @@ It can handle multi-dimensional discrete and continuous actions. This agent does
 
 
 For full details, please visit:
-[http://library.rl-community.org/agents/randomagent]
+[http://library.rl-community.org/agents/random-agent-java]
 
 Download Link: [FILELINK FILENAME] [FILEDETAILSLINK (Details)]
 
