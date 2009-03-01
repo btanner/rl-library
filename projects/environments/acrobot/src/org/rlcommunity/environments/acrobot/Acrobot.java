@@ -1,10 +1,9 @@
-package org.rlcommunity.environment.acrobot;
+package org.rlcommunity.environments.acrobot;
 
 import java.net.URL;
 import java.util.Random;
 
 
-import javax.naming.ldap.HasControls;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
@@ -13,11 +12,12 @@ import rlVizLib.general.ParameterHolder;
 import rlVizLib.messaging.environment.EnvironmentMessageParser;
 import rlVizLib.messaging.environment.EnvironmentMessages;
 import rlVizLib.messaging.interfaces.HasAVisualizerInterface;
-import org.rlcommunity.environment.acrobot.visualizer.AcrobotVisualizer;
+import org.rlcommunity.environments.acrobot.visualizer.AcrobotVisualizer;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.IntRange;
+import org.rlcommunity.rlglue.codec.util.EnvironmentLoader;
 import rlVizLib.general.hasVersionDetails;
 import rlVizLib.messaging.environmentShell.TaskSpecPayload;
 import rlVizLib.messaging.interfaces.HasImageInterface;
@@ -270,7 +270,13 @@ public class Acrobot extends EnvironmentBase implements HasAVisualizerInterface,
     public URL getImageURL() {
        URL imageURL = Acrobot.class.getResource("/images/acrobot.png");
        return imageURL;
-   }    
+   }
+
+
+    public static void main(String[] args){
+        EnvironmentLoader L=new EnvironmentLoader(new Acrobot());
+        L.run();
+    }
 }
 
 class DetailsProvider implements hasVersionDetails {

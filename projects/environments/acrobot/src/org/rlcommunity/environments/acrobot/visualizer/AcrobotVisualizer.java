@@ -1,4 +1,4 @@
-package org.rlcommunity.environment.acrobot.visualizer;
+package org.rlcommunity.environments.acrobot.visualizer;
 
 import org.rlcommunity.rlglue.codec.types.Observation;
 import rlVizLib.general.TinyGlue;

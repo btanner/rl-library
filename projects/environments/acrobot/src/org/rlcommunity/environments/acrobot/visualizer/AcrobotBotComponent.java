@@ -1,4 +1,4 @@
-package org.rlcommunity.environment.acrobot.visualizer;
+package org.rlcommunity.environments.acrobot.visualizer;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
