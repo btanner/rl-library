@@ -165,46 +165,6 @@ public class Tetris extends EnvironmentBase implements HasAVisualizerInterface, 
         return null;
     }
 
-    /*    public State_key env_save_state() {
-    savedStates.add(new TetrisState(gameState));
-    State_key k = new State_key(1, 0);
-    k.intArray[0] = savedStates.size() - 1;
-    return k;
-    }
-    
-    public void env_load_state(State_key k) {
-    int theIndex = k.intArray[0];
-    
-    if (savedStates == null || theIndex >= savedStates.size()) {
-    System.err.println("Could not set state to index:" + theIndex + ", that's higher than saved size");
-    return;
-    }
-    TetrisState oldState = savedStates.get(theIndex);
-    this.gameState = new TetrisState(oldState);
-    }
-     */
-    /**
-     * Provides a random seed that can be used with env_load_random_seed to sample
-     * multiple transitions from a single state.
-     * <p>
-     * Note that calling this method has a side effect, it creates a new seed and 
-     * sets it.
-     * @return
-     */
-    /*public Random_seed_key env_save_random_seed() {
-    Random_seed_key k = new Random_seed_key(2, 0);
-    long newSeed = gameState.getRandom().nextLong();
-    gameState.getRandom().setSeed(newSeed);
-    k.intArray[0] = UtilityShop.LongHighBitsToInt(newSeed);
-    k.intArray[1] = UtilityShop.LongLowBitsToInt(newSeed);
-    return k;
-    }
-    
-    public void env_load_random_seed(Random_seed_key k) {
-    long storedSeed = UtilityShop.intsToLong(k.intArray[0], k.intArray[1]);
-    gameState.getRandom().setSeed(storedSeed);
-    }
-     */
     /*End of Base RL-Glue Functions */
     /*RL-Viz Methods*/
     @Override
@@ -224,8 +184,6 @@ public class Tetris extends EnvironmentBase implements HasAVisualizerInterface, 
     private String makeTaskSpec() {
         int boardSize = gameState.getHeight() * gameState.getWidth();
         int numPieces = gameState.possibleBlocks.size();
-        int boardSizeObservations = 2;
-        int intObsCount = boardSize + numPieces + boardSizeObservations;
 
         TaskSpecVRLGLUE3 theTaskSpecObject = new TaskSpecVRLGLUE3();
         theTaskSpecObject.setEpisodic();
@@ -243,7 +201,7 @@ public class Tetris extends EnvironmentBase implements HasAVisualizerInterface, 
 
         theTaskSpecObject.addDiscreteAction(new IntRange(0, 5));
         //This is actually a lie... the rewards aren't in that range.
-        theTaskSpecObject.setRewardRange(new DoubleRange(0, 1));
+        theTaskSpecObject.setRewardRange(new DoubleRange(0, 8.0d));
 
         //This is a better way to tell the rows and cols
         theTaskSpecObject.setExtra("EnvName:Tetris HEIGHT:" + gameState.getHeight() + " WIDTH:" + gameState.getWidth() + " Revision: " + this.getClass().getPackage().getImplementationVersion());
