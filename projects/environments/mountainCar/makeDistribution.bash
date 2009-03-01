@@ -14,6 +14,7 @@ PROJECTNAME=MountainCar-Java
 SYSTEMPATH=../../../system
 WIKIPAGENAME=MountainCarJava
 SVNPASSWORDFILE=~/rl-library-svn-password
+PROJECTTYPE=Environment
 
 #Get all of the build functions
 source $SYSTEMPATH/common/scripts/build-java-distribution.sh

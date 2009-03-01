@@ -259,47 +259,6 @@ public class MountainCar extends EnvironmentBase implements
     }
 
     /**
-     * Provides a random seed that can be used with env_load_random_seed to sample
-     * multiple transitions from a single state.
-     * <p>
-     * Note that calling this method has a side effect, it creates a new seed and 
-     * sets it.
-     * @return
-     */
-    /*
-    public Random_seed_key env_save_random_seed() {
-    Random_seed_key k = new Random_seed_key(2, 0);
-    long newSeed = getRandomGenerator().nextLong();
-    getRandomGenerator().setSeed(newSeed);
-    k.intArray[0] = UtilityShop.LongHighBitsToInt(newSeed);
-    k.intArray[1] = UtilityShop.LongLowBitsToInt(newSeed);
-    return k;
-    }
-    
-    public void env_load_random_seed(Random_seed_key k) {
-    long storedSeed = UtilityShop.intsToLong(k.intArray[0], k.intArray[1]);
-    getRandomGenerator().setSeed(storedSeed);
-    }
-    
-    public State_key env_save_state() {
-    savedStates.add(new MountainCarState(theState));
-    State_key k = new State_key(1, 0);
-    k.intArray[0] = savedStates.size() - 1;
-    return k;
-    }
-    
-    public void env_load_state(State_key k) {
-    int theIndex = k.intArray[0];
-    
-    if (savedStates == null || theIndex >= savedStates.size()) {
-    System.err.println("Could not set state to index:" + theIndex + ", that's higher than saved size");
-    return;
-    }
-    MountainCarState oldState = savedStates.get(k.intArray[0]);
-    this.theState = new MountainCarState(oldState);
-    }
-     */
-    /**
      * The value function will be drawn over the position and velocity.  This 
      * method provides the max values for those variables.
      * @param dimension

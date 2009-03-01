@@ -50,7 +50,6 @@ Please send all questions to either the current maintainer (below) or to the
 
 == Authors ==
 Various, over the years, including:
-<a href="/" rel="nofollow"></a>, <a href="http://www.stanford.edu/%7Eacoates/" rel="nofollow"></a>, <a href="http://robotics.stanford.edu/%7Eang/" rel="nofollow">Andrew Y. Ng</a>, Stanford University.  Ported by Mark Lee and <a href="http://research.tannerpages.com/" rel="nofollow">Brian Tanner</a> from C++ to Java for the<a href="http://rl-competition.org/" rel="nofollow"> 2008 RL-Competition</a> and beyond.
 
  * [http://www.cs.berkeley.edu/%7Epabbeel Pieter Abbeel]
  * [http://www.stanford.edu/%7Eacoates Adam Coates]
