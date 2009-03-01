@@ -18,7 +18,6 @@ package org.rlcommunity.environments.helicopter;
 
 import java.net.URL;
 import org.rlcommunity.environments.helicopter.messages.HelicopterRangeResponse;
-import java.util.Vector;
 import org.rlcommunity.environments.helicopter.visualizer.HelicopterVisualizer;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;
@@ -26,6 +25,7 @@ import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
+import org.rlcommunity.rlglue.codec.util.EnvironmentLoader;
 import rlVizLib.Environments.EnvironmentBase;
 import rlVizLib.general.ParameterHolder;
 import rlVizLib.general.hasVersionDetails;
@@ -282,6 +282,11 @@ public class Helicopter extends EnvironmentBase implements  HasAVisualizerInterf
 
 
         return newTaskSpecString;
+    }
+
+    public static void main(String[] args){
+        EnvironmentLoader L=new EnvironmentLoader(new Helicopter());
+        L.run();
     }
 }
 
