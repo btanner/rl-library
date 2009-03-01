@@ -11,6 +11,7 @@
 #		* FILENAME
 #		* FILELINK
 #		* FILEDETAILSLINK
+#		* VERSION
 #	These tokens will be replaced by the actual details of the file
 #	that will be uploaded to google code.
 #	This page will be uploaded as a wiki document to $WIKIPAGENAME.wiki\
@@ -94,7 +95,9 @@ javaDistributionInit(){
 	echo Initializing $DISTNAME
 #Remove if we already have it
 	rm $DISTNAME.tar.gz
-	DISTDIR=$DISTNAME
+	
+	DISTDIR=distbuild
+	THISPROJECTDISTDIR=$DISTDIR/$DISTNAME
 	COMMONPATH=$SYSTEMPATH/common
 	COMMONLIBS=$COMMONPATH/libs
 	ANTSCRIPTS=$COMMONPATH/ant
@@ -102,8 +105,9 @@ javaDistributionInit(){
 	RLVIZJAR=$RLVIZPATH/RLVizLib.jar
 	rm -Rf $DISTDIR
 	mkdir $DISTDIR
+	mkdir $THISPROJECTDISTDIR
 
-	svn export --quiet src $DISTDIR/src
+	svn export --quiet src $THISPROJECTDISTDIR/src
 	mkdir -p $DISTDIR/system/common/libs/rl-viz
 	svn export --quiet $ANTSCRIPTS $DISTDIR/system/common/ant
 	svn export --quiet $COMMONLIBS/ant-contrib-1.0b3.jar  $DISTDIR/system/common/libs/ant-contrib-1.0b3.jar
@@ -114,7 +118,7 @@ javaDistributionInit(){
 	#We will use bar | as a delimiter
 	#Looks for something like: name="baseLibraryDir" value="../77s_5/../../../../blargl"
 	#And changes it to: name="baseLibraryDir" value="."
-	sed 's|name="baseLibraryDir" value="\([a-z,A-Z,0-9,.,/,-,_]*\)"|name="baseLibraryDir" value="."|' <build.xml > $DISTDIR/build.xml
+	sed 's|name="baseLibraryDir" value="\([a-z,A-Z,0-9,.,/,-,_]*\)"|name="baseLibraryDir" value=".."|' <build.xml > $THISPROJECTDISTDIR/build.xml
 
 	#Use sed to also splice the details into README.txt
 	#README.txt has some placeholders for FILENAME FILELINK and FILEDETAILSLINK
@@ -123,7 +127,8 @@ javaDistributionInit(){
 		s|FILENAME|'${DISTFILENAME}'|
 		s|FILELINK|'${DISTFILEURL}'|
 		s|FILEDETAILSLINK|'${DISTFILEINFOURL}'|
-	' <README.txt > $DISTDIR/README.txt
+		s|VERSION|'${VERSION}'|
+	' <README.txt > $THISPROJECTDISTDIR/README.txt
 
 
 }
@@ -131,11 +136,13 @@ javaDistributionInit(){
 #This will go into $DISTDIR, build the project, remove the build directory, back out
 #tar and gzip the directory, and then delete the directory.
 javaDistributionBuildJarAndGzip(){
-	pushd $DISTDIR
+	pushd $THISPROJECTDISTDIR
 	ant -quiet build
 	rm -Rf build
 	popd
-	tar -cf $DISTNAME.tar $DISTDIR
+	pushd $DISTDIR
+	tar -cf ../$DISTNAME.tar *
+	popd
 	gzip $DISTNAME.tar
 	echo Successfully created $DISTFILENAME
 }
@@ -150,7 +157,7 @@ javaDistributionUpdateWiki(){
 	SVNUSERNAME=$(cat $SVNPASSWORDFILE | awk '{print $1}')
 	SVNPASSWORD=$(cat $SVNPASSWORDFILE | awk '{print $2}')
 	svn co --quiet --username $SVNUSERNAME --password $SVNPASSWORD https://rl-library.googlecode.com/svn/wiki wikis 
-	cp $DISTDIR/README.txt wikis/$WIKIPAGENAME.wiki
+	cp $THISPROJECTDISTDIR/README.txt wikis/$WIKIPAGENAME.wiki
 	svn commit wikis/$WIKIPAGENAME.wiki -m "Automatic update of Wiki page when doing release of $PROJECTNAME"
 	echo "Wiki updated."
 }
