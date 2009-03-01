@@ -20,6 +20,8 @@
 #	With your google username and password.  You can make it like this:
 #		 echo -n "brian@tannerpages.com MYPASSWORD" > ~/rl-library-svn-password
 #	Then just set SVNPASSWORDFILE=~/rl-library-svn-password
+#   - $PROJECTTYPE variable set
+#	This should be one of: environment, agent, experiment, package
 #
 #  - A build.xml with target "build" that puts a jar in products/
 #
@@ -46,6 +48,13 @@ javaDistributionInit(){
 	then
 		echo 
 		echo "   ERROR: You Must set the SYSTEMPATH variable."
+		echo 
+	  exit 1
+	fi
+	if [ -z $PROJECTTYPE ]
+	then
+		echo 
+		echo "   ERROR: You Must set the PROJECTTYPE variable."
 		echo 
 	  exit 1
 	fi
@@ -133,7 +142,7 @@ javaDistributionBuildJarAndGzip(){
 
 javaDistributionUploadFile(){
 	echo -n "  Uploading file to google code..."
-	python $COMMONPATH/scripts/googlecode_upload.py -f $SVNPASSWORDFILE -s "$PROJECTNAME $VERSION" -p rl-library --labels=Type-Archive,OpSys-All,Language-Java $DISTFILENAME
+	python $COMMONPATH/scripts/googlecode_upload.py -f $SVNPASSWORDFILE -s "$PROJECTNAME $VERSION" -p rl-library --labels=Type-Archive,OpSys-All,Language-Java,RLType-$PROJECTTYPE $DISTFILENAME
 	echo "File uploaded."
 }
 javaDistributionUpdateWiki(){
