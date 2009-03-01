@@ -17,6 +17,7 @@ import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
+import org.rlcommunity.rlglue.codec.util.EnvironmentLoader;
 import rlVizLib.messaging.interfaces.HasImageInterface;
 import rlVizLib.messaging.environmentShell.TaskSpecPayload;
 
@@ -272,6 +273,11 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
         TaskSpec.checkTaskSpec(newTaskSpecString);
 
         return newTaskSpecString;
+    }
+
+    public static void main(String[] args){
+        EnvironmentLoader L=new EnvironmentLoader(new CartPole());
+        L.run();
     }
 }
 
