@@ -9,6 +9,8 @@ http://code.google.com/p/rl-library/wiki/MountainCarJava
 So, it is in Wiki Syntax.  It's still pretty easy to read.
 </wiki:comment>
 
+<wiki:toc />
+
 
 = RL-Library Java Version of Mountain Car =
 

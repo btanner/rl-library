@@ -10,6 +10,8 @@ http://code.google.com/p/rl-library/wiki/RandomAgentJava
 So, it is in Wiki Syntax.  It's still pretty easy to read.
 </wiki:comment>
 
+<wiki:toc />
+
 
 = RL-Library Java Version of a Random Agent =
 This Java agent is meant to select random actions for any RL-Glue domain whose actions are properly characterized by a valid task spec.  
