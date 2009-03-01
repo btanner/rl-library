@@ -28,7 +28,7 @@ javaDistributionInit
 #
 #  Extra files you want to distribute go here
 #
-cp LICENSE.txt $DISTDIR/
+cp LICENSE.txt $THISPROJECTDISTDIR/
 
 #This will go into $DISTDIR, build the project, remove the build directory, back out
 #tar and gzip the directory, and then delete the directory.
