@@ -1,6 +1,7 @@
 #!/bin/bash
 
-#Make the distribution for the Random Java Agent.
+
+#Make the distribution for the RL-Glue Sample experiment
 #This relies on a fairly general script that will work for most Java environments and agents.
 #Requirements
 #	this should be done with code that is in a subversion checkout
@@ -37,7 +38,13 @@ javaDistributionInit
 #tar and gzip the directory, and then delete the directory.
 javaDistributionBuildJarAndGzip
 
-javaDistributionUploadFile
+if [ -z "$SKIPUPLOAD" ]
+then
+	javaDistributionUploadFile
+else
+	echo "   Skipping upload."
+fi
+
 
 javaDistributionUpdateWiki
 

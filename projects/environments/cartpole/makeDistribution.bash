@@ -38,7 +38,13 @@ cp LICENSE.txt $THISPROJECTDISTDIR/
 #tar and gzip the directory, and then delete the directory.
 javaDistributionBuildJarAndGzip
 
-javaDistributionUploadFile
+if [ -z "$SKIPUPLOAD" ]
+then
+	javaDistributionUploadFile
+else
+	echo "   Skipping upload."
+fi
+
 
 javaDistributionUpdateWiki
 
