@@ -216,6 +216,7 @@ javaDistributionInit(){
 		s|\$WIKIURL\$|'"${PROJECTTYPE}"'|
 		s|\$PROJECTTYPE\$|'"${PROJECTTYPE}"'|
 		s|\$PROJECTDIR\$|'"${DISTNAME}"'|
+		s|\$SIDEBAR\$|'"${PROJECTTYPE}Sidebar"'|
 	' README.out
 
 	mv README.out $THISPROJECTDISTDIR/README.txt

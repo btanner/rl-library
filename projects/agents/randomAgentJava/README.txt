@@ -4,7 +4,7 @@
 ##
 #summary This is the page for download information and details about the $LANGUAGE$ $PROJECTTITLE$ Domain, Version: r$VERSION$.
 #labels Language-$LANGUAGE$,Type-$PROJECTTYPE$,Page-Download
-#sidebar Downloads
+#sidebar $SIDEBAR$
 
 $WIKICOMMENTTEMPLATE$
 
