@@ -4,17 +4,17 @@ Before diving into this, you may want to check out [GettingStarted the getting s
 This download can be used to augment your existing local RL-Library (if you have one), or as the basis to start a new one.
 
 === This Is Your First Project ===
-{{{
+<code language="bsh">
 #Create a directory for your rl-library. Call it whatever you like.
 mkdir rl-library
-}}}
+</code>
 
 That's all you have to do special for the *first time* you download a rl-library component.  Continue on now
 to the next section.
 
 === Adding To An Existing RL-Library Download ===
 
-{{{
+<code language="bsh">
 #First, download the file.  Depending on your platform, you might have to do this manually with a web browser. 
 
 #If you are on Linux, you can use wget which will download $FILENAME$ for you
@@ -30,5 +30,4 @@ tar -zxf $FILENAME$
 
 #Clean up
 rm $FILENAME$
-}}}
-
+</code>

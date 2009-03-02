@@ -4,19 +4,19 @@ You must have ANT installed to build this project using these instructions.
 You don't have to compile this, because the JAR file has been compiled
 and placed into the products directory already. However, if you want to 
 make changes and recompile, you can simply type:
-{{{
+<code language="bsh">
 >$ cd $PROJECTDIR$
 >$ ant clean
 
 #this will update ../products/$JARNAME$
 >$ ant build
-}}}
+</code>
 
 == Running This Project ==
 You can run this project by typing:
-{{{
+<code language="bsh">
 >$ java -jar products/$JARNAME$
-}}}
+</code>
 
 You can also use it in conjunction with RL-Library by putting the JAR file
 products/$JARNAME$ in the appropriate directory, as long as the 
