@@ -108,10 +108,7 @@ public class RandomAgent implements AgentInterface,HasImageInterface {
         return action;
     }
 
-    private int step=0;
     public Action agent_step(double arg0, Observation o) {
-        step++;
-        if(step%500==0)System.out.println("Agent on step: "+step);
         setRandomActions(action);
         return action;
     }
@@ -176,7 +173,7 @@ class DetailsProvider implements hasVersionDetails {
     }
 
     public String getInfoUrl() {
-        return "http://code.google.com/p/rl-library/wiki/RandomAgent";
+        return "http://code.google.com/p/rl-library/wiki/RandomAgentJava";
     }
 
     public String getDescription() {
