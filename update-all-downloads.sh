@@ -36,3 +36,12 @@ svn up
 bash makeDistribution.bash
 popd
 
+
+###
+#Experiments
+###
+pushd projects/experiments/sampleExperimentRLGlue
+svn up
+bash makeDistribution.bash
+popd
+
