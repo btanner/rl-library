@@ -1,0 +1,22 @@
+== Compiling This Project ==
+You must have ANT installed to build this project using these instructions.
+
+You don't have to compile this, because the JAR file has been compiled
+and placed into the products directory already. However, if you want to 
+make changes and recompile, you can simply type:
+{{{
+>$ ant clean
+>$ ant build
+}}}
+
+== Running This Project ==
+You can run this project by typing:
+{{{
+>$ java -jar products/$JARNAME$
+}}}
+
+You can also use it in conjunction with RL-Library by putting the JAR file
+products/$JARNAME$ in the appropriate directory, as long as the 
+RL-Viz library jar file is in the appropriate relative location from
+where you put $JARNAME$.  The location is:
+../system/common/libs/rl-viz/RLVizLib.jar

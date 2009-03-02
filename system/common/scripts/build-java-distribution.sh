@@ -2,6 +2,10 @@
 #
 #  - $PROJECTNAME variable set.  
 #	This will partially determine the name of the file we will create.
+#	Something like MountainCar-Java is good
+#
+#  - $PROJECTTITLE variable set.  
+#	Regular speech name of environment.  Mountain Car for example.
 #
 #  - $SYSTEMPATH variable set.  
 #	This should be the relative path from where you are sourcing 
@@ -23,6 +27,12 @@
 #	Then just set SVNPASSWORDFILE=~/rl-library-svn-password
 #   - $PROJECTTYPE variable set
 #	This should be one of: environment, agent, experiment, package
+#   - $LANGUAGE variable set
+#	This should be one of: Java/C/CPP/Matlab/Python/Lisp/etc
+#   - $HOMEURL variable set
+#	This should be a the public homepage for this environment/agent
+#   - $JARNAME variable set
+#	This should be the name of the JAR that is built.  Like MountainCar.jar
 #
 #  - A build.xml with target "build" that puts a jar in products/
 #
@@ -52,6 +62,7 @@ javaDistributionInit(){
 		echo 
 	  exit 1
 	fi
+
 	if [ -z $PROJECTTYPE ]
 	then
 		echo 
@@ -59,13 +70,23 @@ javaDistributionInit(){
 		echo 
 	  exit 1
 	fi
+
 	if [ -z $PROJECTNAME ]
 	then
 		echo 
 		echo "   ERROR: You Must set the PROJECTNAME variable."
 		echo 
 	  exit 1
+        fi
+
+	if [ -z $PROJECTTITLE ]
+	then
+		echo 
+		echo "   ERROR: You Must set the PROJECTTITLE variable."
+		echo 
+	  exit 1
 	fi
+
 	if [ -z $WIKIPAGENAME ]
 	then
 		echo 
@@ -73,10 +94,35 @@ javaDistributionInit(){
 		echo 
 	  exit 1
 	fi
+
 	if [ -z $SVNPASSWORDFILE ]
 	then
 		echo 
 		echo "   ERROR: You Must set the SVNPASSWORDFILE variable."
+		echo 
+	  exit 1
+	fi
+
+	if [ -z $LANGUAGE ]
+	then
+		echo 
+		echo "   ERROR: You Must set the LANGUAGE variable."
+		echo 
+	  exit 1
+	fi
+
+	if [ -z $HOMEURL ]
+	then
+		echo 
+		echo "   ERROR: You Must set the HOMEURL variable."
+		echo 
+	  exit 1
+	fi
+
+	if [ -z $JARNAME ]
+	then
+		echo 
+		echo "   ERROR: You Must set the HOMEURL variable."
 		echo 
 	  exit 1
 	fi
@@ -86,6 +132,10 @@ javaDistributionInit(){
 	VERSION=$(svn info . |grep Revision: | awk '{print $2}')
 	DISTNAME=$PROJECTNAME-R$VERSION
 	DISTFILENAME=$DISTNAME.tar.gz
+
+
+#Variables for replacing
+	WIKIURL=http://code.google.com/p/rl-library/wiki/$WIKIPAGENAME
 
 	#URL on Google Code to Download
 	DISTFILEURL=http://rl-library.googlecode.com/files/$DISTFILENAME
@@ -120,16 +170,52 @@ javaDistributionInit(){
 	#And changes it to: name="baseLibraryDir" value="."
 	sed 's|name="baseLibraryDir" value="\([a-z,A-Z,0-9,.,/,-,_]*\)"|name="baseLibraryDir" value=".."|' <build.xml > $THISPROJECTDISTDIR/build.xml
 
-	#Use sed to also splice the details into README.txt
-	#README.txt has some placeholders for FILENAME FILELINK and FILEDETAILSLINK
-	#This is sortof gross multiline syntax, but whatever.
-	sed '
-		s|FILENAME|'${DISTFILENAME}'|
-		s|FILELINK|'${DISTFILEURL}'|
-		s|FILEDETAILSLINK|'${DISTFILEINFOURL}'|
-		s|VERSION|'${VERSION}'|
-	' <README.txt > $THISPROJECTDISTDIR/README.txt
+	#First, strip all of the comments out of README.txt
+	sed -e '/^##/D' <README.txt > README.out
 
+	#Now, fill in the template sections
+	sed -i  '/\$USINGTHISDOWNLOADTEMPLATE\$/ {
+		r '${SYSTEMPATH}'/common/scripts/templates/using-this-download.template
+		d
+	}
+		/\$WIKICOMMENTTEMPLATE\$/ {
+		r '${SYSTEMPATH}'/common/scripts/templates/wiki-comment.template
+		d
+	}
+		/\$INTRODUCTIONTEMPLATE\$/ {
+		r '${SYSTEMPATH}'/common/scripts/templates/introduction.template
+		d
+	}
+		/\$COMPILINGTEMPLATE\$/ {
+		r '${SYSTEMPATH}'/common/scripts/templates/compiling.template
+		d
+	}
+		/\$HELPTEMPLATE\$/ {
+		r '${SYSTEMPATH}'/common/scripts/templates/help.template
+		d
+	}
+	' README.out
+
+
+	#Use sed to also splice the variables into README.out
+	#README.out has some placeholders for FILENAME FILELINK and FILEDETAILSLINK
+	#This is sortof gross multiline syntax, but whatever.
+	sed -i '
+		s|\$FILENAME\$|'"${DISTFILENAME}"'|
+		s|\$FILELINK\$|'"${DISTFILEURL}"'|
+		s|\$FILEDETAILSLINK\$|'"${DISTFILEINFOURL}"'|
+		s|\$VERSION\$|'"${VERSION}"'|
+		s|\$LANGUAGE\$|'"${LANGUAGE}"'|
+		s|\$PROJECTTITLE\$|'"${PROJECTTITLE}"'|
+		s|\$PROJECTNAME\$|'"${PROJECTNAME}"'|
+		s|\$PROJECTTYPE\$|'"${PROJECTTYPE}"'|
+		s|\$HOMEURL\$|'"${HOMEURL}"'|
+		s|\$JARNAME\$|'"${JARNAME}"'|
+		s|\$WIKIURL\$|'"${PROJECTTYPE}"'|
+		s|\$PROJECTTYPE\$|'"${PROJECTTYPE}"'|
+	' README.out
+
+	mv README.out $THISPROJECTDISTDIR/README.txt
 
 }
 
