@@ -33,8 +33,9 @@ public class SampleExperiment
 	{
 		/*run for num_episode number of episodes and store the number of steps and return from each episode*/        	
 		for(int x = 0; x < numEpisodes; ++x) {
+			System.out.print("Episode: "+(x+1));
 			RLGlue.RL_episode(maxStepsPerEpisode);
-			System.out.print(".");
+			System.out.println("\t steps: "+RLGlue.RL_num_steps()); 
 			rlNumSteps[x] = RLGlue.RL_num_steps();
 			rlReturn[x] = RLGlue.RL_return();
 		}
@@ -48,6 +49,8 @@ public class SampleExperiment
 		rlReturn = new double[SampleExperiment.kNumEpisodes];
 
 		RLGlue.RL_init();
+
+		System.out.println("Running: "+kNumEpisodes+" with a cutoff each of: "+maxStepsPerEpisode+" steps.");
 		
 		run(kNumEpisodes);
 		RLGlue.RL_cleanup();

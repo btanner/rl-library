@@ -1,0 +1,13 @@
+== Running This Experiment ==
+This experiment will automatically recompile itself each time you run it. 
+
+To run it, simple execute the `run.bash` script that was bunded with the project.
+
+{{{
+>$ cd $PROJECTDIR$
+>$ bash run.bash
+
+}}}
+
+This will start up the agent, environment, and experiment program needed to run this example, and will also start the rl_glue executable socket server if necessary.
+

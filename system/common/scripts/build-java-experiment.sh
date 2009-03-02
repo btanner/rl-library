@@ -31,8 +31,6 @@
 #	This should be one of: Java/C/CPP/Matlab/Python/Lisp/etc
 #   - $HOMEURL variable set
 #	This should be a the public homepage for this environment/agent
-#   - $JARNAME variable set
-#	This should be the name of the JAR that is built.  Like MountainCar.jar
 #
 #  - A build.xml with target "build" that puts a jar in products/
 #
@@ -119,13 +117,6 @@ javaDistributionInit(){
 	  exit 1
 	fi
 
-	if [ -z $JARNAME ]
-	then
-		echo 
-		echo "   ERROR: You Must set the HOMEURL variable."
-		echo 
-	  exit 1
-	fi
 
 #This has the modifieds and stuff in it, I prefer this one:
 #	VERSION=$(svnversion -n)
@@ -150,27 +141,24 @@ javaDistributionInit(){
 	THISPROJECTDISTDIR=$DISTDIR/$DISTNAME
 	COMMONPATH=$SYSTEMPATH/common
 	COMMONLIBS=$COMMONPATH/libs
-	ANTSCRIPTS=$COMMONPATH/ant
-	RLVIZPATH=$COMMONPATH/libs/rl-viz
-	RLVIZJAR=$RLVIZPATH/RLVizLib.jar
+	RLGLUEJAVAJARPATH=$COMMONLIBS/rl-glue-java/JavaRLGlueCodec.jar
 	rm -Rf $DISTDIR
 	mkdir $DISTDIR
 	mkdir $THISPROJECTDISTDIR
 
 	svn export --quiet src $THISPROJECTDISTDIR/src
-	mkdir -p $DISTDIR/system/common/libs/rl-viz
-	svn export --quiet $ANTSCRIPTS $DISTDIR/system/common/ant
-	svn export --quiet $COMMONLIBS/ant-contrib-1.0b3.jar  $DISTDIR/system/common/libs/ant-contrib-1.0b3.jar
-	svn export --quiet $RLVIZJAR $DISTDIR/system/common/libs/rl-viz/RLVizLib.jar
-	svn export --quiet $RLVIZPATH/libs $DISTDIR/system/common/libs/rl-viz/libs
-	
+	mkdir -p $DISTDIR/system/common/libs/rl-glue-java/
+	mkdir -p $DISTDIR/system/scripts
+	mkdir -p $DISTDIR/system/bin
+	svn export --quiet $RLGLUEJAVAJARPATH $DISTDIR/system/common/libs/rl-glue-java/JavaRLGlueCodec.jar
+	svn export --quiet $SYSTEMPATH/scripts/rl-library-includes.sh $DISTDIR/system/scripts/rl-library-includes.sh
+	svn export --quiet $SYSTEMPATH/bin/pkill $DISTDIR/system/bin/pkill
 
-
-	#Going to use sed to change the relative path to the system directory in the build.xml file
+	#Going to use sed to change the relative path to the system directory in the run.bash file
 	#We will use bar | as a delimiter
-	#Looks for something like: name="baseLibraryDir" value="../77s_5/../../../../blargl"
-	#And changes it to: name="baseLibraryDir" value=".."
-	sed 's|name="baseLibraryDir" value="\([a-z,A-Z,0-9,.,/,-,_]*\)"|name="baseLibraryDir" value=".."|' <build.xml > $THISPROJECTDISTDIR/build.xml
+	#Looks for something like: basePath=../../../77s_5/../../../../blargl"
+	#And changes it to: basePath=..
+	sed 's|basePath=[a-z,A-Z,0-9,.,/,-,_]*$|basePath=..|'<run.bash >$THISPROJECTDISTDIR/run.bash
 
 	#First, strip all of the comments out of README.txt
 	sed -e '/^##/D' <README.txt > README.out
@@ -196,6 +184,10 @@ javaDistributionInit(){
 		r '${SYSTEMPATH}'/common/scripts/templates/help.template
 		d
 	}
+		/\$RUNNINGTHISEXPERIMENTTEMPLATE\$/ {
+		r '${SYSTEMPATH}'/common/scripts/templates/running-this-experiment.template
+		d
+	}
 	' README.out
 
 
@@ -212,7 +204,6 @@ javaDistributionInit(){
 		s|\$PROJECTNAME\$|'"${PROJECTNAME}"'|
 		s|\$PROJECTTYPE\$|'"${PROJECTTYPE}"'|
 		s|\$HOMEURL\$|'"${HOMEURL}"'|
-		s|\$JARNAME\$|'"${JARNAME}"'|
 		s|\$WIKIURL\$|'"${PROJECTTYPE}"'|
 		s|\$PROJECTTYPE\$|'"${PROJECTTYPE}"'|
 		s|\$PROJECTDIR\$|'"${DISTNAME}"'|
@@ -225,10 +216,6 @@ javaDistributionInit(){
 #This will go into $DISTDIR, build the project, remove the build directory, back out
 #tar and gzip the directory, and then delete the directory.
 javaDistributionBuildJarAndGzip(){
-	pushd $THISPROJECTDISTDIR
-	ant -quiet build
-	rm -Rf build
-	popd
 	pushd $DISTDIR
 	tar -cf ../$DISTNAME.tar *
 	popd
