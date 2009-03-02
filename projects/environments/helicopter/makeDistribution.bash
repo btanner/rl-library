@@ -10,11 +10,16 @@
 #Maybe this should be done in ANT.  Not quite sure.
 
 #Set these variables for this specific project
+PROJECTTITLE='Helicopter Hovering'
 PROJECTNAME=Helicopter-Java
 SYSTEMPATH=../../../system
 WIKIPAGENAME=HelicopterJava
 SVNPASSWORDFILE=~/rl-library-svn-password
 PROJECTTYPE=Environment
+LANGUAGE=Java
+HOMEURL=http://library.rl-community.org/environments/helicopter
+JARNAME=Helicopter.jar
+
 
 #Get all of the build functions
 source $SYSTEMPATH/common/scripts/build-java-distribution.sh

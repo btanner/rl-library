@@ -10,11 +10,15 @@
 #Maybe this should be done in ANT.  Not quite sure.
 
 #Set these variables for this specific project
+PROJECTTITLE='Cart Pole Balance'
 PROJECTNAME=CartPole-Java
 SYSTEMPATH=../../../system
 WIKIPAGENAME=CartpoleJava
 SVNPASSWORDFILE=~/rl-library-svn-password
 PROJECTTYPE=Environment
+LANGUAGE=Java
+HOMEURL=http://library.rl-community.org/environments/cartpole
+JARNAME=CartPole.jar
 
 #Get all of the build functions
 source $SYSTEMPATH/common/scripts/build-java-distribution.sh

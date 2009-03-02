@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Make the distribution for Mountain Car.
+#Make the distribution for the Random Java Agent.
 #This relies on a fairly general script that will work for most Java environments and agents.
 #Requirements
 #	this should be done with code that is in a subversion checkout
@@ -10,11 +10,15 @@
 #Maybe this should be done in ANT.  Not quite sure.
 
 #Set these variables for this specific project
+PROJECTTITLE='Random Agent'
 PROJECTNAME=RandomAgent-Java
 SYSTEMPATH=../../../system
 WIKIPAGENAME=RandomAgentJava
 SVNPASSWORDFILE=~/rl-library-svn-password
 PROJECTTYPE=Agent
+LANGUAGE=Java
+HOMEURL=http://library.rl-community.org/agents/random-agent-java
+JARNAME=RandomAgent.jar
 
 #Get all of the build functions
 source $SYSTEMPATH/common/scripts/build-java-distribution.sh
