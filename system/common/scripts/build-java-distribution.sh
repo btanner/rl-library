@@ -55,7 +55,7 @@
 #After you call this, you should copy whatever other files you need to $DISTDIR
 javaDistributionInit(){
 #First make sure they gave us a username and password so we can do the upload...
-	if [ -z $SYSTEMPATH ]
+	if [ -z "$SYSTEMPATH" ]
 	then
 		echo 
 		echo "   ERROR: You Must set the SYSTEMPATH variable."
@@ -63,7 +63,7 @@ javaDistributionInit(){
 	  exit 1
 	fi
 
-	if [ -z $PROJECTTYPE ]
+	if [ -z "$PROJECTTYPE" ]
 	then
 		echo 
 		echo "   ERROR: You Must set the PROJECTTYPE variable."
@@ -71,7 +71,7 @@ javaDistributionInit(){
 	  exit 1
 	fi
 
-	if [ -z $PROJECTNAME ]
+	if [ -z "$PROJECTNAME" ]
 	then
 		echo 
 		echo "   ERROR: You Must set the PROJECTNAME variable."
@@ -79,7 +79,7 @@ javaDistributionInit(){
 	  exit 1
         fi
 
-	if [ -z $PROJECTTITLE ]
+	if [ -z "$PROJECTTITLE" ]
 	then
 		echo 
 		echo "   ERROR: You Must set the PROJECTTITLE variable."
@@ -87,7 +87,7 @@ javaDistributionInit(){
 	  exit 1
 	fi
 
-	if [ -z $WIKIPAGENAME ]
+	if [ -z "$WIKIPAGENAME" ]
 	then
 		echo 
 		echo "   ERROR: You Must set the WIKIPAGENAME variable."
@@ -95,7 +95,7 @@ javaDistributionInit(){
 	  exit 1
 	fi
 
-	if [ -z $SVNPASSWORDFILE ]
+	if [ -z "$SVNPASSWORDFILE" ]
 	then
 		echo 
 		echo "   ERROR: You Must set the SVNPASSWORDFILE variable."
@@ -103,7 +103,7 @@ javaDistributionInit(){
 	  exit 1
 	fi
 
-	if [ -z $LANGUAGE ]
+	if [ -z "$LANGUAGE" ]
 	then
 		echo 
 		echo "   ERROR: You Must set the LANGUAGE variable."
@@ -111,7 +111,7 @@ javaDistributionInit(){
 	  exit 1
 	fi
 
-	if [ -z $HOMEURL ]
+	if [ -z "$HOMEURL" ]
 	then
 		echo 
 		echo "   ERROR: You Must set the HOMEURL variable."
@@ -119,7 +119,7 @@ javaDistributionInit(){
 	  exit 1
 	fi
 
-	if [ -z $JARNAME ]
+	if [ -z "$JARNAME" ]
 	then
 		echo 
 		echo "   ERROR: You Must set the HOMEURL variable."
