@@ -33,6 +33,8 @@
 #	This should be a the public homepage for this environment/agent
 #   - $JARNAME variable set
 #	This should be the name of the JAR that is built.  Like MountainCar.jar
+#   - $ANTBUILDTARGET (this is optional - if you don't want to build with >$ ant build
+#	give the name of an alternate target
 #
 #  - A build.xml with target "build" that puts a jar in products/
 #
@@ -126,6 +128,12 @@ javaDistributionInit(){
 		echo 
 	  exit 1
 	fi
+
+	if [ -z "$ANTBUILDTARGET" ]
+	then
+		ANTBUILDTARGET=build
+	fi
+
 
 #This has the modifieds and stuff in it, I prefer this one:
 #	VERSION=$(svnversion -n)
@@ -227,7 +235,7 @@ javaDistributionInit(){
 #tar and gzip the directory, and then delete the directory.
 javaDistributionBuildJarAndGzip(){
 	pushd $THISPROJECTDISTDIR
-	ant -quiet build
+	ant -quiet ${ANTBUILDTARGET}
 	rm -Rf build
 	popd
 	pushd $DISTDIR
