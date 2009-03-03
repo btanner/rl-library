@@ -225,6 +225,7 @@ javaDistributionInit(){
 		s|\$PROJECTTYPE\$|'"${PROJECTTYPE}"'|
 		s|\$PROJECTDIR\$|'"${DISTNAME}"'|
 		s|\$SIDEBAR\$|'"${PROJECTTYPE}Sidebar"'|
+		s|\$ANTBUILDTARGET\$|'"${ANTBUILDTARGET}"'|
 	' README.out
 
 	mv README.out $THISPROJECTDISTDIR/README.txt

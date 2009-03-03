@@ -9,7 +9,7 @@ make changes and recompile, you can simply type:
 >$ ant clean
 
 #this will update ../products/$JARNAME$
->$ ant build
+>$ ant $ANTBUILDTARGET$
 }}}
 
 == Running This Project ==
