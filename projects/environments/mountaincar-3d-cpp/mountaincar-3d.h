@@ -16,7 +16,7 @@
 #include <rlglue/utils/C/RLStruct_util.h>
 
 #ifndef RAND_MAX
-#  define RAND_MAX ((int) ((unsigned) ~0 >> 1))
+#define RAND_MAX ((int) ((unsigned) ~0 >> 1))
 #endif
 
 using namespace std;
@@ -24,7 +24,7 @@ using namespace std;
 double m_offset;
 
 
-//State variables
+/*State variables*/
 double mcar_Xposition;
 double mcar_Yposition;
 double mcar_Xvelocity;
@@ -49,8 +49,6 @@ void update_velocity(int a);
 void update_position();
 
 //Create instances of RL-Glue types
-static observation_t current_observation;				
-static reward_observation_terminal_t ro;							
 taskspec_t env_task_spec;
 
 #endif
