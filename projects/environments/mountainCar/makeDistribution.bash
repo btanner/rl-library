@@ -28,7 +28,6 @@ source $SYSTEMPATH/common/scripts/build-java-distribution.sh
 #After you call this, you should copy whatever other files you need to $DISTDIR
 javaDistributionInit
 
-
 #
 #  Extra files you want to distribute go here
 #
