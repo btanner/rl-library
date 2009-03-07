@@ -158,6 +158,10 @@ javaDistributionInit(){
 
 	svn export --quiet src $THISPROJECTDISTDIR/src
 	mkdir -p $DISTDIR/system/common/libs/rl-glue-java/
+	#These Two aren't needed, but they come in handy
+	mkdir -p $DISTDIR/system/common/libs/rl-viz
+	mkdir -p $DISTDIR/products
+
 	mkdir -p $DISTDIR/system/scripts
 	mkdir -p $DISTDIR/system/bin
 	svn export --quiet $RLGLUEJAVAJARPATH $DISTDIR/system/common/libs/rl-glue-java/JavaRLGlueCodec.jar

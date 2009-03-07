@@ -1,7 +1,7 @@
 == Running This Experiment ==
-This experiment will automatically recompile itself each time you run it. 
+If appropriate, this experiment will automatically recompile itself each time you run it. 
 
-To run it, simple execute the `run.bash` script that was bunded with the project.
+To run it, simple execute the `run.bash` script that was bundled with the project.
 
 {{{
 >$ cd $PROJECTDIR$
