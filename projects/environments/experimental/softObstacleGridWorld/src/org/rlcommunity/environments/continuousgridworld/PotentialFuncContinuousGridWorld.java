@@ -71,6 +71,7 @@ public class PotentialFuncContinuousGridWorld extends ContinuousGridWorld {
 
     @Override
     public void addBarriersAndGoal(ParameterHolder theParams) {
+        addRewardRegion(new Rectangle2D.Double(0.0d, 0.0d, 200.0d, 200.0d), -1.0d);
         double width = theParams.getDoubleParam("cont-grid-world-width");
         double height = theParams.getDoubleParam("cont-grid-world-height");
         double goalX = theParams.getDoubleParam("cont-grid-world-goalX");
@@ -132,7 +133,7 @@ public class PotentialFuncContinuousGridWorld extends ContinuousGridWorld {
 
     }
 
-    private String makeTaskSpec() {
+    protected String makeTaskSpec() {
         TaskSpecVRLGLUE3 theTaskSpecObject = new TaskSpecVRLGLUE3();
         theTaskSpecObject.setEpisodic();
         theTaskSpecObject.setDiscountFactor(discountFactor);

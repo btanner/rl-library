@@ -37,8 +37,6 @@ import rlVizLib.messaging.environmentShell.TaskSpecPayload;
  * @author Marc G. Bellemare (mg17 at cs ualberta ca)
  */
 public class DiscontinuousContinuousGridWorld extends ContinuousGridWorld {
-    private static final int MAP_EMPTY = 0;
-    private static final int MAP_CUP   = 1;
 
     private static final int MAPPING_DIRECT = 0;
     private static final int MAPPING_DISCONTINUOUS_TILES = 1;
@@ -74,7 +72,7 @@ public class DiscontinuousContinuousGridWorld extends ContinuousGridWorld {
         p.addIntegerParam("invert-slopes",0);
         //this does nothing for now
         p.addIntegerParam("mapping-seed",27);
-        p.addIntegerParam("map-number", MAP_EMPTY);
+        p.addIntegerParam("map-number", MapGenerator.MAP_EMPTY);
         p.addDoubleParam("random-action-prob", 0.0);
         p.addDoubleParam("movement-noise", 0.0);
 
@@ -97,6 +95,7 @@ public class DiscontinuousContinuousGridWorld extends ContinuousGridWorld {
 
     @Override
     public void addBarriersAndGoal(ParameterHolder theParams) {
+        addRewardRegion(new Rectangle2D.Double(0.0d, 0.0d, 200.0d, 200.0d), -1.0d);
         double goalX = theParams.getDoubleParam("cont-grid-world-goalX");
         double goalY = theParams.getDoubleParam("cont-grid-world-goalY");
         double startX = theParams.getDoubleParam("cont-grid-world-startX");
@@ -127,17 +126,7 @@ public class DiscontinuousContinuousGridWorld extends ContinuousGridWorld {
     }
 
     private void createMap(int number) {
-        switch (number) {
-            case MAP_EMPTY: // Empty map
-                break;
-            case MAP_CUP: // Cup map
-                addBarrierRegion(new Rectangle2D.Double(50.0d, 50.0d, 10.0d, 100.0d), 1.0d);
-                addBarrierRegion(new Rectangle2D.Double(50.0d, 50.0d, 100.0d, 10.0d), 1.0d);
-                addBarrierRegion(new Rectangle2D.Double(150.0d, 50.0d, 10.0d, 100.0d), 1.0d);
-                break;
-            default:
-                throw new IllegalArgumentException ("Map number "+number);
-        }
+        MapGenerator.makeMap(number,this);
     }
 
     private void createMapping(int number, ParameterHolder theParams) {
@@ -208,7 +197,8 @@ public class DiscontinuousContinuousGridWorld extends ContinuousGridWorld {
 
     }
 
-    private String makeTaskSpec() {
+    @Override
+    protected String makeTaskSpec() {
         TaskSpecVRLGLUE3 theTaskSpecObject = new TaskSpecVRLGLUE3();
         theTaskSpecObject.setEpisodic();
         theTaskSpecObject.setDiscountFactor(discountFactor);
