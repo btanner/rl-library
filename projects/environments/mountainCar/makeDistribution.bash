@@ -27,7 +27,6 @@ source $SYSTEMPATH/common/scripts/build-java-distribution.sh
 #Copies the default set of jars and stuff to the appropriate directories.
 #After you call this, you should copy whatever other files you need to $DISTDIR
 javaDistributionInit
-
 #
 #  Extra files you want to distribute go here
 #

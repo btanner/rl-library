@@ -117,15 +117,6 @@ javaDistributionInit(){
 	  exit 1
 	fi
 	
-	#Darwin SED and Linux SED are not the same.  For Darwin, to 
-	#edit in place, we need to put '' between -i and the replace
-	OS=$(uname)
-	EXTRASEDHACK=
-
-	if [[ "$OS" == "Darwin" ]]
-	then 
-	EXTRASEDHACK=\'\'
-	fi
 
 
 #This has the modifieds and stuff in it, I prefer this one:
@@ -178,7 +169,7 @@ javaDistributionInit(){
 	sed -e '/^##/D' <README.txt > README.out
 
 	#Now, fill in the template sections
-	sed -i $EXTRASEDHACK '/\$USINGTHISDOWNLOADTEMPLATE\$/ {
+	sed -i.backup '/\$USINGTHISDOWNLOADTEMPLATE\$/ {
 		r '${SYSTEMPATH}'/common/scripts/templates/using-this-download.template
 		d
 	}
@@ -208,7 +199,7 @@ javaDistributionInit(){
 	#Use sed to also splice the variables into README.out
 	#README.out has some placeholders for FILENAME FILELINK and FILEDETAILSLINK
 	#This is sortof gross multiline syntax, but whatever.
-	sed -i $EXTRASEDHACK '
+	sed -i.backup '
 		s|\$FILENAME\$|'"${DISTFILENAME}"'|
 		s|\$FILELINK\$|'"${DISTFILEURL}"'|
 		s|\$FILEDETAILSLINK\$|'"${DISTFILEINFOURL}"'|
@@ -225,6 +216,7 @@ javaDistributionInit(){
 	' README.out
 
 	mv README.out $THISPROJECTDISTDIR/README.txt
+	rm README.out.backup
 
 }
 

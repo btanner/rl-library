@@ -134,16 +134,6 @@ javaDistributionInit(){
 		ANTBUILDTARGET=build
 	fi
 
-	#Darwin SED and Linux SED are not the same.  For Darwin, to 
-	#edit in place, we need to put '' between -i and the replace
-	OS=$(uname)
-	EXTRASEDHACK=
-
-	if [[ "$OS" == "Darwin" ]]
-	then 
-	EXTRASEDHACK=\'\'
-	fi
-
 #This has the modifieds and stuff in it, I prefer this one:
 #	VERSION=$(svnversion -n)
 	VERSION=$(svn info . |grep Revision: | awk '{print $2}')
@@ -183,17 +173,17 @@ javaDistributionInit(){
 	
 
 
-	#Going to use /usr/local/bin/sed to change the relative path to the system directory in the build.xml file
+	#Going to use sed to change the relative path to the system directory in the build.xml file
 	#We will use bar | as a delimiter
 	#Looks for something like: name="baseLibraryDir" value="../77s_5/../../../../blargl"
 	#And changes it to: name="baseLibraryDir" value=".."
-	/usr/local/bin/sed 's|name="baseLibraryDir" value="\([a-z,A-Z,0-9,.,/,-,_]*\)"|name="baseLibraryDir" value=".."|' <build.xml > $THISPROJECTDISTDIR/build.xml
+	sed 's|name="baseLibraryDir" value="\([a-z,A-Z,0-9,.,/,-,_]*\)"|name="baseLibraryDir" value=".."|' <build.xml > $THISPROJECTDISTDIR/build.xml
 
 	#First, strip all of the comments out of README.txt
-	/usr/local/bin/sed -e '/^##/D' <README.txt > README.out
+	sed -e '/^##/D' <README.txt > README.out
 
 	#Now, fill in the template sections
-	/usr/local/bin/sed -i $EXTRASEDHACK '/\$USINGTHISDOWNLOADTEMPLATE\$/ {
+	sed -i.backup '/\$USINGTHISDOWNLOADTEMPLATE\$/ {
 		r '${SYSTEMPATH}'/common/scripts/templates/using-this-download.template
 		d
 	}
@@ -216,10 +206,10 @@ javaDistributionInit(){
 	' README.out
 
 
-	#Use /usr/local/bin/sed to also splice the variables into README.out
+	#Use sed to also splice the variables into README.out
 	#README.out has some placeholders for FILENAME FILELINK and FILEDETAILSLINK
 	#This is sortof gross multiline syntax, but whatever.
-	/usr/local/bin/sed -i $EXTRASEDHACK '
+	sed -i.backup '
 		s|\$FILENAME\$|'"${DISTFILENAME}"'|
 		s|\$FILELINK\$|'"${DISTFILEURL}"'|
 		s|\$FILEDETAILSLINK\$|'"${DISTFILEINFOURL}"'|
@@ -238,6 +228,7 @@ javaDistributionInit(){
 	' README.out
 
 	mv README.out $THISPROJECTDISTDIR/README.txt
+	rm README.out.backup
 
 }
 
