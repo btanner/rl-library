@@ -30,6 +30,11 @@ public class ContinuousGridWorld extends AbstractContinuousGridWorld {
         super(theParams);
     }
 
+    public static ParameterHolder getDefaultParameters() {
+        ParameterHolder myParams=AbstractContinuousGridWorld.getDefaultParameters();
+        return myParams;
+    }
+
     protected String makeTaskSpec() {
         TaskSpecVRLGLUE3 theTaskSpecObject = new TaskSpecVRLGLUE3();
         theTaskSpecObject.setEpisodic();
