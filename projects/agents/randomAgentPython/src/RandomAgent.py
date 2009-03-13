@@ -72,3 +72,6 @@ class RandomAgent(Agent):
 			if action_type == 'f':
 				self.action.doubleArray.append(random.uniform(min_action,max_action))
 
+if __name__=="__main__":
+       AgentLoader.loadAgent(RandomAgent())
+
