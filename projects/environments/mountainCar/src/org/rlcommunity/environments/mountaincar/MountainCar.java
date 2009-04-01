@@ -109,14 +109,18 @@ public class MountainCar extends EnvironmentBase implements
      * @return
      */
     public Observation env_start() {
-        if (theState.randomStarts) {
-            double randStartPosition = (randomGenerator.nextDouble() * (theState.maxPosition + Math.abs((theState.minPosition))) - Math.abs(theState.minPosition));
-            theState.position = theState.minVelocity;
-        } else {
-            theState.position = theState.defaultInitPosition;
-        }
-        theState.velocity = theState.defaultInitVelocity;
 
+        theState.position = theState.defaultInitPosition;
+        theState.velocity = theState.defaultInitVelocity;
+        if (theState.randomStarts) {
+            //We use goal position instead of max position so that the agent
+            //doesn't start past the goal ever
+            double maxStartPosition = theState.goalPosition;
+            double randStartPosition = (randomGenerator.nextDouble() * (maxStartPosition + Math.abs((theState.minPosition))) - Math.abs(theState.minPosition));
+            theState.position = randStartPosition;
+            double randStartVelocity = (randomGenerator.nextDouble() * (theState.maxVelocity + Math.abs((theState.minVelocity))) - Math.abs(theState.minVelocity));
+            theState.velocity = randStartVelocity;
+        }
         return makeObservation();
     }
 
