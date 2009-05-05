@@ -40,19 +40,15 @@ public class Acrobot extends EnvironmentBase implements HasAVisualizerInterface,
     final static double I1 = 1.0;
     final static double I2 = 1.0;
     final static double g = 9.8;
-    final static double dt = 0.01;
+    final static double dt = 0.05;
     final static double acrobotGoalPosition = 1.0;
     /*State Variables*/
     private double theta1,  theta2,  theta1Dot,  theta2Dot;
-    private int maxSteps = 1000000;
-    private int currentNumSteps;
     private int seed = 0;
     private Random ourRandomNumber = new Random(seed);
     boolean setRandomStarts; //if true then do random starts, else, start at static position
-    private int numEpisodes = 0;
-    private int numSteps = 0;
-    private int totalNumSteps = 0;
 
+    
     /*Constructor Business*/
     public Acrobot() {
         this(getDefaultParameters());
@@ -105,79 +101,59 @@ public class Acrobot extends EnvironmentBase implements HasAVisualizerInterface,
 
     /*Beginning of RL-GLUE methods*/
     public String env_init() {
-        numEpisodes = 0;
-        numSteps = 0;
-        totalNumSteps = 0;
         return makeTaskSpec();
     }
 
     public Observation env_start() {
-        numEpisodes++;
-        totalNumSteps++;
-        numSteps = 0;
         if (setRandomStarts) {
             set_initial_position_random();
         } else {
             set_initial_position_at_bottom();
         }
-        currentNumSteps = 0;
-
         return makeObservation();
     }
 
     public Reward_observation_terminal env_step(Action a) {
-        totalNumSteps++;
-        numSteps++;
         if ((a.intArray[0] < 0) || (a.intArray[0] > 2)) {
             System.out.printf("Invalid action %d, selecting an action randomly\n", a.intArray[0]);
             a.intArray[0] = (int) ourRandomNumber.nextDouble() * 3;
         }
         double torque = a.intArray[0] - 1.0;
+        double d1;
+        double d2;
+        double phi_2;
+        double phi_1;
+
+        double theta2_ddot ;
+        double theta1_ddot;
 
         int count = 0;
         while (!test_termination() && count < 4) {
             count++;
 
-            double d1 = m1 * Math.pow(lc1, 2) + m2 * (Math.pow(l1, 2) + Math.pow(lc2, 2) + 2 * l1 * lc2 * Math.cos(theta2)) + I1 + I2;
-            double d2 = m2 * (Math.pow(lc2, 2) + l1 * lc2 * Math.cos(theta2)) + I2;
-            double phi_2 = m2 * lc2 * g * Math.cos(theta1 + theta2 - Math.PI / 2);
-            double phi_1 = -(m2 * l1 * lc2 * Math.pow(theta2, 2) * Math.sin(theta2) + 2 * m2 * l1 * lc2 * theta1Dot * theta2Dot * Math.sin(theta2)) + (m1 * lc1 + m2 * l1) * g * Math.cos(theta1 - Math.PI / 2) + phi_2;
+            d1 = m1 * Math.pow(lc1, 2) + m2 * ( Math.pow(l1, 2) + Math.pow(lc2, 2) + 2 * l1 * lc2 * Math.cos(theta2)) + I1 + I2;
+            d2 = m2 * (Math.pow(lc2, 2) + l1 * lc2 * Math.cos(theta2)) + I2;
 
-            double theta2_ddot = (torque + (d2 / d1) * phi_1 - phi_2) / (m2 * Math.pow(lc2, 2) + I2 - Math.pow(d2, 2) / d1);
-            double theta1_ddot = -(d2 * theta2_ddot + phi_1) / d1;
+            phi_2 = m2 * lc2 * g * Math.cos(theta1 + theta2 - Math.PI / 2.0);
+            phi_1 = -(m2 * l1 * lc2 * Math.pow(theta2Dot, 2) * Math.sin(theta2) -2 * m2 * l1 * lc2 * theta1Dot * theta2Dot * Math.sin(theta2)) + (m1 * lc1 + m2 * l1) * g * Math.cos(theta1 - Math.PI / 2.0) + phi_2;
+
+            theta2_ddot = (torque + (d2 / d1) * phi_1 - m2*l1*lc2*Math.pow(theta1Dot,2)*Math.sin(theta2)- phi_2) / (m2 * Math.pow(lc2, 2) + I2 - Math.pow(d2, 2) / d1);
+            theta1_ddot = - (d2 * theta2_ddot + phi_1) / d1;
 
             theta1Dot += theta1_ddot * dt;
-
-            if (theta1Dot > maxTheta1Dot) {
-                theta1Dot = maxTheta1Dot;
-            } else if (theta1Dot < -(maxTheta1Dot)) {
-                theta1Dot = -(maxTheta1Dot);
-            }
             theta2Dot += theta2_ddot * dt;
 
-            if (theta2Dot > maxTheta2Dot) {
-                theta2Dot = maxTheta2Dot;
-            } else if (theta2Dot < -(maxTheta2Dot)) {
-                theta2Dot = -(maxTheta2Dot);
-            }
             theta1 += theta1Dot * dt;
             theta2 += theta2Dot * dt;
         }
+        if (Math.abs(theta1Dot)>maxTheta1Dot){ theta1Dot = Math.signum(theta1Dot)*maxTheta1Dot;}
 
-        //Keep thetas in reasonable range to avoid loss of percision.
-        while (theta1 >= Math.PI) {
-            theta1 -= 2.0 * Math.PI;
-        }
-        while (theta1 < -Math.PI) {
-            theta1 += 2.0 * Math.PI;
-        }
-        while (theta2 >= Math.PI) {
-            theta2 -= 2.0 * Math.PI;
-        }
-        while (theta2 < -Math.PI) {
-            theta2 += 2.0 * Math.PI;
-        }
-        currentNumSteps++;
+        if (Math.abs(theta2Dot)>maxTheta2Dot){ theta2Dot = Math.signum(theta2Dot)*maxTheta2Dot;}
+        /* Put a hard constraint on the Acrobot physics, thetas MUST be in [-PI,+PI]
+         * if they reach a top then angular velocity becomes zero
+         */
+        if (Math.abs(theta2)>Math.PI){ theta2 = Math.signum(theta2)*Math.PI; theta2Dot=0; }
+        if (Math.abs(theta1)>Math.PI){ theta1 = Math.signum(theta1)*Math.PI; theta1Dot=0;}
 
         Reward_observation_terminal ro = new Reward_observation_terminal();
         ro.r = -1;
@@ -185,6 +161,7 @@ public class Acrobot extends EnvironmentBase implements HasAVisualizerInterface,
 
         ro.terminal = 0;
         if (test_termination()) {
+            ro.r=0.0d;
             ro.terminal = 1;
         }
         return ro;
@@ -209,10 +186,8 @@ public class Acrobot extends EnvironmentBase implements HasAVisualizerInterface,
         if (theMessageObject.getTheMessageType() == rlVizLib.messaging.environment.EnvMessageType.kEnvCustom.id()) {
 
             String theCustomType = theMessageObject.getPayLoad();
-
-
-            System.out.println("We need some code written in Env Message for Acrobot.. unknown custom message type received" + theMessage);
-            Thread.dumpStack();
+            System.out.println("We need some code written in Env Message for Acrobot.. unknown custom message type received" + theCustomType+" :: "+theMessage);
+//            Thread.dumpStack();
 
             return null;
         }
@@ -260,7 +235,7 @@ public class Acrobot extends EnvironmentBase implements HasAVisualizerInterface,
         //Second Joint height (relative to first joint)
         double secondJointEndHeight = l2 * Math.sin(Math.PI / 2 - theta1 - theta2);
         feet_height = -(firstJointEndHeight + secondJointEndHeight);
-        return (feet_height > acrobotGoalPosition) || (currentNumSteps > maxSteps);
+        return (feet_height > acrobotGoalPosition);
     }
 
     public String getVisualizerClassName() {
