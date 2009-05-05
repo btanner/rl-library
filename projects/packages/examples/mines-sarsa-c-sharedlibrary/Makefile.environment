@@ -11,9 +11,11 @@ SampleMinesEnvironmentLinux: SampleMinesEnvironment.c
 	$(CC) $(CFLAGS) -shared -Wl,-soname,SampleMinesEnvironment \
     -o SampleMinesEnvironment.so SampleMinesEnvironment.c $(LDFLAGS)
 
-SampleMinesEnvironmentOSX: SampleMinesEnvironment.o 
-	$(CC) $(CFLAGS) -c -fPIC SampleMinesEnvironment.c \
-    -dynamiclib $(LDFLAGS) -o SampleMinesEnvironment.dylib
+SampleMinesEnvironmentOSX: SampleMinesEnvironmentOSX.o 
+	$(CC)  SampleMinesEnvironmentOSX.o -dynamiclib $(LDFLAGS) -o SampleMinesEnvironment.dylib
+
+SampleMinesEnvironmentOSX.o: SampleMinesEnvironment.c
+	$(CC)  $(CFLAGS) -c -fPIC SampleMinesEnvironment.c -o SampleMinesEnvironmentOSX.o 
 
 clean:
 	rm -rf SampleMinesEnvironment SampleMinesEnvironment.exe *.o SampleMinesEnvironment.dylib SampleMinesEnvironment.so
