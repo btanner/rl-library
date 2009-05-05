@@ -1,16 +1,28 @@
 LDFLAGS := $(LDFLAGS)  -lm -lrlutils -lrlagent -lrlgluenetdev
 CFLAGS := $(CFLAGS) -Wall -pedantic
 
-all: SampleSarsaAgent
+all: OSX
 
-SampleSarsaAgent: SampleSarsaAgent.o 
-	$(CC)   SampleSarsaAgent.o $(LDFLAGS) -o SampleSarsaAgent      
+OSX: SampleSarsaAgentOSX
 
-SampleSarsaAgent.o: SampleSarsaAgent.c
-	$(CC)  $(CFLAGS) -c SampleSarsaAgent.c -o SampleSarsaAgent.o 
+Linux: SampleSarsaAgentLinux
+
+
+SampleSarsaAgentLinux: SampleSarsaAgent.c
+	$(CC) $(CFLAGS) -shared -Wl,-soname,SampleSarsaAgent \
+    -o SampleSarsaAgent.so SampleSarsaAgent.c $(LDFLAGS)
+
+
+SampleSarsaAgentOSX: SampleSarsaAgentOSX.o 
+	$(CC)   SampleSarsaAgentOSX.o -dynamiclib $(LDFLAGS) -o  SampleSarsaAgent.dylib      
+
+SampleSarsaAgentOSX.o: SampleSarsaAgent.c
+	$(CC)  $(CFLAGS) -c -fPIC SampleSarsaAgent.c -o SampleSarsaAgentOSX.o 
 
 clean:
-	rm -rf SampleSarsaAgent SampleSarsaAgent.exe *.o
+	rm -rf SampleSarsaAgent SampleSarsaAgent.exe SampleSarsaAgent*.o SampleSarsaAgent.dylib SampleSarsaAgent.so
+
+
 
 
 

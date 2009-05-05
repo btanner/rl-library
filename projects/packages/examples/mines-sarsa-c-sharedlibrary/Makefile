@@ -7,14 +7,17 @@
 # LDFLAGS := $(LDFLAGS) -L/Users/btanner/rl-glue/lib
 # CFLAGS := $(CFLAGS) -I/Users/btanner/rl-glue/include/rlglue
 
+all: OSX
 
+OSX: 
+	CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" make -f Makefile.agent OSX
+	CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" make -f Makefile.environment OSX 
 
-all: 	
-	CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" make -f Makefile.agent 
-	CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" make -f Makefile.environment 
-	CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" make -f Makefile.experiment
+Linux:
+	CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" make -f Makefile.agent Linux
+	CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" make -f Makefile.environment Linux
 
 clean:
 	make -f Makefile.agent  clean
 	make -f Makefile.environment clean
-	make -f Makefile.experiment clean
+

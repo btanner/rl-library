@@ -18,6 +18,6 @@ SampleMinesEnvironmentOSX.o: SampleMinesEnvironment.c
 	$(CC)  $(CFLAGS) -c -fPIC SampleMinesEnvironment.c -o SampleMinesEnvironmentOSX.o 
 
 clean:
-	rm -rf SampleMinesEnvironment SampleMinesEnvironment.exe *.o SampleMinesEnvironment.dylib SampleMinesEnvironment.so
+	rm -rf SampleMinesEnvironment SampleMinesEnvironment.exe SampleMinesEnvironment*.o SampleMinesEnvironment.dylib SampleMinesEnvironment.so
 
 

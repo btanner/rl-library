@@ -1,7 +1,6 @@
 =================================
 RL-Glue C MINES-SARSA-SAMPLE-SHAREDLIBRARY README
 =================================
-NOTE: Currently only the environment in this project is configured to compile to a shared library.  This project is not complete.
 
 ----------------------------
 Introduction
@@ -21,21 +20,19 @@ Depending on whether you have RL-Glue Core and the C/C++ codec installed in your
 If the installation was to the default location, this Makefile may not need to be edited.
 If you have to update the Makefile, set the -I and -L for CFLAGS and LDFLAGS to point to where you installed the headers and libs.  
 
+To make with OS X (create SampleMinesEnvironment.dylib)
 >$ make
+or
+>$ make OSX
+
+To make with Linux (create SampleMinesEnvironment.so)
+>$ make Linux
 
 ----------------------------
 Running
 ----------------------------
-Compile First! (above)
-
-- These instructions assume that you have rl_glue (or rl_glue.exe) installed on your path so that you don't have to type the full path to it.
-
-Do the following in different console/terminal windows:
-#If you want to do them in the same terminal window, append an ampersand & to each line
-$> ./SampleSarsaAgent
-$> ./SampleMinesEnvironment
-$> ./SampleExperiment
-$> rl_glue #(maybe rl_glue.exe)
+Compiling into Dylibs is specifically so that you don't run these components directly, but rather, you load them with the RL-Viz External CPPEnvLoader and/or CPPAgentLoader.  A link to a brief tutorial on these advanced techniques is here:
+http://code.google.com/p/rl-viz/wiki/CPPEnvLoader
 
 ----------------------------
 More Information
