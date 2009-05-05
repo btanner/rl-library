@@ -1,0 +1,21 @@
+LDFLAGS := $(LDFLAGS)  -lm -lrlutils -lrlenvironment -lrlgluenetdev
+CFLAGS := $(CFLAGS)  -Wall -pedantic
+
+all: OSX
+
+OSX: SampleMinesEnvironmentOSX
+
+Linux: SampleMinesEnvironmentLinux
+
+SampleMinesEnvironmentLinux: SampleMinesEnvironment.c
+	$(CC) $(CFLAGS) -shared -Wl,-soname,SampleMinesEnvironment \
+    -o SampleMinesEnvironment.so SampleMinesEnvironment.c $(LDFLAGS)
+
+SampleMinesEnvironmentOSX: SampleMinesEnvironment.o 
+	$(CC) $(CFLAGS) -c -fPIC SampleMinesEnvironment.c \
+    -dynamiclib $(LDFLAGS) -o SampleMinesEnvironment.dylib
+
+clean:
+	rm -rf SampleMinesEnvironment SampleMinesEnvironment.exe *.o SampleMinesEnvironment.dylib SampleMinesEnvironment.so
+
+
