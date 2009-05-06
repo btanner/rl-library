@@ -9,7 +9,7 @@ Linux: SampleSarsaAgentLinux
 
 
 SampleSarsaAgentLinux: SampleSarsaAgent.c
-	$(CC) $(CFLAGS) -shared -Wl,-soname,SampleSarsaAgent \
+	$(CC) $(CFLAGS) -fPIC -shared -Wl,-soname,SampleSarsaAgent \
     -o SampleSarsaAgent.so SampleSarsaAgent.c $(LDFLAGS)
 
 

@@ -8,7 +8,7 @@ OSX: SampleMinesEnvironmentOSX
 Linux: SampleMinesEnvironmentLinux
 
 SampleMinesEnvironmentLinux: SampleMinesEnvironment.c
-	$(CC) $(CFLAGS) -shared -Wl,-soname,SampleMinesEnvironment \
+	$(CC) $(CFLAGS) -fPIC -shared -Wl,-soname,SampleMinesEnvironment \
     -o SampleMinesEnvironment.so SampleMinesEnvironment.c $(LDFLAGS)
 
 SampleMinesEnvironmentOSX: SampleMinesEnvironmentOSX.o 
