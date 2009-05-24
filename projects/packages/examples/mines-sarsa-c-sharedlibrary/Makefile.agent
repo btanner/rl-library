@@ -9,15 +9,18 @@ Linux: SampleSarsaAgentLinux
 
 
 SampleSarsaAgentLinux: SampleSarsaAgent.c
-	$(CC) $(CFLAGS) -fPIC -shared -Wl,-soname,SampleSarsaAgent \
+	$(CXX) $(CFLAGS) -fPIC -shared -Wl,-soname,SampleSarsaAgent \
     -o SampleSarsaAgent.so SampleSarsaAgent.c $(LDFLAGS)
 
 
-SampleSarsaAgentOSX: SampleSarsaAgentOSX.o 
-	$(CC)   SampleSarsaAgentOSX.o -dynamiclib $(LDFLAGS) -o  SampleSarsaAgent.dylib      
+SampleSarsaAgentOSX: SampleSarsaAgentOSX.o ParameterHolderOSX.o
+	$(CXX)   SampleSarsaAgentOSX.o ParameterHolderOSX.o -dynamiclib $(LDFLAGS) -o  SampleSarsaAgent.dylib      
 
 SampleSarsaAgentOSX.o: SampleSarsaAgent.c
-	$(CC)  $(CFLAGS) -c -fPIC SampleSarsaAgent.c -o SampleSarsaAgentOSX.o 
+	$(CXX)  $(CFLAGS) -c -fPIC SampleSarsaAgent.c -o SampleSarsaAgentOSX.o 
+
+ParameterHolderOSX.o: ParameterHolder.cpp
+	$(CXX)  $(CFLAGS) -c -fPIC ParameterHolder.cpp -o ParameterHolderOSX.o 
 
 clean:
 	rm -rf SampleSarsaAgent SampleSarsaAgent.exe SampleSarsaAgent*.o SampleSarsaAgent.dylib SampleSarsaAgent.so

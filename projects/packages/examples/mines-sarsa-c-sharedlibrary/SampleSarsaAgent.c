@@ -38,6 +38,10 @@
 #include <rlglue/utils/C/RLStruct_util.h> /* helpful functions for structs */
 #include <rlglue/utils/C/TaskSpec_Parser.h> /* task spec parser */
 
+#include "ParameterHolder.h"
+
+#include <iostream>
+#include <string>
 
 action_t this_action;
 action_t last_action;
@@ -53,6 +57,44 @@ int numStates=0;
 
 int policy_frozen=0;
 int exploring_frozen=0;
+
+
+
+std::string parameterString;
+int sampleIntParam = 0;
+double sampleDoubleParam = 0.0;
+bool sampleBoolParam = true;
+std::string sampleStringParam;
+ParameterHolder theParamHolder;
+
+extern "C"{
+const char *agent_getDefaultParameters(){
+	ParameterHolder P;
+	P.addIntParam("sampleIntParam",5);
+	P.addDoubleParam("sampleDoubleParam", 2.0);
+	P.addBoolParam("sampleBoolParam", true);
+	P.addStringParam("sampleStringParam", "thetest");
+	
+	parameterString=P.stringSerialize();
+    return parameterString.c_str();
+}
+
+void agent_setDefaultParameters(const char* theParamString){
+    theParamHolder = ParameterHolder(std::string(theParamString));
+    sampleIntParam = theParamHolder.getIntParam("sampleIntParam");
+    sampleDoubleParam = theParamHolder.getDoubleParam("sampleDoubleParam");
+    sampleBoolParam = theParamHolder.getBoolParam("sampleBoolParam");
+    sampleStringParam = theParamHolder.getStringParam("sampleStringParam");
+
+	std::cout<<"Params have been set in the agent: "<<std::endl;
+	std::cout<<"\tsampleInt:\t"<<sampleIntParam<<std::endl;
+	std::cout<<"\tsampleDouble:\t"<<sampleDoubleParam<<std::endl;
+	std::cout<<"\tsampleBool:\t"<<sampleBoolParam<<std::endl;
+	std::cout<<"\tsampleString:\t"<<sampleStringParam<<std::endl;
+
+
+}
+}
 
 /* Returns a random integer in [0,max] */
 int randInRange(int max);

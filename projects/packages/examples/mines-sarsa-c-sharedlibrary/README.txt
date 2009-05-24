@@ -7,7 +7,7 @@ Introduction
 ----------------------------
 This is a sample experiment that has the "Mines" environment and a simple tabular Sarsa agent.  This project lives in RL-Library, but is also distributed with the RL-Viz project.  
 
-The point of this sample is to show how a C RL-Glue project can be compiled into a shared library so that it can be loaded at runtime by the RL-Viz external CPPEnvLoader.  This allows C/C++ environments and agents to be used transparently with RL-Viz with or without using network sockets.  It also allows for run-time parameterization and configuration of environments and agents using the parameter holder.
+The point of this sample is to show how a C RL-Glue project can be compiled into a shared library so that it can be loaded at runtime by the RL-Viz external CPPEnvLoader and CPPAgentLoader.  This allows C/C++ environments and agents to be used transparently with RL-Viz with or without using network sockets.  It also allows for run-time parameterization and configuration of environments and agents using the parameter holder.
 
 This example requires the C/C++ Codec:
 http://glue.rl-community.org/Home/Extensions/c-c-codec
@@ -32,7 +32,7 @@ To make with Linux (create SampleMinesEnvironment.so)
 Running
 ----------------------------
 Compiling into Dylibs is specifically so that you don't run these components directly, but rather, you load them with the RL-Viz External CPPEnvLoader and/or CPPAgentLoader.  A link to a brief tutorial on these advanced techniques is here:
-http://code.google.com/p/rl-viz/wiki/CPPEnvLoader
+http://code.google.com/p/rl-viz/wiki/CPPLoaders
 
 ----------------------------
 More Information

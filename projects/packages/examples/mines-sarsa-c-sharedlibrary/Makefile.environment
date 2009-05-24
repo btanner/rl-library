@@ -8,15 +8,19 @@ OSX: SampleMinesEnvironmentOSX
 Linux: SampleMinesEnvironmentLinux
 
 SampleMinesEnvironmentLinux: SampleMinesEnvironment.c
-	$(CC) $(CFLAGS) -fPIC -shared -Wl,-soname,SampleMinesEnvironment \
-    -o SampleMinesEnvironment.so SampleMinesEnvironment.c $(LDFLAGS)
+	$(CXX) $(CFLAGS) -fPIC -shared -Wl,-soname,SampleMinesEnvironment \
+    -o SampleMinesEnvironment.so SampleMinesEnvironment.c ParameterHolder.cpp $(LDFLAGS)
 
-SampleMinesEnvironmentOSX: SampleMinesEnvironmentOSX.o 
-	$(CC)  SampleMinesEnvironmentOSX.o -dynamiclib $(LDFLAGS) -o SampleMinesEnvironment.dylib
+SampleMinesEnvironmentOSX: SampleMinesEnvironmentOSX.o  ParameterHolderOSX.o
+	$(CXX)  SampleMinesEnvironmentOSX.o ParameterHolderOSX.o -dynamiclib $(LDFLAGS) -o SampleMinesEnvironment.dylib
 
 SampleMinesEnvironmentOSX.o: SampleMinesEnvironment.c
-	$(CC)  $(CFLAGS) -c -fPIC SampleMinesEnvironment.c -o SampleMinesEnvironmentOSX.o 
+	$(CXX)  $(CFLAGS) -c -fPIC SampleMinesEnvironment.c -o SampleMinesEnvironmentOSX.o 
 
+ParameterHolderOSX.o: ParameterHolder.cpp
+	$(CXX)  $(CFLAGS) -c -fPIC ParameterHolder.cpp -o ParameterHolderOSX.o 
+
+	
 clean:
 	rm -rf SampleMinesEnvironment SampleMinesEnvironment.exe SampleMinesEnvironment*.o SampleMinesEnvironment.dylib SampleMinesEnvironment.so
 

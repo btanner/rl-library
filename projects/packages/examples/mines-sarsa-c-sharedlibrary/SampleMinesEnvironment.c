@@ -28,9 +28,13 @@
 #include <stdlib.h>
 #include <assert.h> /*assert*/
 
+#include <iostream>
+#include <string>
+
 #include <rlglue/Environment_common.h>	  /* env_ function prototypes types */
 #include <rlglue/utils/C/RLStruct_util.h> /* helpful functions for allocating
  											  structs and cleaning them up */
+#include "ParameterHolder.h"
 
 /* 	
 	This is a very simple discrete-state, episodic grid world that has 
@@ -123,6 +127,42 @@ static int start_row=1;
 static int start_col=1;
 
 
+
+std::string parameterString;
+int sampleIntParam = 0;
+double sampleDoubleParam = 0.0;
+bool sampleBoolParam = true;
+std::string sampleStringParam;
+ParameterHolder theParamHolder;
+
+extern "C"{
+const char *env_getDefaultParameters(){
+	ParameterHolder P;
+	P.addIntParam("sampleIntParam",5);
+	P.addDoubleParam("sampleDoubleParam", 2.0);
+	P.addBoolParam("sampleBoolParam", true);
+	P.addStringParam("sampleStringParam", "thetest");
+	
+	parameterString=P.stringSerialize();
+    return parameterString.c_str();
+}
+
+void env_setDefaultParameters(const char* theParamString){
+    theParamHolder = ParameterHolder(std::string(theParamString));
+    sampleIntParam = theParamHolder.getIntParam("sampleIntParam");
+    sampleDoubleParam = theParamHolder.getDoubleParam("sampleDoubleParam");
+    sampleBoolParam = theParamHolder.getBoolParam("sampleBoolParam");
+    sampleStringParam = theParamHolder.getStringParam("sampleStringParam");
+
+	std::cout<<"Params have been set in the environment: "<<std::endl;
+	std::cout<<"\tsampleInt:\t"<<sampleIntParam<<std::endl;
+	std::cout<<"\tsampleDouble:\t"<<sampleDoubleParam<<std::endl;
+	std::cout<<"\tsampleBool:\t"<<sampleBoolParam<<std::endl;
+	std::cout<<"\tsampleString:\t"<<sampleStringParam<<std::endl;
+
+
+}
+}
 /*****************************
 
 	RL-Glue Methods 
