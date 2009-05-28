@@ -37,24 +37,27 @@ public class CarOnMountainVizComponent implements SelfUpdatingVizComponent, Obse
     private MountainCarVisualizer mcv = null;
     private boolean showAction = true;
     private VizComponentChangeListener theChangeListener;
-    
-    private Image theCarImage=null;
+    private Image carImageNeutral = null;
+    private Image carImageLeft = null;
+    private Image carImageRight = null;
 
     public CarOnMountainVizComponent(MountainCarVisualizer mc) {
         this.mcv = mc;
         mc.getTheGlueState().addObserver(this);
-        URL carImageURL=CarOnMountainVizComponent.class.getResource("/images/auto.png");
+        URL carImageNeutralURL = CarOnMountainVizComponent.class.getResource("/images/auto.png");
+        URL carImageLeftURL = CarOnMountainVizComponent.class.getResource("/images/auto_left.png");
+        URL carImageRightURL = CarOnMountainVizComponent.class.getResource("/images/auto_right.png");
         try {
-            theCarImage = ImageIO.read(carImageURL);
-            theCarImage=theCarImage.getScaledInstance(50,50,Image.SCALE_SMOOTH);
+            carImageNeutral = ImageIO.read(carImageNeutralURL);
+            carImageNeutral = carImageNeutral.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+            carImageLeft = ImageIO.read(carImageLeftURL);
+            carImageLeft = carImageLeft.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+            carImageRight = ImageIO.read(carImageRightURL);
+            carImageRight = carImageRight.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         } catch (IOException ex) {
             System.err.println("ERROR: Problem getting car image.");
         }
-        
-    }
 
-    public void setShowAction(boolean shouldShow) {
-        this.showAction = shouldShow;
     }
 
     public void render(Graphics2D g) {
@@ -75,38 +78,27 @@ public class CarOnMountainVizComponent implements SelfUpdatingVizComponent, Obse
                 this.mcv.getHeight(),
                 mcv.getMinHeight(),
                 mcv.getMaxHeight());
-        transY = (1.0 - transY-.05);
-        
-        transX*=200.0d;
-        transY*=200.0d;
+        transY = (1.0 - transY - .05);
 
-        double rectWidth = .05;
-        double rectHeight = .05;
-        
-        double theta=mcv.getSlope()*1.25;
-//        Rectangle2D fillRect = new Rectangle2D.Double(transX - rectWidth / 2.0d, transY - rectHeight / 2.0d, rectWidth, rectHeight);
-//        g.fill(fillRect);
-        AffineTransform theTransform= AffineTransform.getTranslateInstance(transX-theCarImage.getWidth(null)/2.0d, transY-theCarImage.getHeight(null)/2.0d);
-        theTransform.concatenate(AffineTransform.getRotateInstance(theta,theCarImage.getWidth(null)/2,theCarImage.getHeight(null)/2));
-        
-        g.drawImage(theCarImage,theTransform, null);
-//        if (showAction) {
-//            double actionRectWdthOffset = 0;
-//            if (lastAction == 0) {
-//                actionRectWdthOffset = 0;
-//            } else if (lastAction == 1) {
-//                actionRectWdthOffset = 7 * (rectWidth / 16);
-//            } else if (lastAction == 2) {
-//                actionRectWdthOffset = 14 * (rectWidth / 16);
-//            }
-//            g.setColor(Color.CYAN);
-//            Rectangle2D fillActionRect = new Rectangle2D.Double((transX - rectWidth / 2.0d) + actionRectWdthOffset,
-//                    transY - rectHeight / 2.0d,
-//                    rectWidth / 8.0, rectHeight);
-//            g.fill(fillActionRect);
-//        }
+        transX *= 200.0d;
+        transY *= 200.0d;
+
+
+        double theta = -mcv.getSlope() * 1.25;
+
+        Image whichImageToDraw = carImageNeutral;
+        if (lastAction == 0) {
+            whichImageToDraw = carImageLeft;
+        }
+        if (lastAction == 2) {
+            whichImageToDraw = carImageRight;
+        }
+        AffineTransform theTransform = AffineTransform.getTranslateInstance(transX - whichImageToDraw.getWidth(null) / 2.0d, transY - whichImageToDraw.getHeight(null) / 2.0d);
+        theTransform.concatenate(AffineTransform.getRotateInstance(theta, whichImageToDraw.getWidth(null) / 2, whichImageToDraw.getHeight(null) / 2));
+        g.drawImage(whichImageToDraw, theTransform, null);
+
         g.setTransform(saveAT);
-        
+
     }
 
     public void setVizComponentChangeListener(VizComponentChangeListener theChangeListener) {
@@ -116,6 +108,7 @@ public class CarOnMountainVizComponent implements SelfUpdatingVizComponent, Obse
     public void update(Observable o, Object arg) {
         if (theChangeListener != null) {
             theChangeListener.vizComponentChanged(this);
+            mcv.updateAgentState(true);
         }
     }
 }

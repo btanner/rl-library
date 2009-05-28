@@ -24,6 +24,7 @@ import org.rlcommunity.environments.mountaincar.messages.MCGoalResponse;
 import org.rlcommunity.environments.mountaincar.messages.MCHeightRequest;
 import org.rlcommunity.environments.mountaincar.messages.MCHeightResponse;
 import org.rlcommunity.environments.mountaincar.messages.MCStateRequest;
+import org.rlcommunity.environments.mountaincar.messages.MCStateResponse;
 import rlVizLib.general.TinyGlue;
 import rlVizLib.visualization.interfaces.AgentOnValueFunctionDataProvider;
 import rlVizLib.visualization.interfaces.ValueFunctionDataProvider;
@@ -47,11 +48,11 @@ import rlVizLib.visualization.SelfUpdatingVizComponent;
 
 public class MountainCarVisualizer extends AbstractVisualizer implements ValueFunctionDataProvider, AgentOnValueFunctionDataProvider, GlueStateProvider {
 
-    Vector<Double> mins = null;
-    Vector<Double> maxs = null;
-    org.rlcommunity.environments.mountaincar.messages.MCStateResponse theCurrentState = null;
-    Vector<Double> theQueryPositions = null;
-    Vector<Double> theHeights = null;
+    private Vector<Double> mins = null;
+    private Vector<Double> maxs = null;
+    private MCStateResponse theCurrentState = null;
+    private Vector<Double> theQueryPositions = null;
+    private  Vector<Double> theHeights = null;
     double minHeight = Double.MIN_VALUE;
     double maxHeight = Double.MAX_VALUE;
     double goalPosition = 0.5;
@@ -59,7 +60,7 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
     private int lastAgentValueUpdateTimeStep = -1;
     private boolean printedQueryError = false;
     //Will have to find a way to easily generalize this and move it to vizlib
-    TinyGlue glueState = null;
+    private TinyGlue glueState = null;
     //This is a little interface that will let us dump controls to a panel somewhere.
     DynamicControlTarget theControlTarget = null;
     private ValueFunctionVizComponent theValueFunction;
@@ -74,8 +75,8 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
     }
 
     protected void setupVizComponents() {
-        theValueFunction = new ValueFunctionVizComponent(this, theControlTarget, this.getTheGlueState());
-        theAgentOnValueFunction = new AgentOnValueFunctionVizComponent(this, this.getTheGlueState());
+        theValueFunction = new ValueFunctionVizComponent(this, theControlTarget, this.glueState);
+        theAgentOnValueFunction = new AgentOnValueFunctionVizComponent(this, this.glueState);
         SelfUpdatingVizComponent mountain = new MountainVizComponent(this);
         SelfUpdatingVizComponent carOnMountain = new CarOnMountainVizComponent(this);
         SelfUpdatingVizComponent scoreComponent = new GenericScoreComponent(this);
@@ -164,36 +165,32 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
     }
 
     public double getCurrentStateInDimension(int whichDimension) {
-        if(glueState.getLastObservation()==null)return 0;
+        ensureStateExists();
         if (whichDimension == 0) {
-            return glueState.getLastObservation().doubleArray[0];
+            return theCurrentState.getPosition();
         } else {
-            return glueState.getLastObservation().doubleArray[1];
+            return theCurrentState.getVelocity();
         }
     }
 
     public int getLastAction() {
-        if(glueState.getLastAction()==null)return 0;
-        Action lastActionObject = getTheGlueState().getLastAction();
-        int lastAction = -1;
-        //This might be null at the first step of an episode
-        if (lastActionObject != null) {
-            lastAction = lastActionObject.intArray[0];
-        }
-        return lastAction;
+        ensureStateExists();
+        return theCurrentState.getAction();
     }
 
+    private void ensureStateExists(){
+        if(theCurrentState==null){
+            updateAgentState(true);
+        }
+    }
     public double getHeight() {
-        double currentX = getCurrentStateInDimension(0);
-        final double hillPeakFrequency = 3.0;
-        return -Math.sin(hillPeakFrequency * currentX);
+        ensureStateExists();
+        return theCurrentState.getHeight();
     }
     
     public double getSlope(){
-        double currentX = getCurrentStateInDimension(0);
-        final double hillPeakFrequency = 3.0;
-        return -Math.cos(hillPeakFrequency * currentX);
-        
+        ensureStateExists();
+        return theCurrentState.getSlope();
     }
 
     public double getMaxHeight() {
@@ -224,13 +221,6 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
         return theQueryPositions;
     }
 
-    /**
-     * This was used when we were actually putting an angled car on the hill.
-     * @return
-     */
-    public double getDeltaHeight() {
-        return theCurrentState.getDeltaheight();
-    }
 
     public synchronized void updateAgentState(boolean force) {
         //Only do this if we're on a new time step
@@ -282,27 +272,20 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
         }
     }
 
-    public TinyGlue getTheGlueState() {
-        return glueState;
-    }
 
     @Override
     public String getName() {
         return "Mountain Car 1.3 ";
     }
-    int lastSaveIndex = -1;
-    boolean forceDrawRefresh = false;
 
-    public boolean getForceDrawRefresh() {
-        return forceDrawRefresh;
-    }
-
-    public void setForceDrawRefresh(boolean newValue) {
-        forceDrawRefresh = newValue;
-    }
+    
     //This is the one required from RLVizLib, ours has a forcing parameter.  Should update the VizLib
     public void updateAgentState() {
         updateAgentState(false);
+    }
+
+    public TinyGlue getTheGlueState() {
+        return glueState;
     }
 
 }

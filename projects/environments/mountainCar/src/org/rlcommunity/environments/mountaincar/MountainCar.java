@@ -194,11 +194,12 @@ public class MountainCar extends EnvironmentBase implements
 
             if (theCustomType.equals("GETMCSTATE")) {
                 //It is a request for the state
-                double position = theState.position;
-                double velocity = theState.velocity;
-                double height = this.getHeight();
-                double deltaheight = theState.getHeightAtPosition(position + .05);
-                MCStateResponse theResponseObject = new MCStateResponse(position, velocity, height, deltaheight);
+                double position = theState.getPosition();
+                double velocity = theState.getVelocity();
+                double height = theState.getHeightAtPosition(position);
+                int lastAction=theState.getLastAction();
+                double slope=theState.getSlope(position);
+                MCStateResponse theResponseObject = new MCStateResponse(lastAction,position, velocity, height, slope);
                 return theResponseObject.makeStringResponse();
             }
 
@@ -241,12 +242,7 @@ public class MountainCar extends EnvironmentBase implements
      */
     @Override
     protected Observation makeObservation() {
-        Observation currentObs = new Observation(0, 2);
-
-        currentObs.doubleArray[0] = theState.position;
-        currentObs.doubleArray[1] = theState.velocity;
-
-        return currentObs;
+        return theState.makeObservation();
     }
 
     public void env_cleanup() {
@@ -297,14 +293,6 @@ public class MountainCar extends EnvironmentBase implements
      */
     public int getNumVars() {
         return 2;
-    }
-
-    /**
-     * Used by MCHeightRequest Message
-     * @return
-     */
-    private double getHeight() {
-        return theState.getHeightAtPosition(theState.position);
     }
 
     public String getVisualizerClassName() {

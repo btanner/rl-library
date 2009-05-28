@@ -4,21 +4,22 @@ http://rl-library.googlecode.com/
 brian@tannerpages.com
 http://brian.tannerpages.com
 
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
-*/
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ */
 package org.rlcommunity.environments.mountaincar;
 
 import java.util.Random;
+import org.rlcommunity.rlglue.codec.types.Observation;
 
 /**
  * This class manages all of the problem parameters, current state variables, 
@@ -28,36 +29,43 @@ import java.util.Random;
  */
 public class MountainCarState {
 //	Current State Information
-    public double position;
-    public double velocity;
 
+    private double position;
+    private double velocity;
 //Some of these are fixed.  This environment would be easy to parameterize further by changing these.
-    public double minPosition = -1.2;
-    public double maxPosition = 0.6;
-    public double minVelocity = -0.07;
-    public double maxVelocity = 0.07;
-
-    public double goalPosition = 0.5;
-    public double accelerationFactor = 0.001;
-    public double gravityFactor = -0.0025;
-    public double hillPeakFrequency = 3.0;
-
+    final public double minPosition = -1.2;
+    final public double maxPosition = 0.6;
+    final public double minVelocity = -0.07;
+    final public double maxVelocity = 0.07;
+    final public double goalPosition = 0.5;
+    final public double accelerationFactor = 0.001;
+    final public double gravityFactor = -0.0025;
+    final public double hillPeakFrequency = 3.0;
     //This is the middle of the valley (no slope)
-    public double defaultInitPosition = -0.5d;
-    public double defaultInitVelocity = 0.0d;
-    public double rewardPerStep = -1.0d;
-    public double rewardAtGoal = 0.0d;
-    private Random randomGenerator;
-
+    final public double defaultInitPosition = -0.5d;
+    final public double defaultInitVelocity = 0.0d;
+    final public double rewardPerStep = -1.0d;
+    final public double rewardAtGoal = 0.0d;
+    final private Random randomGenerator;
     //These are configurable
     public boolean randomStarts = false;
 
+
+    private int lastAction=0;
     /**
      * Constructor 
      * @param randomGenerator
      */
     MountainCarState(Random randomGenerator) {
         this.randomGenerator = randomGenerator;
+    }
+
+    public double getPosition() {
+        return position;
+    }
+
+    public double getVelocity() {
+        return velocity;
     }
 
     /**
@@ -72,7 +80,6 @@ public class MountainCarState {
         }
     }
 
-
     /**
      * IS the agent past the goal marker?
      * @return
@@ -81,8 +88,8 @@ public class MountainCarState {
         return position >= goalPosition;
     }
 
-    protected void reset(){
-                position = defaultInitPosition;
+    protected void reset() {
+        position = defaultInitPosition;
         velocity = defaultInitVelocity;
         if (randomStarts) {
             //We use goal position instead of max position so that the agent
@@ -96,12 +103,13 @@ public class MountainCarState {
 
     }
 
-   /**
-    * Update the agent's velocity, threshold it, then 
-    * update position and threshold it. 
-    * @param a Should be in {0 (left), 1 (neutral), 2 (right)}
-    */
+    /**
+     * Update the agent's velocity, threshold it, then
+     * update position and threshold it.
+     * @param a Should be in {0 (left), 1 (neutral), 2 (right)}
+     */
     void update(int a) {
+        lastAction=a;
         double variedAccel = accelerationFactor;
 
         velocity += ((a - 1)) * variedAccel + getSlope(position) * (gravityFactor);
@@ -123,20 +131,25 @@ public class MountainCarState {
         }
 
     }
-/**
- * Get the height of the hill at this position
- * @param queryPosition
- * @return
- */
+
+    public int getLastAction(){
+        return lastAction;
+    }
+
+    /**
+     * Get the height of the hill at this position
+     * @param queryPosition
+     * @return
+     */
     public double getHeightAtPosition(double queryPosition) {
         return -Math.sin(hillPeakFrequency * (queryPosition));
     }
 
-/**
- * Get the slop of the hill at this position
- * @param queryPosition
- * @return
- */
+    /**
+     * Get the slop of the hill at this position
+     * @param queryPosition
+     * @return
+     */
     public double getSlope(double queryPosition) {
         /*The curve is generated by cos(hillPeakFrequency(x-pi/2)) so the 
          * pseudo-derivative is cos(hillPeakFrequency* x) 
@@ -144,31 +157,13 @@ public class MountainCarState {
         return Math.cos(hillPeakFrequency * queryPosition);
     }
 
-    
-    /**
-     * This is basically a copy constructor and we use it when were doing 
-     * env_save_state and env_save_state
-     * @param stateToCopy
-     */
-    public MountainCarState(MountainCarState stateToCopy) {
-        this.position = stateToCopy.position;
-        this.velocity = stateToCopy.velocity;
-        this.minPosition = stateToCopy.minPosition;
-        this.maxPosition = stateToCopy.maxPosition;
-        this.minVelocity = stateToCopy.minVelocity;
-        this.maxVelocity = stateToCopy.maxVelocity;
-        this.goalPosition = stateToCopy.goalPosition;
-        this.accelerationFactor = stateToCopy.accelerationFactor;
-        this.gravityFactor = stateToCopy.gravityFactor;
-        this.hillPeakFrequency = stateToCopy.hillPeakFrequency;
-        this.defaultInitPosition = stateToCopy.defaultInitPosition;
-        this.defaultInitVelocity = stateToCopy.defaultInitVelocity;
-        this.rewardPerStep = stateToCopy.rewardPerStep;
-        this.rewardAtGoal = stateToCopy.rewardAtGoal;
+    Observation makeObservation() {
+        Observation currentObs = new Observation(0, 2);
 
-        this.randomStarts = stateToCopy.randomStarts;
+        currentObs.doubleArray[0] = getPosition();
+        currentObs.doubleArray[1] = getVelocity();
 
-//These are pointers but that's ok
-        this.randomGenerator = stateToCopy.randomGenerator;
+        return currentObs;
+
     }
 }
