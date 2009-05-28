@@ -81,6 +81,21 @@ public class MountainCarState {
         return position >= goalPosition;
     }
 
+    protected void reset(){
+                position = defaultInitPosition;
+        velocity = defaultInitVelocity;
+        if (randomStarts) {
+            //We use goal position instead of max position so that the agent
+            //doesn't start past the goal ever
+            double maxStartPosition = goalPosition;
+            double randStartPosition = (randomGenerator.nextDouble() * (maxStartPosition + Math.abs(minPosition)) - Math.abs(minPosition));
+            position = randStartPosition;
+            double randStartVelocity = (randomGenerator.nextDouble() * (maxVelocity + Math.abs(minVelocity)) - Math.abs(minVelocity));
+            velocity = randStartVelocity;
+        }
+
+    }
+
    /**
     * Update the agent's velocity, threshold it, then 
     * update position and threshold it. 

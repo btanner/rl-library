@@ -70,7 +70,7 @@ public class MountainCar extends EnvironmentBase implements
     static final int numActions = 3;
     protected MountainCarState theState = null;    //Used for env_save_state and env_save_state, which don't exist anymore, but we will one day bring them back
     //through the messaging system and RL-Viz.
-    protected Vector<MountainCarState> savedStates = null;
+
     //Problem parameters have been moved to MountainCar State
     private Random randomGenerator = new Random();
 
@@ -97,8 +97,11 @@ public class MountainCar extends EnvironmentBase implements
 
     }
 
+    public MountainCarState getState(){
+        return theState;
+    }
+
     public String env_init() {
-        savedStates = new Vector<MountainCarState>();
         return makeTaskSpec();
 
     }
@@ -109,18 +112,8 @@ public class MountainCar extends EnvironmentBase implements
      * @return
      */
     public Observation env_start() {
+        theState.reset();
 
-        theState.position = theState.defaultInitPosition;
-        theState.velocity = theState.defaultInitVelocity;
-        if (theState.randomStarts) {
-            //We use goal position instead of max position so that the agent
-            //doesn't start past the goal ever
-            double maxStartPosition = theState.goalPosition;
-            double randStartPosition = (randomGenerator.nextDouble() * (maxStartPosition + Math.abs((theState.minPosition))) - Math.abs(theState.minPosition));
-            theState.position = randStartPosition;
-            double randStartVelocity = (randomGenerator.nextDouble() * (theState.maxVelocity + Math.abs((theState.minVelocity))) - Math.abs(theState.minVelocity));
-            theState.velocity = randStartVelocity;
-        }
         return makeObservation();
     }
 
@@ -257,9 +250,7 @@ public class MountainCar extends EnvironmentBase implements
     }
 
     public void env_cleanup() {
-        if (savedStates != null) {
-            savedStates.clear();
-        }
+        theState.reset();
     }
 
     /**
@@ -318,10 +309,6 @@ public class MountainCar extends EnvironmentBase implements
 
     public String getVisualizerClassName() {
         return MountainCarVisualizer.class.getName();
-    }
-
-    private Random getRandomGenerator() {
-        return randomGenerator;
     }
 
     /**
