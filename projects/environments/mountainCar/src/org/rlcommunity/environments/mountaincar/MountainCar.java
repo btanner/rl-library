@@ -70,17 +70,16 @@ public class MountainCar extends EnvironmentBase implements
     static final int numActions = 3;
     protected MountainCarState theState = null;    //Used for env_save_state and env_save_state, which don't exist anymore, but we will one day bring them back
     //through the messaging system and RL-Viz.
-
     //Problem parameters have been moved to MountainCar State
     private Random randomGenerator = new Random();
 
     public static TaskSpecPayload getTaskSpecPayload(ParameterHolder P) {
         MountainCar theMC = new MountainCar(P);
-        String taskSpec = theMC.makeTaskSpec();
-        return new TaskSpecPayload(taskSpec, false, "");
+        String taskSpecString = theMC.makeTaskSpec().getStringRepresentation();
+        return new TaskSpecPayload(taskSpecString, false, "");
     }
 
-    private String makeTaskSpec() {
+    public TaskSpec makeTaskSpec() {
         TaskSpecVRLGLUE3 theTaskSpecObject = new TaskSpecVRLGLUE3();
         theTaskSpecObject.setEpisodic();
         theTaskSpecObject.setDiscountFactor(1.0d);
@@ -93,16 +92,16 @@ public class MountainCar extends EnvironmentBase implements
         String taskSpecString = theTaskSpecObject.toTaskSpec();
         TaskSpec.checkTaskSpec(taskSpecString);
 
-        return taskSpecString;
+        return new TaskSpec(theTaskSpecObject);
 
     }
 
-    public MountainCarState getState(){
+    public MountainCarState getState() {
         return theState;
     }
 
     public String env_init() {
-        return makeTaskSpec();
+        return makeTaskSpec().getStringRepresentation();
 
     }
 
@@ -197,9 +196,9 @@ public class MountainCar extends EnvironmentBase implements
                 double position = theState.getPosition();
                 double velocity = theState.getVelocity();
                 double height = theState.getHeightAtPosition(position);
-                int lastAction=theState.getLastAction();
-                double slope=theState.getSlope(position);
-                MCStateResponse theResponseObject = new MCStateResponse(lastAction,position, velocity, height, slope);
+                int lastAction = theState.getLastAction();
+                double slope = theState.getSlope(position);
+                MCStateResponse theResponseObject = new MCStateResponse(lastAction, position, velocity, height, slope);
                 return theResponseObject.makeStringResponse();
             }
 
