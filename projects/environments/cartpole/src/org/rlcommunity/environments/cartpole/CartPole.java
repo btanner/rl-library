@@ -35,32 +35,8 @@ import rlVizLib.messaging.environmentShell.TaskSpecPayload;
  */
 public class CartPole extends EnvironmentBase implements HasAVisualizerInterface, HasImageInterface {
 
-    final static double GRAVITY = 9.8;
-    final static double MASSCART = 1.0;
-    final static double MASSPOLE = 0.1;
-    final static double TOTAL_MASS = (MASSPOLE + MASSCART);
-    final static double LENGTH = 0.5;	  /* actually half the pole's length */
+    private CartPoleState theState=new CartPoleState();
 
-    final static double POLEMASS_LENGTH = (MASSPOLE * LENGTH);
-    final static double FORCE_MAG = 10.0;
-    final static double TAU = 0.02;	  /* seconds between state updates */
-
-    final static double FOURTHIRDS = 4.0d / 3.0d;
-    final static double DEFAULTLEFTCARTBOUND = -2.4;
-    final static double DEFAULTRIGHTCARTBOUND = 2.4;
-    final static double DEFAULTLEFTANGLEBOUND = -Math.toRadians(12.0d);
-    final static double DEFAULTRIGHTANGLEBOUND = Math.toRadians(12.0d);
-    double leftCartBound;
-    double rightCartBound;
-    double leftAngleBound;
-    double rightAngleBound;    //State variables
-    double x;			/* cart position, meters */
-
-    double x_dot;			/* cart velocity */
-
-    double theta;			/* pole angle, radians */
-
-    double theta_dot;		/* pole angular velocity */
 
 
     public CartPole() {
@@ -71,10 +47,10 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
         super();
         if (p != null) {
             if (!p.isNull()) {
-                leftAngleBound = p.getDoubleParam("leftAngle");
-                rightAngleBound = p.getDoubleParam("rightAngle");
-                this.leftCartBound = p.getDoubleParam("leftCart");
-                rightCartBound = p.getDoubleParam("rightCart");
+                theState.leftAngleBound = p.getDoubleParam("leftAngle");
+                theState.rightAngleBound = p.getDoubleParam("rightAngle");
+                theState.leftCartBound = p.getDoubleParam("leftCart");
+                theState.rightCartBound = p.getDoubleParam("rightCart");
 
             }
         }
@@ -90,10 +66,10 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
         ParameterHolder p = new ParameterHolder();
         rlVizLib.utilities.UtilityShop.setVersionDetails(p, new DetailsProvider());
 
-        p.addDoubleParam("Left Terminal Angle", DEFAULTLEFTANGLEBOUND);
-        p.addDoubleParam("Right Terminal Angle", DEFAULTRIGHTANGLEBOUND);
-        p.addDoubleParam("Terminal Left Cart Position", DEFAULTLEFTCARTBOUND);
-        p.addDoubleParam("Terminal Right Cart Position", DEFAULTRIGHTCARTBOUND);
+        p.addDoubleParam("Left Terminal Angle", CartPoleState.DEFAULTLEFTANGLEBOUND);
+        p.addDoubleParam("Right Terminal Angle", CartPoleState.DEFAULTRIGHTANGLEBOUND);
+        p.addDoubleParam("Terminal Left Cart Position", CartPoleState.DEFAULTLEFTCARTBOUND);
+        p.addDoubleParam("Terminal Right Cart Position", CartPoleState.DEFAULTRIGHTCARTBOUND);
 
         p.setAlias("leftCart", "Terminal Left Cart Position");
         p.setAlias("rightCart", "Terminal Right Cart Position");
@@ -105,62 +81,26 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
 
     /*RL GLUE METHODS*/
     public String env_init() {
-        x = 0.0f;
-        x_dot = 0.0f;
-        theta = 0.0f;
-        theta_dot = 0.0f;
+        theState.reset();
 
         return makeTaskSpec();
     }
 
     public Observation env_start() {
-        x = 0.0f;
-        x_dot = 0.0f;
-        theta = 0.0f;
-        theta_dot = 0.0f;
+        theState.reset();
         return makeObservation();
     }
 
     public Reward_observation_terminal env_step(Action action) {
-        double xacc;
-        double thetaacc;
-        double force;
-        double costheta;
-        double sintheta;
-        double temp;
 
-        if (action.intArray[0] > 0) {
-            force = FORCE_MAG;
-        } else {
-            force = -FORCE_MAG;
-        }
+        assert(action.intArray.length==1);
+        assert(action.intArray[0]>=0);
+        assert(action.intArray[0]<=1);
 
-        costheta = Math.cos(theta);
-        sintheta = Math.sin(theta);
-
-        temp = (force + POLEMASS_LENGTH * theta_dot * theta_dot * sintheta) / TOTAL_MASS;
-
-        thetaacc = (GRAVITY * sintheta - costheta * temp) / (LENGTH * (FOURTHIRDS - MASSPOLE * costheta * costheta / TOTAL_MASS));
-
-        xacc = temp - POLEMASS_LENGTH * thetaacc * costheta / TOTAL_MASS;
-
-        /*** Update the four state variables, using Euler's method. ***/
-        x += TAU * x_dot;
-        x_dot += TAU * xacc;
-        theta += TAU * theta_dot;
-        theta_dot += TAU * thetaacc;
-
-        /**These probably never happen because the pole would crash **/
-        while (theta >= Math.PI) {
-            theta -= 2.0d * Math.PI;
-        }
-        while (theta < -Math.PI) {
-            theta += 2.0d * Math.PI;
-        }
+        theState.update(action.intArray[0]);
 
 
-
-        if (inFailure()) {
+        if (theState.inFailure()) {
             return new Reward_observation_terminal(-1.0d, makeObservation(), 1);
         } else {
             return new Reward_observation_terminal(1.0d, makeObservation(), 0);
@@ -191,7 +131,7 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
 
             if (theCustomType.equals("GETCARTPOLETRACK")) {
                 //It is a request for the state
-                CartpoleTrackResponse theResponseObject = new CartpoleTrackResponse(leftCartBound, rightCartBound, leftAngleBound, rightAngleBound);
+                CartpoleTrackResponse theResponseObject = new CartpoleTrackResponse(theState.getLeftCartBound(), theState.getRightCartBound(), theState.getLeftAngleBound(), theState.getRightAngleBound());
                 return theResponseObject.makeStringResponse();
             }
         }
@@ -206,38 +146,16 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
     @Override
     protected Observation makeObservation() {
         Observation returnObs = new Observation(0, 4);
-        returnObs.doubleArray[0] = x;
-        returnObs.doubleArray[1] = x_dot;
-        returnObs.doubleArray[2] = theta;
-        returnObs.doubleArray[3] = theta_dot;
+        returnObs.doubleArray[0] = theState.getX();
+        returnObs.doubleArray[1] = theState.getXDot();
+        returnObs.doubleArray[2] = theState.getTheta();
+        returnObs.doubleArray[3] = theState.getThetaDot();
 
         return returnObs;
     }
 
     /*END OF RL-VIZ REQUIREMENTS*/
-    /*CART POLE SPECIFIC FUNCTIONS*/
-    private boolean inFailure() {
-        if (x < leftCartBound || x > rightCartBound || theta < leftAngleBound || theta > rightAngleBound) {
-            return true;
-        } /* to signal failure */
-        return false;
-    }
 
-    public double getLeftCartBound() {
-        return this.leftCartBound;
-    }
-
-    public double getRightCartBound() {
-        return this.rightCartBound;
-    }
-
-    public double getRightAngleBound() {
-        return this.rightAngleBound;
-    }
-
-    public double getLeftAngleBound() {
-        return this.leftAngleBound;
-    }
 
     public String getVisualizerClassName() {
         return CartPoleVisualizer.class.getName();
@@ -251,14 +169,14 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
 
     private String makeTaskSpec() {
 
-        double xMin = leftCartBound;
-        double xMax = rightCartBound;
+        double xMin = theState.getLeftCartBound();
+        double xMax = theState.getRightCartBound();
 
         //Dots are guesses
         double xDotMin = -6.0d;
         double xDotMax = 6.0d;
-        double thetaMin = leftAngleBound;
-        double thetaMax = rightAngleBound;
+        double thetaMin = theState.getLeftAngleBound();
+        double thetaMax = theState.getRightAngleBound();
         double thetaDotMin = -6.0d;
         double thetaDotMax = 6.0d;
 
@@ -283,7 +201,13 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
         EnvironmentLoader L=new EnvironmentLoader(new CartPole());
         L.run();
     }
+
+    public CartPoleState getState(){
+        return theState;
+    }
 }
+
+
 
 /**
  * This is a little helper class that fills in the details about this environment
