@@ -90,7 +90,7 @@ public class Acrobot extends EnvironmentBase implements HasAVisualizerInterface,
         theTaskSpecObject.addDiscreteAction(new IntRange(0, numActions - 1));
 
         //Apparently we don't say the reward range.
-        theTaskSpecObject.setRewardRange(new DoubleRange());
+        theTaskSpecObject.setRewardRange(new DoubleRange(-1.0d,0.0d));
         theTaskSpecObject.setExtra("EnvName:Acrobot");
         String taskSpecString = theTaskSpecObject.toTaskSpec();
         TaskSpec.checkTaskSpec(taskSpecString);

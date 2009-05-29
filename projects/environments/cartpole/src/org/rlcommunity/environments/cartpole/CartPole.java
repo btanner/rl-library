@@ -2,6 +2,7 @@ package org.rlcommunity.environments.cartpole;
 
 import java.net.URL;
 import org.rlcommunity.environments.cartpole.messages.*;
+import org.rlcommunity.environments.cartpole.visualizer.CartPoleVisualizer;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
@@ -27,7 +28,9 @@ import rlVizLib.messaging.environmentShell.TaskSpecPayload;
  * The Barto, Sutton, and Anderson cart-pole simulation. 
  * Available (not in 2008) by anonymous ftp from ftp.gte.com, as 
  * /pub/reinforcement-learning/pole.c.
- * 
+ * Update (May 2009): the original pole.c is available from the UMass RL Repository
+ *    Umass RLR: http://www-anw.cs.umass.edu/rlr/domains.html
+ *    pole.c in cpole.tar at: http://www-anw.cs.umass.edu/rlr/distcode/cpole.tar
  * @author btanner
  */
 public class CartPole extends EnvironmentBase implements HasAVisualizerInterface, HasImageInterface {
@@ -147,6 +150,7 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
         theta += TAU * theta_dot;
         theta_dot += TAU * thetaacc;
 
+        /**These probably never happen because the pole would crash **/
         while (theta >= Math.PI) {
             theta -= 2.0d * Math.PI;
         }
@@ -236,7 +240,7 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
     }
 
     public String getVisualizerClassName() {
-        return "org.rlcommunity.environments.cartpole.visualizer.CartPoleVisualizer";
+        return CartPoleVisualizer.class.getName();
     }
     public URL getImageURL() {
        URL imageURL = CartPole.class.getResource("/images/cartpole.png");
