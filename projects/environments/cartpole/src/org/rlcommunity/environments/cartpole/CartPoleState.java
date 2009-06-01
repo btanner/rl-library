@@ -39,8 +39,10 @@ public class CartPoleState {
 
     double theta_dot;		/* pole angular velocity */
 
+    private int lastAction=0;
 
     void reset() {
+        lastAction=0;
         x = 0.0f;
         x_dot = 0.0f;
         theta = 0.0f;
@@ -49,6 +51,7 @@ public class CartPoleState {
     }
 
     void update(int theAction) {
+        lastAction=theAction;
         double xacc;
         double thetaacc;
         double force;
@@ -100,6 +103,10 @@ public class CartPoleState {
 
     public double getThetaDot() {
         return theta_dot;
+    }
+
+    public int getLastAction(){
+        return lastAction;
     }
     /*CART POLE SPECIFIC FUNCTIONS*/
 

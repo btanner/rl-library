@@ -134,6 +134,11 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
                 CartpoleTrackResponse theResponseObject = new CartpoleTrackResponse(theState.getLeftCartBound(), theState.getRightCartBound(), theState.getLeftAngleBound(), theState.getRightAngleBound());
                 return theResponseObject.makeStringResponse();
             }
+            if (theCustomType.equals("GETCPSTATE")) {
+                //It is a request for the state
+                StateResponse theResponseObject = new StateResponse(theState.getLastAction(),theState.getX(), theState.getXDot(), theState.getTheta(), theState.getThetaDot());
+                return theResponseObject.makeStringResponse();
+            }
         }
         System.err.println("We need some code written in Env Message for Cartpole.. unknown request received: " + theMessage);
         Thread.dumpStack();

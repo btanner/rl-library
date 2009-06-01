@@ -2,9 +2,10 @@ package org.rlcommunity.environments.cartpole.visualizer;
 
 import org.rlcommunity.environments.cartpole.messages.CartpoleTrackRequest;
 import org.rlcommunity.environments.cartpole.messages.CartpoleTrackResponse;
+import org.rlcommunity.environments.cartpole.messages.StateRequest;
+import org.rlcommunity.environments.cartpole.messages.StateResponse;
 import rlVizLib.general.TinyGlue;
 import rlVizLib.visualization.AbstractVisualizer;
-import org.rlcommunity.rlglue.codec.types.Observation;
 import rlVizLib.visualization.GenericScoreComponent;
 import rlVizLib.visualization.SelfUpdatingVizComponent;
 import rlVizLib.visualization.interfaces.GlueStateProvider;
@@ -13,7 +14,7 @@ public class CartPoleVisualizer extends AbstractVisualizer implements GlueStateP
 
     private TinyGlue theGlueState = null;
     private CartpoleTrackResponse trackResponse = null;
-    private int lastStateUpdateTimeStep = -1;
+    private StateResponse theCurrentState=null;
 
     /**
      * Creates a new Cart Pile Visualizer
@@ -37,7 +38,15 @@ public class CartPoleVisualizer extends AbstractVisualizer implements GlueStateP
         if (trackResponse == null) {
             trackResponse = CartpoleTrackRequest.Execute();
         }
+        if (theCurrentState == null) {
+            updateState();
+        }
     }
+
+        void updateState() {
+            theCurrentState = StateRequest.Execute();
+    }
+
 
     public double getLeftCartBound() {
         checkCoreData();
@@ -50,31 +59,30 @@ public class CartPoleVisualizer extends AbstractVisualizer implements GlueStateP
     }
 
     public double currentXPos() {
-        Observation lastObservation = theGlueState.getLastObservation();
-        if (lastObservation != null) {
-            return lastObservation.doubleArray[0];
-        } else {
-            return 0.0f;
-        }
+        return theCurrentState.getX();
     }
 
     public double getMinAngle() {
         checkCoreData();
-        return trackResponse.getMinAngle() - 2.0 * Math.PI / 4.0;
+        return translateAngle(trackResponse.getMinAngle());
     }
 
     public double getMaxAngle() {
         checkCoreData();
-        return trackResponse.getMaxAngle() - 2.0 * Math.PI / 4.0;
+        return translateAngle(trackResponse.getMaxAngle());
     }
 
     public double getAngle() {
-        Observation lastObservation = theGlueState.getLastObservation();
-        if (lastObservation != null) {
-            return lastObservation.doubleArray[2] - 2.0 * Math.PI / 4.0;
-        } else {
-            return 0.0f;
-        }
+        checkCoreData();
+        return translateAngle(theCurrentState.getAngle());
+    }
+
+    /**
+     * Simple translation makes it easier to draw.
+     * @return
+     */
+    private static double translateAngle(double origAngle){
+       return origAngle - 2.0 * Math.PI / 4.0;
     }
 
     public TinyGlue getTheGlueState() {
@@ -84,4 +92,5 @@ public class CartPoleVisualizer extends AbstractVisualizer implements GlueStateP
     public String getName() {
         return "Cart-Pole 1.0 (DEV)";
     }
+
 }

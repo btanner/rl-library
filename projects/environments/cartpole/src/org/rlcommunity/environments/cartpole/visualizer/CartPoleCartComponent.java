@@ -95,6 +95,7 @@ public class CartPoleCartComponent implements SelfUpdatingVizComponent, Observer
      */
     public void update(Observable o, Object arg) {
         if (theChangeListener != null) {
+            cartVis.updateState();
             theChangeListener.vizComponentChanged(this);
         }
     }
