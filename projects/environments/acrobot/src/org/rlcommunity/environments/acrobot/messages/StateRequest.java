@@ -41,7 +41,7 @@ public class StateRequest extends EnvironmentMessages{
 				MessageUser.kBenchmark.id(),
 				EnvMessageType.kEnvCustom.id(),
 				MessageValueType.kString.id(),
-				"GETCPSTATE");
+				"GETACROBOTSTATE");
 
 		String responseMessage=RLGlue.RL_env_message(theRequest);
 
