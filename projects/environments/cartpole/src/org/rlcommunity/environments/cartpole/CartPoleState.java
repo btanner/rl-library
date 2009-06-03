@@ -88,18 +88,8 @@ public class CartPoleState {
             theta += 2.0d * Math.PI;
         }
 
-        if(Math.abs(x_dot)>maxXDot){
-            maxXDot=Math.abs(x_dot);
-            System.out.printf("New Max Dot: %.3f\n",maxXDot);
-        }
-        if(Math.abs(theta_dot)>maxThetaDot){
-            maxThetaDot=Math.abs(theta_dot);
-            System.out.printf("New Theta Dot: %.3f\n",maxThetaDot);
-        }
     }
 
-    double maxXDot=0;
-    double maxThetaDot=0;
 
     public double getX() {
         return x;
