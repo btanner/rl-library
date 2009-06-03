@@ -113,19 +113,19 @@ public class AcrobotState {
         return (feet_height > acrobotGoalPosition);
     }
 
-    double getMaxTheta1() {
+    public double getMaxTheta1() {
         return maxTheta1;
     }
 
-    double getMaxTheta2() {
+    public double getMaxTheta2() {
         return maxTheta2;
     }
 
-    double getMaxTheta1Dot() {
+    public double getMaxTheta1Dot() {
         return maxTheta1Dot;
     }
 
-    double getMaxTheta2Dot() {
+    public double getMaxTheta2Dot() {
         return maxTheta2Dot;
     }
 
@@ -137,19 +137,19 @@ public class AcrobotState {
         return randomStarts;
     }
 
-    double getTheta1() {
+    public double getTheta1() {
         return theta1;
     }
 
-    double getTheta2() {
+    public double getTheta2() {
         return theta2;
     }
 
-    double getTheta1Dot() {
+    public double getTheta1Dot() {
         return theta1Dot;
     }
 
-    double getTheta2Dot() {
+    public double getTheta2Dot() {
         return theta2Dot;
     }
 
