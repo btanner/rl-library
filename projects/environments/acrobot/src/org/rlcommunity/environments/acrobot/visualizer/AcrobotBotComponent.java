@@ -8,20 +8,21 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.util.Observable;
 import java.util.Observer;
+import org.rlcommunity.rlglue.codec.types.Observation;
+import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 import rlVizLib.visualization.SelfUpdatingVizComponent;
 import rlVizLib.visualization.VizComponentChangeListener;
 
 public class AcrobotBotComponent implements SelfUpdatingVizComponent, Observer {
 
     private AcrobotVisualizer acroVis;
-    static final int joint1X = 50;
-    static final int joint1Y = 30;
-    static final int leg1length = 25;
-    static final int leg2length = leg1length;
-    static final int circleSize1 = 6;
-    static final int circleSize2 = 4;
-    static final int circleSize3 = 2;
-    int lastUpdateStep = -1;
+    private static final int joint1X = 50;
+    private static final int joint1Y = 30;
+    private static final int leg1length = 25;
+    private static final int leg2length = leg1length;
+    private static final int circleSize1 = 6;
+    private static final int circleSize2 = 4;
+    private static final int circleSize3 = 2;
 
     public AcrobotBotComponent(AcrobotVisualizer acrobotVisualizer) {
         acroVis = acrobotVisualizer;
@@ -77,7 +78,14 @@ public class AcrobotBotComponent implements SelfUpdatingVizComponent, Observer {
      */
     public void update(Observable o, Object arg) {
         if (theChangeListener != null) {
-            theChangeListener.vizComponentChanged(this);
+            if (arg instanceof Observation) {
+                acroVis.updateState();
+                theChangeListener.vizComponentChanged(this);
+            }
+            if (arg instanceof Reward_observation_terminal) {
+                acroVis.updateState();
+                theChangeListener.vizComponentChanged(this);
+            }
         }
     }
 }
