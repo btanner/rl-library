@@ -14,7 +14,7 @@ public class CartPoleVisualizer extends AbstractVisualizer implements GlueStateP
 
     private TinyGlue theGlueState = null;
     private CartpoleTrackResponse trackResponse = null;
-    private StateResponse theCurrentState=null;
+    private StateResponse theCurrentState = null;
 
     /**
      * Creates a new Cart Pile Visualizer
@@ -43,10 +43,9 @@ public class CartPoleVisualizer extends AbstractVisualizer implements GlueStateP
         }
     }
 
-        void updateState() {
-            theCurrentState = StateRequest.Execute();
+    void updateState() {
+        theCurrentState = StateRequest.Execute();
     }
-
 
     public double getLeftCartBound() {
         checkCoreData();
@@ -59,6 +58,7 @@ public class CartPoleVisualizer extends AbstractVisualizer implements GlueStateP
     }
 
     public double currentXPos() {
+        checkCoreData();
         return theCurrentState.getX();
     }
 
@@ -81,16 +81,16 @@ public class CartPoleVisualizer extends AbstractVisualizer implements GlueStateP
      * Simple translation makes it easier to draw.
      * @return
      */
-    private static double translateAngle(double origAngle){
-       return origAngle - 2.0 * Math.PI / 4.0;
+    private static double translateAngle(double origAngle) {
+        return origAngle - 2.0 * Math.PI / 4.0;
     }
 
     public TinyGlue getTheGlueState() {
         return theGlueState;
     }
 
+    @Override
     public String getName() {
         return "Cart-Pole 1.0 (DEV)";
     }
-
 }

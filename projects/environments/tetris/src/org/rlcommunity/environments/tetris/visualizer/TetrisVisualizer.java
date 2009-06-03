@@ -35,7 +35,6 @@ public class TetrisVisualizer extends AbstractVisualizer {
 
     private TetrisStateResponse currentState = null;
     private TinyGlue theGlueState = null;
-    private int lastUpdateTimeStep = -1;
     javax.swing.JCheckBox printGridCheckBox = null;
 
     public boolean printGrid() {
@@ -94,16 +93,7 @@ public class TetrisVisualizer extends AbstractVisualizer {
     }
 
     public void updateAgentState(boolean force) {
-//        //Only do this if we're on a new time step
-        int currentTimeStep = theGlueState.getTotalSteps();
-
-
-//        if (currentState == null || currentTimeStep != lastUpdateTimeStep || force) {
-            System.out.println("\t\tRequesting tetris state");
             currentState = TetrisStateRequest.Execute();
-            System.out.println("\t\tGot tetris state");
-            lastUpdateTimeStep = currentTimeStep;
-//        }
     }
 
     public int getWidth() {

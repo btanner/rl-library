@@ -9,6 +9,8 @@ import java.awt.geom.AffineTransform;
 
 import java.util.Observable;
 import java.util.Observer;
+import org.rlcommunity.rlglue.codec.types.Observation;
+import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 import rlVizLib.utilities.UtilityShop;
 import rlVizLib.visualization.SelfUpdatingVizComponent;
 import rlVizLib.visualization.VizComponentChangeListener;
@@ -38,12 +40,12 @@ public class CartPoleCartComponent implements SelfUpdatingVizComponent, Observer
         g.scale(scale, scale);
         int transX = (int) (UtilityShop.normalizeValue(cartVis.currentXPos(), cartVis.getLeftCartBound(), cartVis.getRightCartBound()) * (eightyPercent) + tenPercent);
         int transY = (int) eightyPercent;
-        
+
         g.setColor(Color.blue);
-        Rectangle carRect=new Rectangle((int) (transX - tenPercent), transY, (int) twentyPercent, (int) fivePercent);
+        Rectangle carRect = new Rectangle((int) (transX - tenPercent), transY, (int) twentyPercent, (int) fivePercent);
         g.fill(carRect);
-        drawWheels(g,carRect);
-        
+        drawWheels(g, carRect);
+
 
         //Draw the pole
         Stroke stroke = new BasicStroke(20.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
@@ -53,7 +55,7 @@ public class CartPoleCartComponent implements SelfUpdatingVizComponent, Observer
         g.setColor(Color.BLACK);
         g.drawLine(transX, transY, x2, y2);
 
-        
+
         //Draw the failure lines
         int failLeftX = transX + (int) (inverseScale * poleLength * Math.cos(cartVis.getMinAngle()));
         int failLeftY = transY + (int) (inverseScale * poleLength * Math.sin(cartVis.getMinAngle()));
@@ -63,21 +65,21 @@ public class CartPoleCartComponent implements SelfUpdatingVizComponent, Observer
         int failRightY = transY + (int) (inverseScale * poleLength * Math.sin(cartVis.getMaxAngle()));
         g.setColor(Color.RED);
         g.drawLine(transX, transY, failRightX, failRightY);
-        
 
-        
+
+
         g.setTransform(saveAT);
     }
 
-    private void drawWheels(Graphics2D g,Rectangle carRect) {
+    private void drawWheels(Graphics2D g, Rectangle carRect) {
         g.setColor(Color.red);
-        
-        double carMidY=carRect.getCenterY();
-        double carX1=carRect.getMinX()+carRect.width/4.0d;
-        double carX2=carRect.getMaxX()-carRect.width/4.0d;
-        double wheelRad=carRect.height;
-        g.fillOval((int)(carX1-wheelRad/2.0d),(int)(carMidY),(int)wheelRad,(int)wheelRad);
-        g.fillOval((int)(carX2-wheelRad/2.0d),(int)(carMidY),(int)wheelRad,(int)wheelRad);
+
+        double carMidY = carRect.getCenterY();
+        double carX1 = carRect.getMinX() + carRect.width / 4.0d;
+        double carX2 = carRect.getMaxX() - carRect.width / 4.0d;
+        double wheelRad = carRect.height;
+        g.fillOval((int) (carX1 - wheelRad / 2.0d), (int) (carMidY), (int) wheelRad, (int) wheelRad);
+        g.fillOval((int) (carX2 - wheelRad / 2.0d), (int) (carMidY), (int) wheelRad, (int) wheelRad);
     }
     /**
      * This is the object (a renderObject) that should be told when this component needs to be drawn again.
@@ -95,9 +97,15 @@ public class CartPoleCartComponent implements SelfUpdatingVizComponent, Observer
      */
     public void update(Observable o, Object arg) {
         if (theChangeListener != null) {
-            cartVis.updateState();
-            theChangeListener.vizComponentChanged(this);
+            if (arg instanceof Observation) {
+                cartVis.updateState();
+                theChangeListener.vizComponentChanged(this);
+            }
+            if (arg instanceof Reward_observation_terminal) {
+                cartVis.updateState();
+                theChangeListener.vizComponentChanged(this);
+            }
         }
-    }
 
+    }
 }
