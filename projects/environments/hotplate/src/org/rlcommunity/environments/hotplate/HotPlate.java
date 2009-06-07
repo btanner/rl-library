@@ -78,6 +78,12 @@ public class HotPlate extends EnvironmentBase implements
         theTaskSpecObject.setEpisodic();
         theTaskSpecObject.setDiscountFactor(1.0d);
         theTaskSpecObject.addContinuousObservation(new DoubleRange(0.0d,1.0d,numDimensions));
+
+        if(theState.getSignaled()){
+            theTaskSpecObject.addDiscreteObservation(new IntRange(0,1<<numDimensions));
+        }else{
+        }
+
         theTaskSpecObject.addDiscreteAction(new IntRange(0, numActions-1));
         theTaskSpecObject.setRewardRange(new DoubleRange(-1.0d, 1.0d));
         theTaskSpecObject.setExtra("EnvName:HotPlate");
