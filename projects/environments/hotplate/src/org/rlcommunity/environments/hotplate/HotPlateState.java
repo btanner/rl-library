@@ -30,42 +30,38 @@ import org.rlcommunity.rlglue.codec.types.Observation;
 public class HotPlateState {
 //	Current State Information
 
-    private double position;
-    private double velocity;
-//Some of these are fixed.  This environment would be easy to parameterize further by changing these.
-    final public double minPosition = -1.2;
-    final public double maxPosition = 0.6;
-    final public double minVelocity = -0.07;
-    final public double maxVelocity = 0.07;
-    final public double goalPosition = 0.5;
-    final public double accelerationFactor = 0.001;
-    final public double gravityFactor = -0.0025;
-    final public double hillPeakFrequency = 3.0;
-    //This is the middle of the valley (no slope)
-    final public double defaultInitPosition = -0.5d;
-    final public double defaultInitVelocity = 0.0d;
-    final public double rewardPerStep = -1.0d;
-    final public double rewardAtGoal = 0.0d;
+//This will be an N-D vector all in [0,1]
+    private double[] position = null;
+    private boolean signaledVersion = false;
+    private int[] safeZone = null;
+    private int numDims = 1;
+    private double moveDistance = .05;
+    final private double rewardAtGoal = 1.0d;
+    final private double rewardPerStep = -1.0d;
     final private Random randomGenerator;
-    //These are configurable
-    public boolean randomStarts = false;
+    private int lastAction = 0;
 
-
-    private int lastAction=0;
     /**
      * Constructor 
      * @param randomGenerator
      */
-    HotPlateState(Random randomGenerator) {
-        this.randomGenerator = randomGenerator;
+    HotPlateState(int numDims, boolean signaled) {
+        this.randomGenerator = new Random();
+        this.numDims = numDims;
+        this.signaledVersion = signaled;
+        reset();
     }
 
-    public double getPosition() {
+    public double[] getPosition() {
         return position;
     }
 
-    public double getVelocity() {
-        return velocity;
+    public boolean getSignaled() {
+        return signaledVersion;
+    }
+
+    public int[] getSafeZone() {
+        return safeZone;
     }
 
     /**
@@ -80,90 +76,148 @@ public class HotPlateState {
         }
     }
 
+    public boolean inGoalRegion() {
+        return inGoalRegion(position, safeZone, signaledVersion);
+    }
+
     /**
      * IS the agent past the goal marker?
      * @return
      */
-    public boolean inGoalRegion() {
-        return position >= goalPosition;
-    }
+    private static boolean inGoalRegion(double[] positionToCheck, int[] safeZoneToCheck, boolean useSafeZones) {
+        double goalSize = .05;
 
-    protected void reset() {
-        position = defaultInitPosition;
-        velocity = defaultInitVelocity;
-        if (randomStarts) {
-            //We use goal position instead of max position so that the agent
-            //doesn't start past the goal ever
-            double maxStartPosition = goalPosition;
-            double randStartPosition = (randomGenerator.nextDouble() * (maxStartPosition + Math.abs(minPosition)) - Math.abs(minPosition));
-            position = randStartPosition;
-            double randStartVelocity = (randomGenerator.nextDouble() * (maxVelocity + Math.abs(minVelocity)) - Math.abs(minVelocity));
-            velocity = randStartVelocity;
+        boolean inGoalRegion = false;
+
+        if (!useSafeZones) {
+            //This loops through all dimensions and makes sure the agent is
+            //along an edge in EACH dimension
+            boolean inAllGoals = true;
+            for (double thisDimPos : positionToCheck) {
+                inAllGoals &= (thisDimPos < goalSize || thisDimPos >= 1.0d - goalSize);
+            }
+            inGoalRegion = inAllGoals;
         }
 
+        //In this case, the agent has to be in the goal region indicated by
+        //safeZone
+
+        if (useSafeZones) {
+            boolean inCorrectGoals = true;
+            for (int i = 0; i < positionToCheck.length; i++) {
+                double thisDimPos = positionToCheck[i];
+                int thisSafeZone = safeZoneToCheck[i];
+
+                if (thisSafeZone == 0) {
+                    inCorrectGoals &= thisDimPos < goalSize;
+
+                } else {
+                    inCorrectGoals &= thisDimPos >= 1.0d - goalSize;
+                }
+            }
+            inGoalRegion = inCorrectGoals;
+        }
+        return inGoalRegion;
     }
 
-    /**
-     * Update the agent's velocity, threshold it, then
-     * update position and threshold it.
-     * @param a Should be in {0 (left), 1 (neutral), 2 (right)}
+    private double[] generatePosition() {
+        double[] tmp_position = new double[numDims];
+        for (int i = 0; i < tmp_position.length; i++) {
+            tmp_position[i] = randomGenerator.nextDouble();
+        }
+        return tmp_position;
+
+    }
+
+    /*
+     * Reset the agent to a random starting state
      */
-    void update(int a) {
-        lastAction=a;
-        double variedAccel = accelerationFactor;
+    protected void reset() {
+        //Technically we only need to do this if signaled, but no reason not
+        //to calculate it always and use it sometimes
+        safeZone = new int[numDims];
+        for (int i = 0; i < safeZone.length; i++) {
+            safeZone[i] = randomGenerator.nextInt(2);
+        }
 
-        velocity += ((a - 1)) * variedAccel + getSlope(position) * (gravityFactor);
-        if (velocity > maxVelocity) {
-            velocity = maxVelocity;
+        double[] candidatePosition = generatePosition();
+
+        while (inGoalRegion(candidatePosition, safeZone, signaledVersion)) {
+            candidatePosition = generatePosition();
         }
-        if (velocity < minVelocity) {
-            velocity = minVelocity;
+
+        position = candidatePosition;
+    }
+
+    void update(int a) {
+        lastAction = a;
+        int maxMovementAction = (1 << numDims) - 1;
+        if (lastAction == maxMovementAction + 1) {
+            //Do nothing
+            return;
         }
-        position += velocity;
-        if (position > maxPosition) {
-            position = maxPosition;
+
+        String actionAsBinary = Integer.toBinaryString(a);
+        //Pad the string.
+        while (actionAsBinary.length() < numDims) {
+            actionAsBinary = "0" + actionAsBinary;
         }
-        if (position < minPosition) {
-            position = minPosition;
-        }
-        if (position == minPosition && velocity < 0) {
-            velocity = 0;
+        assert (actionAsBinary.length() == numDims);
+
+        for (int i = 0; i < numDims; i++) {
+            char thisAction = actionAsBinary.charAt(i);
+            Integer interpretedAsInt = Integer.parseInt("" + thisAction);
+
+            if (interpretedAsInt == 0) {
+                position[i] += moveDistance;
+                if (position[i] > 1.0d) {
+                    position[i] = 1.0d;
+                }
+            } else {
+                position[i] -= moveDistance;
+                if (position[i] < 0.0d) {
+                    position[i] = 0.0d;
+                }
+            }
         }
 
     }
 
-    public int getLastAction(){
+    public int getLastAction() {
         return lastAction;
     }
 
-    /**
-     * Get the height of the hill at this position
-     * @param queryPosition
-     * @return
-     */
-    public double getHeightAtPosition(double queryPosition) {
-        return -Math.sin(hillPeakFrequency * (queryPosition));
+    int getNumActions() {
+        return 1 + (1 << numDims);
     }
 
-    /**
-     * Get the slop of the hill at this position
-     * @param queryPosition
-     * @return
-     */
-    public double getSlope(double queryPosition) {
-        /*The curve is generated by cos(hillPeakFrequency(x-pi/2)) so the 
-         * pseudo-derivative is cos(hillPeakFrequency* x) 
-         */
-        return Math.cos(hillPeakFrequency * queryPosition);
+    public int getNumDimensions() {
+        return numDims;
     }
 
     Observation makeObservation() {
-        Observation currentObs = new Observation(0, 2);
+        int numInts = 0;
 
-        currentObs.doubleArray[0] = getPosition();
-        currentObs.doubleArray[1] = getVelocity();
+        if (signaledVersion) {
+            numInts = 1;
+        }
 
-        return currentObs;
+        Observation theObservation = new Observation(numInts, numDims, 0);
 
+        if (signaledVersion) {
+            int safeZoneAsInt = 0;
+            //This will construct a decimal number as if safeZone was a binary string
+            for (int thisSafePos : safeZone) {
+                safeZoneAsInt = safeZoneAsInt << 1;
+                safeZoneAsInt += thisSafePos;
+            }
+            theObservation.intArray[0] = safeZoneAsInt;
+        }
+
+        for (int i = 0; i < numDims; i++) {
+            theObservation.doubleArray[i] = position[i];
+        }
+
+        return theObservation;
     }
 }

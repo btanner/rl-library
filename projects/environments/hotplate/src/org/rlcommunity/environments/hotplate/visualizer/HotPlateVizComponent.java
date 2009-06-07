@@ -20,103 +20,77 @@ package org.rlcommunity.environments.hotplate.visualizer;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
 
-import rlVizLib.utilities.UtilityShop;
+import javax.imageio.ImageIO;
+import org.rlcommunity.rlglue.codec.types.Observation;
 import rlVizLib.visualization.SelfUpdatingVizComponent;
 import rlVizLib.visualization.VizComponentChangeListener;
 
 public class HotPlateVizComponent implements SelfUpdatingVizComponent, Observer {
 
     private HotPlateVisualizer theVizualizer = null;
-    private Vector<Double> theHeights = null;
-    private double theGoalPosition = 0.0d;
-    private double theGoalHeight = 0.0d;
+    private Vector<Rectangle2D> safeZones=new Vector<Rectangle2D>();
     private VizComponentChangeListener theChangeListener;
-    boolean everDrawn = false;
+
+    private Image hotplateImage=null;
+
+
 
     public HotPlateVizComponent(HotPlateVisualizer theVizualizer) {
         this.theVizualizer = theVizualizer;
+        URL hotplateImageUrl = HotPlateVizComponent.class.getResource("/images/hotplate.jpg");
+            try {
+            hotplateImage = ImageIO.read(hotplateImageUrl);
+        } catch (Exception ex) {
+            System.err.println("ERROR: Problem getting hot plate image.");
+        }
+
         theVizualizer.getTheGlueState().addObserver(this);
+
+
     }
 
+    private void updateData(){
+            safeZones=new Vector<Rectangle2D>();
+            boolean signaledVersion=theVizualizer.isSignaled();
+            int[] safeZoneID=theVizualizer.getSafeZone();
+            //Assume 2D for now.
+
+               if (!signaledVersion) {
+                    safeZones.add(new Rectangle2D.Double(0,0,.05,.05));
+                    safeZones.add(new Rectangle2D.Double(.95,0,.05,.05));
+                    safeZones.add(new Rectangle2D.Double(0,.95,.05,.05));
+                    safeZones.add(new Rectangle2D.Double(.95,.95,.05,.05));
+               }else{
+
+                    double xStart=0.0d;
+                    if(safeZoneID[0]==1)
+                        xStart=.95d;
+                    double yStart=0.0d;
+                    if(safeZoneID[1]==1)
+                        yStart=.95d;
+                    safeZones.add(new Rectangle2D.Double(xStart,yStart,.05,.05));
+               }
+    }
     public void render(Graphics2D g) {
-        if (!everDrawn) {
-            theGoalPosition = theVizualizer.getGoalPosition();
-            Vector<Double> tempVec = new Vector<Double>();
-            tempVec.add(theGoalPosition);
+        //Draw the background
+        g.drawImage(hotplateImage, 0,0,1,1, null);
 
-            Vector<Double> returnVector = theVizualizer.getHeightsForPositions(tempVec);
-            theGoalHeight = returnVector.get(0);
-            everDrawn = true;
-
-        }
-
-        AffineTransform theScaleTransform = new AffineTransform();
-
-        //Draw a rectangle
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, 1, 1);
-
-        double scaleFactor = 1000.0d;
-        theScaleTransform.scale(1.0d / scaleFactor, 1.0d / scaleFactor);
-        AffineTransform origTransform = g.getTransform();
-
-        AffineTransform x = g.getTransform();
-        x.concatenate(theScaleTransform);
-        g.setTransform(x);
-
-
-        theHeights = theVizualizer.getSampleHeights();
-
-        double sizeEachComponent = 1.0 / (double) theHeights.size();
-
-
-        g.setColor(Color.BLACK);
-
-        double lastX = 0.0d;
-        double lastY = 1.0 - UtilityShop.normalizeValue(theHeights.get(0), theVizualizer.getMinHeight(), theVizualizer.getMaxHeight());
-        for (int i = 1; i < theHeights.size(); i++) {
-            double thisX = lastX + sizeEachComponent;
-            double thisY = 1.0 - UtilityShop.normalizeValue(theHeights.get(i), theVizualizer.getMinHeight(), theVizualizer.getMaxHeight());
-
-            Line2D thisLine = new Line2D.Double(scaleFactor * lastX, scaleFactor * lastY, scaleFactor * thisX, scaleFactor * thisY);
-
-            lastX = thisX;
-            lastY = thisY;
-
-            g.draw(thisLine);
+        //Draw the safezones
+        g.setColor(Color.white);
+        for (Rectangle2D thisSafeZone : safeZones) {
+            g.fill(thisSafeZone);
         }
 
 
-
-
-        g.setTransform(origTransform);
-
-        g.setColor(Color.GREEN);
-
-        //to bring things back into the window
-        double minPosition = theVizualizer.getMinValueForDim(0);
-        double maxPosition = theVizualizer.getMaxValueForDim(0);
-
-
-        double transX = UtilityShop.normalizeValue(theGoalPosition, minPosition, maxPosition);
-        //need to get he actual height ranges
-        double transY = UtilityShop.normalizeValue(
-                theGoalHeight,
-                theVizualizer.getMinHeight(),
-                theVizualizer.getMaxHeight());
-        transY = (1.0 - transY);
-
-        double rectWidth = .05 / 4;
-        double rectHeight = 0.1;
-        Rectangle2D fillRect = new Rectangle2D.Double(transX - rectWidth / 2.0d, transY - rectHeight / 2.0d, rectWidth, rectHeight);
-        g.fill(fillRect);
     }
 
     public void setVizComponentChangeListener(VizComponentChangeListener theChangeListener) {
@@ -124,7 +98,9 @@ public class HotPlateVizComponent implements SelfUpdatingVizComponent, Observer 
     }
 
     public void update(Observable o, Object arg) {
-        if (!everDrawn) {
+        //Only update on RL_start (glue produces an observation)
+        if (arg instanceof Observation) {
+            updateData();
             theChangeListener.vizComponentChanged(this);
         }
 

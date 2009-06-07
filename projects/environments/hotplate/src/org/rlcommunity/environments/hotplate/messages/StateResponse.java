@@ -27,24 +27,23 @@ import rlVizLib.messaging.MessageValueType;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvMessageType;
 
-public class MCStateResponse extends AbstractResponse {
+public class StateResponse extends AbstractResponse {
 
-    double position;
-    double velocity;
-    double height;
-    double theSlope;
+    double[] position;
+    int[] safeZone;
+    boolean signaled;
     int theAction;
 
-    public MCStateResponse(int action, double position, double velocity, double height, double slope) {
+    public StateResponse(int action, double[] position, int[] safeZone, boolean signaled) {
+        assert position!=null : "Environment passed a null position vector to State Response message";
+        assert position!=null : "Environment passed a null safeZone vector to State Response message";
         this.position = position;
-        this.velocity = velocity;
-        this.height = height;
+        this.safeZone = safeZone;
+        this.signaled = signaled;
         this.theAction = action;
-        this.theSlope = slope;
-
     }
 
-    public MCStateResponse(String responseMessage) throws NotAnRLVizMessageException {
+    public StateResponse(String responseMessage) throws NotAnRLVizMessageException {
 
         GenericMessage theGenericResponse = new GenericMessage(responseMessage);
 
@@ -53,15 +52,22 @@ public class MCStateResponse extends AbstractResponse {
         StringTokenizer stateTokenizer = new StringTokenizer(thePayLoadString, ":");
 
         theAction = Integer.parseInt(stateTokenizer.nextToken());
-        position = Double.parseDouble(stateTokenizer.nextToken());
-        velocity = Double.parseDouble(stateTokenizer.nextToken());
-        height = Double.parseDouble(stateTokenizer.nextToken());
-        theSlope = Double.parseDouble(stateTokenizer.nextToken());
+        int numDims = Integer.parseInt(stateTokenizer.nextToken());
+
+        position = new double[numDims];
+        safeZone = new int[numDims];
+        for (int i = 0; i < numDims; i++) {
+            position[i] = Double.parseDouble(stateTokenizer.nextToken());
+        }
+        for (int i = 0; i < numDims; i++) {
+            safeZone[i] = Integer.parseInt(stateTokenizer.nextToken());
+        }
+        signaled = Boolean.parseBoolean(stateTokenizer.nextToken());
     }
 
     @Override
     public String toString() {
-        String theResponse = "MCStateResponse: not implemented ";
+        String theResponse = "StateResponse: not implemented ";
         return theResponse;
     }
 
@@ -80,34 +86,35 @@ public class MCStateResponse extends AbstractResponse {
 
         theResponseBuffer.append(theAction);
         theResponseBuffer.append(":");
-        theResponseBuffer.append(position);
+        theResponseBuffer.append(position.length);
         theResponseBuffer.append(":");
-        theResponseBuffer.append(velocity);
-        theResponseBuffer.append(":");
-        theResponseBuffer.append(height);
-        theResponseBuffer.append(":");
-        theResponseBuffer.append(theSlope);
+        for (int i = 0; i < position.length; i++) {
+            theResponseBuffer.append(position[i]);
+            theResponseBuffer.append(":");
+        }
+        for (int i = 0; i < safeZone.length; i++) {
+            theResponseBuffer.append(safeZone[i]);
+            theResponseBuffer.append(":");
+        }
+        theResponseBuffer.append(signaled);
 
         return theResponseBuffer.toString();
     }
 
-    public double getPosition() {
+    public double[] getPosition() {
         return position;
     }
 
-    public double getVelocity() {
-        return velocity;
+    public int[] getSafeZone() {
+        return safeZone;
     }
 
-    public double getHeight() {
-        return height;
+    public boolean getSignaled() {
+        return signaled;
     }
 
     public int getAction() {
         return theAction;
     }
 
-    public double getSlope() {
-        return theSlope;
-    }
 };

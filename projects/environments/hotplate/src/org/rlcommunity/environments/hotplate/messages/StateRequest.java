@@ -29,27 +29,27 @@ import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvMessageType;
 import rlVizLib.messaging.environment.EnvironmentMessages;
 
-public class MCStateRequest extends EnvironmentMessages{
+public class StateRequest extends EnvironmentMessages{
 
-	public MCStateRequest(GenericMessage theMessageObject){
+	public StateRequest(GenericMessage theMessageObject){
 		super(theMessageObject);
 	}
 
-	public static MCStateResponse Execute(){
+	public static StateResponse Execute(){
 		String theRequest=AbstractMessage.makeMessage(
 				MessageUser.kEnv.id(),
 				MessageUser.kBenchmark.id(),
 				EnvMessageType.kEnvCustom.id(),
 				MessageValueType.kString.id(),
-				"GETMCSTATE");
+				"GETHOTPLATESTATE");
 
 		String responseMessage=RLGlue.RL_env_message(theRequest);
 
-		MCStateResponse theResponse;
+		StateResponse theResponse;
 		try {
-			theResponse = new MCStateResponse(responseMessage);
+			theResponse = new StateResponse(responseMessage);
 		} catch (NotAnRLVizMessageException e) {
-			System.err.println("In MCStateRequest, the response was not RL-Viz compatible");
+			System.err.println("In StateRequest, the response was not RL-Viz compatible");
 			theResponse=null;
 		}
 

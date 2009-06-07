@@ -19,12 +19,7 @@ limitations under the License.
 package org.rlcommunity.environments.hotplate;
 
 import java.net.URL;
-import java.util.StringTokenizer;
-import java.util.Vector;
-
-import org.rlcommunity.environments.hotplate.messages.MCGoalResponse;
-import org.rlcommunity.environments.hotplate.messages.MCHeightResponse;
-import org.rlcommunity.environments.hotplate.messages.MCStateResponse;
+import org.rlcommunity.environments.hotplate.messages.StateResponse;
 import rlVizLib.Environments.EnvironmentBase;
 import rlVizLib.general.ParameterHolder;
 import rlVizLib.messaging.NotAnRLVizMessageException;
@@ -38,7 +33,6 @@ import org.rlcommunity.rlglue.codec.types.Observation;
 
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 
-import java.util.Random;
 import org.rlcommunity.environments.hotplate.visualizer.HotPlateVisualizer;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;
@@ -68,27 +62,25 @@ public class HotPlate extends EnvironmentBase implements
         HasAVisualizerInterface,
         HasImageInterface {
 
-    static final int numActions = 3;
-    protected HotPlateState theState = null;    //Used for env_save_state and env_save_state, which don't exist anymore, but we will one day bring them back
-    //through the messaging system and RL-Viz.
-    //Problem parameters have been moved to MountainCar State
-    private Random randomGenerator = new Random();
+    protected HotPlateState theState = null;
 
     public static TaskSpecPayload getTaskSpecPayload(ParameterHolder P) {
-        HotPlate theMC = new HotPlate(P);
-        String taskSpecString = theMC.makeTaskSpec().getStringRepresentation();
+        HotPlate theHotPlate = new HotPlate(P);
+        String taskSpecString = theHotPlate.makeTaskSpec().getStringRepresentation();
         return new TaskSpecPayload(taskSpecString, false, "");
     }
 
     public TaskSpec makeTaskSpec() {
+        int numDimensions=theState.getNumDimensions();
+        int numActions=theState.getNumActions();
+        
         TaskSpecVRLGLUE3 theTaskSpecObject = new TaskSpecVRLGLUE3();
         theTaskSpecObject.setEpisodic();
         theTaskSpecObject.setDiscountFactor(1.0d);
-        theTaskSpecObject.addContinuousObservation(new DoubleRange(theState.minPosition, theState.maxPosition));
-        theTaskSpecObject.addContinuousObservation(new DoubleRange(theState.minVelocity, theState.maxVelocity));
-        theTaskSpecObject.addDiscreteAction(new IntRange(0, 2));
-        theTaskSpecObject.setRewardRange(new DoubleRange(-1, 0));
-        theTaskSpecObject.setExtra("EnvName:Mountain-Car Revision:" + this.getClass().getPackage().getImplementationVersion());
+        theTaskSpecObject.addContinuousObservation(new DoubleRange(0.0d,1.0d,numDimensions));
+        theTaskSpecObject.addDiscreteAction(new IntRange(0, numActions-1));
+        theTaskSpecObject.setRewardRange(new DoubleRange(-1.0d, 1.0d));
+        theTaskSpecObject.setExtra("EnvName:HotPlate");
 
         String taskSpecString = theTaskSpecObject.toTaskSpec();
         TaskSpec.checkTaskSpec(taskSpecString);
@@ -113,7 +105,6 @@ public class HotPlate extends EnvironmentBase implements
      */
     public Observation env_start() {
         theState.reset();
-
         return makeObservation();
     }
 
@@ -126,9 +117,11 @@ public class HotPlate extends EnvironmentBase implements
 
         int a = theAction.intArray[0];
 
-        if (a > 2 || a < 0) {
-            System.err.println("Invalid action selected in mountainCar: " + a);
-            a = randomGenerator.nextInt(3);
+
+        if (a >= theState.getNumActions() || a < 0) {
+            System.err.println("Invalid action selected in HotPlate: " + a);
+            //Take the null action
+            a = theState.getNumActions()-1;
         }
 
         theState.update(a);
@@ -145,7 +138,9 @@ public class HotPlate extends EnvironmentBase implements
         ParameterHolder p = new ParameterHolder();
         rlVizLib.utilities.UtilityShop.setVersionDetails(p, new DetailsProvider());
 
-        p.addBooleanParam("randomStartStates", false);
+
+//        p.addIntegerParam("Dimensions", 2);
+        p.addBooleanParam("Signaled", false);
         return p;
     }
 
@@ -155,12 +150,16 @@ public class HotPlate extends EnvironmentBase implements
      */
     public HotPlate(ParameterHolder p) {
         super();
-        theState = new HotPlateState(randomGenerator);
+        int dimensions=2;
+        boolean signaled=false;
+
         if (p != null) {
             if (!p.isNull()) {
-                theState.randomStarts = p.getBooleanParam("randomStartStates");
+                signaled = p.getBooleanParam("Signaled");
+//                dimensions=p.getIntegerParam("Dimensions");
             }
         }
+        theState = new HotPlateState(dimensions,signaled);
     }
 
     public HotPlate() {
@@ -192,36 +191,9 @@ public class HotPlate extends EnvironmentBase implements
 
             String theCustomType = theMessageObject.getPayLoad();
 
-            if (theCustomType.equals("GETMCSTATE")) {
+            if (theCustomType.equals("GETHOTPLATESTATE")) {
                 //It is a request for the state
-                double position = theState.getPosition();
-                double velocity = theState.getVelocity();
-                double height = theState.getHeightAtPosition(position);
-                int lastAction = theState.getLastAction();
-                double slope = theState.getSlope(position);
-                MCStateResponse theResponseObject = new MCStateResponse(lastAction, position, velocity, height, slope);
-                return theResponseObject.makeStringResponse();
-            }
-
-            if (theCustomType.startsWith("GETHEIGHTS")) {
-                Vector<Double> theHeights = new Vector<Double>();
-
-                StringTokenizer theTokenizer = new StringTokenizer(theCustomType, ":");
-                //throw away the first token
-                theTokenizer.nextToken();
-
-                int numQueries = Integer.parseInt(theTokenizer.nextToken());
-                for (int i = 0; i < numQueries; i++) {
-                    double thisPoint = Double.parseDouble(theTokenizer.nextToken());
-                    theHeights.add(theState.getHeightAtPosition(thisPoint));
-                }
-
-                MCHeightResponse theResponseObject = new MCHeightResponse(theHeights);
-                return theResponseObject.makeStringResponse();
-            }
-
-            if (theCustomType.startsWith("GETMCGOAL")) {
-                MCGoalResponse theResponseObject = new MCGoalResponse(theState.goalPosition);
+                StateResponse theResponseObject = new StateResponse(theState.getLastAction(), theState.getPosition(),theState.getSafeZone(),theState.getSignaled());
                 return theResponseObject.makeStringResponse();
             }
 
@@ -250,35 +222,23 @@ public class HotPlate extends EnvironmentBase implements
     }
 
     /**
-     * The value function will be drawn over the position and velocity.  This 
-     * method provides the max values for those variables.
      * @param dimension
      * @return
      */
     public double getMaxValueForQuerableVariable(int dimension) {
-        if (dimension == 0) {
-            return theState.maxPosition;
-        } else {
-            return theState.maxVelocity;
-        }
+        return 1.0d;
     }
 
     /**
-     * The value function will be drawn over the position and velocity.  This 
-     * method provides the min values for those variables.
      * @param dimension
      * @return
      */
     public double getMinValueForQuerableVariable(int dimension) {
-        if (dimension == 0) {
-            return theState.minPosition;
-        } else {
-            return theState.minVelocity;
-        }
+        return 0.0d;
     }
 
     /**
-     * Given a state, return an observation.  This is trivial in mountain car
+     * Given a state, return an observation.  This is trivial 
      * because the observation is the same as the internal state 
      * @param theState
      * @return
@@ -292,7 +252,9 @@ public class HotPlate extends EnvironmentBase implements
      * @return
      */
     public int getNumVars() {
-        return 2;
+        int numDims=theState.getNumDimensions();
+        if(numDims>2)numDims=2;
+        return numDims;
     }
 
     public String getVisualizerClassName() {
@@ -304,7 +266,7 @@ public class HotPlate extends EnvironmentBase implements
      * @return
      */
     public URL getImageURL() {
-        URL imageURL = HotPlate.class.getResource("/images/mountaincar.png");
+        URL imageURL = HotPlate.class.getResource("/images/splashscreen_hotplate.png");
         return imageURL;
     }
 }
@@ -316,23 +278,23 @@ public class HotPlate extends EnvironmentBase implements
 class DetailsProvider implements hasVersionDetails {
 
     public String getName() {
-        return "Mountain Car 1.30";
+        return "Hot Plate 0.1";
     }
 
     public String getShortName() {
-        return "Mount-Car";
+        return "HotPlate";
     }
 
     public String getAuthors() {
-        return "Richard Sutton, Adam White, Brian Tanner";
+        return "Brian Tanner (inspired by Tyler Streeter)";
     }
 
     public String getInfoUrl() {
-        return "http://library.rl-community.org/environments/mountaincar";
+        return "http://library.rl-community.org/";
     }
 
     public String getDescription() {
-        return "RL-Library Java Version of the classic Mountain Car RL-Problem.";
+        return "RL-Library Java Version of the Hot Plate problem.";
     }
 }
 
