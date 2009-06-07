@@ -106,6 +106,5 @@ public class CartPoleCartComponent implements SelfUpdatingVizComponent, Observer
                 theChangeListener.vizComponentChanged(this);
             }
         }
-
     }
 }

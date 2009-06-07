@@ -123,7 +123,7 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
             return theMessageObject.handleAutomatically(this);
         }
 
-//		If it wasn't handled automatically, maybe its a custom Mountain Car Message
+//		If it wasn't handled automatically, maybe its a custom message
         if (theMessageObject.getTheMessageType() == rlVizLib.messaging.environment.EnvMessageType.kEnvCustom.id()) {
 
             String theCustomType = theMessageObject.getPayLoad();
