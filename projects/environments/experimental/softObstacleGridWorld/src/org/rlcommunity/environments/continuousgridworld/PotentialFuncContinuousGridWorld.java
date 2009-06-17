@@ -14,6 +14,7 @@ import org.rlcommunity.rlglue.codec.taskspec.ranges.IntRange;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
+import org.rlcommunity.rlviz.dynamicloading.Unloadable;
 import rlVizLib.general.ParameterHolder;
 import rlVizLib.messaging.environmentShell.TaskSpecPayload;
 
@@ -23,7 +24,7 @@ import rlVizLib.messaging.environmentShell.TaskSpecPayload;
  *
  * @author Marc G. Bellemare (mg17 at cs ualberta ca)
  */
-public class PotentialFuncContinuousGridWorld extends ContinuousGridWorld {
+public class PotentialFuncContinuousGridWorld extends ContinuousGridWorld implements Unloadable {
     public static final int MAP_EMPTY = 0;
     public static final int MAP_CUP   = 1;
 

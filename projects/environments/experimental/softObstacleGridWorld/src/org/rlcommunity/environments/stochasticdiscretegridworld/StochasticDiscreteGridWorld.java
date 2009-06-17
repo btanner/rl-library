@@ -14,13 +14,11 @@ limitations under the License.
  */
 package org.rlcommunity.environments.stochasticdiscretegridworld;
 
-import org.rlcommunity.environments.discretegridworld.*;
-import org.rlcommunity.environments.continuousgridworld.ContinuousGridWorld;
 import java.awt.geom.Point2D;
 import java.util.Random;
+import org.rlcommunity.environments.discretegridworld.DiscreteGridWorld;
 import rlVizLib.general.ParameterHolder;
 import org.rlcommunity.rlglue.codec.types.Action;
-import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 import rlVizLib.dynamicLoading.Unloadable;
 
