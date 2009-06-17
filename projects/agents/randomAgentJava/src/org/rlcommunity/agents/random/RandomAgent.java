@@ -26,6 +26,7 @@ import rlVizLib.general.hasVersionDetails;
 
 import org.rlcommunity.rlglue.codec.AgentInterface;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
+import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.AbstractRange;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.IntRange;
@@ -43,7 +44,7 @@ import rlVizLib.messaging.interfaces.HasImageInterface;
  * actions.
  * @author btanner
  */
-public class RandomAgent implements AgentInterface,HasImageInterface {
+public class RandomAgent implements AgentInterface, HasImageInterface {
 
     private Action action;
     private Random random = new Random();
@@ -56,15 +57,15 @@ public class RandomAgent implements AgentInterface,HasImageInterface {
     public RandomAgent(ParameterHolder p) {
         super();
     }
-    
+
     /**
      * Random agent can take any task spec.
      * @param P
      * @param TaskSpec
      * @return
      */
-    public static TaskSpecResponsePayload isCompatible(ParameterHolder P, String TaskSpec){
-        return new TaskSpecResponsePayload(false,"");
+    public static TaskSpecResponsePayload isCompatible(ParameterHolder P, String TaskSpec) {
+        return new TaskSpecResponsePayload(false, "");
     }
 
     /**
@@ -77,12 +78,28 @@ public class RandomAgent implements AgentInterface,HasImageInterface {
         return p;
     }
 
-    public static void main(String[] args){
-        AgentLoader L=new AgentLoader(new RandomAgent());
+    public static void main(String[] args) {
+        AgentLoader L = new AgentLoader(new RandomAgent());
         L.run();
     }
+
     public void agent_init(String taskSpec) {
         TSO = new TaskSpec(taskSpec);
+
+        //Quick hack for Mario
+        if (TSO.getVersionString().equals("Mario-v1")) {
+            TaskSpecVRLGLUE3 hardCodedTaskSpec = new TaskSpecVRLGLUE3();
+            hardCodedTaskSpec.setEpisodic();
+            hardCodedTaskSpec.setDiscountFactor(1.0d);
+            //Run
+            hardCodedTaskSpec.addDiscreteAction(new IntRange(-1, 1));
+            //Jump
+            hardCodedTaskSpec.addDiscreteAction(new IntRange(0, 1));
+            //Speed
+            hardCodedTaskSpec.addDiscreteAction(new IntRange(0, 1));
+            TSO = new TaskSpec(hardCodedTaskSpec);
+        }
+
 
         //Do some checking on the ranges here so we don't feel bad if we crash later for not checking them.
         for (int i = 0; i < TSO.getNumDiscreteActionDims(); i++) {
@@ -128,7 +145,6 @@ public class RandomAgent implements AgentInterface,HasImageInterface {
     }
 
     public void agent_cleanup() {
-        
     }
 
     public String agent_message(String theMessage) {
@@ -150,7 +166,6 @@ public class RandomAgent implements AgentInterface,HasImageInterface {
     public URL getImageURL() {
         return this.getClass().getResource("/images/randomagent.png");
     }
-
 }
 
 /**

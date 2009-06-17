@@ -8,25 +8,17 @@ import java.util.Observable;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
-import java.awt.geom.AffineTransform;
 
 import java.util.Observer;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.Vector;
-import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
 import org.rlcommunity.agents.keyboard.IntActionReceiver;
-import org.rlcommunity.agents.keyboard.SimpleIntAction;
 import org.rlcommunity.agents.keyboard.mappings.AcrobotControlSettings;
 import org.rlcommunity.agents.keyboard.mappings.CartPoleControlSettings;
 import org.rlcommunity.agents.keyboard.mappings.ExpandedCritterControlSettings;
 import org.rlcommunity.agents.keyboard.mappings.GridWorldControlSettings;
+import org.rlcommunity.agents.keyboard.mappings.MarioControlSettings;
 import org.rlcommunity.agents.keyboard.mappings.MountainCarControlSettings;
 import org.rlcommunity.agents.keyboard.mappings.TetrisControlSettings;
 import org.rlcommunity.agents.keyboard.messages.TaskSpecRequest;
@@ -120,7 +112,7 @@ public class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Obs
 
     public void actionFinished() {
     }
-    static String supportedEnvStrings[] = {"EnvName:Mountain-Car", "EnvName:Acrobot",
+    static String supportedEnvStrings[] = {"Mario-v1","EnvName:Mountain-Car", "EnvName:Acrobot",
         "EnvName:ContinuousGridWorld", "EnvName:Tetris", "EnvName:Tetris", "EnvName:ExpandedCritter",
         "EnvName:CartPole","EnvName:PotentialFuncContinuousGridWorld","EnvName:DiscontinuousContinuousGridWorld"
     };
@@ -135,16 +127,25 @@ public class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Obs
     }
 
     private void setupPanels(String taskSpec) {
+        System.out.println("Keyboard agent taskspec received: "+taskSpec);
         this.sendNullActions = false;
 
         theControlTarget.removeControl(theKeyListenerPanel);
         theKeyListenerPanel = new JPanel();
-
         TaskSpec TSO = new TaskSpec(taskSpec);
-        String extraString = TSO.getExtraString();
 
         boolean foundMatch=false;
 
+        if(!TaskSpec.checkTaskSpec(taskSpec)){
+            //If we fail this then lets assume we can still get the version.
+            String theVersion=TSO.getVersionString();
+        if (theVersion.contains("Mario-v1")) {
+            MarioControlSettings.addActions(theKeyListenerPanel, this);
+            foundMatch=true;
+        }
+
+        }else{
+        String extraString = TSO.getExtraString();
         if (extraString.contains("EnvName:Mountain-Car")) {
             MountainCarControlSettings.addActions(theKeyListenerPanel, this);
             foundMatch=true;
@@ -178,11 +179,19 @@ public class KeyboardActionVizComponent implements SelfUpdatingVizComponent, Obs
             nullAction = new Action(4, 0, 0);
             nullAction.intArray = new int[]{1, 0, 0, 0};
             foundMatch=true;
-        } //        if (theKeyBoardMapper != null) {
+        }
+        }
+
+
+
+
+
+
+        //        if (theKeyBoardMapper != null) {
         //            theKeyBoardMapper.ensureTaskSpecMatchesExpectation(TSO);
 
         if(!foundMatch)
-            System.err.println("Didn't know how to make a keyboard agent from string: " + extraString);
+            System.err.println("Didn't know how to make a keyboard agent from string: " + taskSpec);
 
         Vector<Component> v = new Vector<Component>();
 

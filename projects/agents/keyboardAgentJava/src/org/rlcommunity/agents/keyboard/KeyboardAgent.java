@@ -19,8 +19,8 @@ limitations under the License.
 package org.rlcommunity.agents.keyboard;
 
 import java.net.URL;
-import java.util.Random;
 
+import org.rlcommunity.agents.keyboard.mappings.MarioControlSettings;
 import org.rlcommunity.agents.keyboard.messages.TaskSpecResponse;
 import org.rlcommunity.agents.keyboard.messages.TellAgentWhatToDoResponse;
 import org.rlcommunity.agents.keyboard.visualizer.KeyboardActionVizComponent;
@@ -54,6 +54,7 @@ public class KeyboardAgent implements AgentInterface,HasAVisualizerInterface,Has
 
     private Action action;
     TaskSpec TSO = null;
+    private String taskSpecString=null;
 
     public KeyboardAgent() {
         this(getDefaultParameters());
@@ -84,8 +85,14 @@ public class KeyboardAgent implements AgentInterface,HasAVisualizerInterface,Has
     }
 
     public void agent_init(String taskSpec) {
-        TSO = new TaskSpec(taskSpec);
-        action=new Action(TSO.getNumDiscreteActionDims(),TSO.getNumContinuousActionDims(),0);
+        taskSpecString=taskSpec;
+          TSO = new TaskSpec(taskSpec);
+
+          if(TSO.getVersionString().equals("Mario-v1")){
+              action=MarioControlSettings.getActionStructure();
+          }else{
+          action=new Action(TSO.getNumDiscreteActionDims(),TSO.getNumContinuousActionDims(),0);
+          }
 //        System.out.println("TSO tells us there are: "+TSO.getNumDiscreteActionDims()+" discrete actions");
 //        System.out.println(taskSpec);
 //        System.out.println(TSO.getStringRepresentation());
@@ -132,11 +139,10 @@ public class KeyboardAgent implements AgentInterface,HasAVisualizerInterface,Has
                 return theResponseObject.makeStringResponse();
             }
             if (theCustomType.startsWith("GETTASKSPEC")) {
-                if(TSO==null){
+                if(taskSpecString==null){
                     System.out.println("Was asked for task spec before RL_init was called");
-                    
                 }
-                TaskSpecResponse theResponseObject = TaskSpecResponse.makeResponseFromTaskSpec(TSO.getStringRepresentation());
+                TaskSpecResponse theResponseObject = TaskSpecResponse.makeResponseFromTaskSpec(taskSpecString);
                 return theResponseObject.makeStringResponse();
             }
 
