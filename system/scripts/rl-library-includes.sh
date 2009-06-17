@@ -87,10 +87,15 @@ echo "-- Starting up Gui Trainer"
 java -enableassertions -Xmx128M $osExtras -jar $VIZAPP_JAR agent-environment-jar-path=$ENV_AGENT_JARS_PATH list-agents=true list-environments=true env-viz=true agent-viz=true local-glue=true
 echo "++ Gui Trainer is finished"
 }
+startLocalGuiTrainerBothVizCPP(){
+echo "-- Starting up Gui Trainer"
+java -enableassertions -Xmx128M $osExtras -jar $VIZAPP_JAR agent-environment-jar-path=$ENV_AGENT_JARS_PATH list-agents=true list-environments=true env-viz=true agent-viz=true local-glue=true cpp-env-loading=true cpp-agent-loading=true
+echo "++ Gui Trainer is finished"
+}
 
 startNetGuiTrainer(){
 echo "-- Starting up Networked Gui Trainer"
-java -enableassertions -Xmx128M $osExtras -jar $VIZAPP_JAR agent-environment-jar-path=$ENV_AGENT_JARS_PATH list-agents=true list-environments=true env-viz=true
+java -enableassertions -Xmx128M $osExtras -jar $VIZAPP_JAR agent-environment-jar-path=$ENV_AGENT_JARS_PATH list-agents=true list-environments=true env-viz=true agent-viz=true
 echo "++ Gui Trainer is finished"
 }
 
