@@ -41,17 +41,6 @@ import org.rlcommunity.rlglue.codec.taskspec.ranges.IntRange;
 import org.rlcommunity.rlglue.codec.util.EnvironmentLoader;
 import rlVizLib.general.hasVersionDetails;
 
-/*
- * July 2007
- * This is the Java Version MountainCar Domain from the RL-Library.  
- * Brian Tanner ported it from the Existing RL-Library to Java.
- * I found it here: http://rlai.cs.ualberta.ca/RLR/environment.html
- * 
- * 
- * This is quite an advanced environment in that it has some fancy visualization
- * capabilities which have polluted the code a little.  What I'm saying is that 
- * this is not the easiest environment to get started with.
- */
 import rlVizLib.messaging.environmentShell.TaskSpecPayload;
 import rlVizLib.messaging.interfaces.HasImageInterface;
 
@@ -105,8 +94,7 @@ public class HotPlate extends EnvironmentBase implements
     }
 
     /**
-     * Restart the car on the mountain.  Pick a random position and velocity if
-     * randomStarts is set.
+     * Reset the state of the world to initial conditions.
      * @return
      */
     public Observation env_start() {
@@ -137,7 +125,7 @@ public class HotPlate extends EnvironmentBase implements
 
     /**
      * Return the ParameterHolder object that contains the default parameters for
-     * mountain car.  The only parameter is random start states.
+     * this environment.
      * @return
      */
     public static ParameterHolder getDefaultParameters() {
@@ -151,7 +139,7 @@ public class HotPlate extends EnvironmentBase implements
     }
 
     /**
-     * Create a new mountain car environment using parameter settings in p.
+     * Create a new environment using parameter settings in p.
      * @param p
      */
     public HotPlate(ParameterHolder p) {
@@ -183,7 +171,7 @@ public class HotPlate extends EnvironmentBase implements
         try {
             theMessageObject = EnvironmentMessageParser.parseMessage(theMessage);
         } catch (NotAnRLVizMessageException e) {
-            System.err.println("Someone sent mountain Car a message that wasn't RL-Viz compatible");
+            System.err.println("Someone sent "+getClass().getName()+" a message that wasn't RL-Viz compatible");
             return "I only respond to RL-Viz messages!";
         }
 
@@ -192,7 +180,7 @@ public class HotPlate extends EnvironmentBase implements
             return theResponseString;
         }
 
-        //If it wasn't handled automatically, maybe its a custom Mountain Car Message
+        //If it wasn't handled automatically, maybe its a custom message
         if (theMessageObject.getTheMessageType() == rlVizLib.messaging.environment.EnvMessageType.kEnvCustom.id()) {
 
             String theCustomType = theMessageObject.getPayLoad();
@@ -204,7 +192,7 @@ public class HotPlate extends EnvironmentBase implements
             }
 
         }
-        System.err.println("We need some code written in Env Message for MountainCar.. unknown request received: " + theMessage);
+        System.err.println("We need some code written in Env Message for "+getClass().getName()+"... unknown request received: " + theMessage);
         Thread.dumpStack();
         return null;
     }
