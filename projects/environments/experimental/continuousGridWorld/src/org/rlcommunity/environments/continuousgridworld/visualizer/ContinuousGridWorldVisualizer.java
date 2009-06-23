@@ -136,12 +136,12 @@ public class ContinuousGridWorldVisualizer extends AbstractVisualizer implements
         checkCoreData();
         assert theStateMessage!=null : "For some reason theStateMessage is null.";
         assert theStateMessage.getState()!=null : "For some reason theStateMessage.getState() is null.";
-        assert theStateMessage.getState().getAgent()!=null : "For some reason theStateMessage.getState().getAgent() is null.";
+        assert theStateMessage.getState().getAgentPosition()!=null : "For some reason theStateMessage.getState().getAgent() is null.";
 
         if (whichDimension == 0) {
-            return theStateMessage.getState().getAgent().getX();
+            return theStateMessage.getState().getAgentPosition().getX();
         } else {
-            return theStateMessage.getState().getAgent().getY();
+            return theStateMessage.getState().getAgentPosition().getY();
         }
     }
 

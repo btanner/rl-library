@@ -14,6 +14,9 @@ import java.io.Serializable;
  * @author btanner
  */
 public class Region implements Serializable {
+      /** Change this when you make new versions that are not compatible **/
+    private static final long serialVersionUID = 1L;
+
     protected Shape theRegion;
 
     public Region(Shape theRegion){
