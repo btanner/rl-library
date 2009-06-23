@@ -8,21 +8,27 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
 
+import org.rlcommunity.environments.continuousgridworld.BarrierRegion;
+import org.rlcommunity.environments.continuousgridworld.State;
+import org.rlcommunity.environments.continuousgridworld.TerminalRegion;
+import org.rlcommunity.rlglue.codec.types.Observation;
+import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 import rlVizLib.visualization.SelfUpdatingVizComponent;
 import rlVizLib.visualization.VizComponentChangeListener;
 
 public class GridWorldMapComponent implements SelfUpdatingVizComponent, Observer {
 
-    GridWorldVisualizerInterface CGWViz;
+    GridWorldVisualizerInterface theVisualizer;
     private VizComponentChangeListener theChangeListener;
 
-    public GridWorldMapComponent(GridWorldVisualizerInterface CGWViz) {
-        this.CGWViz = CGWViz;
-        CGWViz.getTheGlueState().addObserver(this);
+    public GridWorldMapComponent(GridWorldVisualizerInterface theVisualizer) {
+        this.theVisualizer = theVisualizer;
+        theVisualizer.getTheGlueState().addObserver(this);
     }
 
     public void render(Graphics2D g) {
-        Rectangle2D theWorldRect = CGWViz.getWorldRect();
+        State theState=theVisualizer.getState();
+        Rectangle2D theWorldRect = new Rectangle2D.Double(0,0,100,100);
 
         AffineTransform theScaleTransform = new AffineTransform();
         theScaleTransform.scale(1.0d / theWorldRect.getWidth(), 1.0d / theWorldRect.getHeight());
@@ -31,25 +37,24 @@ public class GridWorldMapComponent implements SelfUpdatingVizComponent, Observer
         g.setTransform(x);
 
 
-        Vector<Rectangle2D> resetRegions = CGWViz.getResetRegions();
-        for (Rectangle2D thisRect : resetRegions) {
+        Vector<TerminalRegion> resetRegions = theState.getResetRegions();
+
             g.setColor(Color.blue);
-            g.fill(thisRect);
+        for (TerminalRegion terminalState : resetRegions) {
+            g.fill(terminalState.getShape());
+
         }
 
-        Vector<Rectangle2D> barrierRegions = CGWViz.getBarrierRegions();
-        Vector<Double> thePenalties = CGWViz.getPenalties();
-        for (int i = 0; i < barrierRegions.size(); i++) {
-            Rectangle2D thisRect = barrierRegions.get(i);
-            double thisPenalty = thePenalties.get(i);
 
-            Color theColor = new Color((float) thisPenalty, 0, 0);
+        Vector<BarrierRegion> barrierRegions = theState.getBarriers();
 
+        for (BarrierRegion barrier : barrierRegions) {
+            Color theColor = new Color((float) barrier.getPenalty(), 0, 0);
             g.setColor(theColor);
-            g.fill(thisRect);
+            g.fill(barrier.getShape());
         }
 
-
+        
     }
 
     public void setVizComponentChangeListener(VizComponentChangeListener theChangeListener) {
@@ -58,7 +63,14 @@ public class GridWorldMapComponent implements SelfUpdatingVizComponent, Observer
 
     public void update(Observable o, Object arg) {
         if (theChangeListener != null) {
-            theChangeListener.vizComponentChanged(this);
+            if (arg instanceof Observation) {
+                theVisualizer.updateAgentState();
+                theChangeListener.vizComponentChanged(this);
+            }
+            if (arg instanceof Reward_observation_terminal) {
+                theVisualizer.updateAgentState();
+                theChangeListener.vizComponentChanged(this);
+            }
         }
     }
 }

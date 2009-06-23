@@ -1,5 +1,6 @@
 package org.rlcommunity.environments.continuousgridworld;
 
+import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;
@@ -19,7 +20,6 @@ import rlVizLib.general.ParameterHolder;
 import rlVizLib.general.hasVersionDetails;
 import rlVizLib.messaging.environmentShell.TaskSpecPayload;
 
-
 public class ContinuousGridWorld extends AbstractContinuousGridWorld {
 
     public ContinuousGridWorld() {
@@ -31,7 +31,7 @@ public class ContinuousGridWorld extends AbstractContinuousGridWorld {
     }
 
     public static ParameterHolder getDefaultParameters() {
-        ParameterHolder myParams=AbstractContinuousGridWorld.getDefaultParameters();
+        ParameterHolder myParams = AbstractContinuousGridWorld.getDefaultParameters();
         return myParams;
     }
 
@@ -39,8 +39,7 @@ public class ContinuousGridWorld extends AbstractContinuousGridWorld {
         TaskSpecVRLGLUE3 theTaskSpecObject = new TaskSpecVRLGLUE3();
         theTaskSpecObject.setEpisodic();
         theTaskSpecObject.setDiscountFactor(1.0d);
-        theTaskSpecObject.addContinuousObservation(new DoubleRange(getWorldRect().getMinX(), getWorldRect().getMaxX()));
-        theTaskSpecObject.addContinuousObservation(new DoubleRange(getWorldRect().getMinY(), getWorldRect().getMaxY()));
+        theTaskSpecObject.addContinuousObservation(new DoubleRange(0.0d, 1.0d, 2));
         theTaskSpecObject.addDiscreteAction(new IntRange(0, 3));
         theTaskSpecObject.setRewardRange(new DoubleRange(-1, 1));
         theTaskSpecObject.setExtra("EnvName:ContinuousGridWorld");
@@ -58,14 +57,23 @@ public class ContinuousGridWorld extends AbstractContinuousGridWorld {
 
     @Override
     protected void addBarriersAndGoal(ParameterHolder theParams) {
-        addRewardRegion(new Rectangle2D.Double(0.0d, 0.0d, 200.0d, 200.0d), -1.0d);
-        addResetRegion(new Rectangle2D.Double(75.0, 75.0, 25.0, 25.0));
-        addRewardRegion(new Rectangle2D.Double(75.0, 75.0, 25.0, 25.0), 1.0);
-        addBarrierRegion(new Rectangle2D.Double(50.0, 50.0, 10.0, 100.0), 1.0);
-        addBarrierRegion(new Rectangle2D.Double(50.0, 50.0, 100.0, 10.0), 1.0);
-        addBarrierRegion(new Rectangle2D.Double(150.0, 50.0, 10.0, 100.0), 1.0);
+        RewardRegion negativeEverywhere = new RewardRegion(new SerializableRectangle(0.0d, 0.0d, 100.0d, 100.0d), -1.0d);
+        theState.addRewardState(negativeEverywhere);
+
+        Shape goalRegion = new SerializableRectangle(35.0, 35.0, 12.0, 12.0);
+
+        TerminalRegion goalState = new TerminalRegion(goalRegion);
+        theState.addTerminalState(goalState);
+
+        theState.addRewardState(new RewardRegion(goalRegion, 1.0));
+
+
+        theState.addBarrier(new BarrierRegion(new SerializableRectangle(25.0, 25.0, 5.0, 50.0), 1.0));
+        theState.addBarrier(new BarrierRegion(new SerializableRectangle(25.0, 25.0, 50.0, 5.0), 1.0));
+        theState.addBarrier(new BarrierRegion(new SerializableRectangle(75.0, 25.0, 5.0, 50.0), 1.0));
     }
 }
+
 class DetailsProvider implements hasVersionDetails {
 
     public String getName() {

@@ -5,8 +5,9 @@
 
 package org.rlcommunity.environments.continuousgridworld.visualizer;
 
-import java.awt.geom.Rectangle2D;
 import java.util.Vector;
+import org.rlcommunity.environments.continuousgridworld.BarrierRegion;
+import org.rlcommunity.environments.continuousgridworld.State;
 import rlVizLib.visualization.interfaces.AgentOnValueFunctionDataProvider;
 import rlVizLib.visualization.interfaces.GlueStateProvider;
 import rlVizLib.visualization.interfaces.ValueFunctionDataProvider;
@@ -17,18 +18,8 @@ import rlVizLib.visualization.interfaces.ValueFunctionDataProvider;
  */
 public interface GridWorldVisualizerInterface extends AgentOnValueFunctionDataProvider, GlueStateProvider, ValueFunctionDataProvider {
 
-    Vector<Rectangle2D> getBarrierRegions();
-
-    Vector<Double> getPenalties();
-
-    Vector<Rectangle2D> getResetRegions();
-
-    Vector<Rectangle2D> getRewardRegions();
-
-    Vector<Double> getTheRewards();
-
-    Rectangle2D getWorldRect();
-
+    State getState();
     void updateAgentState();
+
 
 }

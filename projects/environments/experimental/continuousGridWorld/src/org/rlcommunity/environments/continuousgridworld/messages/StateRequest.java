@@ -10,27 +10,27 @@ import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvMessageType;
 import rlVizLib.messaging.environment.EnvironmentMessages;
 
-public class CGWMapRequest extends EnvironmentMessages{
+public class StateRequest extends EnvironmentMessages{
 
-	public CGWMapRequest(GenericMessage theMessageObject){
+	public StateRequest(GenericMessage theMessageObject){
 		super(theMessageObject);
 	}
 
-	public static CGWMapResponse Execute(){
+	public static StateResponse Execute(){
 		String theRequest=AbstractMessage.makeMessage(
 				MessageUser.kEnv.id(),
 				MessageUser.kBenchmark.id(),
 				EnvMessageType.kEnvCustom.id(),
 				MessageValueType.kString.id(),
-				"GETCGWMAP");
+				"GETSTATE");
 
 		String responseMessage=RLGlue.RL_env_message(theRequest);
 
-		CGWMapResponse theResponse;
+		StateResponse theResponse;
 		try {
-			theResponse = new CGWMapResponse(responseMessage);
+			theResponse = new StateResponse(responseMessage);
 		} catch (NotAnRLVizMessageException e) {
-			System.err.println("In CGWMapRequest, the response was not RL-Viz compatible");
+			System.err.println("In StateRequest, the response was not RL-Viz compatible");
 			theResponse=null;
 		}
 
