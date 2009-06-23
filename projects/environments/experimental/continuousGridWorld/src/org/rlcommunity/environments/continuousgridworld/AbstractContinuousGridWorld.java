@@ -33,11 +33,23 @@ public abstract class AbstractContinuousGridWorld extends EnvironmentBase implem
 
     public static ParameterHolder getDefaultParameters() {
         ParameterHolder p = new ParameterHolder();
+        p.addBooleanParam("UseVelocities", false);
         return p;
     }
 
     public AbstractContinuousGridWorld(ParameterHolder theParams) {
-        theState = new State();
+        boolean useVelocities = false;
+        if (theParams != null) {
+            if (!theParams.isNull()) {
+                useVelocities = theParams.getBooleanParam("UseVelocities");
+            }
+        }
+        if (useVelocities) {
+            theState = new StateWithVelocities();
+        } else {
+            theState = new State();
+        }
+
         addBarriersAndGoal(theParams);
     }
 
@@ -110,25 +122,11 @@ public abstract class AbstractContinuousGridWorld extends EnvironmentBase implem
     }
 
     public int getNumVars() {
-        return 4;
+        return theState.getNumVars();
     }
 
     public Observation getObservationForState(Observation theQueryState) {
-        //Value function only loops over dims 1 and 2 so we have to add the others.
-        Observation theObs = new Observation(0, 4, 0);
-        //States are in [0,100], observations are in [0,1]
-        theObs.doubleArray[0] = theQueryState.doubleArray[0] / 100.0d;
-        theObs.doubleArray[1] = theQueryState.doubleArray[1] / 100.0d;
-        //States are in [-5,5], observations are in [0,1]
-        //Use the current velocity to draw the VF
-        Point2D theVelocity = theState.getAgentVelocity();
-        theObs.doubleArray[2] = (theVelocity.getX() + 5.0d) / 10.0d;
-        theObs.doubleArray[3] = (theVelocity.getY() + 5.0d) / 10.0d;
-
-        //Use this code to draw velocity=0 value function.
-//        theObs.doubleArray[2]=.5d;
-//        theObs.doubleArray[3]=.5d;
-        return theObs;
+        return theState.getObservationForState(theQueryState);
     }
 
     public RLVizVersion getTheVersionISupport() {
@@ -141,16 +139,6 @@ public abstract class AbstractContinuousGridWorld extends EnvironmentBase implem
 
     @Override
     protected Observation makeObservation() {
-        Observation currentObs = new Observation(0, 4);
-        Point2D theAgent = theState.getAgentPosition();
-        Point2D theVelocity = theState.getAgentVelocity();
-
-        //Normalize each to 0,1
-        currentObs.doubleArray[0] = theAgent.getX() / 100.0d;
-        currentObs.doubleArray[1] = theAgent.getY() / 100.0d;
-
-        currentObs.doubleArray[2] = (theVelocity.getX() + 5.0d) / 10.0d;
-        currentObs.doubleArray[3] = (theVelocity.getY() + 5.0d) / 10.0d;
-        return currentObs;
+        return theState.makeObservation();
     }
 }

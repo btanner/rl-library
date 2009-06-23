@@ -39,8 +39,7 @@ public class ContinuousGridWorld extends AbstractContinuousGridWorld {
         TaskSpecVRLGLUE3 theTaskSpecObject = new TaskSpecVRLGLUE3();
         theTaskSpecObject.setEpisodic();
         theTaskSpecObject.setDiscountFactor(1.0d);
-        theTaskSpecObject.addContinuousObservation(new DoubleRange(0.0d, 1.0d, 2));
-        theTaskSpecObject.addContinuousObservation(new DoubleRange(0.0d, 1.0d, 2));
+        theTaskSpecObject.addContinuousObservation(new DoubleRange(0.0d, 1.0d, theState.getNumVars()));
         theTaskSpecObject.addDiscreteAction(new IntRange(0, 3));
         theTaskSpecObject.setRewardRange(new DoubleRange(-1, 1));
         theTaskSpecObject.setExtra("EnvName:ContinuousGridWorld");

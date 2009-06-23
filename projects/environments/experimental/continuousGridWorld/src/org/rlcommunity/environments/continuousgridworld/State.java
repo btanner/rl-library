@@ -8,6 +8,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.Vector;
+import org.rlcommunity.rlglue.codec.types.Observation;
 
 /**
  *
@@ -17,24 +18,24 @@ public class State implements Serializable{
 /** Change this when you make new versions that are not compatible **/
     private static final long serialVersionUID = 1L;
 
-    private double xSpeed = .5d;
-    private double ySpeed = .5d;
+    private double xSpeed = 5.0d;
+    private double ySpeed = 5.0d;
     private final double width = 100.0d;
     private final double height = 100.0d;
     private final Rectangle2D worldRect = new SerializableRectangle(0, 0, width, height);
     //Maybe make this random?
     private final Point2D agentSize = new SerializablePoint(1.0d, 1.0d);
-    private Point2D agentPos=new SerializablePoint(1.0d, 1.0d);;
-    private Point2D agentVelocity=new SerializablePoint(0.0d, 0.0d);;
+    private Point2D agentPos=new SerializablePoint(1.0d, 1.0d);
     private Rectangle2D currentAgentRect;
     private Vector<BarrierRegion> barrierRegions = new Vector<BarrierRegion>();
     private Vector<TerminalRegion> resetRegions = new Vector<TerminalRegion>();
     private Vector<RewardRegion> rewardRegions = new Vector<RewardRegion>();
 
-    private boolean impactLastStep=false;
+    protected boolean impactFromMovement=false;
 
     public State() {
     }
+
 
     private double calculateMaxBarrierAtPosition(Rectangle2D r) {
         double maxPenalty = 0.0F;
@@ -56,7 +57,7 @@ public class State implements Serializable{
     }
 
     void update(int theAction){
-        impactLastStep=false;
+        impactFromMovement=false;
 
         double dx = 0;
         double dy = 0;
@@ -73,34 +74,16 @@ public class State implements Serializable{
         if (theAction == 3) {
             dy = -ySpeed;
         }
-        double noiseX = 0.05 * (Math.random() - 0.5);
-        double noiseY = 0.05 * (Math.random() - 0.5);
+        double noiseX = 0.125 * (Math.random() - 0.5);
+        double noiseY = 0.125 * (Math.random() - 0.5);
         dx += noiseX;
         dy += noiseY;
 
-        double newXVel=agentVelocity.getX()+dx;
-        double newYVel=agentVelocity.getY()+dy;
-
-
-        //Limits
-        if(newXVel>5.0d)newXVel=5.0d;
-        if(newYVel>5.0d)newYVel=5.0d;
-        if(newXVel<-5.0d)newXVel=-5.0d;
-        if(newYVel<-5.0d)newYVel=-5.0d;
-
-
-        agentVelocity.setLocation(newXVel, newYVel);
-
-        Point2D nextPos = new SerializablePoint(agentPos.getX() + agentVelocity.getX(), agentPos.getY() + agentVelocity.getY());
+        Point2D nextPos = new SerializablePoint(agentPos.getX() + dx, agentPos.getY() + dy);
         nextPos = updateNextPosBecauseOfWorldBoundary(nextPos);
         nextPos = updateNextPosBecauseOfBarriers(nextPos);
         agentPos = nextPos;
 
-        if(impactLastStep){
-            newXVel=-newXVel*Math.random();
-            newYVel=-newYVel*Math.random();
-            agentVelocity.setLocation(newXVel,newYVel);
-        }
         updateCurrentAgentRect();
     }
 
@@ -111,6 +94,10 @@ public class State implements Serializable{
 
     protected void updateCurrentAgentRect() {
         currentAgentRect = makeAgentSizedRectFromPosition(agentPos);
+    }
+
+    protected boolean impactLastStep(){
+        return impactFromMovement;
     }
 
     protected Point2D updateNextPosBecauseOfBarriers(Point2D nextPos) {
@@ -127,7 +114,7 @@ public class State implements Serializable{
         float fudgeCounter = 0;
         Rectangle2D nextPosRect = makeAgentSizedRectFromPosition(nextPos);
         while (calculateMaxBarrierAtPosition(nextPosRect) == 1.0F) {
-            impactLastStep=true;
+            impactFromMovement=true;
             nextPos = findMidPoint(nextPos, agentPos);
             fudgeCounter++;
             if (fudgeCounter == 4) {
@@ -143,7 +130,7 @@ public class State implements Serializable{
         int fudgeCounter = 0;
         Rectangle2D nextPosRect = makeAgentSizedRectFromPosition(nextPos);
         while (!worldRect.contains(nextPosRect)) {
-            impactLastStep=true;
+            impactFromMovement=true;
             nextPos = findMidPoint(nextPos, agentPos);
             fudgeCounter++;
             if (fudgeCounter == 4) {
@@ -167,9 +154,6 @@ public class State implements Serializable{
         return new SerializableRectangle(thePos.getX(), thePos.getY(), agentSize.getX(), agentSize.getY());
     }
 
-    public boolean impactLastStep(){
-        return impactLastStep;
-    }
     double getReward() {
         Rectangle2D agentRect = makeAgentSizedRectFromPosition(agentPos);
         double reward = 0.0;
@@ -177,10 +161,6 @@ public class State implements Serializable{
             if (thisRewardState.intersects(agentRect)) {
                 reward += thisRewardState.getRewardValue();
             }
-        }
-
-        if(impactLastStep){
-            reward-=Math.abs(agentVelocity.getX())+Math.abs(agentVelocity.getY());
         }
         return reward;
     }
@@ -233,10 +213,29 @@ public class State implements Serializable{
         return barrierRegions;
     }
 
-    public Point2D getAgentVelocity() {
-        return agentVelocity;
+    Observation makeObservation() {
+        Observation currentObs = new Observation(0, 2);
+       //Normalize each to 0,1
+        currentObs.doubleArray[0] = agentPos.getX() / 100.0d;
+        currentObs.doubleArray[1] = agentPos.getY() / 100.0d;
+
+        return currentObs;
     }
 
-  
+     Observation getObservationForState(Observation theQueryState) {
+        //Value function only loops over dims 1 and 2 so we have to add the others.
+        Observation theObs = new Observation(0, 2, 0);
+        //States are in [0,100], observations are in [0,1]
+        theObs.doubleArray[0] = theQueryState.doubleArray[0] / 100.0d;
+        theObs.doubleArray[1] = theQueryState.doubleArray[1] / 100.0d;
+        //States are in [-5,5], observations are in [0,1]
+
+        return theObs;
+    }
+
+    int getNumVars() {
+        return 2;
+    }
+
 
 }
