@@ -9,6 +9,12 @@ We'll try and rely on minimal variables from above.
 -->
 
 <project basedir=".."  default="print-imports" name="this-project-common">
+
+<!-- These are the default properties, like what Java version you are targetting.  You can 
+	override these by including your own properties file before including build-common.xml -->	
+<property file="${this.project.system.directory}/common/ant/properties/default.build.properties"/>
+
+
 <dirname property="imported.basedir" file="${ant.file.imported}"/>
 <property name="rlvizlib.jar" value="${this.project.system.directory}/common/libs/rl-viz/RLVizLib.jar" />
 <property name="dist.dir"   value="${this.project.product.directory}"/>
