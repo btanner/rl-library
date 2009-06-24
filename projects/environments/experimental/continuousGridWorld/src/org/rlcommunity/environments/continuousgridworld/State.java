@@ -82,6 +82,9 @@ public class State implements Serializable {
         }else{
             theRandom=new Random(seed);
         }
+        //Throw away the first few bits because they depend heavily on the seed.
+        theRandom.nextDouble();
+        theRandom.nextDouble();
     }
 
     private double calculateMaxBarrierAtPosition(Rectangle2D r) {

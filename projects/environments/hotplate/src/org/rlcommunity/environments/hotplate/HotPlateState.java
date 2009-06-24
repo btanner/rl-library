@@ -41,14 +41,25 @@ public class HotPlateState {
     final private Random randomGenerator;
     private int lastAction = 0;
 
-    /**
-     * Constructor 
-     * @param randomGenerator
-     */
-    HotPlateState(int numDims, boolean signaled) {
-        this.randomGenerator = new Random();
-        this.numDims = numDims;
+    private boolean randomStarts=false;
+    private double transitionNoise=0.0d;
+
+    HotPlateState(int dimensions, boolean signaled, boolean randomStartStates, double transitionNoise, long randomSeed) {
+        this.numDims = dimensions;
         this.signaledVersion = signaled;
+
+        this.randomStarts=randomStartStates;
+        this.transitionNoise=transitionNoise;
+
+        if(randomSeed==0){
+        this.randomGenerator = new Random();
+        }else{
+            this.randomGenerator=new Random(randomSeed);
+        }
+
+        //Throw away the first few because they first bits are not that random.
+        randomGenerator.nextDouble();
+        randomGenerator.nextDouble();
         reset();
     }
 
@@ -120,7 +131,7 @@ public class HotPlateState {
         return inGoalRegion;
     }
 
-    private double[] generatePosition() {
+    private double[] generateRandomPosition() {
         double[] tmp_position = new double[numDims];
         for (int i = 0; i < tmp_position.length; i++) {
             tmp_position[i] = randomGenerator.nextDouble();
@@ -140,10 +151,17 @@ public class HotPlateState {
             safeZone[i] = randomGenerator.nextInt(2);
         }
 
-        double[] candidatePosition = generatePosition();
+        double[] candidatePosition = new double[numDims];
+        for(int i=0;i<candidatePosition.length;i++){
+            candidatePosition[i]=.5d;
+        }
+
+        if(randomStarts){
+            candidatePosition=generateRandomPosition();
+        }
 
         while (inGoalRegion(candidatePosition, safeZone, signaledVersion)) {
-            candidatePosition = generatePosition();
+            candidatePosition = generateRandomPosition();
         }
 
         position = candidatePosition;
@@ -168,13 +186,15 @@ public class HotPlateState {
             char thisAction = actionAsBinary.charAt(i);
             Integer interpretedAsInt = Integer.parseInt("" + thisAction);
 
+            //Should make it at most movedistance
+            double thisMoveNoise=2.0d*moveDistance*transitionNoise*(randomGenerator.nextDouble()-.5d);
             if (interpretedAsInt == 0) {
-                position[i] += moveDistance;
+                position[i] += moveDistance+thisMoveNoise;
                 if (position[i] > 1.0d) {
                     position[i] = 1.0d;
                 }
             } else {
-                position[i] -= moveDistance;
+                position[i] -= moveDistance+thisMoveNoise;
                 if (position[i] < 0.0d) {
                     position[i] = 0.0d;
                 }

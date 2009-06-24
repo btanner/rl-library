@@ -15,8 +15,9 @@
 		    <include name="commons-codec-1.3.jar"/>
 		</fileset>
 	</path>
-        <property name="jar.main.class" value="org.rlcommunity.environments.octopus.Octopus" />
-        <property name="jar.extra.classpath" value="../system/common/libs/rl-viz/RLVizLib.jar" />
+
+    <property name="jar.main.class" value="org.rlcommunity.environments.octopus.Octopus" />
+    <property name="jar.extra.classpath" value="../system/common/libs/rl-viz/RLVizLib.jar" />
 	<import file="${this.project.system.directory}/common/ant/build-targets.xml"/>
 
 	<!-- this import gives you targets: clean, build, test, javadoc, all -->

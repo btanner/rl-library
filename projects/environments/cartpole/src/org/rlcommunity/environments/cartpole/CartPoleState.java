@@ -57,7 +57,9 @@ public class CartPoleState {
             theRandom=new Random(randomSeed);
         }
         //Throw away the first few bits because they depend heavily on the seed.
-        theRandom.nextInt(32);
+        theRandom.nextDouble();
+        theRandom.nextDouble();
+
     }
 
     void reset() {

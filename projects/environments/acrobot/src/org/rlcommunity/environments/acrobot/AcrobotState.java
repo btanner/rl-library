@@ -49,7 +49,8 @@ public class AcrobotState {
         }
 
         //Throw away the first few bits because they depend heavily on the seed.
-        ourRandomNumber.nextInt(32);
+        ourRandomNumber.nextDouble();
+        ourRandomNumber.nextDouble();
     }
     
     public void reset() {

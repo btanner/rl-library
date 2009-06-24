@@ -135,6 +135,11 @@ public class HotPlate extends EnvironmentBase implements
 
 //        p.addIntegerParam("Dimensions", 2);
         p.addBooleanParam("Signaled", false);
+        p.addIntegerParam("RandomSeed(0 means random)", 0);
+        p.addBooleanParam("RandomStartStates", false);
+        p.addDoubleParam("TransitionNoise[0,1]", 0.0d);
+        p.setAlias("noise", "TransitionNoise[0,1]");
+        p.setAlias("seed", "RandomSeed(0 means random)");
         return p;
     }
 
@@ -147,13 +152,22 @@ public class HotPlate extends EnvironmentBase implements
         int dimensions=2;
         boolean signaled=false;
 
+        boolean randomStartStates = false;
+        double transitionNoise = 0.0d;
+        long randomSeed = 0L;
+
+
+
         if (p != null) {
             if (!p.isNull()) {
                 signaled = p.getBooleanParam("Signaled");
 //                dimensions=p.getIntegerParam("Dimensions");
-            }
+                randomStartStates = p.getBooleanParam("RandomStartStates");
+                transitionNoise = p.getDoubleParam("noise");
+                randomSeed = p.getIntegerParam("seed");
+             }
         }
-        theState = new HotPlateState(dimensions,signaled);
+        theState = new HotPlateState(dimensions,signaled,randomStartStates,transitionNoise,randomSeed);
     }
 
     public HotPlate() {
