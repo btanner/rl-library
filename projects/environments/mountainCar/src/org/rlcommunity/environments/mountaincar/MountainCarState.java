@@ -48,16 +48,24 @@ public class MountainCarState {
     final public double rewardAtGoal = 0.0d;
     final private Random randomGenerator;
     //These are configurable
-    public boolean randomStarts = false;
+    private boolean randomStarts = false;
+    private double transitionNoise = 0.0d;
+    private int lastAction = 0;
 
+    public MountainCarState(boolean randomStartStates, double transitionNoise, long randomSeed) {
+        this.randomStarts = randomStartStates;
+        this.transitionNoise = transitionNoise;
 
-    private int lastAction=0;
-    /**
-     * Constructor 
-     * @param randomGenerator
-     */
-    MountainCarState(Random randomGenerator) {
-        this.randomGenerator = randomGenerator;
+        if (randomSeed == 0) {
+            this.randomGenerator = new Random();
+        } else {
+            this.randomGenerator = new Random(randomSeed);
+        }
+
+        //Throw away the first few because they first bits are not that random.
+        randomGenerator.nextDouble();
+        randomGenerator.nextDouble();
+        reset();
     }
 
     public double getPosition() {
@@ -92,12 +100,10 @@ public class MountainCarState {
         position = defaultInitPosition;
         velocity = defaultInitVelocity;
         if (randomStarts) {
-            //We use goal position instead of max position so that the agent
-            //doesn't start past the goal ever
-            double maxStartPosition = goalPosition;
-            double randStartPosition = (randomGenerator.nextDouble() * (maxStartPosition + Math.abs(minPosition)) - Math.abs(minPosition));
+            //Dampened starting values
+            double randStartPosition = defaultInitPosition+.25d*(randomGenerator.nextDouble()-.5d);
             position = randStartPosition;
-            double randStartVelocity = (randomGenerator.nextDouble() * (maxVelocity + Math.abs(minVelocity)) - Math.abs(minVelocity));
+            double randStartVelocity = defaultInitVelocity+.025d*(randomGenerator.nextDouble()-.5d);
             velocity = randStartVelocity;
         }
 
@@ -109,10 +115,13 @@ public class MountainCarState {
      * @param a Should be in {0 (left), 1 (neutral), 2 (right)}
      */
     void update(int a) {
-        lastAction=a;
-        double variedAccel = accelerationFactor;
+        lastAction = a;
+        double acceleration = accelerationFactor;
 
-        velocity += ((a - 1)) * variedAccel + getSlope(position) * (gravityFactor);
+        //Noise should be at most
+        double thisNoise=2.0d*accelerationFactor*transitionNoise*(randomGenerator.nextDouble()-.5d);
+
+        velocity += (thisNoise+((a - 1)) * (acceleration)) + getSlope(position) * (gravityFactor);
         if (velocity > maxVelocity) {
             velocity = maxVelocity;
         }
@@ -132,7 +141,7 @@ public class MountainCarState {
 
     }
 
-    public int getLastAction(){
+    public int getLastAction() {
         return lastAction;
     }
 

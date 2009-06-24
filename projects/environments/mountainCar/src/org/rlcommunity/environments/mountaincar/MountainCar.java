@@ -68,7 +68,7 @@ public class MountainCar extends EnvironmentBase implements
         HasImageInterface {
 
     static final int numActions = 3;
-    protected MountainCarState theState = null;    //Used for env_save_state and env_save_state, which don't exist anymore, but we will one day bring them back
+    protected final MountainCarState theState;    //Used for env_save_state and env_save_state, which don't exist anymore, but we will one day bring them back
     //through the messaging system and RL-Viz.
     //Problem parameters have been moved to MountainCar State
     private Random randomGenerator = new Random();
@@ -144,7 +144,11 @@ public class MountainCar extends EnvironmentBase implements
         ParameterHolder p = new ParameterHolder();
         rlVizLib.utilities.UtilityShop.setVersionDetails(p, new DetailsProvider());
 
-        p.addBooleanParam("randomStartStates", false);
+        p.addIntegerParam("RandomSeed(0 means random)", 0);
+        p.addBooleanParam("RandomStartStates", false);
+        p.addDoubleParam("TransitionNoise[0,1]", 0.0d);
+        p.setAlias("noise", "TransitionNoise[0,1]");
+        p.setAlias("seed", "RandomSeed(0 means random)");
         return p;
     }
 
@@ -154,12 +158,19 @@ public class MountainCar extends EnvironmentBase implements
      */
     public MountainCar(ParameterHolder p) {
         super();
-        theState = new MountainCarState(randomGenerator);
+        boolean randomStartStates = false;
+        double transitionNoise = 0.0d;
+        long randomSeed = 0L;
+
         if (p != null) {
             if (!p.isNull()) {
-                theState.randomStarts = p.getBooleanParam("randomStartStates");
+                randomStartStates = p.getBooleanParam("RandomStartStates");
+                transitionNoise = p.getDoubleParam("noise");
+                randomSeed = p.getIntegerParam("seed");
             }
         }
+        theState = new MountainCarState(randomStartStates, transitionNoise, randomSeed);
+
     }
 
     public MountainCar() {
