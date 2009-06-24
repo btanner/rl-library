@@ -35,9 +35,7 @@ import rlVizLib.messaging.environmentShell.TaskSpecPayload;
  */
 public class CartPole extends EnvironmentBase implements HasAVisualizerInterface, HasImageInterface {
 
-    private CartPoleState theState=new CartPoleState();
-
-
+    private final CartPoleState theState;
 
     public CartPole() {
         this(getDefaultParameters());
@@ -45,15 +43,33 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
 
     public CartPole(ParameterHolder p) {
         super();
+
+        boolean randomStartStates = false;
+        double transitionNoise = 0.0d;
+        long randomSeed = 0L;
+
+        double leftAngleBound=CartPoleState.DEFAULTLEFTANGLEBOUND;
+        double rightAngleBound=CartPoleState.DEFAULTRIGHTANGLEBOUND;
+        double leftCartBound=CartPoleState.DEFAULTLEFTCARTBOUND;
+        double rightCartBound=CartPoleState.DEFAULTRIGHTCARTBOUND;
+
         if (p != null) {
             if (!p.isNull()) {
-                theState.leftAngleBound = p.getDoubleParam("leftAngle");
-                theState.rightAngleBound = p.getDoubleParam("rightAngle");
-                theState.leftCartBound = p.getDoubleParam("leftCart");
-                theState.rightCartBound = p.getDoubleParam("rightCart");
+                leftAngleBound= p.getDoubleParam("leftAngle");
+                rightAngleBound = p.getDoubleParam("rightAngle");
+                leftCartBound = p.getDoubleParam("leftCart");
+                rightCartBound = p.getDoubleParam("rightCart");
+                randomStartStates = p.getBooleanParam("RandomStartStates");
+                transitionNoise = p.getDoubleParam("noise");
+                randomSeed = p.getIntegerParam("seed");
 
             }
         }
+        theState=new CartPoleState(randomStartStates,transitionNoise,randomSeed);
+        theState.leftAngleBound=leftAngleBound;
+        theState.rightAngleBound=rightAngleBound;
+        theState.leftCartBound=leftCartBound;
+        theState.rightCartBound=rightCartBound;
     }
 
     public static TaskSpecPayload getTaskSpecPayload(ParameterHolder P) {
@@ -75,6 +91,13 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
         p.setAlias("rightCart", "Terminal Right Cart Position");
         p.setAlias("leftAngle", "Left Terminal Angle");
         p.setAlias("rightAngle", "Right Terminal Angle");
+
+        p.addIntegerParam("RandomSeed(0 means random)", 0);
+        p.addBooleanParam("RandomStartStates", false);
+        p.addDoubleParam("TransitionNoise[0,1]", 0.0d);
+        p.setAlias("noise", "TransitionNoise[0,1]");
+        p.setAlias("seed", "RandomSeed(0 means random)");
+
         return p;
     }
 
@@ -93,9 +116,9 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
 
     public Reward_observation_terminal env_step(Action action) {
 
-        assert(action.intArray.length==1);
-        assert(action.intArray[0]>=0);
-        assert(action.intArray[0]<=1);
+        assert (action.intArray.length == 1);
+        assert (action.intArray[0] >= 0);
+        assert (action.intArray[0] <= 1);
 
         theState.update(action.intArray[0]);
 
@@ -136,7 +159,7 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
             }
             if (theCustomType.equals("GETCPSTATE")) {
                 //It is a request for the state
-                StateResponse theResponseObject = new StateResponse(theState.getLastAction(),theState.getX(), theState.getXDot(), theState.getTheta(), theState.getThetaDot());
+                StateResponse theResponseObject = new StateResponse(theState.getLastAction(), theState.getX(), theState.getXDot(), theState.getTheta(), theState.getThetaDot());
                 return theResponseObject.makeStringResponse();
             }
         }
@@ -160,17 +183,14 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
     }
 
     /*END OF RL-VIZ REQUIREMENTS*/
-
-
     public String getVisualizerClassName() {
         return CartPoleVisualizer.class.getName();
     }
+
     public URL getImageURL() {
-       URL imageURL = CartPole.class.getResource("/images/cartpole.png");
-       return imageURL;
-   }      
-
-
+        URL imageURL = CartPole.class.getResource("/images/cartpole.png");
+        return imageURL;
+    }
 
     private String makeTaskSpec() {
 
@@ -202,17 +222,15 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
         return newTaskSpecString;
     }
 
-    public static void main(String[] args){
-        EnvironmentLoader L=new EnvironmentLoader(new CartPole());
+    public static void main(String[] args) {
+        EnvironmentLoader L = new EnvironmentLoader(new CartPole());
         L.run();
     }
 
-    public CartPoleState getState(){
+    public CartPoleState getState() {
         return theState;
     }
 }
-
-
 
 /**
  * This is a little helper class that fills in the details about this environment

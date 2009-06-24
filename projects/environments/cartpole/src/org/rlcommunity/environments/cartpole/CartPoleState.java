@@ -4,6 +4,8 @@
  */
 package org.rlcommunity.environments.cartpole;
 
+import java.util.Random;
+
 /**
  *
  * @author btanner
@@ -41,12 +43,35 @@ public class CartPoleState {
 
     private int lastAction=0;
 
+
+    private double noise=0.0d;
+    private boolean randomStarts=false;
+    private Random theRandom;
+    
+    CartPoleState(boolean randomStartStates, double transitionNoise, long randomSeed) {
+        this.randomStarts=randomStartStates;
+        this.noise=transitionNoise;
+        if(randomSeed==0){
+            theRandom=new Random();
+        }else{
+            theRandom=new Random(randomSeed);
+        }
+    }
+
     void reset() {
         lastAction=0;
         x = 0.0f;
         x_dot = 0.0f;
         theta = 0.0f;
         theta_dot = 0.0f;
+
+        if(randomStarts){
+            //Going to have the random start states be near to equilibrium
+            x=theRandom.nextDouble()-.5d;
+            x_dot=theRandom.nextDouble()-.5d;
+            theta=(theRandom.nextDouble()-.5d)/8.0d;
+            theta_dot=(theRandom.nextDouble()-.5d)/8.0d;
+        }
 
     }
 
@@ -64,6 +89,11 @@ public class CartPoleState {
         } else {
             force = -FORCE_MAG;
         }
+
+        //Noise of 1.0 means possibly full opposite action
+        double thisNoise=2.0d*noise*FORCE_MAG*(theRandom.nextDouble()-.5d);
+
+        force+=thisNoise;
 
         costheta = Math.cos(theta);
         sintheta = Math.sin(theta);
