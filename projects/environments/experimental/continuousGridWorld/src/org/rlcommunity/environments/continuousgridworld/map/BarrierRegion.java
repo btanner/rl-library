@@ -24,21 +24,35 @@
  */
 
 
-package org.rlcommunity.environments.continuousgridworld.visualizer;
+package org.rlcommunity.environments.continuousgridworld.map;
 
-import org.rlcommunity.environments.continuousgridworld.State;
-import rlVizLib.visualization.interfaces.AgentOnValueFunctionDataProvider;
-import rlVizLib.visualization.interfaces.GlueStateProvider;
-import rlVizLib.visualization.interfaces.ValueFunctionDataProvider;
+import java.awt.Shape;
+
 
 /**
  *
  * @author btanner
  */
-public interface GridWorldVisualizerInterface extends AgentOnValueFunctionDataProvider, GlueStateProvider, ValueFunctionDataProvider {
+public class BarrierRegion extends Region{
+  /** Change this when you make new versions that are not compatible **/
+    private static final long serialVersionUID = 1L;
 
-    State getState();
-    void updateAgentState();
+    private double movementPenalty=0.0d;
 
+    /**
+     *
+     * @param theRegion Make sure the shape is serializable.
+     * @param movementPenalty should be in [0,1].  0 is no penalty
+     * 1 is a 100% stop.  In between will restrict how quickly the agent
+     * moves through the barrier.
+     */public BarrierRegion(Shape theRegion, double movementPenalty){
+        super(theRegion);
+        assert(movementPenalty>=0.0d);
+        assert(movementPenalty<=1.0d);
+        this.movementPenalty=movementPenalty;
+    }
 
+    public double getPenalty(){
+        return movementPenalty;
+    }
 }

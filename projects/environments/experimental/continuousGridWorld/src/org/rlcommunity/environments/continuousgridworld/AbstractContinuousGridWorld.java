@@ -1,11 +1,30 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ *  Copyright 2009 Brian Tanner.
+ *
+ *  brian@tannerpages.com
+ *  http://research.tannerpages.com
+ *
+ *  This source file is from one of:
+ *  {rl-coda,rl-glue,rl-library,bt-agentlib,rl-viz}.googlecode.com
+ *  Check out http://rl-community.org for more information!
+ *
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *  under the License.
  */
 package org.rlcommunity.environments.continuousgridworld;
 
 import org.rlcommunity.environments.continuousgridworld.messages.StateResponse;
-import java.awt.geom.Point2D;
 import java.net.URL;
 import org.rlcommunity.environments.continuousgridworld.visualizer.ContinuousGridWorldVisualizer;
 import org.rlcommunity.rlglue.codec.types.Action;
@@ -34,20 +53,31 @@ public abstract class AbstractContinuousGridWorld extends EnvironmentBase implem
     public static ParameterHolder getDefaultParameters() {
         ParameterHolder p = new ParameterHolder();
         p.addBooleanParam("UseVelocities", false);
+        p.addIntegerParam("RandomSeed(0 means random)",0);
+        p.addBooleanParam("RandomStartStates", false);
+        p.addDoubleParam("TransitionNoise[0,1]", 0.0d);
+        p.setAlias("noise","TransitionNoise[0,1]");
+        p.setAlias("seed","RandomSeed(0 means random)");
         return p;
     }
 
     public AbstractContinuousGridWorld(ParameterHolder theParams) {
         boolean useVelocities = false;
+        boolean randomStartStates = false;
+        double transitionNoise = 0.0d;
+        long randomSeed=0L;
         if (theParams != null) {
             if (!theParams.isNull()) {
                 useVelocities = theParams.getBooleanParam("UseVelocities");
+                randomStartStates = theParams.getBooleanParam("RandomStartStates");
+                transitionNoise = theParams.getDoubleParam("noise");
+                randomSeed=theParams.getIntegerParam("seed");
             }
         }
         if (useVelocities) {
-            theState = new StateWithVelocities();
+            theState = new StateWithVelocities(randomStartStates,transitionNoise,randomSeed);
         } else {
-            theState = new State();
+            theState = new State(randomStartStates,transitionNoise,randomSeed);
         }
 
         addBarriersAndGoal(theParams);

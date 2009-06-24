@@ -23,22 +23,36 @@
  *  under the License.
  */
 
+package org.rlcommunity.environments.continuousgridworld.map;
 
-package org.rlcommunity.environments.continuousgridworld.visualizer;
-
-import org.rlcommunity.environments.continuousgridworld.State;
-import rlVizLib.visualization.interfaces.AgentOnValueFunctionDataProvider;
-import rlVizLib.visualization.interfaces.GlueStateProvider;
-import rlVizLib.visualization.interfaces.ValueFunctionDataProvider;
+import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 
 /**
  *
  * @author btanner
  */
-public interface GridWorldVisualizerInterface extends AgentOnValueFunctionDataProvider, GlueStateProvider, ValueFunctionDataProvider {
+public class Region implements Serializable {
+      /** Change this when you make new versions that are not compatible **/
+    private static final long serialVersionUID = 1L;
 
-    State getState();
-    void updateAgentState();
+    protected Shape theRegion;
 
+    /**
+     *
+     * @param theRegion Make sure the region is serializable.
+     */
+    public Region(Shape theRegion){
+        assert(theRegion!=null);
+        this.theRegion=theRegion;
+    }
 
+    public boolean intersects(Rectangle2D someRectangle){
+        return theRegion.intersects(someRectangle);
+    }
+
+    public Shape getShape(){
+        return theRegion;
+    }
 }

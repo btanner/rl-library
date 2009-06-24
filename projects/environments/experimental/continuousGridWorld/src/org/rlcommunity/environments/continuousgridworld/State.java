@@ -1,12 +1,38 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ *  Copyright 2009 Brian Tanner.
+ *
+ *  brian@tannerpages.com
+ *  http://research.tannerpages.com
+ *
+ *  This source file is from one of:
+ *  {rl-coda,rl-glue,rl-library,bt-agentlib,rl-viz}.googlecode.com
+ *  Check out http://rl-community.org for more information!
+ *
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *  under the License.
  */
 package org.rlcommunity.environments.continuousgridworld;
 
+import org.rlcommunity.environments.continuousgridworld.map.SerializableRectangle;
+import org.rlcommunity.environments.continuousgridworld.map.SerializablePoint;
+import org.rlcommunity.environments.continuousgridworld.map.BarrierRegion;
+import org.rlcommunity.environments.continuousgridworld.map.RewardRegion;
+import org.rlcommunity.environments.continuousgridworld.map.TerminalRegion;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
+import java.util.Random;
 import java.util.Vector;
 import org.rlcommunity.rlglue.codec.types.Observation;
 
@@ -14,10 +40,12 @@ import org.rlcommunity.rlglue.codec.types.Observation;
  *
  * @author btanner
  */
-public class State implements Serializable{
-/** Change this when you make new versions that are not compatible **/
-    private static final long serialVersionUID = 1L;
+public class State implements Serializable {
 
+    protected Random theRandom;
+
+    /** Change this when you make new versions that are not compatible **/
+    private static final long serialVersionUID = 1L;
     private double xSpeed = 5.0d;
     private double ySpeed = 5.0d;
     private final double width = 100.0d;
@@ -25,17 +53,36 @@ public class State implements Serializable{
     private final Rectangle2D worldRect = new SerializableRectangle(0, 0, width, height);
     //Maybe make this random?
     private final Point2D agentSize = new SerializablePoint(1.0d, 1.0d);
-    private Point2D agentPos=new SerializablePoint(1.0d, 1.0d);
+    private Point2D agentPos = new SerializablePoint(1.0d, 1.0d);
     private Rectangle2D currentAgentRect;
     private Vector<BarrierRegion> barrierRegions = new Vector<BarrierRegion>();
     private Vector<TerminalRegion> resetRegions = new Vector<TerminalRegion>();
     private Vector<RewardRegion> rewardRegions = new Vector<RewardRegion>();
+    protected boolean impactFromMovement = false;
+    protected boolean randomStartStates = false;
+    protected double transitionNoise = 0.0d;
 
-    protected boolean impactFromMovement=false;
-
-    public State() {
+    /**
+     * This is for deserialization
+     */
+    private State() {
     }
 
+    /**
+     *
+     * @param randomStartStates
+     * @param transitionNoise
+     * @param seed 0 means to not use the seed and be truly random.
+     */
+    public State(boolean randomStartStates, double transitionNoise, long seed) {
+        this.randomStartStates = randomStartStates;
+        this.transitionNoise = transitionNoise;
+        if(seed==0L){
+            theRandom=new Random();
+        }else{
+            theRandom=new Random(seed);
+        }
+    }
 
     private double calculateMaxBarrierAtPosition(Rectangle2D r) {
         double maxPenalty = 0.0F;
@@ -50,14 +97,14 @@ public class State implements Serializable{
     }
 
     void reset() {
-        randomizeAgentPosition();
-        while (calculateMaxBarrierAtPosition(currentAgentRect) >= 1.0F || !worldRect.contains(currentAgentRect)) {
-            randomizeAgentPosition();
+        setInitialAgentPosition();
+        while (calculateMaxBarrierAtPosition(currentAgentRect) >= 1.0F || !worldRect.contains(currentAgentRect)||intersectsResetRegion(currentAgentRect)) {
+            setInitialAgentPosition();
         }
     }
 
-    void update(int theAction){
-        impactFromMovement=false;
+    void update(int theAction) {
+        impactFromMovement = false;
 
         double dx = 0;
         double dy = 0;
@@ -74,8 +121,10 @@ public class State implements Serializable{
         if (theAction == 3) {
             dy = -ySpeed;
         }
-        double noiseX = 0.125 * (Math.random() - 0.5);
-        double noiseY = 0.125 * (Math.random() - 0.5);
+
+        //Max noise would be equal to the speed.
+        double noiseX = 2.0d * transitionNoise * xSpeed * (theRandom.nextDouble() - 0.5);
+        double noiseY = 2.0d * transitionNoise * ySpeed * (theRandom.nextDouble() - 0.5);
         dx += noiseX;
         dy += noiseY;
 
@@ -96,7 +145,7 @@ public class State implements Serializable{
         currentAgentRect = makeAgentSizedRectFromPosition(agentPos);
     }
 
-    protected boolean impactLastStep(){
+    protected boolean impactLastStep() {
         return impactFromMovement;
     }
 
@@ -114,11 +163,11 @@ public class State implements Serializable{
         float fudgeCounter = 0;
         Rectangle2D nextPosRect = makeAgentSizedRectFromPosition(nextPos);
         while (calculateMaxBarrierAtPosition(nextPosRect) == 1.0F) {
-            impactFromMovement=true;
+            impactFromMovement = true;
             nextPos = findMidPoint(nextPos, agentPos);
             fudgeCounter++;
             if (fudgeCounter == 4) {
-        nextPos = (Point2D) agentPos.clone();
+                nextPos = (Point2D) agentPos.clone();
                 break;
             }
         }
@@ -130,7 +179,7 @@ public class State implements Serializable{
         int fudgeCounter = 0;
         Rectangle2D nextPosRect = makeAgentSizedRectFromPosition(nextPos);
         while (!worldRect.contains(nextPosRect)) {
-            impactFromMovement=true;
+            impactFromMovement = true;
             nextPos = findMidPoint(nextPos, agentPos);
             fudgeCounter++;
             if (fudgeCounter == 4) {
@@ -171,13 +220,14 @@ public class State implements Serializable{
         return new SerializablePoint(newX, newY);
     }
 
-    protected void randomizeAgentPosition() {
-        double startX = Math.random() * worldRect.getWidth();
-        double startY = Math.random() * worldRect.getHeight();
-        // @todo maybe someone should decide whether the position should be
-        //   random or fixed?
-        startX = 0.1;
-        startY = 0.1;
+    protected void setInitialAgentPosition() {
+        double startX = 0.1;
+        double startY = 0.1;
+
+        if (randomStartStates) {
+            startX = theRandom.nextDouble() * worldRect.getWidth();
+            startY = theRandom.nextDouble() * worldRect.getHeight();
+        }
         setAgentPosition(new SerializablePoint(startX, startY));
     }
 
@@ -189,7 +239,7 @@ public class State implements Serializable{
         return agentPos;
     }
 
-    public String getSerializedState(){
+    public String getSerializedState() {
         return "";
     }
 
@@ -202,7 +252,7 @@ public class State implements Serializable{
     }
 
     void addBarrier(BarrierRegion barrier) {
-       barrierRegions.add(barrier);
+        barrierRegions.add(barrier);
     }
 
     public Vector<TerminalRegion> getResetRegions() {
@@ -215,14 +265,14 @@ public class State implements Serializable{
 
     Observation makeObservation() {
         Observation currentObs = new Observation(0, 2);
-       //Normalize each to 0,1
+        //Normalize each to 0,1
         currentObs.doubleArray[0] = agentPos.getX() / 100.0d;
         currentObs.doubleArray[1] = agentPos.getY() / 100.0d;
 
         return currentObs;
     }
 
-     Observation getObservationForState(Observation theQueryState) {
+    Observation getObservationForState(Observation theQueryState) {
         //Value function only loops over dims 1 and 2 so we have to add the others.
         Observation theObs = new Observation(0, 2, 0);
         //States are in [0,100], observations are in [0,1]
@@ -236,6 +286,4 @@ public class State implements Serializable{
     int getNumVars() {
         return 2;
     }
-
-
 }

@@ -1,13 +1,31 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ *  Copyright 2009 Brian Tanner.
+ *
+ *  brian@tannerpages.com
+ *  http://research.tannerpages.com
+ *
+ *  This source file is from one of:
+ *  {rl-coda,rl-glue,rl-library,bt-agentlib,rl-viz}.googlecode.com
+ *  Check out http://rl-community.org for more information!
+ *
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *  under the License.
  */
 package org.rlcommunity.environments.continuousgridworld;
 
+import org.rlcommunity.environments.continuousgridworld.map.SerializablePoint;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.io.Serializable;
-import java.util.Vector;
 import org.rlcommunity.rlglue.codec.types.Observation;
 
 /**
@@ -20,17 +38,28 @@ public class StateWithVelocities extends State {
     private static final long serialVersionUID = 1L;
     private Point2D agentVelocity = new SerializablePoint(0.0d, 0.0d);
 
-    ;
     private double xVelIncrement = .5d;
     private double yVelIncrement = .5d;
 
-    public StateWithVelocities() {
+//    private StateWithVelocities() {
+//    }
+
+    StateWithVelocities(boolean randomStartStates, double transitionNoise, long randomSeed) {
+        super(randomStartStates,transitionNoise,randomSeed);
     }
 
     @Override
     void reset() {
         super.reset();
-        agentVelocity = new SerializablePoint(0.0d, 0.0d);
+
+        double startVX=0.0d;
+        double startVY=0.0d;
+
+        if(randomStartStates){
+            startVX=(theRandom.nextDouble()-.5d)/2.0d;
+            startVY=(theRandom.nextDouble()-.5d)/2.0d;
+        }
+        agentVelocity = new SerializablePoint(startVX, startVY);
     }
 
     @Override
@@ -52,8 +81,9 @@ public class StateWithVelocities extends State {
         if (theAction == 3) {
             dy = -yVelIncrement;
         }
-        double noiseX = 0.05 * (Math.random() - 0.5);
-        double noiseY = 0.05 * (Math.random() - 0.5);
+        double noiseX = 2.0d * transitionNoise * xVelIncrement * (theRandom.nextDouble() - 0.5);
+        double noiseY = 2.0d * transitionNoise * yVelIncrement * (theRandom.nextDouble() - 0.5);
+
         dx += noiseX;
         dy += noiseY;
 
@@ -86,8 +116,8 @@ public class StateWithVelocities extends State {
         setAgentPosition(nextPos);
 
         if (impactFromMovement) {
-            newXVel = -newXVel * Math.random();
-            newYVel = -newYVel * Math.random();
+            newXVel = -newXVel * theRandom.nextDouble();
+            newYVel = -newYVel * theRandom.nextDouble();
         }
         agentVelocity.setLocation(newXVel, newYVel);
         updateCurrentAgentRect();

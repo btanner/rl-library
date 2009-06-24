@@ -24,21 +24,19 @@
  */
 
 
-package org.rlcommunity.environments.continuousgridworld.visualizer;
+package org.rlcommunity.environments.continuousgridworld.map;
 
-import org.rlcommunity.environments.continuousgridworld.State;
-import rlVizLib.visualization.interfaces.AgentOnValueFunctionDataProvider;
-import rlVizLib.visualization.interfaces.GlueStateProvider;
-import rlVizLib.visualization.interfaces.ValueFunctionDataProvider;
+import java.awt.Shape;
 
 /**
  *
  * @author btanner
  */
-public interface GridWorldVisualizerInterface extends AgentOnValueFunctionDataProvider, GlueStateProvider, ValueFunctionDataProvider {
+public class TerminalRegion extends Region {
+/** Change this when you make new versions that are not compatible **/
+    private static final long serialVersionUID = 1L;
 
-    State getState();
-    void updateAgentState();
-
-
+    public TerminalRegion(Shape theRegion){
+        super(theRegion);
+    }
 }
