@@ -33,10 +33,24 @@ public class AcrobotState {
     /*State Variables*/
     private double theta1, theta2, theta1Dot, theta2Dot;
 
-    private Random ourRandomNumber = new Random();
-    boolean randomStarts; //if true then do random starts, else, start at static position
+    private final Random ourRandomNumber;
+    private boolean randomStarts; //if true then do random starts, else, start at static position
+    private double transitionNoise=0.0d;
 
     private int lastAction=0;
+
+    AcrobotState(boolean randomStartStates, double transitionNoise, long randomSeed) {
+        this.randomStarts=randomStartStates;
+        this.transitionNoise=transitionNoise;
+        if(randomSeed==0){
+            ourRandomNumber=new Random();
+        }else{
+            ourRandomNumber=new Random(randomSeed);
+        }
+
+        //Throw away the first few bits because they depend heavily on the seed.
+        ourRandomNumber.nextInt(32);
+    }
     
     public void reset() {
         lastAction=0;
@@ -62,6 +76,12 @@ public class AcrobotState {
 
         double theta2_ddot;
         double theta1_ddot;
+
+        //torque is in [-1,1]
+        //We'll make noise equal to at most +/- 1
+        double theNoise=transitionNoise*2.0d*(ourRandomNumber.nextDouble()-.5d);
+
+        torque+=theNoise;
 
         int count = 0;
         while (!isTerminal() && count < 4) {
@@ -154,11 +174,11 @@ public class AcrobotState {
     }
 
     private void resetRandom() {
-        theta1 = (ourRandomNumber.nextDouble() * (Math.PI + Math.abs(-Math.PI)) + (-Math.PI)) * 0.1;
-        theta2 = (ourRandomNumber.nextDouble() * (Math.PI + Math.abs(-Math.PI)) + (-Math.PI)) * 0.1;
-        theta1Dot = (ourRandomNumber.nextDouble() * (maxTheta1Dot * 2) - maxTheta1Dot) * 0.1;
-        theta2Dot = (ourRandomNumber.nextDouble() * (maxTheta2Dot * 2) - maxTheta2Dot) * 0.1;
-    }
+        theta1 = ourRandomNumber.nextDouble() -.5d;
+        theta2 = ourRandomNumber.nextDouble() -.5d;
+        theta1Dot = ourRandomNumber.nextDouble() -.5d;
+        theta2Dot = ourRandomNumber.nextDouble() -.5d;
+      }
 
     private void resetBottom() {
         theta1 = theta2 = 0.0;

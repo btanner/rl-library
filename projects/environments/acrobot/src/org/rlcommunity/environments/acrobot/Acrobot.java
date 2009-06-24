@@ -24,7 +24,7 @@ import rlVizLib.messaging.environmentShell.TaskSpecPayload;
 import rlVizLib.messaging.interfaces.HasImageInterface;
 
 public class Acrobot extends EnvironmentBase implements HasAVisualizerInterface, HasImageInterface {
-  private AcrobotState theState=new AcrobotState();
+  private final AcrobotState theState;
     
     /*Constructor Business*/
     public Acrobot() {
@@ -33,18 +33,31 @@ public class Acrobot extends EnvironmentBase implements HasAVisualizerInterface,
 
     public Acrobot(ParameterHolder p) {
         super();
+
+        boolean randomStartStates = false;
+        double transitionNoise = 0.0d;
+        long randomSeed = 0L;
+
         if (p != null) {
             if (!p.isNull()) {
-                theState.randomStarts = p.getBooleanParam("rstarts");
+                randomStartStates = p.getBooleanParam("RandomStartStates");
+                transitionNoise = p.getDoubleParam("noise");
+                randomSeed = p.getIntegerParam("seed");
             }
         }
+
+        theState=new AcrobotState(randomStartStates,transitionNoise,randomSeed);
     }
     //This method creates the object that can be used to easily set different problem parameters
     public static ParameterHolder getDefaultParameters() {
         ParameterHolder p = new ParameterHolder();
         rlVizLib.utilities.UtilityShop.setVersionDetails(p, new DetailsProvider());
-        p.addBooleanParam("Random Starts", false);
-        p.setAlias("rstarts", "Random Starts");
+        p.addIntegerParam("RandomSeed(0 means random)", 0);
+        p.addBooleanParam("RandomStartStates", false);
+        p.addDoubleParam("TransitionNoise[0,1]", 0.0d);
+        p.setAlias("noise", "TransitionNoise[0,1]");
+        p.setAlias("seed", "RandomSeed(0 means random)");
+
         return p;
     }
     
@@ -93,8 +106,8 @@ public class Acrobot extends EnvironmentBase implements HasAVisualizerInterface,
 
     public Reward_observation_terminal env_step(Action a) {
         if ((a.intArray[0] < 0) || (a.intArray[0] > 2)) {
-            System.out.printf("Invalid action %d, selecting an action randomly\n", a.intArray[0]);
-            a.intArray[0] = (int)(Math.random() * 3.0d);
+            System.out.printf("Invalid action %d, selecting null action randomly\n", a.intArray[0]);
+            a.intArray[0] =1;
         }
         theState.update(a.intArray[0]);
 
