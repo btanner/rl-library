@@ -12,25 +12,25 @@ import java.util.Random;
  */
 public class CartPoleState {
 
-    final static double GRAVITY = 9.8;
-    final static double MASSCART = 1.0;
-    final static double MASSPOLE = 0.1;
-    final static double TOTAL_MASS = (MASSPOLE + MASSCART);
-    final static double LENGTH = 0.5;	  /* actually half the pole's length */
+    private final static double GRAVITY = 9.8;
+    private final static double MASSCART = 1.0;
+    private final static double MASSPOLE = 0.1;
+    private final static double TOTAL_MASS = (MASSPOLE + MASSCART);
+    private final static double LENGTH = 0.5;	  /* actually half the pole's length */
 
-    final static double POLEMASS_LENGTH = (MASSPOLE * LENGTH);
-    final static double FORCE_MAG = 10.0;
-    final static double TAU = 0.02;	  /* seconds between state updates */
+    private final static double POLEMASS_LENGTH = (MASSPOLE * LENGTH);
+    private final static double FORCE_MAG = 10.0;
+    private final static double TAU = 0.02;	  /* seconds between state updates */
 
-    final static double FOURTHIRDS = 4.0d / 3.0d;
-    final static double DEFAULTLEFTCARTBOUND = -2.4;
-    final static double DEFAULTRIGHTCARTBOUND = 2.4;
-    final static double DEFAULTLEFTANGLEBOUND = -Math.toRadians(12.0d);
-    final static double DEFAULTRIGHTANGLEBOUND = Math.toRadians(12.0d);
-    double leftCartBound;
-    double rightCartBound;
-    double leftAngleBound;
-    double rightAngleBound;    //State variables
+    private final static double FOURTHIRDS = 4.0d / 3.0d;
+     final static double DEFAULTLEFTCARTBOUND = -2.4;
+     final static double DEFAULTRIGHTCARTBOUND = 2.4;
+     final static double DEFAULTLEFTANGLEBOUND = -Math.toRadians(12.0d);
+     final static double DEFAULTRIGHTANGLEBOUND = Math.toRadians(12.0d);
+     double leftCartBound;
+     double rightCartBound;
+     double leftAngleBound;
+     double rightAngleBound;    //State variables
 
     /*Current Values */
     double x;			/* cart position, meters */
@@ -43,12 +43,28 @@ public class CartPoleState {
 
     private int lastAction=0;
 
+    private final double gammaOrExitProb=.999d;
+
+    private boolean useDiscountFactor=true;
+    //This will get set sometimes in update.
+    private boolean natureSaysFail=false;
 
     private double noise=0.0d;
     private boolean randomStarts=false;
     private Random theRandom;
-    
-    CartPoleState(boolean randomStartStates, double transitionNoise, long randomSeed) {
+
+    /**
+     * If we use discount factor, the task spec has gamma:=gammeOrExitProb and the
+     * problem never terminates except if the pole gets unbalanced/cart off track.
+     *
+     * If we DONT use discount factor, then we set gamma:=1.0, but env_step has a 1/1000
+     * chance of exiting.
+     * @param randomStartStates
+     * @param transitionNoise
+     * @param randomSeed
+     * @param useDiscountFactor
+     */
+    CartPoleState(boolean randomStartStates, double transitionNoise, long randomSeed, boolean useDiscountFactor) {
         this.randomStarts=randomStartStates;
         this.noise=transitionNoise;
         if(randomSeed==0){
@@ -60,9 +76,11 @@ public class CartPoleState {
         theRandom.nextDouble();
         theRandom.nextDouble();
 
+        this.useDiscountFactor=useDiscountFactor;
     }
 
     void reset() {
+        natureSaysFail=false;
         lastAction=0;
         x = 0.0f;
         x_dot = 0.0f;
@@ -80,6 +98,9 @@ public class CartPoleState {
     }
 
     void update(int theAction) {
+        if(theRandom.nextDouble()<=(1.0d-gammaOrExitProb) && !useDiscountFactor){
+            natureSaysFail=true;
+        }
         lastAction=theAction;
         double xacc;
         double thetaacc;
@@ -147,11 +168,12 @@ public class CartPoleState {
     /*CART POLE SPECIFIC FUNCTIONS*/
 
     public boolean inFailure() {
-        if (x < leftCartBound || x > rightCartBound || theta < leftAngleBound || theta > rightAngleBound) {
+        if (x < leftCartBound || x > rightCartBound || theta < leftAngleBound || theta > rightAngleBound || natureSaysFail) {
             return true;
         } /* to signal failure */
         return false;
     }
+
 
     public double getLeftCartBound() {
         return this.leftCartBound;
@@ -167,5 +189,13 @@ public class CartPoleState {
 
     public double getLeftAngleBound() {
         return this.leftAngleBound;
+    }
+
+    double getDiscountFactor() {
+       if(useDiscountFactor){
+           return gammaOrExitProb;
+       }else{
+           return 1.0d;
+       }
     }
 }

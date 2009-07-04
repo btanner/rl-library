@@ -53,6 +53,8 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
         double leftCartBound=CartPoleState.DEFAULTLEFTCARTBOUND;
         double rightCartBound=CartPoleState.DEFAULTRIGHTCARTBOUND;
 
+        boolean useDiscountFactor=true;
+
         if (p != null) {
             if (!p.isNull()) {
                 leftAngleBound= p.getDoubleParam("leftAngle");
@@ -62,10 +64,11 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
                 randomStartStates = p.getBooleanParam("RandomStartStates");
                 transitionNoise = p.getDoubleParam("noise");
                 randomSeed = p.getIntegerParam("seed");
+                useDiscountFactor = p.getBooleanParam("UseDiscounting");
 
             }
         }
-        theState=new CartPoleState(randomStartStates,transitionNoise,randomSeed);
+        theState=new CartPoleState(randomStartStates,transitionNoise,randomSeed,useDiscountFactor);
         theState.leftAngleBound=leftAngleBound;
         theState.rightAngleBound=rightAngleBound;
         theState.leftCartBound=leftCartBound;
@@ -95,6 +98,7 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
         p.addIntegerParam("RandomSeed(0 means random)", 0);
         p.addBooleanParam("RandomStartStates", false);
         p.addDoubleParam("TransitionNoise[0,1]", 0.0d);
+        p.addBooleanParam("UseDiscounting",true);
         p.setAlias("noise", "TransitionNoise[0,1]");
         p.setAlias("seed", "RandomSeed(0 means random)");
 
@@ -207,7 +211,7 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
 
         TaskSpecVRLGLUE3 theTaskSpecObject = new TaskSpecVRLGLUE3();
         theTaskSpecObject.setEpisodic();
-        theTaskSpecObject.setDiscountFactor(1.0d);
+        theTaskSpecObject.setDiscountFactor(theState.getDiscountFactor());
         theTaskSpecObject.addContinuousObservation(new DoubleRange(xMin, xMax));
         theTaskSpecObject.addContinuousObservation(new DoubleRange(xDotMin, xDotMax));
         theTaskSpecObject.addContinuousObservation(new DoubleRange(thetaMin, thetaMax));
