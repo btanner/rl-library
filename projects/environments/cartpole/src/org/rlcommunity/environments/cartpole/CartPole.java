@@ -128,9 +128,9 @@ public class CartPole extends EnvironmentBase implements HasAVisualizerInterface
 
 
         if (theState.inFailure()) {
-            return new Reward_observation_terminal(-1.0d, makeObservation(), 1);
+            return new Reward_observation_terminal(theState.getReward(), makeObservation(), true);
         } else {
-            return new Reward_observation_terminal(1.0d, makeObservation(), 0);
+            return new Reward_observation_terminal(theState.getReward(), makeObservation(), false);
         }
     }
 

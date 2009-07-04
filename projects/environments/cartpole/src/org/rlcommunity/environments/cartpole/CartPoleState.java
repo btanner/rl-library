@@ -198,4 +198,11 @@ public class CartPoleState {
            return 1.0d;
        }
     }
+
+    double getReward() {
+        if(!inFailure() || natureSaysFail){
+            return 1.0d;
+        }
+        return -1.0d;
+    }
 }
