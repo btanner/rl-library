@@ -9,6 +9,7 @@
 <project basedir=".." name="predefined-target-aliases">
 <target name="clean" depends="rl-clean"/>
 <target name="build" depends="rl-jar"/>
+<target name="run" depends="rl-run"/>
 <target name="debug" depends="rl-set-debug,rl-jar"/>
 <target name="test" depends="rl-test"/>
 <target name="javadoc" depends="rl-javadoc"/>
