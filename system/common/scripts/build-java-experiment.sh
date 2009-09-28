@@ -4,9 +4,6 @@
 #	This will partially determine the name of the file we will create.
 #	Something like MountainCar-Java is good
 #
-#  - $PROJECTTITLE variable set.  
-#	Regular speech name of environment.  Mountain Car for example.
-#
 #  - $SYSTEMPATH variable set.  
 #	This should be the relative path from where you are sourcing 
 #	from to the system dir. Something like ../../../system
@@ -29,9 +26,7 @@
 #	This should be one of: environment, agent, experiment, package
 #   - $LANGUAGE variable set
 #	This should be one of: Java/C/CPP/Matlab/Python/Lisp/etc
-#   - $HOMEURL variable set
-#	This should be a the public homepage for this environment/agent
-#
+
 #  - A build.xml with target "build" that puts a jar in products/
 #
 #  	The build.xml must actually follow the common build system in here, 
@@ -77,13 +72,6 @@ javaDistributionInit(){
 	  exit 1
         fi
 
-	if [ -z "$PROJECTTITLE" ]
-	then
-		echo 
-		echo "   ERROR: You Must set the PROJECTTITLE variable."
-		echo 
-	  exit 1
-	fi
 
 	if [ -z "$WIKIPAGENAME" ]
 	then
@@ -108,15 +96,6 @@ javaDistributionInit(){
 		echo 
 	  exit 1
 	fi
-
-	if [ -z "$HOMEURL" ]
-	then
-		echo 
-		echo "   ERROR: You Must set the HOMEURL variable."
-		echo 
-	  exit 1
-	fi
-	
 
 
 #This has the modifieds and stuff in it, I prefer this one:
@@ -165,59 +144,6 @@ javaDistributionInit(){
 	#And changes it to: basePath=..
 	sed 's|basePath=[a-z,A-Z,0-9,.,/,-,_]*$|basePath=..|'<run.bash >$THISPROJECTDISTDIR/run.bash
 
-	#First, strip all of the comments out of README.txt
-	sed -e '/^##/D' <README.txt > README.out
-
-	#Now, fill in the template sections
-	sed -i.backup '/\$USINGTHISDOWNLOADTEMPLATE\$/ {
-		r '${SYSTEMPATH}'/common/scripts/templates/using-this-download.template
-		d
-	}
-		/\$WIKICOMMENTTEMPLATE\$/ {
-		r '${SYSTEMPATH}'/common/scripts/templates/wiki-comment.template
-		d
-	}
-		/\$INTRODUCTIONTEMPLATE\$/ {
-		r '${SYSTEMPATH}'/common/scripts/templates/introduction.template
-		d
-	}
-		/\$COMPILINGTEMPLATE\$/ {
-		r '${SYSTEMPATH}'/common/scripts/templates/compiling.template
-		d
-	}
-		/\$HELPTEMPLATE\$/ {
-		r '${SYSTEMPATH}'/common/scripts/templates/help.template
-		d
-	}
-		/\$RUNNINGTHISEXPERIMENTTEMPLATE\$/ {
-		r '${SYSTEMPATH}'/common/scripts/templates/running-this-experiment.template
-		d
-	}
-	' README.out
-
-
-	#Use sed to also splice the variables into README.out
-	#README.out has some placeholders for FILENAME FILELINK and FILEDETAILSLINK
-	#This is sortof gross multiline syntax, but whatever.
-	sed -i.backup '
-		s|\$FILENAME\$|'"${DISTFILENAME}"'|
-		s|\$FILELINK\$|'"${DISTFILEURL}"'|
-		s|\$FILEDETAILSLINK\$|'"${DISTFILEINFOURL}"'|
-		s|\$VERSION\$|'"${VERSION}"'|
-		s|\$LANGUAGE\$|'"${LANGUAGE}"'|
-		s|\$PROJECTTITLE\$|'"${PROJECTTITLE}"'|
-		s|\$PROJECTNAME\$|'"${PROJECTNAME}"'|
-		s|\$PROJECTTYPE\$|'"${PROJECTTYPE}"'|
-		s|\$HOMEURL\$|'"${HOMEURL}"'|
-		s|\$WIKIURL\$|'"${PROJECTTYPE}"'|
-		s|\$PROJECTTYPE\$|'"${PROJECTTYPE}"'|
-		s|\$PROJECTDIR\$|'"${DISTNAME}"'|
-		s|\$SIDEBAR\$|'"${PROJECTTYPE}Sidebar"'|
-	' README.out
-
-	mv README.out $THISPROJECTDISTDIR/README.txt
-	rm README.out.backup
-
 }
 
 #This will go into $DISTDIR, build the project, remove the build directory, back out
@@ -237,11 +163,7 @@ javaDistributionUploadFile(){
 }
 javaDistributionUpdateWiki(){
 	echo -n "  Updating Wiki..."
-	SVNUSERNAME=$(cat $SVNPASSWORDFILE | awk '{print $1}')
-	SVNPASSWORD=$(cat $SVNPASSWORDFILE | awk '{print $2}')
-	svn co --quiet --username $SVNUSERNAME --password $SVNPASSWORD https://rl-library.googlecode.com/svn/wiki wikis 
-	cp $THISPROJECTDISTDIR/README.txt wikis/$WIKIPAGENAME.wiki
-	svn commit wikis/$WIKIPAGENAME.wiki -m "Automatic update of Wiki page when doing release of $PROJECTNAME"
+	PYTHONPATH=$COMMONPATH/libs python $COMMONPATH/scripts/wiki_update.py --wikipasswordfile=$WIKIPASSWORDFILE --jarname="NONE" --filename="$DISTFILENAME" --wikipage="$WIKIPAGENAME" --projectdir="$DISTNAME" 
 	echo "Wiki updated."
 }
 
