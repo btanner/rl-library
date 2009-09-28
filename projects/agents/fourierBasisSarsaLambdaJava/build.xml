@@ -13,7 +13,7 @@
 	<property name="main.package.name" value="src.org.rlcommunity.agents/"/>
 	<property name="main.package.spec.version" value="1.0"/>
 	<property name="main.vendor.name" value="George Konidaris"/>
-        <property name="jar.extra.classpath" value="../system/common/libs/rl-viz/RLVizLib.jar" />
+	<path id="project.extra.classpath" />
 
 	<import file="${this.project.system.directory}/common/ant/build-targets.xml"/>
 
