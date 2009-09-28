@@ -183,7 +183,7 @@ javaDistributionUploadFile(){
 }
 javaDistributionUpdateWiki(){
 	echo -n "  Updating Wiki..."
-	PYTHONPATH=$COMMONPATH/libs python $COMMONPATH/scripts/wiki_update.py --wikipasswordfile=$WIKIPASSWORDFILE --jarname="$JARNAME" --filename="$DISTFILENAME" --wikipage="$WIKIPAGENAME" --projectdir="$DISTNAME" 
+	PYTHONPATH=$COMMONPATH/libs python $COMMONPATH/scripts/wiki_update.py --anttarget=$ANTBUILDTARGET --wikipasswordfile=$WIKIPASSWORDFILE --jarname="$JARNAME" --filename="$DISTFILENAME" --wikipage="$WIKIPAGENAME" --projectdir="$DISTNAME" 
 	echo "Wiki updated."
 }
 

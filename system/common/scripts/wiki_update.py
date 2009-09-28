@@ -25,6 +25,8 @@ def main():
                     help='Name of the file as it will appear in the Google Code download page.  Something like MountainCarR440.tar.gz')
   parser.add_option('--jarname', dest='jarname',
                     help='Name of the main jar that runs this project. Something like MountainCar.jar')
+  parser.add_option('--anttarget', dest='anttarget',
+                    help='(Optional) Name of the ant target to build this agent. Default: build')
   parser.add_option('--projectdir', dest='projectdir',
                     help='Name of the folder that your project will unzip to.  Something like MountainCar.')
   parser.add_option('--wikipage', dest='wikipage',
@@ -44,6 +46,8 @@ def main():
     parser.error('Jarname is missing.')
   elif not options.wikipage:
     parser.error('Destination wiki page to edit is missing.')
+  elif not options.anttarget:
+    options.anttarget='build'
 
   f = file(options.passwordfile)
   for line in f:
@@ -69,7 +73,7 @@ def main():
   startToken=startToken+6
   beforeText=text[0:startToken]
   afterText=text[endToken:]
-  newText=beforeText+'Filename='+options.downloadfilename+'|Jarname='+options.jarname+'|Projectdir='+options.projectdir+afterText
+  newText=beforeText+'Filename='+options.downloadfilename+'|Jarname='+options.jarname+'|Projectdir='+options.projectdir+'|Anttarget='+options.anttarget+afterText
   page.save(newText, summary = 'Test edit')
   print 'Changes have been saved.'
 
