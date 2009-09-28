@@ -60,11 +60,6 @@ import base64
 import sys
 
 
-def get_svn_config_dir():
-	"""Return user's Subversion configuration directory."""
-	return os.path.expanduser('~/.subversion')
-
-
 def upload(file, project_name, user_name, password, summary, labels=None):
   """Upload a file to a Google Code project's file server.
 
