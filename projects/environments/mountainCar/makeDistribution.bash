@@ -10,18 +10,17 @@
 #Maybe this should be done in ANT.  Not quite sure.
 
 #Set these variables for this specific project
-PROJECTTITLE='Mountain Car'
 PROJECTNAME=MountainCar-Java
 SYSTEMPATH=../../../system
 WIKIPAGENAME='Mountain_Car_(Java)'
 SVNPASSWORDFILE=~/rl-library-svn-password
+WIKIPASSWORDFILE=~/rl-library-wiki-password
 PROJECTTYPE=Environment
 LANGUAGE=Java
-HOMEURL=http://library.rl-community.org/environments/mountaincar
 JARNAME=MountainCar.jar
 
 #Get all of the build functions
-source $SYSTEMPATH/common/scripts/build-java-distribution-new.sh
+source $SYSTEMPATH/common/scripts/build-java-distribution-2.0.sh
 
 #Sets up the most of the paths and creates the distribution directory
 #Copies the default set of jars and stuff to the appropriate directories.
@@ -31,6 +30,7 @@ javaDistributionInit
 #  Extra files you want to distribute go here
 #
 cp LICENSE.txt $THISPROJECTDISTDIR/
+cp README.txt $THISPROJECTDISTDIR/
 
 #This will go into $DISTDIR, build the project, remove the build directory, back out
 #tar and gzip the directory, and then delete the directory.
@@ -47,4 +47,4 @@ fi
 javaDistributionUpdateWiki
 
 #Delete $DISTDIR and $DISTFILENAME
-#javaDistributionCleanup
+javaDistributionCleanup

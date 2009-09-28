@@ -11,14 +11,13 @@
 #Maybe this should be done in ANT.  Not quite sure.
 
 #Set these variables for this specific project
-PROJECTTITLE='RL-Glue Sample Experiment'
 PROJECTNAME=SampleExperimentRLGlue-Java
 SYSTEMPATH=../../../system
-WIKIPAGENAME=SampleExperimentRLGlueJava
+WIKIPAGENAME='Sample_Experiment_RL-Glue_(Java)'
 SVNPASSWORDFILE=~/rl-library-svn-password
+WIKIPASSWORDFILE=~/rl-library-wiki-password
 PROJECTTYPE=Experiment
 LANGUAGE=Java
-HOMEURL=http://code.google.com/p/rl-library/wiki/SampleExperimentRLGlueJava
 
 
 #Get all of the build functions
@@ -32,6 +31,7 @@ javaDistributionInit
 #
 #  Extra files you want to distribute go here
 #
+
 
 #This will go into $DISTDIR, build the project, remove the build directory, back out
 #tar and gzip the directory, and then delete the directory.

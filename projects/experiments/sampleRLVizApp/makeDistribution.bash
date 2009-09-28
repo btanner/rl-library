@@ -11,14 +11,13 @@
 #Maybe this should be done in ANT.  Not quite sure.
 
 #Set these variables for this specific project
-PROJECTTITLE='RLViz Application Sample Experiment'
 PROJECTNAME=SampleExperimentRLVizApp-Java
 SYSTEMPATH=../../../system
-WIKIPAGENAME=SampleExperimentRLVizAppJava
+WIKIPAGENAME='Sample_Experiment_RL-Viz_App_(Java)'
 SVNPASSWORDFILE=~/rl-library-svn-password
+WIKIPASSWORDFILE=~/rl-library-wiki-password
 PROJECTTYPE=Experiment
 LANGUAGE=Java
-HOMEURL=http://code.google.com/p/rl-library/wiki/SampleExperimentRLVizAppJava
 
 
 #Get all of the build functions
@@ -50,4 +49,4 @@ fi
 javaDistributionUpdateWiki
 
 #Delete $DISTDIR and $DISTFILENAME
-#javaDistributionCleanup
+javaDistributionCleanup

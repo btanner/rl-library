@@ -1,32 +1,4 @@
-##This is actually a template that has some variables in here to be replaced.  Lines starting with ## are comments.
-##Things like $VERSION$ are variables.
-##Substitutions are done using files in system/common/scripts/templates
-##
-#summary This is the page for download information and details about the $LANGUAGE$ $PROJECTTITLE$ Domain, Version: r$VERSION$.
-#labels Language-$LANGUAGE$,Type-$PROJECTTYPE$,Page-Download
-#sidebar $SIDEBAR$
-
-$WIKICOMMENTTEMPLATE$
-
-$INTRODUCTIONTEMPLATE$
-
-$USINGTHISDOWNLOADTEMPLATE$
-
-$COMPILINGTEMPLATE$
-
-$HELPTEMPLATE$
-
-== Authors ==
-Various, over the years, including:
- * Mark Lee
- * Leah Hackman
- * [http://research.tannerpages.com Brian Tanner]
-
-=== Current Maintainer ===
- * [http://research.tannerpages.com Brian Tanner]
- * btanner@rl-community.org
- * [http://research.tannerpages.com]
-
-
-
-
+Random Agent (Java)
+-------------------------------
+For full details about how to use this project, its history, and how to get help, please visit:
+http://library.rl-community.org/wiki/Random_(Java)
