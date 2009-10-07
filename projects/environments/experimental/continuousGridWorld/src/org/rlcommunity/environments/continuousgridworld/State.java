@@ -42,7 +42,8 @@ import org.rlcommunity.rlglue.codec.types.Observation;
  */
 public class State implements Serializable {
 
-    protected Random theRandom;
+    protected  Random randomStateGenerator;
+    protected  Random randomNoiseGenerator;
 
     /** Change this when you make new versions that are not compatible **/
     private static final long serialVersionUID = 1L;
@@ -78,13 +79,17 @@ public class State implements Serializable {
         this.randomStartStates = randomStartStates;
         this.transitionNoise = transitionNoise;
         if(seed==0L){
-            theRandom=new Random();
+            randomStateGenerator=new Random();
+            randomNoiseGenerator=new Random();
         }else{
-            theRandom=new Random(seed);
+            randomStateGenerator=new Random(seed);
+            randomNoiseGenerator=new Random(seed);
         }
         //Throw away the first few bits because they depend heavily on the seed.
-        theRandom.nextDouble();
-        theRandom.nextDouble();
+        randomStateGenerator.nextDouble();
+        randomStateGenerator.nextDouble();
+        randomNoiseGenerator.nextDouble();
+        randomNoiseGenerator.nextDouble();
     }
 
     private double calculateMaxBarrierAtPosition(Rectangle2D r) {
@@ -126,8 +131,8 @@ public class State implements Serializable {
         }
 
         //Max noise would be equal to the speed.
-        double noiseX = 2.0d * transitionNoise * xSpeed * (theRandom.nextDouble() - 0.5);
-        double noiseY = 2.0d * transitionNoise * ySpeed * (theRandom.nextDouble() - 0.5);
+        double noiseX = 2.0d * transitionNoise * xSpeed * (randomNoiseGenerator.nextDouble() - 0.5);
+        double noiseY = 2.0d * transitionNoise * ySpeed * (randomNoiseGenerator.nextDouble() - 0.5);
         dx += noiseX;
         dy += noiseY;
 
@@ -228,8 +233,8 @@ public class State implements Serializable {
         double startY = 0.1;
 
         if (randomStartStates) {
-            startX = theRandom.nextDouble() * worldRect.getWidth();
-            startY = theRandom.nextDouble() * worldRect.getHeight();
+            startX = randomStateGenerator.nextDouble() * worldRect.getWidth();
+            startY = randomStateGenerator.nextDouble() * worldRect.getHeight();
         }
         setAgentPosition(new SerializablePoint(startX, startY));
     }

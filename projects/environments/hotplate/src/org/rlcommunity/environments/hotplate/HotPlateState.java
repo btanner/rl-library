@@ -38,7 +38,8 @@ public class HotPlateState {
     private double moveDistance = .05;
     final private double rewardAtGoal = 1.0d;
     final private double rewardPerStep = -1.0d;
-    final private Random randomGenerator;
+    final private Random randomStateGenerator;
+    final private Random randomNoiseGenerator;
     private int lastAction = 0;
 
     private boolean randomStarts=false;
@@ -52,14 +53,19 @@ public class HotPlateState {
         this.transitionNoise=transitionNoise;
 
         if(randomSeed==0){
-        this.randomGenerator = new Random();
+        this.randomStateGenerator = new Random();
+        this.randomNoiseGenerator = new Random();
         }else{
-            this.randomGenerator=new Random(randomSeed);
+            this.randomStateGenerator=new Random(randomSeed);
+            this.randomNoiseGenerator=new Random(randomSeed);
         }
 
         //Throw away the first few because they first bits are not that random.
-        randomGenerator.nextDouble();
-        randomGenerator.nextDouble();
+        randomStateGenerator.nextDouble();
+        randomStateGenerator.nextDouble();
+        randomNoiseGenerator.nextDouble();
+        randomNoiseGenerator.nextDouble();
+
         reset();
     }
 
@@ -134,7 +140,7 @@ public class HotPlateState {
     private double[] generateRandomPosition() {
         double[] tmp_position = new double[numDims];
         for (int i = 0; i < tmp_position.length; i++) {
-            tmp_position[i] = randomGenerator.nextDouble();
+            tmp_position[i] = randomStateGenerator.nextDouble();
         }
         return tmp_position;
 
@@ -148,7 +154,7 @@ public class HotPlateState {
         //to calculate it always and use it sometimes
         safeZone = new int[numDims];
         for (int i = 0; i < safeZone.length; i++) {
-            safeZone[i] = randomGenerator.nextInt(2);
+            safeZone[i] = randomStateGenerator.nextInt(2);
         }
 
         double[] candidatePosition = new double[numDims];
@@ -187,7 +193,7 @@ public class HotPlateState {
             Integer interpretedAsInt = Integer.parseInt("" + thisAction);
 
             //Should make it at most movedistance
-            double thisMoveNoise=2.0d*moveDistance*transitionNoise*(randomGenerator.nextDouble()-.5d);
+            double thisMoveNoise=2.0d*moveDistance*transitionNoise*(randomNoiseGenerator.nextDouble()-.5d);
             if (interpretedAsInt == 0) {
                 position[i] += moveDistance+thisMoveNoise;
                 if (position[i] > 1.0d) {

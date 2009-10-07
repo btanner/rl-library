@@ -13,7 +13,6 @@ import java.util.Random;
 public class AcrobotState {
 
     /*STATIC CONSTANTS*/
-    private final static int stateSize = 4;
     private final static int numActions = 3;
     private final static double maxTheta1 = Math.PI;
     private final static double maxTheta2 = Math.PI;
@@ -33,7 +32,8 @@ public class AcrobotState {
     /*State Variables*/
     private double theta1, theta2, theta1Dot, theta2Dot;
 
-    private final Random ourRandomNumber;
+    private final Random randomStateGenerator;
+    private final Random randomNoiseGenerator;
     private boolean randomStarts; //if true then do random starts, else, start at static position
     private double transitionNoise=0.0d;
 
@@ -43,14 +43,18 @@ public class AcrobotState {
         this.randomStarts=randomStartStates;
         this.transitionNoise=transitionNoise;
         if(randomSeed==0){
-            ourRandomNumber=new Random();
+            randomStateGenerator=new Random();
+            randomNoiseGenerator=new Random();
         }else{
-            ourRandomNumber=new Random(randomSeed);
+            randomStateGenerator=new Random(randomSeed);
+            randomNoiseGenerator=new Random(randomSeed);
         }
 
         //Throw away the first few bits because they depend heavily on the seed.
-        ourRandomNumber.nextDouble();
-        ourRandomNumber.nextDouble();
+        randomStateGenerator.nextDouble();
+        randomStateGenerator.nextDouble();
+        randomNoiseGenerator.nextDouble();
+        randomNoiseGenerator.nextDouble();
     }
     
     public void reset() {
@@ -80,7 +84,7 @@ public class AcrobotState {
 
         //torque is in [-1,1]
         //We'll make noise equal to at most +/- 1
-        double theNoise=transitionNoise*2.0d*(ourRandomNumber.nextDouble()-.5d);
+        double theNoise=transitionNoise*2.0d*(randomNoiseGenerator.nextDouble()-.5d);
 
         torque+=theNoise;
 
@@ -175,10 +179,10 @@ public class AcrobotState {
     }
 
     private void resetRandom() {
-        theta1 = ourRandomNumber.nextDouble() -.5d;
-        theta2 = ourRandomNumber.nextDouble() -.5d;
-        theta1Dot = ourRandomNumber.nextDouble() -.5d;
-        theta2Dot = ourRandomNumber.nextDouble() -.5d;
+        theta1 = randomStateGenerator.nextDouble() -.5d;
+        theta2 = randomStateGenerator.nextDouble() -.5d;
+        theta1Dot = randomStateGenerator.nextDouble() -.5d;
+        theta2Dot = randomStateGenerator.nextDouble() -.5d;
       }
 
     private void resetBottom() {

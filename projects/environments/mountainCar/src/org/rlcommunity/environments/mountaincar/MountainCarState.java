@@ -46,7 +46,8 @@ public class MountainCarState {
     final public double defaultInitVelocity = 0.0d;
     final public double rewardPerStep = -1.0d;
     final public double rewardAtGoal = 0.0d;
-    final private Random randomGenerator;
+    final private Random randomStateGenerator;
+    final private Random randomNoiseGenerator;
     //These are configurable
     private boolean randomStarts = false;
     private double transitionNoise = 0.0d;
@@ -57,14 +58,18 @@ public class MountainCarState {
         this.transitionNoise = transitionNoise;
 
         if (randomSeed == 0) {
-            this.randomGenerator = new Random();
+            this.randomStateGenerator = new Random();
+            this.randomNoiseGenerator = new Random();
         } else {
-            this.randomGenerator = new Random(randomSeed);
+            this.randomStateGenerator = new Random(randomSeed);
+            this.randomNoiseGenerator = new Random(randomSeed);
         }
 
         //Throw away the first few because they first bits are not that random.
-        randomGenerator.nextDouble();
-        randomGenerator.nextDouble();
+        randomStateGenerator.nextDouble();
+        randomStateGenerator.nextDouble();
+        randomNoiseGenerator.nextDouble();
+        randomNoiseGenerator.nextDouble();
         reset();
     }
 
@@ -101,9 +106,9 @@ public class MountainCarState {
         velocity = defaultInitVelocity;
         if (randomStarts) {
             //Dampened starting values
-            double randStartPosition = defaultInitPosition+.25d*(randomGenerator.nextDouble()-.5d);
+            double randStartPosition = defaultInitPosition+.25d*(randomStateGenerator.nextDouble()-.5d);
             position = randStartPosition;
-            double randStartVelocity = defaultInitVelocity+.025d*(randomGenerator.nextDouble()-.5d);
+            double randStartVelocity = defaultInitVelocity+.025d*(randomStateGenerator.nextDouble()-.5d);
             velocity = randStartVelocity;
         }
 
@@ -119,7 +124,7 @@ public class MountainCarState {
         double acceleration = accelerationFactor;
 
         //Noise should be at most
-        double thisNoise=2.0d*accelerationFactor*transitionNoise*(randomGenerator.nextDouble()-.5d);
+        double thisNoise=2.0d*accelerationFactor*transitionNoise*(randomNoiseGenerator.nextDouble()-.5d);
 
         velocity += (thisNoise+((a - 1)) * (acceleration)) + getSlope(position) * (gravityFactor);
         if (velocity > maxVelocity) {

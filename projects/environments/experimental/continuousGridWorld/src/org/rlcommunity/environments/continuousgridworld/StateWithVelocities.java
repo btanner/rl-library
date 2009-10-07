@@ -56,8 +56,8 @@ public class StateWithVelocities extends State {
         double startVY=0.0d;
 
         if(randomStartStates){
-            startVX=(theRandom.nextDouble()-.5d)/2.0d;
-            startVY=(theRandom.nextDouble()-.5d)/2.0d;
+            startVX=(randomStateGenerator.nextDouble()-.5d)/2.0d;
+            startVY=(randomStateGenerator.nextDouble()-.5d)/2.0d;
         }
         agentVelocity = new SerializablePoint(startVX, startVY);
     }
@@ -81,8 +81,8 @@ public class StateWithVelocities extends State {
         if (theAction == 3) {
             dy = -yVelIncrement;
         }
-        double noiseX = 2.0d * transitionNoise * xVelIncrement * (theRandom.nextDouble() - 0.5);
-        double noiseY = 2.0d * transitionNoise * yVelIncrement * (theRandom.nextDouble() - 0.5);
+        double noiseX = 2.0d * transitionNoise * xVelIncrement * (randomNoiseGenerator.nextDouble() - 0.5);
+        double noiseY = 2.0d * transitionNoise * yVelIncrement * (randomNoiseGenerator.nextDouble() - 0.5);
 
         dx += noiseX;
         dy += noiseY;
@@ -116,8 +116,8 @@ public class StateWithVelocities extends State {
         setAgentPosition(nextPos);
 
         if (impactFromMovement) {
-            newXVel = -newXVel * theRandom.nextDouble();
-            newYVel = -newYVel * theRandom.nextDouble();
+            newXVel = -newXVel * randomNoiseGenerator.nextDouble();
+            newYVel = -newYVel * randomNoiseGenerator.nextDouble();
         }
         agentVelocity.setLocation(newXVel, newYVel);
         updateCurrentAgentRect();

@@ -51,7 +51,8 @@ public class CartPoleState {
 
     private double noise=0.0d;
     private boolean randomStarts=false;
-    private Random theRandom;
+    private final Random randomStateGenerator;
+    private final Random randomNoiseGenerator;
 
     /**
      * If we use discount factor, the task spec has gamma:=gammeOrExitProb and the
@@ -68,13 +69,17 @@ public class CartPoleState {
         this.randomStarts=randomStartStates;
         this.noise=transitionNoise;
         if(randomSeed==0){
-            theRandom=new Random();
+            randomStateGenerator=new Random();
+            randomNoiseGenerator=new Random();
         }else{
-            theRandom=new Random(randomSeed);
+            randomStateGenerator=new Random(randomSeed);
+            randomNoiseGenerator=new Random(randomSeed);
         }
         //Throw away the first few bits because they depend heavily on the seed.
-        theRandom.nextDouble();
-        theRandom.nextDouble();
+        randomStateGenerator.nextDouble();
+        randomStateGenerator.nextDouble();
+        randomNoiseGenerator.nextDouble();
+        randomNoiseGenerator.nextDouble();
 
         this.useDiscountFactor=useDiscountFactor;
     }
@@ -89,16 +94,16 @@ public class CartPoleState {
 
         if(randomStarts){
             //Going to have the random start states be near to equilibrium
-            x=theRandom.nextDouble()-.5d;
-            x_dot=theRandom.nextDouble()-.5d;
-            theta=(theRandom.nextDouble()-.5d)/8.0d;
-            theta_dot=(theRandom.nextDouble()-.5d)/8.0d;
+            x=randomStateGenerator.nextDouble()-.5d;
+            x_dot=randomStateGenerator.nextDouble()-.5d;
+            theta=(randomStateGenerator.nextDouble()-.5d)/8.0d;
+            theta_dot=(randomStateGenerator.nextDouble()-.5d)/8.0d;
         }
 
     }
 
     void update(int theAction) {
-        if(theRandom.nextDouble()<=(1.0d-gammaOrExitProb) && !useDiscountFactor){
+        if(randomNoiseGenerator.nextDouble()<=(1.0d-gammaOrExitProb) && !useDiscountFactor){
             natureSaysFail=true;
         }
         lastAction=theAction;
@@ -116,7 +121,7 @@ public class CartPoleState {
         }
 
         //Noise of 1.0 means possibly full opposite action
-        double thisNoise=2.0d*noise*FORCE_MAG*(theRandom.nextDouble()-.5d);
+        double thisNoise=2.0d*noise*FORCE_MAG*(randomNoiseGenerator.nextDouble()-.5d);
 
         force+=thisNoise;
 

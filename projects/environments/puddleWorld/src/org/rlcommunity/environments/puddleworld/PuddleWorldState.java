@@ -47,7 +47,8 @@ public class PuddleWorldState {
     final private double agentSpeed = .05;
     final public double rewardPerStep = -1.0d;
     final public double rewardAtGoal = 0.0d;
-    final private Random randomGenerator;
+    final private Random randomStateGenerator;
+    final private Random randomNoiseGenerator;
     //These are configurable
     private boolean randomStarts = false;
     private double transitionNoise = 0.0d;
@@ -58,14 +59,18 @@ public class PuddleWorldState {
         this.transitionNoise = transitionNoise;
 
         if (randomSeed == 0) {
-            this.randomGenerator = new Random();
+            this.randomStateGenerator = new Random();
+            this.randomNoiseGenerator = new Random();
         } else {
-            this.randomGenerator = new Random(randomSeed);
+            this.randomStateGenerator = new Random(randomSeed);
+            this.randomNoiseGenerator = new Random(randomSeed);
         }
 
         //Throw away the first few because they first bits are not that random.
-        randomGenerator.nextDouble();
-        randomGenerator.nextDouble();
+        randomStateGenerator.nextDouble();
+        randomStateGenerator.nextDouble();
+        randomNoiseGenerator.nextDouble();
+        randomNoiseGenerator.nextDouble();
         reset();
     }
 
@@ -122,8 +127,8 @@ public class PuddleWorldState {
         agentPosition.setLocation(defaultInitPosition);
         if (randomStarts) {
             do {
-                double randStartX = .95d * randomGenerator.nextDouble();
-                double randStartY = .95d * randomGenerator.nextDouble();
+                double randStartX = .95d * randomStateGenerator.nextDouble();
+                double randStartY = .95d * randomStateGenerator.nextDouble();
                 agentPosition.setLocation(randStartX, randStartY);
             } while (inGoalRegion());
         }
@@ -148,8 +153,8 @@ public class PuddleWorldState {
             nextY -= agentSpeed;
         }
 
-        double XNoise = randomGenerator.nextGaussian() * transitionNoise * agentSpeed;
-        double YNoise = randomGenerator.nextGaussian() * transitionNoise * agentSpeed;
+        double XNoise = randomNoiseGenerator.nextGaussian() * transitionNoise * agentSpeed;
+        double YNoise = randomNoiseGenerator.nextGaussian() * transitionNoise * agentSpeed;
 
         nextX += XNoise;
         nextY += YNoise;

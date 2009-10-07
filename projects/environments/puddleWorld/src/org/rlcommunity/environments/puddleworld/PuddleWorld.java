@@ -1,8 +1,8 @@
 /*
-Copyright 2007 Brian Tanner
+Copyright 2009 Brian Tanner
 http://rl-library.googlecode.com/
 brian@tannerpages.com
-http://brian.tannerpages.com
+http://research.tannerpages.com
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
