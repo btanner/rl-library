@@ -36,7 +36,19 @@
                     <target>clean</target>
                     <target>build</target>
                 </action>
+                <action name="run">
+                    <target>run</target>
+                </action>
+                <action name="debug">
+                    <script>nbproject/ide-file-targets.xml</script>
+                    <target>debug-nb</target>
+                </action>
             </ide-actions>
+            <export>
+                <type>folder</type>
+                <location>build</location>
+                <build-target>build</build-target>
+            </export>
             <view>
                 <items>
                     <source-folder style="packages">
@@ -52,6 +64,8 @@
                     <ide-action name="rebuild"/>
                     <ide-action name="clean"/>
                     <ide-action name="javadoc"/>
+                    <ide-action name="run"/>
+                    <ide-action name="debug"/>
                 </context-menu>
             </view>
             <subprojects/>
@@ -60,6 +74,7 @@
             <compilation-unit>
                 <package-root>src</package-root>
                 <classpath mode="compile">../../../system/common/libs/rl-viz/RLVizLib.jar</classpath>
+                <built-to>build</built-to>
                 <source-level>1.5</source-level>
             </compilation-unit>
         </java-data>

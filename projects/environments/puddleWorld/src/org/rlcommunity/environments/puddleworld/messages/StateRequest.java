@@ -17,11 +17,8 @@ http://brian.tannerpages.com
  limitations under the License.
 */
 
-package org.rlcommunity.environments.mountaincar.messages;
+package org.rlcommunity.environments.puddleworld.messages;
 
-
-
-import java.util.Vector;
 
 import org.rlcommunity.rlglue.codec.RLGlue;
 import rlVizLib.messaging.AbstractMessage;
@@ -32,47 +29,31 @@ import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.environment.EnvMessageType;
 import rlVizLib.messaging.environment.EnvironmentMessages;
 
-public class MCHeightRequest extends EnvironmentMessages{
-	Vector<Double> queryPositions=null;
+public class StateRequest extends EnvironmentMessages{
 
-	public MCHeightRequest(GenericMessage theMessageObject){
+	public StateRequest(GenericMessage theMessageObject){
 		super(theMessageObject);
 	}
 
-	public static MCHeightResponse Execute(Vector<Double> queryPositions){
-		StringBuffer queryPosBuffer=new StringBuffer();
-
-		queryPosBuffer.append(queryPositions.size());
-		queryPosBuffer.append(":");
-
-		for(int i=0;i<queryPositions.size();i++){
-			queryPosBuffer.append(queryPositions.get(i));
-			queryPosBuffer.append(":");
-		}
-
-
-			String theRequest=AbstractMessage.makeMessage(
-					MessageUser.kEnv.id(),
-					MessageUser.kBenchmark.id(),
-					EnvMessageType.kEnvCustom.id(),
-					MessageValueType.kStringList.id(),
-			"GETHEIGHTS:"+queryPosBuffer.toString());
+	public static StateResponse Execute(){
+		String theRequest=AbstractMessage.makeMessage(
+				MessageUser.kEnv.id(),
+				MessageUser.kBenchmark.id(),
+				EnvMessageType.kEnvCustom.id(),
+				MessageValueType.kString.id(),
+				"GETPWSTATE");
 
 		String responseMessage=RLGlue.RL_env_message(theRequest);
 
-		MCHeightResponse theResponse;
+		StateResponse theResponse;
 		try {
-			theResponse = new MCHeightResponse(responseMessage);
+			theResponse = new StateResponse(responseMessage);
 		} catch (NotAnRLVizMessageException e) {
-			System.err.println("In MCStateRequest, the response was not RL-Viz compatible");
+			System.err.println("In ".getClass().getName()+", the response was not RL-Viz compatible");
 			theResponse=null;
 		}
 
 		return theResponse;
 
-	}
-
-	public Vector<Double> getQueryPositions() {
-		return queryPositions;
 	}
 }

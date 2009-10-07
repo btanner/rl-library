@@ -16,15 +16,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
-package org.rlcommunity.environments.mountaincar;
+package org.rlcommunity.environments.puddleworld;
 
+import java.awt.geom.Point2D;
 import java.net.URL;
-import java.util.StringTokenizer;
-import java.util.Vector;
-
-import org.rlcommunity.environments.mountaincar.messages.MCGoalResponse;
-import org.rlcommunity.environments.mountaincar.messages.MCHeightResponse;
-import org.rlcommunity.environments.mountaincar.messages.MCStateResponse;
+import org.rlcommunity.environments.puddleworld.messages.StateResponse;
 import rlVizLib.Environments.EnvironmentBase;
 import rlVizLib.general.ParameterHolder;
 import rlVizLib.messaging.NotAnRLVizMessageException;
@@ -39,7 +35,7 @@ import org.rlcommunity.rlglue.codec.types.Observation;
 import org.rlcommunity.rlglue.codec.types.Reward_observation_terminal;
 
 import java.util.Random;
-import org.rlcommunity.environments.mountaincar.visualizer.MountainCarVisualizer;
+import org.rlcommunity.environments.puddleworld.visualizer.PuddleWorldVisualizer;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
@@ -48,33 +44,40 @@ import org.rlcommunity.rlglue.codec.util.EnvironmentLoader;
 import rlVizLib.general.hasVersionDetails;
 
 /*
- * July 2007
- * This is the Java Version MountainCar Domain from the RL-Library.  
- * Brian Tanner ported it from the Existing RL-Library to Java.
+ * October 2009
+ * This is the Java Version of the Puddle World Domain from the RL-Library.
+ *
+ * Brian Tanner ported it from the old RL-Library Environment Shelf to Java.
  * I found it here: http://rlai.cs.ualberta.ca/RLR/environment.html
+ *
+ * I have taken some liberties in this port.  This version will have the exact
+ * same noise model if the transition noise parameter is set to 0.2 (the default).
+ *
+ * I'm not sure of the exact penalty model from the original paper (it's a bit unclear),
+ * so I'm using the same as the software implementation I'm porting from.  Negative rewards
+ * stack, so being in both puddles is worse than being in only one.
+ *
+ * This version has a rectangular goal region which by default is of size .01
+ *
+ * If random start states are turned on, the agent will start anywhere uniformly
+ * that is not in the goal.
  * 
- * 
- * This is quite an advanced environment in that it has some fancy visualization
- * capabilities which have polluted the code a little.  What I'm saying is that 
- * this is not the easiest environment to get started with.
  */
 import rlVizLib.messaging.environmentShell.TaskSpecPayload;
 import rlVizLib.messaging.interfaces.HasImageInterface;
 
-public class MountainCar extends EnvironmentBase implements
+public class PuddleWorld extends EnvironmentBase implements
         getEnvMaxMinsInterface,
         getEnvObsForStateInterface,
         HasAVisualizerInterface,
         HasImageInterface {
 
-    static final int numActions = 3;
-    protected final MountainCarState theState;    //Used for env_save_state and env_save_state, which don't exist anymore, but we will one day bring them back
-    //through the messaging system and RL-Viz.
-    //Problem parameters have been moved to MountainCar State
+    static final int numActions = 4;
+    protected final PuddleWorldState theState;
     private Random randomGenerator = new Random();
 
     public static TaskSpecPayload getTaskSpecPayload(ParameterHolder P) {
-        MountainCar theMC = new MountainCar(P);
+        PuddleWorld theMC = new PuddleWorld(P);
         String taskSpecString = theMC.makeTaskSpec().getStringRepresentation();
         return new TaskSpecPayload(taskSpecString, false, "");
     }
@@ -83,11 +86,12 @@ public class MountainCar extends EnvironmentBase implements
         TaskSpecVRLGLUE3 theTaskSpecObject = new TaskSpecVRLGLUE3();
         theTaskSpecObject.setEpisodic();
         theTaskSpecObject.setDiscountFactor(1.0d);
-        theTaskSpecObject.addContinuousObservation(new DoubleRange(theState.minPosition, theState.maxPosition));
-        theTaskSpecObject.addContinuousObservation(new DoubleRange(theState.minVelocity, theState.maxVelocity));
-        theTaskSpecObject.addDiscreteAction(new IntRange(0, 2));
-        theTaskSpecObject.setRewardRange(new DoubleRange(-1, 0));
-        theTaskSpecObject.setExtra("EnvName:Mountain-Car Revision:" + this.getClass().getPackage().getImplementationVersion());
+        theTaskSpecObject.addContinuousObservation(new DoubleRange(theState.worldRect.getMinX(), theState.worldRect.getMaxX()));
+        theTaskSpecObject.addContinuousObservation(new DoubleRange(theState.worldRect.getMinY(), theState.worldRect.getMaxY()));
+
+        theTaskSpecObject.addDiscreteAction(new IntRange(0, 3));
+        theTaskSpecObject.setRewardRange(new DoubleRange(-80, 0));
+        theTaskSpecObject.setExtra("EnvName:Puddle-World Revision:" + this.getClass().getPackage().getImplementationVersion());
 
         String taskSpecString = theTaskSpecObject.toTaskSpec();
         TaskSpec.checkTaskSpec(taskSpecString);
@@ -96,13 +100,12 @@ public class MountainCar extends EnvironmentBase implements
 
     }
 
-    public MountainCarState getState() {
+    public PuddleWorldState getState() {
         return theState;
     }
 
     public String env_init() {
         return makeTaskSpec().getStringRepresentation();
-
     }
 
     /**
@@ -125,9 +128,9 @@ public class MountainCar extends EnvironmentBase implements
 
         int a = theAction.intArray[0];
 
-        if (a > 2 || a < 0) {
-            System.err.println("Invalid action selected in mountainCar: " + a);
-            a = randomGenerator.nextInt(3);
+        if (a > 3 || a < 0) {
+            System.err.println("Invalid action selected in puddle world: " + a);
+            a = randomGenerator.nextInt(4);
         }
 
         theState.update(a);
@@ -145,8 +148,8 @@ public class MountainCar extends EnvironmentBase implements
         rlVizLib.utilities.UtilityShop.setVersionDetails(p, new DetailsProvider());
 
         p.addIntegerParam("RandomSeed(0 means random)", 0);
-        p.addBooleanParam("RandomStartStates", false);
-        p.addDoubleParam("TransitionNoise[0,1]", 0.0d);
+        p.addBooleanParam("RandomStartStates", true);
+        p.addDoubleParam("TransitionNoise[0,1]", 0.2d);
         p.setAlias("noise", "TransitionNoise[0,1]");
         p.setAlias("seed", "RandomSeed(0 means random)");
         return p;
@@ -156,7 +159,7 @@ public class MountainCar extends EnvironmentBase implements
      * Create a new mountain car environment using parameter settings in p.
      * @param p
      */
-    public MountainCar(ParameterHolder p) {
+    public PuddleWorld(ParameterHolder p) {
         super();
         boolean randomStartStates = false;
         double transitionNoise = 0.0d;
@@ -169,12 +172,13 @@ public class MountainCar extends EnvironmentBase implements
                 randomSeed = p.getIntegerParam("seed");
             }
         }
-        theState = new MountainCarState(randomStartStates, transitionNoise, randomSeed);
+        theState = new PuddleWorldState(randomStartStates, transitionNoise, randomSeed);
 
     }
 
-    public MountainCar() {
+    public PuddleWorld() {
         this(getDefaultParameters());
+        System.out.println("Completed constructor.");
     }
 
     /**
@@ -188,7 +192,7 @@ public class MountainCar extends EnvironmentBase implements
         try {
             theMessageObject = EnvironmentMessageParser.parseMessage(theMessage);
         } catch (NotAnRLVizMessageException e) {
-            System.err.println("Someone sent mountain Car a message that wasn't RL-Viz compatible");
+            System.err.println("Someone sent Puddle World a message that wasn't RL-Viz compatible");
             return "I only respond to RL-Viz messages!";
         }
 
@@ -202,47 +206,27 @@ public class MountainCar extends EnvironmentBase implements
 
             String theCustomType = theMessageObject.getPayLoad();
 
-            if (theCustomType.equals("GETMCSTATE")) {
+            if (theCustomType.equals("GETPWSTATE")) {
                 //It is a request for the state
-                double position = theState.getPosition();
-                double velocity = theState.getVelocity();
-                double height = theState.getHeightAtPosition(position);
-                int lastAction = theState.getLastAction();
-                double slope = theState.getSlope(position);
-                MCStateResponse theResponseObject = new MCStateResponse(lastAction, position, velocity, height, slope);
-                return theResponseObject.makeStringResponse();
-            }
 
-            if (theCustomType.startsWith("GETHEIGHTS")) {
-                Vector<Double> theHeights = new Vector<Double>();
-
-                StringTokenizer theTokenizer = new StringTokenizer(theCustomType, ":");
-                //throw away the first token
-                theTokenizer.nextToken();
-
-                int numQueries = Integer.parseInt(theTokenizer.nextToken());
-                for (int i = 0; i < numQueries; i++) {
-                    double thisPoint = Double.parseDouble(theTokenizer.nextToken());
-                    theHeights.add(theState.getHeightAtPosition(thisPoint));
+                Point2D agentPosition=PuddleWorldState.getDefaultPosition();
+                if(theState!=null){
+                    agentPosition=theState.getPosition();
                 }
-
-                MCHeightResponse theResponseObject = new MCHeightResponse(theHeights);
-                return theResponseObject.makeStringResponse();
-            }
-
-            if (theCustomType.startsWith("GETMCGOAL")) {
-                MCGoalResponse theResponseObject = new MCGoalResponse(theState.goalPosition);
+                StateResponse theResponseObject = new StateResponse(agentPosition);
                 return theResponseObject.makeStringResponse();
             }
 
         }
-        System.err.println("We need some code written in Env Message for MountainCar.. unknown request received: " + theMessage);
+        System.err.println("We need some code written in Env Message for PuddleWorld.. unknown request received: " + theMessage);
         Thread.dumpStack();
         return null;
     }
 
     public static void main(String[] args) {
-        EnvironmentLoader L = new EnvironmentLoader(new MountainCar());
+        System.out.println("in main...");
+        EnvironmentLoader L = new EnvironmentLoader(new PuddleWorld());
+        System.out.println("loaded...");
         L.run();
     }
 
@@ -267,9 +251,9 @@ public class MountainCar extends EnvironmentBase implements
      */
     public double getMaxValueForQuerableVariable(int dimension) {
         if (dimension == 0) {
-            return theState.maxPosition;
+            return theState.worldRect.getMaxX();
         } else {
-            return theState.maxVelocity;
+            return theState.worldRect.getMaxY();
         }
     }
 
@@ -281,9 +265,9 @@ public class MountainCar extends EnvironmentBase implements
      */
     public double getMinValueForQuerableVariable(int dimension) {
         if (dimension == 0) {
-            return theState.minPosition;
+            return theState.worldRect.getMinX();
         } else {
-            return theState.minVelocity;
+            return theState.worldRect.getMinY();
         }
     }
 
@@ -306,7 +290,7 @@ public class MountainCar extends EnvironmentBase implements
     }
 
     public String getVisualizerClassName() {
-        return MountainCarVisualizer.class.getName();
+        return PuddleWorldVisualizer.class.getName();
     }
 
     /**
@@ -314,7 +298,7 @@ public class MountainCar extends EnvironmentBase implements
      * @return
      */
     public URL getImageURL() {
-        URL imageURL = MountainCar.class.getResource("/images/mountaincar.png");
+        URL imageURL = PuddleWorld.class.getResource("/images/mountaincar.png");
         return imageURL;
     }
 }
@@ -327,11 +311,11 @@ public class MountainCar extends EnvironmentBase implements
 class DetailsProvider implements hasVersionDetails {
 
     public String getName() {
-        return "Mountain Car 1.30";
+        return "Puddle World 0.1";
     }
 
     public String getShortName() {
-        return "Mount-Car";
+        return "Puddle-World";
     }
 
     public String getAuthors() {
@@ -339,11 +323,11 @@ class DetailsProvider implements hasVersionDetails {
     }
 
     public String getInfoUrl() {
-        return "http://library.rl-community.org/environments/mountaincar";
+        return "http://library.rl-community.org/wiki/Puddle_World_(Java)";
     }
 
     public String getDescription() {
-        return "RL-Library Java Version of the classic Mountain Car RL-Problem.";
+        return "RL-Library Java Version of the classic Puddle World RL-Problem.";
     }
 }
 

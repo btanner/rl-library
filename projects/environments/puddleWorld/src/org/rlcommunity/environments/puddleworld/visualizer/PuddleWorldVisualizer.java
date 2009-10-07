@@ -16,15 +16,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
-package org.rlcommunity.environments.mountaincar.visualizer;
+package org.rlcommunity.environments.puddleworld.visualizer;
 
 import java.util.Vector;
-import org.rlcommunity.environments.mountaincar.messages.MCGoalRequest;
-import org.rlcommunity.environments.mountaincar.messages.MCGoalResponse;
-import org.rlcommunity.environments.mountaincar.messages.MCHeightRequest;
-import org.rlcommunity.environments.mountaincar.messages.MCHeightResponse;
-import org.rlcommunity.environments.mountaincar.messages.MCStateRequest;
-import org.rlcommunity.environments.mountaincar.messages.MCStateResponse;
+import org.rlcommunity.environments.puddleworld.messages.StateRequest;
+import org.rlcommunity.environments.puddleworld.messages.StateResponse;
 import rlVizLib.general.TinyGlue;
 import rlVizLib.visualization.interfaces.AgentOnValueFunctionDataProvider;
 import rlVizLib.visualization.interfaces.ValueFunctionDataProvider;
@@ -42,30 +38,27 @@ import rlVizLib.visualization.ValueFunctionVizComponent;
 import rlVizLib.visualization.interfaces.DynamicControlTarget;
 import org.rlcommunity.rlglue.codec.types.Observation;
 
-import org.rlcommunity.rlglue.codec.types.Action;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.visualization.SelfUpdatingVizComponent;
 
-public class MountainCarVisualizer extends AbstractVisualizer implements ValueFunctionDataProvider, AgentOnValueFunctionDataProvider, GlueStateProvider {
+public class PuddleWorldVisualizer extends AbstractVisualizer implements ValueFunctionDataProvider, AgentOnValueFunctionDataProvider, GlueStateProvider {
 
     private Vector<Double> mins = null;
     private Vector<Double> maxs = null;
-    private MCStateResponse theCurrentState = null;
-    private Vector<Double> theQueryPositions = null;
-    private  Vector<Double> theHeights = null;
-    double minHeight = Double.MIN_VALUE;
-    double maxHeight = Double.MAX_VALUE;
-    double goalPosition = 0.5;
+    private StateResponse theCurrentState = null;
+
     private int lastStateUpdateTimeStep = -1;
     private int lastAgentValueUpdateTimeStep = -1;
-    private boolean printedQueryError = false;
+
     //Will have to find a way to easily generalize this and move it to vizlib
     private TinyGlue glueState = null;
     //This is a little interface that will let us dump controls to a panel somewhere.
     DynamicControlTarget theControlTarget = null;
     private ValueFunctionVizComponent theValueFunction;
     private AgentOnValueFunctionVizComponent theAgentOnValueFunction;
-    public MountainCarVisualizer(TinyGlue glueState, DynamicControlTarget theControlTarget) {
+    private boolean printedQueryError=false;
+    
+    public PuddleWorldVisualizer(TinyGlue glueState, DynamicControlTarget theControlTarget) {
         super();
 
         this.glueState = glueState;
@@ -77,16 +70,14 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
     protected void setupVizComponents() {
         theValueFunction = new ValueFunctionVizComponent(this, theControlTarget, this.glueState);
         theAgentOnValueFunction = new AgentOnValueFunctionVizComponent(this, this.glueState);
-        SelfUpdatingVizComponent mountain = new MountainVizComponent(this);
-        SelfUpdatingVizComponent carOnMountain = new CarOnMountainVizComponent(this);
+        SelfUpdatingVizComponent puddleComponent = new PuddleMapComponent(this);
         SelfUpdatingVizComponent scoreComponent = new GenericScoreComponent(this);
 
-        super.addVizComponentAtPositionWithSize(theValueFunction, 0, .5, 1.0, .5);
-        super.addVizComponentAtPositionWithSize(theAgentOnValueFunction, 0, .5, 1.0, .5);
+        super.addVizComponentAtPositionWithSize(theValueFunction, 0, 0, 1.0, 1.0);
+        super.addVizComponentAtPositionWithSize(puddleComponent, 0, 0, 1.0, 1.0);
+        super.addVizComponentAtPositionWithSize(theAgentOnValueFunction, 0, 0,1.0,1.0);
+        super.addVizComponentAtPositionWithSize(scoreComponent, 0, 0,1.0,1.0);
 
-        super.addVizComponentAtPositionWithSize(mountain, 0, 0, 1.0, .5);
-        super.addVizComponentAtPositionWithSize(carOnMountain, 0, 0, 1.0, .5);
-        super.addVizComponentAtPositionWithSize(scoreComponent, 0, 0, 1.0, 1.0);
     }
 
     public void updateEnvironmentVariableRanges() {
@@ -167,15 +158,10 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
     public double getCurrentStateInDimension(int whichDimension) {
         ensureStateExists();
         if (whichDimension == 0) {
-            return theCurrentState.getPosition();
+            return theCurrentState.getPosition().getX();
         } else {
-            return theCurrentState.getVelocity();
+            return theCurrentState.getPosition().getY();
         }
-    }
-
-    public int getLastAction() {
-        ensureStateExists();
-        return theCurrentState.getAction();
     }
 
     private void ensureStateExists(){
@@ -183,99 +169,23 @@ public class MountainCarVisualizer extends AbstractVisualizer implements ValueFu
             updateAgentState(true);
         }
     }
-    public double getHeight() {
-        ensureStateExists();
-        return theCurrentState.getHeight();
-    }
     
-    public double getSlope(){
-        ensureStateExists();
-        return theCurrentState.getSlope();
-    }
-
-    public double getMaxHeight() {
-        if (theQueryPositions == null) {
-            initializeHeights();
-        }
-        return minHeight;
-    }
-
-    public double getMinHeight() {
-        if (theQueryPositions == null) {
-            initializeHeights();
-        }
-        return maxHeight;
-    }
-
-    public Vector<Double> getSampleHeights() {
-        if (theHeights == null) {
-            initializeHeights();
-        }
-        return theHeights;
-    }
-
-    public Vector<Double> getSamplePositions() {
-        if (theQueryPositions == null) {
-            initializeHeights();
-        }
-        return theQueryPositions;
-    }
-
 
     public synchronized void updateAgentState(boolean force) {
         //Only do this if we're on a new time step
         int currentTimeStep = glueState.getTotalSteps();
 
         if (theCurrentState == null || currentTimeStep != lastStateUpdateTimeStep || force) {
-            theCurrentState = MCStateRequest.Execute();
+            theCurrentState = StateRequest.Execute();
             lastStateUpdateTimeStep = currentTimeStep;
         }
     }
 
-    public Vector<Double> getHeightsForPositions(Vector<Double> theQueryPositions) {
-        MCHeightResponse heightResponse = MCHeightRequest.Execute(theQueryPositions);
-        return heightResponse.getHeights();
-    }
-
-    public double getGoalPosition() {
-        MCGoalResponse goalResponse = MCGoalRequest.Execute();
-        return goalResponse.getGoalPosition();
-    }
-
-    public void initializeHeights() {
-        //Because we can change the shape of the curve we have no guarantees what
-        // the max and min heights of the mountains may turn out to be...
-        // this takes a quick sample based approach to find out what is a good approximation
-        //for the min and the max.
-        double minPosition = getMinValueForDim(0);
-        double maxPosition = getMaxValueForDim(0);
-
-        int pointsToDraw = 500;
-        double theRangeSize = maxPosition - minPosition;
-        double pointIncrement = theRangeSize / (double) pointsToDraw;
-
-        theQueryPositions = new Vector<Double>();
-        for (double i = minPosition; i < maxPosition; i += pointIncrement) {
-            theQueryPositions.add(i);
-        }
-        theHeights = this.getHeightsForPositions(theQueryPositions);
-
-        maxHeight = Double.MIN_VALUE;
-        minHeight = Double.MAX_VALUE;
-        for (Double thisHeight : theHeights) {
-            if (thisHeight > maxHeight) {
-                maxHeight = thisHeight;
-            }
-            if (thisHeight < minHeight) {
-                minHeight = thisHeight;
-            }
-        }
-    }
-
+    
 
     @Override
     public String getName() {
-        return "Mountain Car 1.3 ";
+        return "Puddle World 0.1";
     }
 
     
