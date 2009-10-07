@@ -298,7 +298,7 @@ public class PuddleWorld extends EnvironmentBase implements
      * @return
      */
     public URL getImageURL() {
-        URL imageURL = PuddleWorld.class.getResource("/images/mountaincar.png");
+        URL imageURL = PuddleWorld.class.getResource("/images/puddleworld.png");
         return imageURL;
     }
 }
