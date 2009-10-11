@@ -24,11 +24,6 @@
  */
 package org.rlcommunity.environments.continuousgridworld;
 
-import org.rlcommunity.environments.continuousgridworld.map.SerializableRectangle;
-import org.rlcommunity.environments.continuousgridworld.map.RewardRegion;
-import org.rlcommunity.environments.continuousgridworld.map.BarrierRegion;
-import org.rlcommunity.environments.continuousgridworld.map.TerminalRegion;
-import java.awt.Shape;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpecVRLGLUE3;
 import org.rlcommunity.rlglue.codec.taskspec.ranges.DoubleRange;
@@ -59,6 +54,8 @@ public class ContinuousGridWorld extends AbstractContinuousGridWorld {
 
     public static ParameterHolder getDefaultParameters() {
         ParameterHolder myParams = AbstractContinuousGridWorld.getDefaultParameters();
+        myParams.addIntegerParam("map-number [0-2]",0);
+        myParams.setAlias("map-number","map-number [0-2]");
         return myParams;
     }
 
@@ -84,20 +81,13 @@ public class ContinuousGridWorld extends AbstractContinuousGridWorld {
 
     @Override
     protected void addBarriersAndGoal(ParameterHolder theParams) {
-        RewardRegion negativeEverywhere = new RewardRegion(new SerializableRectangle(0.0d, 0.0d, 100.0d, 100.0d), -1.0d);
-        theState.addRewardState(negativeEverywhere);
-
-        Shape goalRegion = new SerializableRectangle(35.0, 35.0, 12.0, 12.0);
-
-        TerminalRegion goalState = new TerminalRegion(goalRegion);
-        theState.addTerminalState(goalState);
-
-        theState.addRewardState(new RewardRegion(goalRegion, 1.0));
-
-
-        theState.addBarrier(new BarrierRegion(new SerializableRectangle(25.0, 25.0, 5.0, 50.0), 1.0));
-        theState.addBarrier(new BarrierRegion(new SerializableRectangle(25.0, 25.0, 50.0, 5.0), 1.0));
-        theState.addBarrier(new BarrierRegion(new SerializableRectangle(75.0, 25.0, 5.0, 50.0), 1.0));
+        int mapNumber=0;
+        if(theParams!=null){
+            if(!theParams.isNull()){
+                mapNumber=theParams.getIntegerParam("map-number");
+            }
+        }
+        MapGenerator.makeMap(mapNumber,this.theState);
     }
 }
 
