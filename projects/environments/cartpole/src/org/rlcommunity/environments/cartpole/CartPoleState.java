@@ -43,7 +43,7 @@ public class CartPoleState {
 
     private int lastAction=0;
 
-    private final double gammaOrExitProb=.999d;
+    private final double gammaOrExitProb=.95d;
 
     private boolean useDiscountFactor=true;
     //This will get set sometimes in update.
@@ -206,7 +206,7 @@ public class CartPoleState {
 
     double getReward() {
         if(!inFailure() || natureSaysFail){
-            return 1.0d;
+            return 0.0d;
         }
         return -1.0d;
     }

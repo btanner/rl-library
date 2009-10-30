@@ -84,7 +84,7 @@ echo "++ Gui Trainer is finished"
 }
 startLocalGuiTrainerBothViz(){
 echo "-- Starting up Gui Trainer"
-java -enableassertions -Xmx128M $osExtras -jar $VIZAPP_JAR agent-environment-jar-path=$ENV_AGENT_JARS_PATH list-agents=true list-environments=true env-viz=true agent-viz=true local-glue=true
+java -enableassertions -Xmx2048M $osExtras -jar $VIZAPP_JAR agent-environment-jar-path=$ENV_AGENT_JARS_PATH list-agents=true list-environments=true env-viz=true agent-viz=true local-glue=true
 echo "++ Gui Trainer is finished"
 }
 startLocalGuiTrainerBothVizCPP(){

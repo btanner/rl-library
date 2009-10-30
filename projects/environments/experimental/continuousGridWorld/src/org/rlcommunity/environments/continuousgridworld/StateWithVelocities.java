@@ -38,8 +38,8 @@ public class StateWithVelocities extends State {
     private static final long serialVersionUID = 1L;
     private Point2D agentVelocity = new SerializablePoint(0.0d, 0.0d);
 
-    private double xVelIncrement = .5d;
-    private double yVelIncrement = .5d;
+    private double xVelIncrement = .25d;
+    private double yVelIncrement = .25d;
 
 //    private StateWithVelocities() {
 //    }
@@ -92,17 +92,17 @@ public class StateWithVelocities extends State {
 
 
         //Limits
-        if (newXVel > 5.0d) {
-            newXVel = 5.0d;
+        if (newXVel > 2.5d) {
+            newXVel = 2.5d;
         }
-        if (newYVel > 5.0d) {
-            newYVel = 5.0d;
+        if (newYVel > 2.5d) {
+            newYVel = 2.5d;
         }
-        if (newXVel < -5.0d) {
-            newXVel = -5.0d;
+        if (newXVel < -2.5d) {
+            newXVel = -2.5d;
         }
-        if (newYVel < -5.0d) {
-            newYVel = -5.0d;
+        if (newYVel < -2.5d) {
+            newYVel = -2.5d;
         }
 
 
