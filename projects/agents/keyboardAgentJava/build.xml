@@ -11,7 +11,9 @@
 	<property name="main.package.name" value="org.rlcommunity.agents.keyboard/"/>
 	<property name="main.package.spec.version" value="1.0"/>
 	<property name="main.vendor.name" value="Brian Tanner"/>
+    <property name="jar.main.class" value="org.rlcommunity.agents.keyboard.KeyboardAgent" />
 	<path id="project.extra.classpath" />
+    <property name="jar.extra.classpath" value="../system/common/libs/rl-viz/RLVizLib.jar" />
 	<import file="${this.project.system.directory}/common/ant/build-targets.xml"/>
 
 	<!-- this import gives you targets: clean, build, test, javadoc, all -->

@@ -32,6 +32,7 @@ import org.rlcommunity.rlglue.codec.AgentInterface;
 import org.rlcommunity.rlglue.codec.taskspec.TaskSpec;
 import org.rlcommunity.rlglue.codec.types.Action;
 import org.rlcommunity.rlglue.codec.types.Observation;
+import org.rlcommunity.rlglue.codec.util.AgentLoader;
 import rlVizLib.messaging.NotAnRLVizMessageException;
 import rlVizLib.messaging.agent.AgentMessageParser;
 import rlVizLib.messaging.agent.AgentMessages;
@@ -55,6 +56,11 @@ public class KeyboardAgent implements AgentInterface,HasAVisualizerInterface,Has
     private Action action;
     TaskSpec TSO = null;
     private String taskSpecString=null;
+
+    public static void main(String[] args) {
+        AgentLoader L = new AgentLoader(new KeyboardAgent());
+        L.run();
+    }
 
     public KeyboardAgent() {
         this(getDefaultParameters());
