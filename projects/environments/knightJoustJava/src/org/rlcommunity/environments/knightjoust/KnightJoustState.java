@@ -1,5 +1,16 @@
 /*
-Copyright 2009 Ioannis Partalas
+ 
+This code is based on the source code that Matthew Taylor
+provided me. The original source can be obtained from the following
+URL: http://teamcore.usc.edu/taylorm/dissertation/index.htm.
+A full description of the environment can be found in Matthew's PhD dissertation:
+
+Matthew E. Taylor. Autonomous Inter-Task Transfer in Reinforcement Learning Domains. 
+Ph.D. Thesis, Department of Computer Sciences, The University of Texas at Austin, 2008.
+
+This package implements the Knight Joust environment under the
+framework of RL-Glue 3.0.
+
 http://rl-library.googlecode.com/
 http://users.auth.gr/~partalas/
 
