@@ -17,6 +17,7 @@ We'll try and rely on minimal variables from above.
 
 <dirname property="imported.basedir" file="${ant.file.imported}"/>
 <property name="rlvizlib.jar" value="${this.project.system.directory}/common/libs/rl-viz/RLVizLib.jar" />
+<property name="rlvizlib.dir" value="${this.project.system.directory}/common/libs/rl-viz/" />
 <property name="dist.dir"   value="${this.project.product.directory}"/>
 <property name="result.jar" value="${dist.dir}/${project.name}.jar" />
 

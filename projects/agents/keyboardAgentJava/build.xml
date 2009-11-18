@@ -13,6 +13,7 @@
 	<property name="main.vendor.name" value="Brian Tanner"/>
     <property name="jar.main.class" value="org.rlcommunity.agents.keyboard.KeyboardAgent" />
 	<path id="project.extra.classpath" />
+
     <property name="jar.extra.classpath" value="../system/common/libs/rl-viz/RLVizLib.jar" />
 	<import file="${this.project.system.directory}/common/ant/build-targets.xml"/>
 
