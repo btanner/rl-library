@@ -20,7 +20,7 @@
  *					car's y-velocity (-.07 to .07)
  *					
  ********************************************************************************************************/
-#include "mountaincar-3D.h"
+#include "mountaincar-3d.h"
 
 static reward_observation_terminal_t this_reward_observation;							
 static observation_t observation;
