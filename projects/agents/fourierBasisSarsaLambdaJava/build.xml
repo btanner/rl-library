@@ -15,6 +15,10 @@
 	<property name="main.vendor.name" value="George Konidaris"/>
 	<path id="project.extra.classpath" />
 
+<!-- added by btanner to allow java -jar thisjar.jar startup -->
+    <property name="jar.main.class" value="org.rlcommunity.agents.EpsilonGreedyFourierBasisSarsaLambda" />
+    <property name="jar.extra.classpath" value="../system/common/libs/rl-viz/RLVizLib.jar" />
+
 	<import file="${this.project.system.directory}/common/ant/build-targets.xml"/>
 
 	<import file="${this.project.system.directory}/common/ant/predefined-target-aliases.xml"/>
