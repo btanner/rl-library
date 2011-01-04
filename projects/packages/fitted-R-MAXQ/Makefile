@@ -2,7 +2,11 @@
 BOOSTDIR := .
 
 # Compiler flags
-CXXFLAGS := -ansi -pedantic -I$(BOOSTDIR) -Wall -Werror
+CXXFLAGS := -ansi -pedantic -Wall -Werror -I$(BOOSTDIR)
+
+# For installations of RL Glue and the C++ Codec outside the default path
+#CXXFLAGS += -I/path/to/include
+#EXTRA-LDFLAGS := -L/path/to/lib
 
 # For optimized code
 CXXFLAGS += -DNDEBUG -O3
@@ -28,6 +32,8 @@ PRODUCT-OBJS := # Defined recursively
 MODULES := Agent Environment Experiment
 
 .PHONY: all clean run
+
+.PRECIOUS: %.o
 
 # By default, build all RL Glue components.
 all: $(PRODUCTS)

@@ -1,6 +1,6 @@
 ENVIRONMENT-SRCS := $(patsubst %, Environment/%.cc, gridworld)
 ENVIRONMENT-OBJS := $(patsubst %.cc, %.o, $(ENVIRONMENT-SRCS))
-ENVIRONMENT-LDFLAGS := -lrlutils -lrlenvironment -lrlgluenetdev
+ENVIRONMENT-LDFLAGS := $(EXTRA-LDFLAGS) -lrlutils -lrlenvironment -lrlgluenetdev
 
 PRODUCT-SRCS += $(patsubst %, Environment/%.cc, $(ENVIRONMENTS))
 PRODUCT-OBJS += $(patsubst %, Environment/%.o, $(ENVIRONMENTS))
