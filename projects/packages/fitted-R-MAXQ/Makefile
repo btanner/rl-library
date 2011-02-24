@@ -4,6 +4,9 @@ BOOSTDIR := .
 # Compiler flags
 CXXFLAGS := -ansi -pedantic -Wall -Werror -I$(BOOSTDIR)
 
+# __gnu_cxx::hash_set and hash_map should be replaced by unordered_set and _map
+CXXFLAGS += -Wno-deprecated
+
 # For installations of RL Glue and the C++ Codec outside the default path
 #CXXFLAGS += -I/path/to/include
 #EXTRA-LDFLAGS := -L/path/to/lib

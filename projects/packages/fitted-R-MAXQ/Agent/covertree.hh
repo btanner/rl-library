@@ -5,6 +5,7 @@
     Implementation of the Cover Tree algorithm.
     http://hunch.net/~jl/projects/cover_tree/cover_tree.html */
 
+#include <algorithm>
 #include <cmath>
 #include <iterator>
 #include <limits>
