@@ -71,7 +71,8 @@ public class EpsilonGreedyFourierBasisSarsaLambda implements AgentInterface, Has
      *  gamma
      *  lambda
      *  epsilon
-     *  fourier_order
+     *  auto-alpha
+     *  fourier-order
      */
     public EpsilonGreedyFourierBasisSarsaLambda(ParameterHolder p) 
     {
@@ -81,19 +82,21 @@ public class EpsilonGreedyFourierBasisSarsaLambda implements AgentInterface, Has
 
     /**
      * Return a ParameterHolder object with the agent's default parameter settings.
- 	 *
+     *
      * @return a default ParameterHolder object.
      */
     public static ParameterHolder getDefaultParameters() 
     {
         ParameterHolder p = new ParameterHolder();
      
-        p.addDoubleParam("alpha", 0.01);
+        p.addDoubleParam("alpha", 1.0);
         p.addDoubleParam("gamma", 1.0);
         p.addDoubleParam("lambda", 0.9);
         p.addDoubleParam("epsilon", 0.01);
         
-        p.addIntegerParam("fourier-order", 3);
+	p.addBooleanParam("auto-alpha", true);
+
+        p.addIntegerParam("fourier-order", 5);
         
         return p;
     }
@@ -122,11 +125,13 @@ public class EpsilonGreedyFourierBasisSarsaLambda implements AgentInterface, Has
         double gamma = theParamHolder.getDoubleParam("gamma");
         double epsilon = theParamHolder.getDoubleParam("epsilon");
      
+	boolean auto_alpha = theParamHolder.getBooleanParam("auto-alpha");
+
         int fourier_order = theParamHolder.getIntegerParam("fourier-order");
      
         // Create function approximator and learner
         FourierFA fa = new FourierFA(theTaskObject, fourier_order);
-        learner = new SarsaLambdaFA(actionCount, fa, alpha, gamma, lambda, epsilon);
+        learner = new SarsaLambdaFA(actionCount, fa, alpha, gamma, lambda, epsilon, auto_alpha);
     }
 
     /**
@@ -227,7 +232,6 @@ public class EpsilonGreedyFourierBasisSarsaLambda implements AgentInterface, Has
     public void agent_cleanup() 
     {
         learner = null;
-        theParamHolder = null;
         theTaskObject = null;
     }
 

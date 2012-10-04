@@ -28,40 +28,40 @@ import org.rlcommunity.rlglue.codec.types.Observation;
  */
 public interface LinearFA 
 {
-	/**
-	 * Create a duplicate function approximator. The new FA should be of the
-	 * same type, use the same set of basis functions, and have equal (but
-	 * distinct) weights. A user should be able to use this function to create
-	 * an FA they can modify independently of the original. 
-	 * 
-	 * @return a new function approximator of the same type.
-	 */
-	public LinearFA duplicate();
+    /**
+     * Create a duplicate function approximator. The new FA should be of the
+     * same type, use the same set of basis functions, and have equal (but
+     * distinct) weights. A user should be able to use this function to create
+     * an FA they can modify independently of the original. 
+     * 
+     * @return a new function approximator of the same type.
+     */
+    public LinearFA duplicate();
 	
-	/**
-	 * Compute the value of this function approximator at a given state.
-	 * 
-	 * @param s	the state observation in question.
-	 * @return the value of the function approximated at state s.
-	 */
-	public double valueAt(Observation s);
+    /**
+     * Compute the value of this function approximator at a given state.
+     * 
+     * @param s	the state observation in question.
+     * @return the value of the function approximated at state s.
+     */
+    public double valueAt(Observation s);
 	
-	/**
-	 * Compute the value of the function approximator's basis functions
-	 * at a given state. 
-	 * 
-	 * @param s		the state observation in question.
-	 * @return	an array of doubles, each item in the array representing the value
-	 * of an individual basis function used by the function approximator.
-	 */
-	public double[] computeFeatures(Observation s);  
+    /**
+     * Compute the value of the function approximator's basis functions
+     * at a given state. 
+     * 
+     * @param s		the state observation in question.
+     * @return	an array of doubles, each item in the array representing the value
+     * of an individual basis function used by the function approximator.
+     */
+    public double[] computeFeatures(Observation s);  
     
-	/**
-	 * Determine the number of basis functions (and hence number of parameters)
-	 * in the function approximator.
-	 * 
-	 * @return	the number of basis functions used by the FA.
-	 */
+    /**
+     * Determine the number of basis functions (and hence number of parameters)
+     * in the function approximator.
+     * 
+     * @return	the number of basis functions used by the FA.
+     */
     public int getNumBasisFunctions();
    
     /**

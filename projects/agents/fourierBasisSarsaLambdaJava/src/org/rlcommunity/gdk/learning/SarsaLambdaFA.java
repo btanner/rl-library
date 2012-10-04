@@ -4,6 +4,10 @@ package org.rlcommunity.gdk.learning;
  * http://www-all.cs.umass.edu/~gdk/
  * gdk@cs.umass.edu
  * 
+ *  Significant modifications by Will Dabney (wdabney@cs.umass.edu)
+ *  to include his Alpha Bounds method for automatically 
+ *  scaling alpha. (September 2012)
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -29,25 +33,29 @@ import org.rlcommunity.rlglue.codec.types.Observation;
 public class SarsaLambdaFA
 {
 
-	/**
-	 * Create a new learning algorithm instance.
-	 * 
-	 * @param actions	the number of action available to the agent.
-	 * @param fa		a linear function approximator instance.
-	 * @param Alpha		learning rate.
-	 * @param Gamma		discount factor.
-	 * @param Lambda	lambda parameter.
-	 * @param Eps		action selection parameter.
-	 */
-	public SarsaLambdaFA(int actions, LinearFA fa,
-			double Alpha, double Gamma, double Lambda, double Eps)
-	{
-	 // Copy parameters.
+  /**
+   * Create a new learning algorithm instance.
+   * 
+   * @param actions	the number of action available to the agent.
+   * @param fa		a linear function approximator instance.
+   * @param Alpha	learning rate.
+   * @param Gamma	discount factor.
+   * @param Lambda	lambda parameter.
+   * @param Eps		action selection parameter.
+   * @param Auto_Alpha  use Dabney's automatic alpha method.
+   */
+  public SarsaLambdaFA(int actions, LinearFA fa,
+			double Alpha, double Gamma, double Lambda, double Eps,
+			boolean Auto_Alpha)
+    {
+     // Copy parameters.
      alpha = Alpha;
      gamma = Gamma;
      eps = Eps;
      lambda = Lambda;
      
+     use_alpha_bounds = Auto_Alpha;
+
      nactions = actions;
      
      // Create the necessary function approximators.
@@ -60,19 +68,19 @@ public class SarsaLambdaFA
      setupTrace();
     }
     
-	/**
-	 * Return the learner's internal function approximators. 
-	 * 
-	 * @return an array of linear function approximators. 
-	 */
-	public LinearFA [] GetFAs()
-	{
-		return FA;
-	}
+    /**
+     * Return the learner's internal function approximators. 
+     * 
+     * @return an array of linear function approximators. 
+     */
+    public LinearFA [] GetFAs()
+     {
+       	return FA;
+     }
 	
-	/**
-	 * Create the trace vector. 
-	 */
+    /**
+     * Create the trace vector. 
+     */
     protected void setupTrace()
     { 
       traces = new double[nactions][FA[0].getNumBasisFunctions()];
@@ -142,7 +150,7 @@ public class SarsaLambdaFA
         // Otherwise ...
         else
         {
-        	// Select a random action number 
+            // Select a random action number 
             int vpos = (int)(Math.random() * bcount);
             if(vpos == bcount) vpos = bcount - 1;
             
@@ -161,8 +169,7 @@ public class SarsaLambdaFA
         System.out.println("Action selection problem ... ");
         return nactions;
     }
-         
-    
+
     /**
      * Perform an update given a (s, a, r, s, a) tuple.
      * 
@@ -210,7 +217,52 @@ public class SarsaLambdaFA
             		traces[j][k] += phi[k];
             	}
             }
-        
+	}
+
+	// Alpha Bounds code (Dabney)
+	if (use_alpha_bounds) 
+	 {
+	    double epsilon_alpha = 0.0;
+
+	    if((sprime != null) && (nextact != -1)) 
+		{
+		double [] phi_tp = FA[nextact].computeFeatures(sprime);
+		double [] phi_t = FA[action].computeFeatures(s);
+		for (int k = 0; k < FA[action].getNumBasisFunctions(); k++) 
+		    {
+			epsilon_alpha += gamma * phi_tp[k] * traces[nextact][k] - phi_t[k] * traces[action][k];
+		    }
+		} 
+	    else 
+		{
+		    double [] phi_t = FA[action].computeFeatures(s);
+		    for (int k = 0; k < FA[action].getNumBasisFunctions(); k++) 
+			{
+			    epsilon_alpha += -1.0 * phi_t[k] * traces[action][k];
+			}
+		}
+
+	    double new_alpha  = Math.abs(-1.0 / epsilon_alpha);
+
+	    // Handle each of the possible situations
+	    if (epsilon_alpha >= 0.0) 
+		{ 
+		    // epsilon_alpha == 0, therefore deltas are the same after the update...
+		    // Doing nothing here: 
+		    // There doesn't exist a scalar step-size that solves the equation and is greater than zero
+		} 
+	    else if (epsilon_alpha < 0.0) 
+		{ 
+		    // epsilon_alpha < 0, we have good bounds 
+		    //	    if (alpha > new_alpha)
+		    //System.out.println("Alpha bounded: " + alpha + " " + new_alpha + " " + epsilon_alpha);
+		    alpha = Math.min(new_alpha, alpha);
+		} 
+	 }
+	 // END of Alpha Bound code (Dabney)
+
+	for(int j = 0; j < nactions; j++)
+	{
            // Build weight deltas to add to weights
            double [] w_deltas = new double[FA[j].getNumBasisFunctions()];
            for(int k = 0; k < FA[j].getNumBasisFunctions(); k++)
@@ -278,4 +330,5 @@ public class SarsaLambdaFA
     private LinearFA [] FA;
     private double [][] traces;
     private int nactions;
+    private final boolean use_alpha_bounds;
 }
