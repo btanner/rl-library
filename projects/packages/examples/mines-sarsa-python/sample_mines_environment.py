@@ -77,20 +77,20 @@ class mines_environment(Environment):
 			self.setRandomState()
 
 		returnObs=Observation()
-		returnObs.intArray=[self.calculateFlatState()]
+		returnObs.int_array=[self.calculateFlatState()]
 
 		return returnObs
 		
 	def env_step(self,thisAction):
 		# Make sure the action is valid 
-		assert len(thisAction.intArray)==1,"Expected 1 integer action."
-		assert thisAction.intArray[0]>=0, "Expected action to be in [0,3]"
-		assert thisAction.intArray[0]<4, "Expected action to be in [0,3]"
+		assert len(thisAction.int_array)==1,"Expected 1 integer action."
+		assert thisAction.int_array[0]>=0, "Expected action to be in [0,3]"
+		assert thisAction.int_array[0]<4, "Expected action to be in [0,3]"
 		
-		self.updatePosition(thisAction.intArray[0])
+		self.updatePosition(thisAction.int_array[0])
 
 		theObs=Observation()
-		theObs.intArray=[self.calculateFlatState()]
+		theObs.int_array=[self.calculateFlatState()]
 
 		returnRO=Reward_observation_terminal()
 		returnRO.r=self.calculateReward()
@@ -226,4 +226,4 @@ class mines_environment(Environment):
 		
 
 if __name__=="__main__":
-	EnvironmentLoader.loadEnvironment(mines_environment())
+	EnvironmentLoader.load_environment(mines_environment())

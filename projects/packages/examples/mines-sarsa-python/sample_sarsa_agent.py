@@ -98,10 +98,10 @@ class sarsa_agent(Agent):
 		
 	
 	def agent_start(self,observation):
-		theState=observation.intArray[0]
+		theState=observation.int_array[0]
 		thisIntAction=self.egreedy(theState)
 		returnAction=Action()
-		returnAction.intArray=[thisIntAction]
+		returnAction.int_array=[thisIntAction]
 		
 		self.lastAction=copy.deepcopy(returnAction)
 		self.lastObservation=copy.deepcopy(observation)
@@ -109,9 +109,9 @@ class sarsa_agent(Agent):
 		return returnAction
 	
 	def agent_step(self,reward, observation):
-		newState=observation.intArray[0]
-		lastState=self.lastObservation.intArray[0]
-		lastAction=self.lastAction.intArray[0]
+		newState=observation.int_array[0]
+		lastState=self.lastObservation.int_array[0]
+		lastAction=self.lastAction.int_array[0]
 
 		newIntAction=self.egreedy(newState)
 
@@ -125,7 +125,7 @@ class sarsa_agent(Agent):
 			self.value_function[lastState][lastAction]=new_Q_sa
 
 		returnAction=Action()
-		returnAction.intArray=[newIntAction]
+		returnAction.int_array=[newIntAction]
 		
 		self.lastAction=copy.deepcopy(returnAction)
 		self.lastObservation=copy.deepcopy(observation)
@@ -133,8 +133,8 @@ class sarsa_agent(Agent):
 		return returnAction
 	
 	def agent_end(self,reward):
-		lastState=self.lastObservation.intArray[0]
-		lastAction=self.lastAction.intArray[0]
+		lastState=self.lastObservation.int_array[0]
+		lastAction=self.lastAction.int_array[0]
 
 		Q_sa=self.value_function[lastState][lastAction]
 
@@ -218,4 +218,4 @@ class sarsa_agent(Agent):
 
 
 if __name__=="__main__":
-	AgentLoader.loadAgent(sarsa_agent())
+	AgentLoader.load_agent(sarsa_agent())

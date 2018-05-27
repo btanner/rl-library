@@ -6,11 +6,11 @@ systemPath=$basePath/system
 #Source a script that sets all important functions and variables
 source $systemPath/scripts/rl-library-includes.sh
 
- startRLGlueInBackGround
- startEnvShellInBackGround
- startAgentShellInBackGround
- startNetGuiTrainerDynamicEnvAgentBothViz
- 
- waitForAgentShellToDie
- waitForEnvShellToDie
- waitForRLGlueToDie
+startRLGlueInBackGround
+startEnvShellInBackGround
+startAgentShellInBackGround
+startNetGuiTrainerDynamicEnvAgentBothViz
+
+waitForAgentShellToDie
+waitForEnvShellToDie
+waitForRLGlueToDie
